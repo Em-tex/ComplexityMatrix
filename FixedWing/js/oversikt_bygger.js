@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
     
     try {
-        const response = await fetch('data/scoring.json'); // Stien er relativ til oversikt.html
+        const response = await fetch('data/scoring.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
