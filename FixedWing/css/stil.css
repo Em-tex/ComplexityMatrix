@@ -44,13 +44,6 @@ body {
     box-sizing: border-box;
     font-family: 'Overpass', sans-serif;
 }
-/* Datalist skal ha samme bredde som input-feltet */
-input[list] {
-    width: 100%; /* Sørger for at input-feltet er 100% */
-}
-datalist {
-    width: 100%; /* Sørger for at datalisten tar samme bredde */
-}
 .info-field input.invalid {
     border-color: #dc3545;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
@@ -152,7 +145,7 @@ datalist {
     margin-top: 20px;
 }
 .total-number {
-    display: none; /* Skjuler den overflødige totalsum-teksten */
+    display: none;
 }
 .all-gauges-container {
     display: flex;
@@ -177,40 +170,30 @@ datalist {
     font-weight: 700;
     margin-bottom: 5px;
     font-size: 0.9em;
-    display: flex; /* For å justere ikon og tekst */
+    display: flex;
     align-items: center;
 }
 .gauge-icon {
     margin-right: 5px;
-    font-size: 1em; /* Liten ikonstørrelse */
+    font-size: 1.1em;
 }
 .gauge-block-summary { font-size: 0.8em; margin-bottom: 5px; }
-
-/* Gauge styling - endret for speedometer-lignende utseende */
 .gauge {
     position: relative;
     overflow: hidden;
-    background: transparent; /* Ingen egen bakgrunn */
 }
-.gauge-arc-bg {
-    position: absolute;
+.gauge-arc {
     width: 100%;
-    height: 100%;
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    border: 8px solid; /* Tykkelse på buen */
-    border-bottom: none; /* Fjerner bunnen */
+    height: 200%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    border: 10px solid #ddd;
     box-sizing: border-box;
-    transform: rotate(0deg); /* Starter på venstre side (0 poeng) */
-    transform-origin: 50% 100%; /* Roter rundt bunn-senter */
-    /* Gradient fra rød til gul til grønn, justert for 0-punktet */
-    border-image: conic-gradient(
-        from 180deg at 50% 100%,
-        #dc3545 0%, /* Rød ved 0 poeng (venstre) */
-        #ffc107 40%, /* Gul midt (opp) */
-        #28a745 80%  /* Grønn mot maks (høyre) */
-    ) 1;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
+    background: conic-gradient(from 180deg at 50% 100%, #28a745 0%, #ffc107 50%, #dc3545 100%);
 }
-
 .gauge-needle {
     position: absolute;
     bottom: 0;
@@ -221,7 +204,7 @@ datalist {
     transition: transform 0.5s ease;
     border-radius: 2px 2px 0 0;
     z-index: 2;
-    transform: translateX(-50%) rotate(-90deg); /* Peker mot venstre for 0 poeng */
+    transform: translateX(-50%) rotate(-90deg);
 }
 .gauge-value-overlay {
     position: absolute;
@@ -231,24 +214,20 @@ datalist {
     color: #333;
     z-index: 3;
 }
-
-/* Størrelser for de små gaugene */
 .small-gauges-grid .gauge-block { min-width: 140px; }
 .small-gauges-grid .gauge { width: 120px; height: 60px; }
-.small-gauges-grid .gauge-arc-bg { border-width: 6px; } /* Juster buen */
+.small-gauges-grid .gauge-arc { border-width: 8px; }
 .small-gauges-grid .gauge-needle { height: 50px; }
 .small-gauges-grid .gauge-value-overlay { font-size: 0.8em; bottom: 3px; }
 
-/* Størrelser for den store gaugen */
 #gauge-block-total { min-width: 300px; }
 #gauge-block-total .gauge-block-title { font-size: 1.4em; }
 #gauge-block-total .gauge-block-summary { font-size: 1.2em; }
 #gauge-block-total .gauge { width: 240px; height: 120px; }
-#gauge-block-total .gauge-arc-bg { border-width: 10px; } /* Juster buen */
+#gauge-block-total .gauge-arc { border-width: 12px; }
 #gauge-block-total .gauge-needle { height: 100px; }
 #gauge-block-total .gauge-value-overlay { font-size: 1.2em; bottom: 8px; }
 
-/* Farger for gauge-bokser */
 #gauge-block-resources { background-color: #E0F2F7; }
 #gauge-block-fleet { background-color: #E6F7E6; }
 #gauge-block-operations { background-color: #FFF2E0; }
@@ -269,14 +248,3 @@ datalist {
 .footer-links { text-align: center; padding-top: 10px; border-top: 1px solid #eee; }
 .footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
 .footer-links a:hover { text-decoration: underline; }
-
-/* Print-stiler er uendret */
-@media print {
-    body { margin: 0; background-color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .header, .action-buttons, .footer-links, .comments-section, .tooltip-container { display: none !important; }
-    .section, .total-summary { box-shadow: none; border: 1px solid #ccc; margin-bottom: 10px; }
-    .container { grid-template-columns: 1fr !important; gap: 10px; }
-    .bg-weak-green { background-color: #d4edda !important; }
-    .bg-weak-yellow { background-color: #fff3cd !important; }
-    .bg-weak-red { background-color: #f8d7da !important; }
-}

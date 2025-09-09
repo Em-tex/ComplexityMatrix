@@ -37,28 +37,28 @@
                 <div class="gauge-block" id="gauge-block-resources">
                     <div class="gauge-block-title"><span class="material-icons gauge-icon">people</span> Resources</div>
                     <div class="gauge-block-summary"><span id="resources-sum">0</span> / <span id="resources-max-sum">21</span></div>
-                    <div class="gauge gauge-small"><div class="gauge-arc-bg"></div><div class="gauge-needle" id="resources-needle"></div><div class="gauge-value-overlay" id="resources-gauge-value">0</div></div>
+                    <div class="gauge"><div class="gauge-arc"></div><div class="gauge-needle" id="resources-needle"></div><div class="gauge-value-overlay" id="resources-gauge-value">0</div></div>
                 </div>
                 <div class="gauge-block" id="gauge-block-fleet">
                     <div class="gauge-block-title"><span class="material-icons gauge-icon">flight</span> Fleet Specific</div>
                     <div class="gauge-block-summary"><span id="fleet-sum">0</span> / <span id="fleet-max-sum">25</span></div>
-                    <div class="gauge gauge-small"><div class="gauge-arc-bg"></div><div class="gauge-needle" id="fleet-needle"></div><div class="gauge-value-overlay" id="fleet-gauge-value">0</div></div>
+                    <div class="gauge"><div class="gauge-arc"></div><div class="gauge-needle" id="fleet-needle"></div><div class="gauge-value-overlay" id="fleet-gauge-value">0</div></div>
                 </div>
                 <div class="gauge-block" id="gauge-block-operations">
                     <div class="gauge-block-title"><span class="material-icons gauge-icon">flight_takeoff</span> Operations</div>
                     <div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">29</span></div>
-                    <div class="gauge gauge-small"><div class="gauge-arc-bg"></div><div class="gauge-needle" id="operations-needle"></div><div class="gauge-value-overlay" id="operations-gauge-value">0</div></div>
+                    <div class="gauge"><div class="gauge-arc"></div><div class="gauge-needle" id="operations-needle"></div><div class="gauge-value-overlay" id="operations-gauge-value">0</div></div>
                 </div>
                 <div class="gauge-block" id="gauge-block-approvals">
                     <div class="gauge-block-title"><span class="material-icons gauge-icon">verified</span> Approvals</div>
                     <div class="gauge-block-summary"><span id="approvals-sum">0</span> / <span id="approvals-max-sum">14</span></div>
-                    <div class="gauge gauge-small"><div class="gauge-arc-bg"></div><div class="gauge-needle" id="approvals-needle"></div><div class="gauge-value-overlay" id="approvals-gauge-value">0</div></div>
+                    <div class="gauge"><div class="gauge-arc"></div><div class="gauge-needle" id="approvals-needle"></div><div class="gauge-value-overlay" id="approvals-gauge-value">0</div></div>
                 </div>
             </div>
             <div class="gauge-block" id="gauge-block-total">
                 <div class="gauge-block-title">Total Score</div>
                 <div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">89</span></div>
-                <div class="gauge gauge-large"><div class="gauge-arc-bg"></div><div class="gauge-needle" id="total-needle"></div><div class="gauge-value-overlay" id="total-gauge-value">0</div></div>
+                <div class="gauge"><div class="gauge-arc"></div><div class="gauge-needle" id="total-needle"></div><div class="gauge-value-overlay" id="total-gauge-value">0</div></div>
             </div>
         </div>
     </div>
@@ -66,8 +66,8 @@
     <div class="container" id="main-container">
         <div class="section" id="section-resources">
             <div class="section-header"><span class="material-icons">people</span><span>Resources</span></div>
-            <div class="section-content" id="resources-content">
-                <div class="header-row"><div class="header-cell">Kriterie</div><div class="header-cell">Valg</div><div class="header-cell">Verdi</div></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
                 <div class="form-row"><div class="form-cell">Total Number of staff employed for the operation</div><div class="form-cell"><select id="staff-employed"><option value="">Velg...</option><option value="<10">&lt; 10</option><option value="11-50">11 - 50</option><option value="51-200">51 - 200</option><option value="200-500">200 - 500</option><option value=">500">&gt; 500</option></select></div><div class="form-cell calculated-value" id="staff-employed-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of pilots employed</div><div class="form-cell"><select id="pilots-employed"><option value="">Velg...</option><option value="<50">&lt; 50</option><option value="51-100">51 - 100</option><option value="101-300">101 - 300</option><option value="301-500">301 - 500</option><option value="501-1000">501 - 1 000</option><option value=">1000">&gt; 1 000</option></select></div><div class="form-cell calculated-value" id="pilots-employed-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Cabin crew carried</div><div class="form-cell"><select id="cabin-crew"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="cabin-crew-value">0</div></div>
@@ -77,8 +77,8 @@
 
         <div class="section" id="section-fleet">
              <div class="section-header"><span class="material-icons">flight</span><span>Fleet Specific</span></div>
-            <div class="section-content" id="fleet-content">
-                <div class="header-row"><div class="header-cell">Kriterie</div><div class="header-cell">Valg</div><div class="header-cell">Verdi</div></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
                 <div class="form-row"><div class="form-cell">Number of types operated</div><div class="form-cell"><select id="types-operated"><option value="">Velg...</option><option value="1-3">1 - 3</option><option value="4-6">4 - 6</option><option value="7-9">7 - 9</option><option value="10-12">10 - 12</option><option value=">12">&gt; 12</option></select></div><div class="form-cell calculated-value" id="types-operated-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of aircraft operated over 40 000 kg</div><div class="form-cell"><select id="aircraft-over-40t"><option value="">Velg...</option><option value="0">0</option><option value="1-3">1 - 3</option><option value="4-5">4 - 5</option><option value="6-8">6 - 8</option><option value="9-10">9 - 10</option><option value=">10-100">&gt; 10 - 100</option><option value=">100">&gt; 100</option></select></div><div class="form-cell calculated-value" id="aircraft-over-40t-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of aircraft operated between 5 700 kg & 40 000 kg</div><div class="form-cell"><select id="aircraft-5.7-40t"><option value="">Velg...</option><option value="0">0</option><option value="1-5">1 - 5</option><option value="6-10">6 - 10</option><option value="11-15">11 - 15</option><option value="16-20">16 - 20</option><option value=">20">&gt; 20</option></select></div><div class="form-cell calculated-value" id="aircraft-5.7-40t-value">0</div></div>
@@ -88,8 +88,8 @@
 
         <div class="section" id="section-operations">
             <div class="section-header"><span class="material-icons">flight_takeoff</span><span>Operations</span></div>
-            <div class="section-content" id="operations-content">
-                <div class="header-row"><div class="header-cell">Kriterie</div><div class="header-cell">Valg</div><div class="header-cell">Verdi</div></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
                 <div class="form-row"><div class="form-cell">Sectors per annum</div><div class="form-cell"><select id="sectors-per-annum"><option value="">Velg...</option><option value="<10k">&lt; 10 000</option><option value="10k-49k">10 000 - 49 999</option><option value="50k-99k">50 000 - 99 999</option><option value="100k-199k">100 000 - 199 999</option><option value="200k-299k">200 000 - 299 999</option><option value=">300k">&gt; 300 000</option></select></div><div class="form-cell calculated-value" id="sectors-per-annum-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Type of Operation</div><div class="form-cell"><select id="type-of-operation"><option value="">Velg...</option><option value="A-A">A-A</option><option value="A-B Restricted">A-B Restricted</option><option value="Ad-Hoc S/H">Ad-Hoc S/H</option><option value="Schd S/H or Ad-Hoc L/H">Schd S/H or Ad-Hoc L/H</option><option value="Schd L/H">Schd L/H</option></select></div><div class="form-cell calculated-value" id="type-of-operation-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Aircraft leasing</div><div class="form-cell"><select id="aircraft-leasing"><option value="">Velg...</option><option value="No">No</option><option value="Yes, dry/wet">Yes, dry/wet</option><option value="Both dry and wet leasing">Both dry and wet leasing</option></select></div><div class="form-cell calculated-value" id="aircraft-leasing-value">0</div></div>
@@ -101,8 +101,8 @@
 
         <div class="section" id="section-approvals">
             <div class="section-header"><span class="material-icons">verified</span><span>Approvals</span></div>
-            <div class="section-content" id="approvals-content">
-                <div class="header-row"><div class="header-cell">Kriterie</div><div class="header-cell">Valg</div><div class="header-cell">Verdi</div></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
                 <div class="form-row"><div class="form-cell">RNP AR APCH</div><div class="form-cell"><select id="rnp-ar-apch"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="rnp-ar-apch-value">0</div></div>
                 <div class="form-row"><div class="form-cell">MNPS/ NAT-HLA</div><div class="form-cell"><select id="mnps-nat-hla"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="mnps-nat-hla-value">0</div></div>
                 <div class="form-row"><div class="form-cell">RVSM</div><div class="form-cell"><select id="rvsm"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="rvsm-value">0</div></div>
