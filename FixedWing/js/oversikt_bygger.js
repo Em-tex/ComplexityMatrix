@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // Denne listen kobler ID fra JSON til en lesbar tittel og riktig seksjon
     const fieldIdToDetails = {
         'staff-employed': { label: 'Total Number of staff employed', section: 'resources' },
         'pilots-employed': { label: 'Number of pilots employed', section: 'resources' },
@@ -17,22 +18,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         'generic-approval': { label: 'Alle godkjenninger (RNP, ETOPS, etc.)', section: 'approvals' }
     };
 
+    // Kart for å oversette tekniske verdier til pen tekst
     const valueToDisplayTextMap = {
         "<10": "< 10", "11-50": "11 - 50", "51-200": "51 - 200", "200-500": "200 - 500", ">500": "> 500",
         "<50": "< 50", "51-100": "51 - 100", "101-300": "101 - 300", "301-500": "301 - 500", "501-1000": "501 - 1 000", ">1000": "> 1 000",
         "1-3": "1 - 3", "4-6": "4 - 6", "7-9": "7 - 9", "10-12": "10 - 12", ">12": "> 12",
-        "0": "0", // Lagt til for konsistens
-        "1-5": "1 - 5", "6-10": "6 - 10", "11-15": "11 - 15", "16-20": "16 - 20", ">20": "> 20",
+        "0": "0", "1-5": "1 - 5", "6-10": "6 - 10", "11-15": "11 - 15", "16-20": "16 - 20", ">20": "> 20",
         "4-5": "4 - 5", "6-8": "6 - 8", "9-10": "9 - 10", ">10": "> 10",
         ">10-100": "> 10 - 100", ">100": "> 100",
         "<10k": "< 10 000", "10k-49k": "10 000 - 49 999", "50k-99k": "50 000 - 99 999", "100k-199k": "100 000 - 199 999", "200k-299k": "200 000 - 299 999", ">300k": "> 300 000"
     };
     
     try {
-        const response = await fetch('data/scoring.json'); // Riktig sti her
+        const response = await fetch('data/scoring.json'); // Stien er relativ til oversikt.html
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const scoringRules = await response.json();
-
-        // Fjernet lasting av operators.json da den ikke er nødvendig her.
 
         for (const [id, details] of Object.entries(fieldIdToDetails)) {
             const rule = scoringRules[id];
@@ -73,6 +75,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error('Kunne ikke laste eller bygge oversiktstabell:', error);
-        document.body.innerHTML += '<p style="color: red;">Klarte ikke å laste poengoversikten. Sjekk konsollen for detaljer.</p>';
+        document.body.innerHTML = `<h1>Feil ved lasting</h1><p>Klarte ikke å laste poengoversikten. Sjekk at filen 'data/scoring.json' eksisterer og at stien er riktig. Detaljer: ${error.message}</p>`;
     }
 });

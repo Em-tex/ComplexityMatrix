@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CAA NOR - Complexity Matrix</title>
-    <link rel="icon" href="smallLogo.png" type="image/png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="icon" href="smallLogo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +13,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Bruk min-height for å unngå scrollbar på små skjermer, men tillate mer innhold */
+            min-height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
         }
@@ -23,12 +24,12 @@
         .button-group {
             display: flex;
             gap: 20px;
-            margin-bottom: 20px; /* Mellomrom mellom topp- og bunn-rad */
-            flex-wrap: wrap; /* Tillat wrapping på mindre skjermer */
+            margin-bottom: 20px;
+            flex-wrap: wrap;
             justify-content: center;
         }
         .button-single {
-            margin-top: 10px; /* Mellomrom til knappen under */
+            margin-top: 10px;
         }
         .button {
             display: flex;
@@ -42,27 +43,25 @@
             border-radius: 5px;
             text-decoration: none;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s; /* La til transform for en liten effekt */
-            min-width: 200px; /* For å sikre at knappene har en minimumsbredde */
-            box-sizing: border-box; /* Inkluder padding og border i bredden */
+            transition: background-color 0.3s, transform 0.2s;
+            min-width: 200px;
+            box-sizing: border-box;
         }
         .button:hover {
             background-color: #003a75;
-            transform: translateY(-2px); /* Liten løfteeffekt ved hover */
+            transform: translateY(-2px);
         }
         .button i {
             margin-right: 10px;
         }
-
-        /* Responsive justeringer for mindre skjermer */
         @media (max-width: 600px) {
             .button-group {
                 flex-direction: column;
                 align-items: center;
             }
             .button {
-                width: 90%; /* Gjør knappene bredere på mobil */
-                max-width: 300px; /* Maks bredde for å unngå for store knapper */
+                width: 90%;
+                max-width: 300px;
             }
         }
     </style>
@@ -72,17 +71,20 @@
     <h1>Complexity Matrix</h1>
 
     <div class="button-group">
-        <a href="FixedWing/fixed-wing.html" class="button"> <i class="fa-solid fa-plane"></i>
+        <a href="FixedWing/fixed-wing.html" class="button">
+            <i class="fa-solid fa-plane"></i>
             Fixed Wing
         </a>
 
-        <a href="Rotary/" class="button" target="_blank"> <i class="fa-solid fa-helicopter"></i>
+        <a href="https://training.caa.no/ComplexityMatrix/Rotary/" class="button">
+            <i class="fa-solid fa-helicopter"></i>
             Helicopter
         </a>
     </div>
 
     <div class="button-group button-single">
-        <a href="UAS/" class="button" target="_blank"> <i class="fa-solid fa-robot"></i>
+        <a href="https://training.caa.no/ComplexityMatrix/UAS/" class="button">
+            <i class="fa-solid fa-robot"></i>
             Drones
         </a>
     </div>
