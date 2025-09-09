@@ -37,6 +37,62 @@
         "10-12": 4,
         ">12": 5
     },
+    "aircraft-over-40t": {
+        "0": 0,
+        "1-3": 1,
+        "4-5": 2,
+        "6-8": 3,
+        "9-10": 4,
+        ">10-100": 5,
+        ">100": 10
+    },
+    "aircraft-5.7-40t": {
+        "0": 0,
+        "1-5": 1,
+        "6-10": 2,
+        "11-15": 3,
+        "16-20": 4,
+        ">20": 5
+    },
+    "aircraft-under-5.7t": {
+        "0": 0,
+        "1-3": 1,
+        "4-5": 2,
+        "6-8": 3,
+        "9-10": 4,
+        ">10": 5
+    },
+    "sectors-per-annum": {
+        "<10k": 0,
+        "10k-49k": 1,
+        "50k-99k": 2,
+        "100k-199k": 3,
+        "200k-299k": 4,
+        ">300k": 5
+    },
+    "type-of-operation": {
+        "A-A": 1,
+        "A-B Restricted": 2,
+        "Ad-Hoc S/H": 3,
+        "Schd S/H or Ad-Hoc L/H": 6,
+        "Schd L/H": 10
+    },
+    "aircraft-leasing": {
+        "No": 0,
+        "Yes, dry/wet": 1,
+        "Both dry and wet leasing": 2
+    },
+    "airports-based": {
+        "1-5": 1,
+        "6-10": 2,
+        "11-15": 3,
+        "16-20": 4,
+        ">20": 5
+    },
+    "group-airline": {
+        "No": 0,
+        "Yes": 2
+    },
     "cargo-carriage": {
         "Nil": 0,
         "BStd": 1,
