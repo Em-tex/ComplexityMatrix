@@ -1,349 +1,389 @@
-// --- Globale konstanter og variabler ---
-const STORAGE_KEY = 'fixedWingComplexityData';
-let scoringRules = {}; // Blir fylt inn fra data/scoring.json
+document.addEventListener('DOMContentLoaded', async () => {
+    const operatorInput = document.getElementById('operator-navn');
+    const operatorList = document.getElementById('operator-list');
+    const filledByInput = document.getElementById('filled-by');
+    const dateInput = document.getElementById('date');
+    const downloadCsvButton = document.getElementById('download-csv-button');
+    const printPdfButton = document.getElementById('print-pdf-button');
+    const clearFormButton = document.getElementById('clear-form-button');
+    const loadCsvButton = document.getElementById('load-csv-button');
+    const csvFileInput = document.getElementById('csv-file-input');
+    const formInputs = document.querySelectorAll('.section-content select');
 
-// Max scores basert på Fixed Wing arket
-const MAX_SCORE_RESOURCES = 21; // staff(5) + pilots(10) + cabin(1) + leading_personnel(5)
-const MAX_SCORE_FLEET = 25;     // types(5) + ac_over_40t(10) + ac_5.7_40t(5) + ac_under_5.7t(5)
-const MAX_SCORE_OPERATIONS = 29;// sectors(5) + type_op(10) + leasing(2) + airports(5) + group_airline(2) + cargo(5)
-const MAX_SCORE_APPROVERS = 14; // 14 x Ja/Nei
-const MAX_SCORE_GRAND_TOTAL = MAX_SCORE_RESOURCES + MAX_SCORE_FLEET + MAX_SCORE_OPERATIONS + MAX_SCORE_APPROVERS;
+    let scoringRules = {}; // Lagrer poengberegningsreglene fra JSON
+    let maxScores = {}; // Maksimum poeng for hver kategori
+    let sections = {
+        'resources': ['staff-employed', 'pilots-employed', 'cabin-crew', 'leading-personnel-roles'],
+        'fleet': ['types-operated', 'aircraft-over-40t', 'aircraft-5.7-40t', 'aircraft-under-5.7t'],
+        'operations': ['sectors-per-annum', 'type-of-operation', 'aircraft-leasing', 'airports-based', 'group-airline', 'cargo-carriage'],
+        'approvals': ['rnp-ar-apch', 'mnps-nat-hla', 'rvsm', 'lv-takeoff', 'lv-landing', 'etops', 'dangerous-goods', 'single-engine-imc', 'efb', 'isolated-aerodromes', 'steep-approach', 'atqp', 'frm', 'ato-lite']
+    };
 
-const fieldData = [
-    { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
-    { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
-    { id: 'cabin-crew', label: 'Cabin crew carried', section: 'resources' },
-    { id: 'leading-personnel-roles', label: 'Leading personell has several roles', section: 'resources' },
-    { id: 'types-operated', label: 'Number of types operated', section: 'fleet' },
-    { id: 'aircraft-over-40t', label: 'Number of aircraft operated over 40 000 kg', section: 'fleet' },
-    { id: 'aircraft-5.7-40t', label: 'Number of aircraft operated between 5 700 kg & 40 000 kg', section: 'fleet' },
-    { id: 'aircraft-under-5.7t', label: 'Number of aircraft operated under 5 700 kg', section: 'fleet' },
-    { id: 'sectors-per-annum', label: 'Sectors per annum', section: 'operations' },
-    { id: 'type-of-operation', label: 'Type of Operation', section: 'operations' },
-    { id: 'aircraft-leasing', label: 'Aircraft leasing', section: 'operations' },
-    { id: 'airports-based', label: 'Number of airports where aircraft and/or crews are permanently based', section: 'operations' },
-    { id: 'group-airline', label: 'Group Airline', section: 'operations' },
-    { id: 'cargo-carriage', label: 'Cargo Carriage', section: 'operations' },
-    { id: 'rnp-ar-apch', label: 'RNP AR APCH', section: 'approvals' },
-    { id: 'mnps-nat-hla', label: 'MNPS/ NAT-HLA', section: 'approvals' },
-    { id: 'rvsm', label: 'RVSM', section: 'approvals' },
-    { id: 'lv-takeoff', label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
-    { id: 'lv-landing', label: 'Low Visibility operations (LANDING)', section: 'approvals' },
-    { id: 'etops', label: 'ETOPS', section: 'approvals' },
-    { id: 'dangerous-goods', label: 'Dangerous Goods', section: 'approvals' },
-    { id: 'single-engine-imc', label: 'Single-Engined Turbine IMC', section: 'approvals' },
-    { id: 'efb', label: 'Electronic Flight Bag', section: 'approvals' },
-    { id: 'isolated-aerodromes', label: 'Isolated Aerodromes', section: 'approvals' },
-    { id: 'steep-approach', label: 'Steep Approach', section: 'approvals' },
-    { id: 'atqp', label: 'ATQP', section: 'approvals' },
-    { id: 'frm', label: 'Fatigue Risk Management', section: 'approvals' },
-    { id: 'ato-lite', label: 'ATO Lite', section: 'approvals' }
-];
-
-// --- Funksjoner for lagring, lasting og tømming ---
-function saveData() {
-    const dataToSave = { inputs: {} };
-    document.querySelectorAll('input[type="text"], select, textarea, input[type="date"]').forEach(el => {
-        if (el.id) dataToSave.inputs[el.id] = el.value;
-    });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-}
-
-function loadData() {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (savedData) {
-        const data = JSON.parse(savedData);
-        if (data.inputs) {
-            for (const id in data.inputs) {
-                const el = document.getElementById(id);
-                if (el) el.value = data.inputs[id];
+    // Funksjon for å hente data
+    async function fetchData(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            return await response.json();
+        } catch (error) {
+            console.error(`Kunne ikke laste data fra ${url}:`, error);
+            return null;
         }
     }
-}
 
-function clearForm() {
-    if (confirm("Er du sikker på at du vil tømme skjemaet? All lagret data vil bli slettet.")) {
-        localStorage.removeItem(STORAGE_KEY);
-        window.location.reload();
-    }
-}
-
-// --- Funksjoner for validering ---
-function validateForm() {
-    const errors = [];
-    let isValid = true;
-    document.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
-
-    const requiredTextInputs = ['operator-navn', 'filled-by'];
-    requiredTextInputs.forEach(id => {
-        const input = document.getElementById(id);
-        if (!input.value.trim()) {
-            errors.push(`"${input.previousElementSibling.textContent}" må fylles ut.`);
-            input.classList.add('invalid');
-            isValid = false;
+    // Laster poengberegningsreglene og maks poeng
+    async function loadScoringRules() {
+        scoringRules = await fetchData('data/scoring.json');
+        maxScores = await fetchData('data/max_scores.json');
+        if (!scoringRules || !maxScores) {
+            alert('Kunne ikke laste poengberegningsregler eller maks poeng. Sjekk konsollen for detaljer.');
+        } else {
+            calculateMaxSectionScores(); // Må beregnes på nytt ved lasting
+            updateAllGauges(); // Oppdaterer gaugene med korrekte maksverdier
         }
-    });
+    }
 
-    fieldData.forEach(field => {
-        const select = document.getElementById(field.id);
-        if (select && select.value === "") {
-            errors.push(`Vennligst gjør et valg for "${field.label}".`);
-            select.classList.add('invalid');
-            isValid = false;
+    // Hjelpefunksjon for å hente poeng for et valg
+    function getScore(fieldId, selectedValue, pilotsEmployedValue) {
+        if (!scoringRules[fieldId] || !selectedValue) return 0;
+
+        const rule = scoringRules[fieldId][selectedValue];
+        if (typeof rule === 'object' && rule.type === 'dependent') {
+            // Logikk for avhengige poeng
+            if (pilotsEmployedValue === '<50') return rule.scores['<50'] || rule.default;
+            if (pilotsEmployedValue === '51-100') return rule.scores['51-100'] || rule.default;
+            if (pilotsEmployedValue === '101-300') return rule.scores['101-300'] || rule.default;
+            if (pilotsEmployedValue === '301-500') return rule.scores['301-500'] || rule.default;
+            if (pilotsEmployedValue === '501-1000') return rule.scores['501-1000'] || rule.default;
+            if (pilotsEmployedValue === '>1000') return rule.scores['>1000'] || rule.default;
+            return rule.default;
         }
-    });
-
-    if (!isValid) {
-        alert("Skjemaet er ikke fullstendig utfylt:\n\n" + errors.join('\n'));
-    }
-    return isValid;
-}
-
-function printPDF() {
-    if (validateForm()) {
-        window.print();
-    }
-}
-
-// --- Hjelpefunksjoner ---
-function getNumericValue(elementId) {
-    const el = document.getElementById(elementId);
-    return el ? (parseFloat(el.textContent) || 0) : 0;
-}
-
-function getSelectedText(selectId) {
-    const selectElement = document.getElementById(selectId);
-    if (selectElement && selectElement.selectedIndex >= 0) {
-        // Returnerer teksten som vises i stedet for option.value
-        return selectElement.options[selectElement.selectedIndex]?.textContent || "";
-    }
-    return "";
-}
-
-function applyValueCellStyle(valueCell, score, isPlaceholderValue) {
-    valueCell.className = 'form-cell calculated-value'; // Reset classes
-    if (isPlaceholderValue) {
-        valueCell.classList.add('bg-default-gray');
-    } else if (score <= 1) {
-        valueCell.classList.add('bg-weak-green');
-    } else if (score <= 3) {
-        valueCell.classList.add('bg-weak-yellow');
-    } else if (score >= 4) {
-        valueCell.classList.add('bg-weak-red');
-    }
-}
-
-// --- Kjernefunksjoner for beregning ---
-function calculateFieldScore(selectId, selectValue) {
-    if (selectValue === "" || Object.keys(scoringRules).length === 0) return 0;
-
-    const approvalFields = [
-        'rnp-ar-apch', 'mnps-nat-hla', 'rvsm', 'lv-takeoff', 'lv-landing',
-        'etops', 'dangerous-goods', 'single-engine-imc', 'efb', 'isolated-aerodromes',
-        'steep-approach', 'atqp', 'frm', 'ato-lite'
-    ];
-    if (approvalFields.includes(selectId)) {
-        return scoringRules['generic-approval']?.[selectValue] ?? 0;
+        return rule || 0;
     }
 
-    const rule = scoringRules[selectId];
-    if (!rule) return 0;
+    // Beregner summen for en seksjon
+    function calculateSectionSum(sectionName) {
+        let sum = 0;
+        const pilotsEmployedValue = document.getElementById('pilots-employed')?.value;
 
-    const scoreRule = rule[selectValue];
-    if (typeof scoreRule === 'number') {
-        return scoreRule;
-    } else if (typeof scoreRule === 'object' && scoreRule.type === 'dependent') {
-        const dependentValue = document.getElementById(scoreRule.on)?.value; // Bruker option.value her
-        if (!dependentValue) return scoreRule.default;
-        return scoreRule.scores[dependentValue] ?? scoreRule.default;
+        sections[sectionName].forEach(fieldId => {
+            const selectElement = document.getElementById(fieldId);
+            if (selectElement) {
+                const score = getScore(fieldId, selectElement.value, pilotsEmployedValue);
+                document.getElementById(`${fieldId}-value`).textContent = score;
+                sum += score;
+            }
+        });
+        return sum;
     }
-    return 0;
-}
 
-function updateCalculations() {
-    let totals = { resources: 0, fleet: 0, operations: 0, approvals: 0 };
+    // Beregner maks poeng for hver seksjon basert på scoringRules
+    function calculateMaxSectionScores() {
+        if (!scoringRules || !maxScores) return;
 
-    fieldData.forEach(field => {
-        const select = document.getElementById(field.id);
-        const valueCell = document.getElementById(field.id + '-value');
-        
-        select.classList.toggle('placeholder-selected', select.value === "");
-
-        if (select && valueCell) {
-            const score = calculateFieldScore(field.id, select.value);
-            valueCell.textContent = score;
-            applyValueCellStyle(valueCell, score, select.value === "");
-            totals[field.section] += score;
+        let totalMax = 0;
+        for (const sectionName in sections) {
+            let sectionMax = 0;
+            sections[sectionName].forEach(fieldId => {
+                if (maxScores[fieldId] !== undefined) {
+                    sectionMax += maxScores[fieldId];
+                }
+            });
+            document.getElementById(`${sectionName}-max-sum`).textContent = sectionMax;
+            totalMax += sectionMax;
         }
-    });
-
-    // Oppdater summer og gauges
-    Object.keys(totals).forEach(section => {
-        const maxScore = window[`MAX_SCORE_${section.toUpperCase()}`];
-        document.getElementById(`${section}-sum`).textContent = totals[section];
-        document.getElementById(`${section}-gauge-value`).textContent = totals[section];
-        updateGauge(section, totals[section], maxScore);
-    });
-
-    // Totalsum
-    const grandTotal = totals.resources + totals.fleet + totals.operations + totals.approvals;
-    document.getElementById('grand-total-display').textContent = grandTotal;
-    document.getElementById('total-gauge-sum-text').textContent = grandTotal;
-    document.getElementById('total-gauge-value').textContent = grandTotal;
-    updateGauge('total', grandTotal, MAX_SCORE_GRAND_TOTAL);
-    
-    saveData();
-}
-
-function updateGauge(prefix, value, maxValue) {
-    const needle = document.getElementById(prefix + '-needle');
-    if (!needle) return;
-    const percentage = maxValue > 0 ? (value / maxValue) * 100 : 0;
-    // Justert for å rotere fra -90 (0%) til +90 (100%) grader over 180 grader
-    const rotation = (percentage * 1.8) - 90; 
-    needle.style.transform = `translateX(-50%) rotate(${Math.max(-90, Math.min(rotation, 90))}deg)`;
-}
-
-// --- Funksjoner for CSV ---
-function parseCsvField(field) {
-    field = field.trim();
-    if (field.startsWith('"') && field.endsWith('"')) {
-        return field.substring(1, field.length - 1).replace(/""/g, '"');
+        document.getElementById('grand-max-total-display').textContent = totalMax;
+        document.getElementById('total-gauge-max-text').textContent = totalMax;
     }
-    return field;
-}
 
-function downloadCSV() {
-    if (!validateForm()) return;
+    // Oppdaterer gaugenålen og verdien
+    function updateGauge(gaugeId, needleId, valueId, currentScore, maxScore) {
+        const needle = document.getElementById(needleId);
+        const valueDisplay = document.getElementById(valueId);
 
-    const operatorNavn = document.getElementById('operator-navn').value || "UkjentOperatør";
-    const dateValue = document.getElementById('date').value;
-    const today = new Date();
-    const formattedDate = dateValue ? `${dateValue.split('-')[2]}-${dateValue.split('-')[1]}-${dateValue.split('-')[0]}` : `${String(today.getDate()).padStart(2, '0')}-${String(today.getMonth() + 1).padStart(2, '0')}-${today.getFullYear()}`;
-    const fileName = `${operatorNavn.replace(/\s/g, "_")}_${formattedDate}.csv`;
+        if (!needle || !valueDisplay || maxScore === 0) {
+            // Sett til startposisjon hvis ugyldig eller maks er 0
+            if (needle) needle.style.transform = 'translateX(-50%) rotate(-90deg)';
+            if (valueDisplay) valueDisplay.textContent = currentScore;
+            return;
+        }
 
-    const headers = ['Operatørnavn', 'Fylt ut av', 'Dato'];
-    fieldData.forEach(field => {
-        headers.push(`${field.label} (Valg)`, `${field.label} (Verdi)`);
-    });
-    headers.push('Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum', 'Kommentarer');
+        const percentage = currentScore / maxScore;
+        const rotation = -90 + (percentage * 180); // Fra -90 (0%) til +90 (100%)
+        needle.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+        valueDisplay.textContent = currentScore;
+    }
 
-    const dataRow = [
-        `"${operatorNavn.replace(/"/g, '""')}"`,
-        `"${document.getElementById('filled-by').value.replace(/"/g, '""')}"`,
-        `"${dateValue}"`
-    ];
+    // Hovedfunksjon for å oppdatere alt
+    function updateScores() {
+        let grandTotal = 0;
+        const pilotsEmployedValue = document.getElementById('pilots-employed')?.value;
 
-    fieldData.forEach(field => {
-        dataRow.push(`"${getSelectedText(field.id).replace(/"/g, '""')}"`, document.getElementById(field.id + '-value').textContent);
-    });
+        // Først beregn alle individuelle felter, da 'pilots-employed' kan påvirke 'leading-personnel-roles'
+        for (const sectionName in sections) {
+            sections[sectionName].forEach(fieldId => {
+                const selectElement = document.getElementById(fieldId);
+                if (selectElement) {
+                    const score = getScore(fieldId, selectElement.value, pilotsEmployedValue);
+                    document.getElementById(`${fieldId}-value`).textContent = score;
+                }
+            });
+        }
 
-    const resourcesSum = getNumericValue('resources-sum');
-    const fleetSum = getNumericValue('fleet-sum');
-    const operationsSum = getNumericValue('operations-sum');
-    const approvalsSum = getNumericValue('approvals-sum');
-    const grandTotalForCsv = resourcesSum + fleetSum + operationsSum + approvalsSum;
-    const comments = `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
-    dataRow.push(resourcesSum, fleetSum, operationsSum, approvalsSum, grandTotalForCsv, comments);
+        // Deretter oppsummer seksjonene og totalen
+        for (const sectionName in sections) {
+            let sectionSum = 0;
+            sections[sectionName].forEach(fieldId => {
+                const valueElement = document.getElementById(`${fieldId}-value`);
+                if (valueElement) {
+                    sectionSum += parseInt(valueElement.textContent) || 0;
+                }
+            });
+            document.getElementById(`${sectionName}-sum`).textContent = sectionSum;
+            grandTotal += sectionSum;
 
-    const csvContent = headers.join(';') + '\r\n' + dataRow.join(';');
-    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+            const maxSectionScore = parseInt(document.getElementById(`${sectionName}-max-sum`).textContent) || 0;
+            updateGauge(
+                `gauge-block-${sectionName}`,
+                `${sectionName}-needle`,
+                `${sectionName}-gauge-value`,
+                sectionSum,
+                maxSectionScore
+            );
+        }
 
-function loadCsvFile(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+        document.getElementById('grand-total-display').textContent = grandTotal;
+        document.getElementById('total-gauge-sum-text').textContent = grandTotal;
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const lines = e.target.result.split(/\r?\n/);
-        if (lines.length < 2) return alert("CSV-filen er tom eller ugyldig.");
+        const totalMaxScore = parseInt(document.getElementById('total-gauge-max-text').textContent) || 0;
+        updateGauge(
+            'gauge-block-total',
+            'total-needle',
+            'total-gauge-value',
+            grandTotal,
+            totalMaxScore
+        );
 
-        const headers = lines[0].split(';').map(h => parseCsvField(h));
-        const data = lines[1].split(';').map(d => parseCsvField(d));
-        const headerMap = Object.fromEntries(headers.map((h, i) => [h, i]));
+        saveState();
+    }
 
-        document.getElementById('operator-navn').value = data[headerMap['Operatørnavn']] || '';
-        document.getElementById('filled-by').value = data[headerMap['Fylt ut av']] || '';
-        document.getElementById('date').value = data[headerMap['Dato']] || '';
+    function updateAllGauges() {
+        for (const sectionName in sections) {
+            const sectionSum = parseInt(document.getElementById(`${sectionName}-sum`).textContent) || 0;
+            const maxSectionScore = parseInt(document.getElementById(`${sectionName}-max-sum`).textContent) || 0;
+            updateGauge(
+                `gauge-block-${sectionName}`,
+                `${sectionName}-needle`,
+                `${sectionName}-gauge-value`,
+                sectionSum,
+                maxSectionScore
+            );
+        }
+        const grandTotal = parseInt(document.getElementById('grand-total-display').textContent) || 0;
+        const totalMaxScore = parseInt(document.getElementById('total-gauge-max-text').textContent) || 0;
+        updateGauge(
+            'gauge-block-total',
+            'total-needle',
+            'total-gauge-value',
+            grandTotal,
+            totalMaxScore
+        );
+    }
 
-        fieldData.forEach(field => {
-            const select = document.getElementById(field.id);
-            if (select) {
-                const valueToSet = data[headerMap[`${field.label} (Valg)`]];
-                if (valueToSet !== undefined) {
-                    // Må finne option basert på displayed text, men sette value
-                    const option = [...select.options].find(opt => opt.textContent === valueToSet);
-                    select.value = option ? option.value : "";
+
+    // Laster operatørdata fra lokal JSON-fil
+    async function loadOperators() {
+        const operators = await fetchData('data/operators.json');
+        if (operators) {
+            operatorList.innerHTML = ''; // Tømmer eksisterende
+            operators.forEach(op => {
+                const option = document.createElement('option');
+                option.value = op.name;
+                operatorList.appendChild(option);
+            });
+        }
+    }
+
+    // Lagrer skjemaets tilstand i localStorage
+    function saveState() {
+        const state = {
+            operator: operatorInput.value,
+            filledBy: filledByInput.value,
+            date: dateInput.value,
+            comments: document.getElementById('comments').value,
+            selections: {}
+        };
+        formInputs.forEach(select => {
+            state.selections[select.id] = select.value;
+        });
+        localStorage.setItem('fixedWingFormState', JSON.stringify(state));
+    }
+
+    // Laster skjemaets tilstand fra localStorage
+    function loadState() {
+        const savedState = localStorage.getItem('fixedWingFormState');
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            operatorInput.value = state.operator || '';
+            filledByInput.value = state.filledBy || '';
+            dateInput.value = state.date || '';
+            document.getElementById('comments').value = state.comments || '';
+            for (const id in state.selections) {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.value = state.selections[id];
+                    // Trigger change for å oppdatere utseende og kalkulering
+                    select.dispatchEvent(new Event('change'));
+                }
+            }
+        } else {
+             // Hvis ingen lagret tilstand, sett startverdier og tving en update
+            formInputs.forEach(select => {
+                if (select.options.length > 0) {
+                     // Sett første option som ikke er placeholder, eller tom streng
+                    select.value = select.querySelector('option[value=""]').value;
+                }
+            });
+            updateScores(); // Utfør en initial kalkulering
+        }
+        updateScores(); // Sørg for at alle verdier og gauger er oppdatert etter lasting
+    }
+
+
+    // Tømmer skjemaet
+    function clearForm() {
+        operatorInput.value = '';
+        filledByInput.value = '';
+        dateInput.value = '';
+        document.getElementById('comments').value = '';
+        formInputs.forEach(select => {
+            select.value = ''; // Setter tilbake til placeholder
+            select.dispatchEvent(new Event('change')); // Trigger change for å oppdatere
+        });
+        localStorage.removeItem('fixedWingFormState'); // Fjern lagret tilstand
+        updateScores();
+        // Tilbakestill til default farge for alle score-celler
+        document.querySelectorAll('.calculated-value').forEach(cell => {
+            cell.classList.remove('bg-weak-red', 'bg-weak-yellow', 'bg-weak-green');
+            cell.classList.add('bg-default-gray');
+        });
+    }
+
+    // Laster inn CSV-data
+    function loadCsvData(data) {
+        // Antar CSV-data er på formatet: "felt-id","verdi"
+        const lines = data.split('\n');
+        const state = {
+            selections: {}
+        };
+        lines.forEach(line => {
+            const parts = line.split(',');
+            if (parts.length === 2) {
+                const id = parts[0].trim();
+                const value = parts[1].trim();
+                if (id === 'operator-navn') operatorInput.value = value;
+                else if (id === 'filled-by') filledByInput.value = value;
+                else if (id === 'date') dateInput.value = value;
+                else if (id === 'comments') document.getElementById('comments').value = value;
+                else {
+                    const select = document.getElementById(id);
+                    if (select) {
+                        select.value = value;
+                        state.selections[id] = value;
+                    }
                 }
             }
         });
-
-        document.getElementById('comments').value = data[headerMap['Kommentarer']] || '';
-        updateCalculations();
-        alert("CSV-fil lastet inn!");
-    };
-    reader.readAsText(file, 'UTF-8');
-}
-
-// --- Initialisering ved side-lasting ---
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const [scoringRes, operatorsRes] = await Promise.all([
-            fetch('data/scoring.json'),
-            fetch('data/operators.json')
-        ]);
-        scoringRules = await scoringRes.json();
-        const operators = await operatorsRes.json();
-        const datalist = document.getElementById('operator-list');
-        operators.forEach(op => {
-            const option = document.createElement('option');
-            option.value = op; // Viktig: option.value settes til operatørnavnet
-            datalist.appendChild(option);
-        });
-        
-        // Oppdater maks-score på displayet etter at konstanter er definert
-        document.getElementById('grand-max-total-display').textContent = MAX_SCORE_GRAND_TOTAL;
-        document.getElementById('resources-max-sum').textContent = MAX_SCORE_RESOURCES;
-        document.getElementById('fleet-max-sum').textContent = MAX_SCORE_FLEET;
-        document.getElementById('operations-max-sum').textContent = MAX_SCORE_OPERATIONS;
-        document.getElementById('approvals-max-sum').textContent = MAX_SCORE_APPROVERS;
-        document.getElementById('total-gauge-max-text').textContent = MAX_SCORE_GRAND_TOTAL;
-
-    } catch (error) {
-        console.error('Klarte ikke å laste inn nødvendige datafiler:', error);
-        alert('FEIL: Kunne ikke laste inn datafiler (scoring/operators). Sjekk at filene ligger i "data"-mappen og at stien er riktig.');
-        return;
+        // Oppdater skjemaet og kalkuler
+        for (const id in state.selections) {
+            const select = document.getElementById(id);
+            if (select) select.dispatchEvent(new Event('change'));
+        }
+        updateScores();
+        saveState(); // Lagre den nye tilstanden
     }
 
-    // Feste hendelseslyttere
-    document.getElementById('clear-form-button').addEventListener('click', clearForm);
-    document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
-    document.getElementById('print-pdf-button').addEventListener('click', printPDF);
-    document.getElementById('load-csv-button').addEventListener('click', () => document.getElementById('csv-file-input').click());
-    document.getElementById('csv-file-input').addEventListener('change', loadCsvFile);
+    // Event listeners
+    operatorInput.addEventListener('input', saveState);
+    filledByInput.addEventListener('input', saveState);
+    dateInput.addEventListener('change', saveState); // Endret til 'change' for dato
+    document.getElementById('comments').addEventListener('input', saveState);
 
-    document.querySelectorAll('input, select, textarea').forEach(el => {
-        el.addEventListener('change', updateCalculations);
-        if (el.matches('input[type="text"], textarea')) {
-            el.addEventListener('keyup', updateCalculations);
-        }
-        el.addEventListener('input', () => {
-            if (el.value.trim() !== '') el.classList.remove('invalid');
+    formInputs.forEach(select => {
+        select.addEventListener('change', () => {
+            updateScores();
+            // Sett farge basert på den nye verdien
+            const score = parseInt(document.getElementById(`${select.id}-value`).textContent);
+            const cell = document.getElementById(`${select.id}-value`);
+            cell.classList.remove('bg-default-gray', 'bg-weak-red', 'bg-weak-yellow', 'bg-weak-green');
+            if (score >= 4) {
+                cell.classList.add('bg-weak-red');
+            } else if (score >= 2) {
+                cell.classList.add('bg-weak-yellow');
+            } else {
+                cell.classList.add('bg-weak-green');
+            }
         });
+        // Initial farge setting ved lasting av siden
+        const score = parseInt(document.getElementById(`${select.id}-value`).textContent);
+        const cell = document.getElementById(`${select.id}-value`);
+        cell.classList.remove('bg-weak-red', 'bg-weak-yellow', 'bg-weak-green'); // Fjern alle først
+        if (score >= 4) {
+            cell.classList.add('bg-weak-red');
+        } else if (score >= 2) {
+            cell.classList.add('bg-weak-yellow');
+        } else {
+            cell.classList.add('bg-weak-green');
+        }
     });
 
-    // Initialiser skjemaet
-    loadData();
-    if (!document.getElementById('date').value) {
-        document.getElementById('date').valueAsDate = new Date();
-    }
-    updateCalculations();
+    downloadCsvButton.addEventListener('click', () => {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "field_id,value\n";
+        csvContent += `operator-navn,"${operatorInput.value}"\n`;
+        csvContent += `filled-by,"${filledByInput.value}"\n`;
+        csvContent += `date,"${dateInput.value}"\n`;
+        csvContent += `comments,"${document.getElementById('comments').value.replace(/"/g, '""')}"\n`; // Escape quotes
+
+        formInputs.forEach(select => {
+            csvContent += `${select.id},"${select.value}"\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `fixed_wing_complexity_${operatorInput.value || 'data'}_${dateInput.value || new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    printPdfButton.addEventListener('click', () => {
+        window.print();
+    });
+
+    clearFormButton.addEventListener('click', clearForm);
+
+    loadCsvButton.addEventListener('click', () => {
+        csvFileInput.click(); // Åpner filvelgeren
+    });
+
+    csvFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                loadCsvData(e.target.result);
+            };
+            reader.readAsText(file);
+        }
+    });
+
+
+    // Initialisering
+    await loadScoringRules();
+    loadOperators();
+    loadState();
 });

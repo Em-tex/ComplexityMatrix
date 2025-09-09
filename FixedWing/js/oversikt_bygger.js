@@ -15,7 +15,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         'airports-based': { label: 'Number of airports (permanent base)', section: 'operations' },
         'group-airline': { label: 'Group Airline', section: 'operations' },
         'cargo-carriage': { label: 'Cargo Carriage', section: 'operations' },
-        'generic-approval': { label: 'Alle godkjenninger (RNP, ETOPS, etc.)', section: 'approvals' }
+        'rnp-ar-apch': { label: 'RNP AR APCH', section: 'approvals' },
+        'mnps-nat-hla': { label: 'MNPS/ NAT-HLA', section: 'approvals' },
+        'rvsm': { label: 'RVSM', section: 'approvals' },
+        'lv-takeoff': { label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
+        'lv-landing': { label: 'Low Visibility operations (LANDING)', section: 'approvals' },
+        'etops': { label: 'ETOPS', section: 'approvals' },
+        'dangerous-goods': { label: 'Dangerous Goods', section: 'approvals' },
+        'single-engine-imc': { label: 'Single-Engined Turbine IMC', section: 'approvals' },
+        'efb': { label: 'Electronic Flight Bag', section: 'approvals' },
+        'isolated-aerodromes': { label: 'Isolated Aerodromes', section: 'approvals' },
+        'steep-approach': { label: 'Steep Approach', section: 'approvals' },
+        'atqp': { label: 'ATQP', section: 'approvals' },
+        'frm': { label: 'Fatigue Risk Management', section: 'approvals' },
+        'ato-lite': { label: 'ATO Lite', section: 'approvals' }
     };
 
     // Kart for å oversette tekniske verdier til pen tekst
@@ -26,9 +39,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         "0": "0", "1-5": "1 - 5", "6-10": "6 - 10", "11-15": "11 - 15", "16-20": "16 - 20", ">20": "> 20",
         "4-5": "4 - 5", "6-8": "6 - 8", "9-10": "9 - 10", ">10": "> 10",
         ">10-100": "> 10 - 100", ">100": "> 100",
-        "<10k": "< 10 000", "10k-49k": "10 000 - 49 999", "50k-99k": "50 000 - 99 999", "100k-199k": "100 000 - 199 999", "200k-299k": "200 000 - 299 999", ">300k": "> 300 000"
+        "<10k": "< 10 000", "10k-49k": "10 000 - 49 999", "50k-99k": "50 000 - 99 999", "100k-199k": "100 000 - 199 999", "200k-299k": "200 000 - 299 999", ">300k": "> 300 000",
+        "A-A": "A-A (Scheduled, Ad-Hoc)",
+        "A-B Restricted": "A-B (Restricted)",
+        "Ad-Hoc S/H": "Ad-Hoc (Short Haul)",
+        "Schd S/H or Ad-Hoc L/H": "Scheduled (Short Haul) or Ad-Hoc (Long Haul)",
+        "Schd L/H": "Scheduled (Long Haul)",
+        "Yes, dry/wet": "Yes (Dry/Wet)",
+        "Both dry and wet leasing": "Both Dry and Wet Leasing",
+        "Nil": "Nil (No Dangerous Goods)",
+        "BStd": "Basic Standard",
+        "UStd": "Unclassified Standard",
+        "NStd": "Non-Standard"
     };
-    
+
     try {
         const response = await fetch('data/scoring.json');
         if (!response.ok) {
@@ -58,10 +82,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 let scoreDisplay = '';
 
                 if (typeof score === 'object' && score.type === 'dependent') {
+                    // Forbedret linjeoppdeling og formatering
                     const dependentScores = Object.entries(score.scores)
                         .map(([val, pts]) => `${valueToDisplayTextMap[val] || val} (${pts}p)`)
-                        .join(', ');
-                    scoreDisplay = `Avh. av piloter: ${dependentScores}, ellers ${score.default}p`;
+                        .join(',\n'); // Bruker \n for linjeskift
+                    scoreDisplay = `Avh. av piloter:\n${dependentScores},\nellers ${score.default}p`;
+                    scoreDisplay = scoreDisplay.replace(/\n/g, '<br>'); // Konverter \n til <br> for HTML
                 } else {
                     scoreDisplay = score;
                 }

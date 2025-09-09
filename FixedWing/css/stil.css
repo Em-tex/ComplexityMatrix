@@ -44,6 +44,13 @@ body {
     box-sizing: border-box;
     font-family: 'Overpass', sans-serif;
 }
+/* Datalist skal ha samme bredde som input-feltet */
+input[list] {
+    width: 100%; /* Sørger for at input-feltet er 100% */
+}
+datalist {
+    width: 100%; /* Sørger for at datalisten tar samme bredde */
+}
 .info-field input.invalid {
     border-color: #dc3545;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
@@ -145,7 +152,7 @@ body {
     margin-top: 20px;
 }
 .total-number {
-    display: none;
+    display: none; /* Skjuler den overflødige totalsum-teksten */
 }
 .all-gauges-container {
     display: flex;
@@ -166,32 +173,44 @@ body {
     padding: 10px;
     border-radius: 6px;
 }
-.gauge-block-title { font-weight: 700; margin-bottom: 5px; font-size: 0.9em; }
+.gauge-block-title {
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    display: flex; /* For å justere ikon og tekst */
+    align-items: center;
+}
+.gauge-icon {
+    margin-right: 5px;
+    font-size: 1em; /* Liten ikonstørrelse */
+}
 .gauge-block-summary { font-size: 0.8em; margin-bottom: 5px; }
 
-/* Fikset Gauge CSS */
+/* Gauge styling - endret for speedometer-lignende utseende */
 .gauge {
     position: relative;
-    overflow: hidden; /* Sørger for at formen blir korrekt */
+    overflow: hidden;
+    background: transparent; /* Ingen egen bakgrunn */
 }
-.gauge-bg {
+.gauge-arc-bg {
+    position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0; /* Perfekt halvsirkel */
-    background: conic-gradient(from -90deg at 50% 100%, #28a745 5%, #ffc107 50%, #dc3545 95%);
-    overflow: hidden;
-}
-.gauge-cover {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 0;
-    background-color: inherit; /* Nøkkelen til å arve bakgrunnsfargen */
-    filter: brightness(1.05); /* Liten effekt for å skille seg ut */
     border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    z-index: 1;
+    border: 8px solid; /* Tykkelse på buen */
+    border-bottom: none; /* Fjerner bunnen */
+    box-sizing: border-box;
+    transform: rotate(0deg); /* Starter på venstre side (0 poeng) */
+    transform-origin: 50% 100%; /* Roter rundt bunn-senter */
+    /* Gradient fra rød til gul til grønn, justert for 0-punktet */
+    border-image: conic-gradient(
+        from 180deg at 50% 100%,
+        #dc3545 0%, /* Rød ved 0 poeng (venstre) */
+        #ffc107 40%, /* Gul midt (opp) */
+        #28a745 80%  /* Grønn mot maks (høyre) */
+    ) 1;
 }
+
 .gauge-needle {
     position: absolute;
     bottom: 0;
@@ -202,7 +221,7 @@ body {
     transition: transform 0.5s ease;
     border-radius: 2px 2px 0 0;
     z-index: 2;
-    transform: translateX(-50%) rotate(-90deg); /* Starter på 0 */
+    transform: translateX(-50%) rotate(-90deg); /* Peker mot venstre for 0 poeng */
 }
 .gauge-value-overlay {
     position: absolute;
@@ -213,19 +232,23 @@ body {
     z-index: 3;
 }
 
+/* Størrelser for de små gaugene */
 .small-gauges-grid .gauge-block { min-width: 140px; }
 .small-gauges-grid .gauge { width: 120px; height: 60px; }
+.small-gauges-grid .gauge-arc-bg { border-width: 6px; } /* Juster buen */
 .small-gauges-grid .gauge-needle { height: 50px; }
 .small-gauges-grid .gauge-value-overlay { font-size: 0.8em; bottom: 3px; }
 
+/* Størrelser for den store gaugen */
 #gauge-block-total { min-width: 300px; }
 #gauge-block-total .gauge-block-title { font-size: 1.4em; }
 #gauge-block-total .gauge-block-summary { font-size: 1.2em; }
 #gauge-block-total .gauge { width: 240px; height: 120px; }
+#gauge-block-total .gauge-arc-bg { border-width: 10px; } /* Juster buen */
 #gauge-block-total .gauge-needle { height: 100px; }
-#gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; }
 #gauge-block-total .gauge-value-overlay { font-size: 1.2em; bottom: 8px; }
 
+/* Farger for gauge-bokser */
 #gauge-block-resources { background-color: #E0F2F7; }
 #gauge-block-fleet { background-color: #E6F7E6; }
 #gauge-block-operations { background-color: #FFF2E0; }

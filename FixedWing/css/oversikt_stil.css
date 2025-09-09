@@ -29,26 +29,21 @@ table {
 th, td {
     border: 1px solid #ddd;
     padding: 12px 15px; /* Litt mer padding */
-    text-align: left;
-    vertical-align: middle;
+    text-align: left; /* Alt venstrejustert */
+    vertical-align: top; /* Justerer teksten øverst i cellen */
+    font-weight: 400; /* Normal vekt for all tekst */
 }
 thead {
     background-color: #34495e;
     color: white;
 }
 th {
-    font-weight: 700;
+    font-weight: 700; /* Kun tabellhodene skal være fete */
 }
 tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
-td {
-    font-weight: 400; /* Normal vekt for all tekst */
-}
-td:nth-child(1) { width: 45%; } /* Kriterium */
-td:nth-child(2) { width: 35%; } /* Valg */
-td:nth-child(3) {
-    width: 20%;
-    text-align: center;
-    font-weight: 700; /* Kun poeng skal være fete */
-}
+/* Kolonnebredder */
+td:nth-child(1) { width: 48%; } /* Kriterium - justert bredere */
+td:nth-child(2) { width: 32%; } /* Valg - justert smalere */
+td:nth-child(3) { width: 20%; text-align: left; } /* Poeng - justert bredere og venstrejustert */
