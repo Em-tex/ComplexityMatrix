@@ -3,12 +3,15 @@
 body {
     font-family: 'Overpass', sans-serif;
     margin: 0 20px 20px 20px;
-    padding: 0;
     background-color: #f8f9fa;
 }
-.header {
+.header, .total-summary, .container, .comments-section, .action-buttons, .footer-links {
     max-width: 1400px;
-    margin: 20px auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+.header, .total-summary, .section, .comments-section {
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -31,7 +34,6 @@ body {
     flex-direction: column;
     text-align: left;
     gap: 5px;
-    position: relative; /* For datalist styling */
 }
 .info-field label {
     font-weight: bold;
@@ -45,27 +47,21 @@ body {
     box-sizing: border-box;
     font-family: 'Overpass', sans-serif;
 }
-.info-field input.invalid {
-    border-color: #dc3545;
-    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-}
 .container {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
+    padding: 0;
+    box-shadow: none;
+    background: none;
 }
 @media (min-width: 992px) {
     .container {
         grid-template-columns: 1fr 1fr;
-        grid-auto-rows: minmax(min-content, max-content);
     }
 }
 .section {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 0;
     display: flex;
     flex-direction: column;
 }
@@ -99,70 +95,43 @@ body {
     color: white;
     font-weight: bold;
 }
-.header-cell {
-    padding: 8px 12px;
-    text-align: center;
-}
-.form-row {
-    display: grid;
-    grid-template-columns: 2fr 1.2fr 0.8fr;
-    border-bottom: 1px solid #eee;
-    align-items: center;
-}
+.header-cell { padding: 8px 12px; text-align: center; }
+.form-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; border-bottom: 1px solid #eee; align-items: center; }
 .form-row:last-child { border-bottom: none; }
-.form-cell {
-    padding: 8px 12px;
-    position: relative;
-}
-.form-cell select {
-    width: 100%;
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-family: 'Overpass', sans-serif;
-}
-.form-cell select.invalid { border-color: #dc3545 !important; }
-.form-cell select.placeholder-selected { color: #757575; }
+.form-cell { padding: 8px 12px; position: relative; }
+.form-cell select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
 
-.tooltip-container { display: inline-block; position: relative; margin-left: 8px; }
-.tooltip-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background-color: #777; color: white; font-size: 12px; font-weight: bold; cursor: pointer; user-select: none; }
-.tooltip-text { visibility: hidden; width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; font-weight: normal; }
-.tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
-
-.calculated-value { font-weight: bold; text-align: center; transition: background-color 0.3s ease; padding: 10px 12px; height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+.calculated-value { font-weight: bold; text-align: center; padding: 10px 12px; height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
 .bg-default-gray { background-color: #e9ecef !important; }
 .bg-weak-green { background-color: #d4edda !important; }
 .bg-weak-yellow { background-color: #fff3cd !important; }
 .bg-weak-red { background-color: #f8d7da !important; }
 
-.total-summary {
-    grid-column: 1 / -1;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 20px;
-    text-align: center;
-    margin-top: 20px;
-}
+.total-summary { text-align: center; }
 .all-gauges-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 20px;
     align-items: center;
 }
+@media (min-width: 768px) {
+    .all-gauges-container {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+}
 .small-gauges-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+    justify-self: center;
 }
 .gauge-block {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 .gauge-block-title {
     font-weight: 700;
@@ -175,73 +144,71 @@ body {
     margin-right: 5px;
     font-size: 1.1em;
 }
-.gauge-block-summary { font-size: 0.8em; margin-bottom: 5px; }
+.gauge-block-summary {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+}
 
-/* -- Ny, korrigert Gauge CSS -- */
+/* -- GAUGE CSS (Helikopter-versjonen) -- */
 .gauge {
     position: relative;
-    display: flex;
-    align-items: flex-end; /* Nålen starter fra bunnen */
-    justify-content: center;
-    overflow: hidden; /* Skjuler det som stikker utenfor */
 }
-.gauge-arc {
-    position: absolute;
+.gauge-bg {
     width: 100%;
-    height: 200%; /* Dobbelt så høy som bred for å lage en sirkel */
-    border-radius: 50%;
-    box-sizing: border-box;
-    /* Klippebane som kun viser den øverste halvdelen */
-    clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
-    /* Gradient fra grønn (venstre) til rød (høyre) */
-    background: conic-gradient(from 180deg at 50% 100%, #28a745 5%, #ffc107 50%, #dc3545 95%);
+    height: 100%;
+    border-radius: 50% 50% 0 0;
+    position: relative;
+    overflow: hidden;
+    background: conic-gradient(from 180deg at 50% 100%, #009122 5%, #fff025 50%, #ff152c 95%);
 }
-.gauge::after { /* Lager det "hule" senteret */
-    content: '';
+.gauge-cover {
     position: absolute;
-    background: inherit; /* Arver fargen fra .gauge-block */
-    filter: brightness(1.05);
-    border-radius: 50%;
-    z-index: 1;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    background-color: inherit;
+    border-radius: 50% 50% 0 0;
 }
 .gauge-needle {
-    position: relative; /* Plasseres relativt til gauge-diven */
+    position: absolute;
+    bottom: 0;
+    left: 50%;
     width: 2px;
+    height: 100%;
     background: #333;
     transform-origin: bottom center;
     transition: transform 0.5s ease;
     border-radius: 2px 2px 0 0;
     z-index: 2;
-    transform: rotate(-90deg); /* Starter på venstre side */
+    transform: translateX(-50%) rotate(-90deg);
 }
-.gauge-value-overlay {
-    position: absolute;
-    font-weight: 700;
-    color: #333;
-    z-index: 3;
-    bottom: 5px; /* Plassering fra bunnen */
-}
-/* Størrelser for de små gaugene */
+/* Størrelser for små gauges */
+.small-gauges-grid .gauge-block { min-width: 140px; }
 .small-gauges-grid .gauge { width: 120px; height: 60px; }
-.small-gauges-grid .gauge::after { width: 100px; height: 100px; bottom: -40px; } /* Juster hullet */
+.small-gauges-grid .gauge-bg { border-radius: 60px 60px 0 0; }
+.small-gauges-grid .gauge-cover { border-radius: 50px 50px 0 0; }
 .small-gauges-grid .gauge-needle { height: 50px; }
-.small-gauges-grid .gauge-value-overlay { font-size: 0.8em; }
 
-/* Størrelser for den store gaugen */
-#gauge-block-total { min-width: 300px; }
-#gauge-block-total .gauge-block-title { font-size: 1.4em; }
-#gauge-block-total .gauge-block-summary { font-size: 1.2em; }
-#gauge-block-total .gauge { width: 240px; height: 120px; }
-#gauge-block-total .gauge::after { width: 200px; height: 200px; bottom: -80px; } /* Juster hullet */
-#gauge-block-total .gauge-needle { height: 100px; }
-#gauge-block-total .gauge-value-overlay { font-size: 1.2em; }
+/* Størrelser for stor gauge */
+#gauge-block-total {
+    min-width: 320px;
+    justify-self: center;
+}
+#gauge-block-total .gauge-block-title { font-size: 1.6em; margin-bottom: 10px; }
+#gauge-block-total .gauge-block-summary { font-size: 1.2em; margin-bottom: 10px; }
+#gauge-block-total .gauge { width: 300px; height: 150px; }
+#gauge-block-total .gauge-bg { border-radius: 150px 150px 0 0; }
+#gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; border-radius: 135px 135px 0 0;}
+#gauge-block-total .gauge-needle { height: 125px; }
 
-#gauge-block-resources { background-color: #E0F2F7; }
-#gauge-block-fleet { background-color: #E6F7E6; }
-#gauge-block-operations { background-color: #FFF2E0; }
-#gauge-block-approvals { background-color: #EAEAF7; }
+/* Farger for gauge-bokser og deres covers */
+#gauge-block-resources .gauge-cover { background-color: #E0F2F7; }
+#gauge-block-fleet .gauge-cover { background-color: #E6F7E6; }
+#gauge-block-operations .gauge-cover { background-color: #FFF2E0; }
+#gauge-block-approvals .gauge-cover { background-color: #EAEAF7; }
+#gauge-block-total .gauge-cover { background-color: white; }
 
-.comments-section, .action-buttons, .footer-links { max-width: 1400px; margin: 20px auto; grid-column: 1 / -1; }
 .comments-section label { font-weight: bold; color: #495057; display: block; margin-bottom: 5px; }
 .comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif;}
 
