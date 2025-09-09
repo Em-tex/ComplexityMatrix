@@ -7,6 +7,9 @@
     <link rel="icon" href="../smallLogo.png" type="image/png">
     <link rel="stylesheet" href="css/stil.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
@@ -29,7 +32,9 @@
     </div>
 
     <div class="total-summary" id="total-summary-block">
-        <div class="total-number" id="grand-total-text"><span id="grand-total-display">0</span> / <span id="grand-max-total-display">89</span></div>
+        <div class="total-number" id="grand-total-text">
+            <span id="grand-total-display">0</span> / <span id="grand-max-total-display">89</span>
+        </div>
         <div class="all-gauges-container">
             <div class="small-gauges-grid">
                 <div class="gauge-block" id="gauge-block-resources">
@@ -62,80 +67,21 @@
     </div>
 
     <div class="container" id="main-container">
-        <div class="section" id="section-resources">
-            <div class="section-header"><span class="material-icons">people</span><span>Resources</span></div>
-            <div class="section-content" id="resources-content">
-                <div class="header-row"><div class="header-cell">Kriterie</div><div class="header-cell">Valg</div><div class="header-cell">Verdi</div></div>
-                <div class="form-row"><div class="form-cell">Total Number of staff employed for the operation</div><div class="form-cell"><select id="staff-employed"><option value="">Velg...</option><option value="<10">&lt; 10</option><option value="11-50">11 - 50</option><option value="51-200">51 - 200</option><option value="200-500">200 - 500</option><option value=">500">&gt; 500</option></select></div><div class="form-cell calculated-value" id="staff-employed-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Number of pilots employed</div><div class="form-cell"><select id="pilots-employed"><option value="">Velg...</option><option value="<50">&lt; 50</option><option value="51-100">51 - 100</option><option value="101-300">101 - 300</option><option value="301-500">301 - 500</option><option value="501-1000">501 - 1 000</option><option value=">1000">&gt; 1 000</option></select></div><div class="form-cell calculated-value" id="pilots-employed-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Cabin crew carried</div><div class="form-cell"><select id="cabin-crew"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="cabin-crew-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Leading personell has several roles<div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Score øker med antall piloter, da dette indikerer høyere organisatorisk kompleksitet for større selskaper.</span></div></div><div class="form-cell"><select id="leading-personnel-roles"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="leading-personnel-roles-value">0</div></div>
-            </div>
         </div>
-
-        <div class="section" id="section-fleet">
-             <div class="section-header"><span class="material-icons">flight</span><span>Fleet Specific</span></div>
-            <div class="section-content" id="fleet-content">
-                <div class="header-row"><div class="header-cell">Kriterie</div><div class="header-cell">Valg</div><div class="header-cell">Verdi</div></div>
-                <div class="form-row"><div class="form-cell">Number of types operated</div><div class="form-cell"><select id="types-operated"><option value="">Velg...</option><option value="1-3">1 - 3</option><option value="4-6">4 - 6</option><option value="7-9">7 - 9</option><option value="10-12">10 - 12</option><option value=">12">&gt; 12</option></select></div><div class="form-cell calculated-value" id="types-operated-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Number of aircraft operated over 40 000 kg</div><div class="form-cell"><select id="aircraft-over-40t"><option value="">Velg...</option><option value="0">0</option><option value="1-3">1 - 3</option><option value="4-5">4 - 5</option><option value="6-8">6 - 8</option><option value="9-10">9 - 10</option><option value=">10-100">&gt; 10 - 100</option><option value=">100">&gt; 100</option></select></div><div class="form-cell calculated-value" id="aircraft-over-40t-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Number of aircraft operated between 5 700 kg & 40 000 kg</div><div class="form-cell"><select id="aircraft-5.7-40t"><option value="">Velg...</option><option value="0">0</option><option value="1-5">1 - 5</option><option value="6-10">6 - 10</option><option value="11-15">11 - 15</option><option value="16-20">16 - 20</option><option value=">20">&gt; 20</option></select></div><div class="form-cell calculated-value" id="aircraft-5.7-40t-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Number of aircraft operated under 5 700 kg</div><div class="form-cell"><select id="aircraft-under-5.7t"><option value="">Velg...</option><option value="0">0</option><option value="1-3">1 - 3</option><option value="4-5">4 - 5</option><option value="6-8">6 - 8</option><option value="9-10">9 - 10</option><option value=">10">&gt; 10</option></select></div><div class="form-cell calculated-value" id="aircraft-under-5.7t-value">0</div></div>
-            </div>
-        </div>
-
-        <div class="section" id="section-operations">
-            <div class="section-header"><span class="material-icons">local_airport</span><span>Operations</span></div>
-            <div class="section-content" id="operations-content">
-                <div class="header-row"><div class="header-cell">Kriterie</div><div class="header-cell">Valg</div><div class="header-cell">Verdi</div></div>
-                <div class="form-row"><div class="form-cell">Sectors per annum</div><div class="form-cell"><select id="sectors-per-annum"><option value="">Velg...</option><option value="<10k">&lt; 10 000</option><option value="10k-49k">10 000 - 49 999</option><option value="50k-99k">50 000 - 99 999</option><option value="100k-199k">100 000 - 199 999</option><option value="200k-299k">200 000 - 299 999</option><option value=">300k">&gt; 300 000</option></select></div><div class="form-cell calculated-value" id="sectors-per-annum-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Type of Operation</div><div class="form-cell"><select id="type-of-operation"><option value="">Velg...</option><option value="A-A">A-A</option><option value="A-B Restricted">A-B Restricted</option><option value="Ad-Hoc S/H">Ad-Hoc S/H</option><option value="Schd S/H or Ad-Hoc L/H">Schd S/H or Ad-Hoc L/H</option><option value="Schd L/H">Schd L/H</option></select></div><div class="form-cell calculated-value" id="type-of-operation-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Aircraft leasing</div><div class="form-cell"><select id="aircraft-leasing"><option value="">Velg...</option><option value="No">No</option><option value="Yes, dry/wet">Yes, dry/wet</option><option value="Both dry and wet leasing">Both dry and wet leasing</option></select></div><div class="form-cell calculated-value" id="aircraft-leasing-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Number of airports where aircraft and/or crews are permanently based</div><div class="form-cell"><select id="airports-based"><option value="">Velg...</option><option value="1-5">1 - 5</option><option value="6-10">6 - 10</option><option value="11-15">11 - 15</option><option value="16-20">16 - 20</option><option value=">20">&gt; 20</option></select></div><div class="form-cell calculated-value" id="airports-based-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Group Airline</div><div class="form-cell"><select id="group-airline"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="group-airline-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Cargo Carriage</div><div class="form-cell"><select id="cargo-carriage"><option value="">Velg...</option><option value="Nil">Nil</option><option value="BStd">BStd</option><option value="UStd">UStd</option><option value="NStd">NStd</option></select></div><div class="form-cell calculated-value" id="cargo-carriage-value">0</div></div>
-            </div>
-        </div>
-
-        <div class="section" id="section-approvals">
-            <div class="section-header"><span class="material-icons">verified</span><span>Approvals</span></div>
-            <div class="section-content" id="approvals-content">
-                <div class="header-row"><div class="header-cell">Kriterie</div><div class="header-cell">Valg</div><div class="header-cell">Verdi</div></div>
-                <div class="form-row"><div class="form-cell">RNP AR APCH</div><div class="form-cell"><select id="rnp-ar-apch"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="rnp-ar-apch-value">0</div></div>
-                <div class="form-row"><div class="form-cell">MNPS/ NAT-HLA</div><div class="form-cell"><select id="mnps-nat-hla"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="mnps-nat-hla-value">0</div></div>
-                <div class="form-row"><div class="form-cell">RVSM</div><div class="form-cell"><select id="rvsm"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="rvsm-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Low Visibility operations (TAKEOFF)</div><div class="form-cell"><select id="lv-takeoff"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="lv-takeoff-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Low Visibility operations (LANDING)</div><div class="form-cell"><select id="lv-landing"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="lv-landing-value">0</div></div>
-                <div class="form-row"><div class="form-cell">ETOPS</div><div class="form-cell"><select id="etops"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="etops-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Dangerous Goods</div><div class="form-cell"><select id="dangerous-goods"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="dangerous-goods-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Single-Engined Turbine IMC</div><div class="form-cell"><select id="single-engine-imc"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="single-engine-imc-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Electronic Flight Bag</div><div class="form-cell"><select id="efb"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="efb-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Isolated Aerodromes</div><div class="form-cell"><select id="isolated-aerodromes"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="isolated-aerodromes-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Steep Approach</div><div class="form-cell"><select id="steep-approach"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="steep-approach-value">0</div></div>
-                <div class="form-row"><div class="form-cell">ATQP</div><div class="form-cell"><select id="atqp"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="atqp-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Fatigue Risk Management</div><div class="form-cell"><select id="frm"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="frm-value">0</div></div>
-                <div class="form-row"><div class="form-cell">ATO Lite</div><div class="form-cell"><select id="ato-lite"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="ato-lite-value">0</div></div>
-            </div>
-        </div>
-    </div>
-
     <div class="comments-section">
-        <label for="comments">Kommentar:</label>
+        <label for="comments">Kommentarer:</label>
         <textarea id="comments" placeholder="Legg til eventuelle kommentarer her..." rows="4"></textarea>
     </div>
-
     <div class="action-buttons">
         <button id="download-csv-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Last ned som CSV</button>
-        <button id="print-pdf-button">Skriv ut til PDF</button>
-        <button id="clear-form-button">Tøm skjema</button>
+        <button id="print-pdf-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" fill-rule="evenodd"/></svg> Skriv ut til PDF</button>
+        <button id="clear-form-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Tøm skjema</button>
         <button id="load-csv-button" class="load-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16h6V8h4L12 3 5 8h4zm-4 5h14v-2H5z"/></svg> Last inn CSV</button>
         <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
     </div>
-
     <div class="footer-links">
         <a href="oversikt.html" target="_blank">Oversikt over poengberegning</a>
     </div>
-
     <script src="js/kalkulator.js"></script>
 </body>
 </html>

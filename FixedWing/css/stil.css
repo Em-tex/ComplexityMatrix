@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Overpass', sans-serif;
     margin: 0 20px 20px 20px;
     padding: 0;
     background-color: #f8f9fa;
@@ -40,6 +42,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: 'Overpass', sans-serif;
 }
 .info-field input.invalid {
     border-color: #dc3545;
@@ -79,7 +82,7 @@ body {
 #section-resources .section-header { background: #4682B4; }
 #section-fleet .section-header { background: #3CB371; }
 #section-operations .section-header { background: #FF8C00; }
-#section-approvals .section-header { background: #6A5ACD; } /* Endret til lilla */
+#section-approvals .section-header { background: #6A5ACD; }
 
 .section-content {
     border: 1px solid #ddd;
@@ -116,6 +119,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: 'Overpass', sans-serif;
 }
 .form-cell select.invalid { border-color: #dc3545 !important; }
 .form-cell select.placeholder-selected { color: #757575; }
@@ -141,10 +145,7 @@ body {
     margin-top: 20px;
 }
 .total-number {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 20px;
+    display: none; /* Skjuler "Totalsum"-teksten som ønsket */
 }
 .all-gauges-container {
     display: flex;
@@ -157,7 +158,6 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    max-width: 320px;
 }
 .gauge-block {
     display: flex;
@@ -166,13 +166,30 @@ body {
     padding: 10px;
     border-radius: 6px;
 }
-.gauge-block-title { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+.gauge-block-title { font-weight: 700; margin-bottom: 5px; font-size: 0.9em; }
 .gauge-block-summary { font-size: 0.8em; margin-bottom: 5px; }
-.gauge { position: relative; overflow: hidden; }
-.gauge-bg { width: 100%; height: 100%; border-radius: 50% 50% 0 0; position: relative; overflow: hidden; background: conic-gradient(from -90deg at 50% 100%, #27ae60 5%, #f1c40f 40%, #c00000 70%); }
-.gauge-cover { position: absolute; background: inherit; filter: brightness(1.05); top: 8px; left: 8px; right: 8px; bottom: 0; border-radius: 50% 50% 0 0; z-index: 1; }
+
+.gauge { position: relative; }
+.gauge-bg {
+    width: 100%;
+    height: 100%;
+    border-radius: 50% 50% 0 0;
+    position: relative;
+    overflow: hidden;
+    background: conic-gradient(from -90deg at 50% 100%, #28a745 5%, #ffc107 50%, #dc3545 95%);
+}
+.gauge-cover {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    background-color: inherit; /* Nøkkelen til å matche bakgrunnen */
+    border-radius: 50% 50% 0 0;
+    z-index: 1;
+}
 .gauge-needle { position: absolute; bottom: 0; left: 50%; width: 2px; background: #333; transform-origin: bottom center; transition: transform 0.5s ease; border-radius: 2px 2px 0 0; z-index: 2; }
-.gauge-value-overlay { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; color: #333; z-index: 3; }
+.gauge-value-overlay { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 700; color: #333; z-index: 3; }
 
 /* Størrelser for de små gaugene */
 .small-gauges-grid .gauge-block { min-width: 140px; }
@@ -186,22 +203,27 @@ body {
 #gauge-block-total .gauge-block-summary { font-size: 1.2em; }
 #gauge-block-total .gauge { width: 240px; height: 120px; }
 #gauge-block-total .gauge-needle { height: 100px; }
+#gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; }
 #gauge-block-total .gauge-value-overlay { font-size: 1.2em; bottom: 8px; }
-#gauge-block-total .gauge-cover { top: 12px; left: 12px; right: 12px; }
 
 /* Farger for gauge-bokser */
 #gauge-block-resources { background-color: #E0F2F7; }
 #gauge-block-fleet { background-color: #E6F7E6; }
 #gauge-block-operations { background-color: #FFF2E0; }
-#gauge-block-approvals { background-color: #EAEAF7; } /* Ny farge */
+#gauge-block-approvals { background-color: #EAEAF7; }
 
 .comments-section, .action-buttons, .footer-links { max-width: 1400px; margin: 20px auto; grid-column: 1 / -1; }
 .comments-section label { font-weight: bold; color: #495057; display: block; margin-bottom: 5px; }
-.comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+.comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif;}
 
 .action-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-.action-buttons button { padding: 10px 20px; font-size: 1em; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease, opacity 0.2s; display: inline-flex; align-items: center; background-color: #555; opacity: 0.8; }
-.action-buttons button:hover { opacity: 1; }
+.action-buttons button { padding: 10px 20px; font-size: 1em; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease; display: inline-flex; align-items: center; }
+.action-buttons button:hover { opacity: 0.9; }
+#download-csv-button { background-color: #28a745; } /* Grønn */
+#print-pdf-button { background-color: #007bff; } /* Blå */
+#clear-form-button { background-color: #dc3545; } /* Rød */
+#load-csv-button { background-color: #ffc107; color: #212529; } /* Gul */
+
 .svg-icon { height: 1.2em; width: 1.2em; margin-right: 0.5em; fill: currentColor; }
 
 .footer-links { text-align: center; padding-top: 10px; border-top: 1px solid #eee; }
