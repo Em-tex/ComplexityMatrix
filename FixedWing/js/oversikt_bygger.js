@@ -24,8 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         "0": "0", // Lagt til for konsistens
         "1-5": "1 - 5", "6-10": "6 - 10", "11-15": "11 - 15", "16-20": "16 - 20", ">20": "> 20",
         "4-5": "4 - 5", "6-8": "6 - 8", "9-10": "9 - 10", ">10": "> 10",
-        "1-3": "1 - 3", // Duplikert for aircraft-over-40t og under-5.7t, men det er ok
-        ">10-100": "> 10 - 100", ">100": "> 100", // Lagt til
+        ">10-100": "> 10 - 100", ">100": "> 100",
         "<10k": "< 10 000", "10k-49k": "10 000 - 49 999", "50k-99k": "50 000 - 99 999", "100k-199k": "100 000 - 199 999", "200k-299k": "200 000 - 299 999", ">300k": "> 300 000"
     };
     
@@ -33,13 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('data/scoring.json'); // Riktig sti her
         const scoringRules = await response.json();
 
-        // Legger til operators.json for oversiktssiden også
-        const operatorsResponse = await fetch('data/operators.json');
-        const operators = await operatorsResponse.json();
-
-        // Dette er for oversikt over operatører, hvis du ville ha det, men jeg har fjernet dette fra oversikt.html nå.
-        // Hvis du vil vise dem, må du legge til en seksjon i oversikt.html
-        // console.log("Operatører lastet:", operators); 
+        // Fjernet lasting av operators.json da den ikke er nødvendig her.
 
         for (const [id, details] of Object.entries(fieldIdToDetails)) {
             const rule = scoringRules[id];
@@ -59,7 +52,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     html += `<td rowspan="${rowCount}">${details.label}</td>`;
                 }
                 
-                // Bruk kartet for å finne pen tekst, ellers bruk verdien som den er
                 const displayText = valueToDisplayTextMap[optionValue] || optionValue;
                 let scoreDisplay = '';
 

@@ -200,7 +200,8 @@ function updateGauge(prefix, value, maxValue) {
     const needle = document.getElementById(prefix + '-needle');
     if (!needle) return;
     const percentage = maxValue > 0 ? (value / maxValue) * 100 : 0;
-    const rotation = (percentage * 1.8) - 90;
+    // Justert for å rotere fra -90 (0%) til +90 (100%) grader over 180 grader
+    const rotation = (percentage * 1.8) - 90; 
     needle.style.transform = `translateX(-50%) rotate(${Math.max(-90, Math.min(rotation, 90))}deg)`;
 }
 
