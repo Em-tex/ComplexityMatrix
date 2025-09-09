@@ -1,77 +1,131 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    const fieldIdToDetails = {
-        'staff-employed': { label: 'Total Number of staff employed', section: 'resources' },
-        'pilots-employed': { label: 'Number of pilots employed', section: 'resources' },
-        'cabin-crew': { label: 'Cabin crew carried', section: 'resources' },
-        'leading-personnel-roles': { label: 'Leading personell has several roles', section: 'resources' },
-        'types-operated': { label: 'Number of types operated', section: 'fleet' },
-        'aircraft-over-40t': { label: 'Number of aircraft operated > 40 000 kg', section: 'fleet' },
-        'aircraft-5.7-40t': { label: 'Number of aircraft between 5 700 kg & 40 000 kg', section: 'fleet' },
-        'aircraft-under-5.7t': { label: 'Number of aircraft < 5 700 kg', section: 'fleet' },
-        'sectors-per-annum': { label: 'Sectors per annum', section: 'operations' },
-        'type-of-operation': { label: 'Type of Operation', section: 'operations' },
-        'aircraft-leasing': { label: 'Aircraft leasing', section: 'operations' },
-        'airports-based': { label: 'Number of airports (permanent base)', section: 'operations' },
-        'group-airline': { label: 'Group Airline', section: 'operations' },
-        'cargo-carriage': { label: 'Cargo Carriage', section: 'operations' },
-        'generic-approval': { label: 'Alle godkjenninger (RNP, ETOPS, etc.)', section: 'approvals' }
-    };
-
-    // Kart for å oversette tekniske verdier til pen tekst
-    const valueToDisplayTextMap = {
-        "<10": "< 10", "11-50": "11 - 50", "51-200": "51 - 200", "200-500": "200 - 500", ">500": "> 500",
-        "<50": "< 50", "51-100": "51 - 100", "101-300": "101 - 300", "301-500": "301 - 500", "501-1000": "501 - 1 000", ">1000": "> 1 000",
-        "1-3": "1 - 3", "4-6": "4 - 6", "7-9": "7 - 9", "10-12": "10 - 12", ">12": "> 12",
-        ">10-100": "> 10 - 100", ">100": "> 100",
-        "1-5": "1 - 5", "6-10": "6 - 10", "11-15": "11 - 15", "16-20": "16 - 20", ">20": "> 20",
-        "4-5": "4 - 5", "6-8": "6 - 8", "9-10": "9 - 10", ">10": "> 10",
-        "<10k": "< 10 000", "10k-49k": "10 000 - 49 999", "50k-99k": "50 000 - 99 999", "100k-199k": "100 000 - 199 999", "200k-299k": "200 000 - 299 999", ">300k": "> 300 000"
-    };
-    
-    try {
-        const response = await fetch('data/scoring.json');
-        const scoringRules = await response.json();
-
-        for (const [id, details] of Object.entries(fieldIdToDetails)) {
-            const rule = scoringRules[id];
-            if (!rule) continue;
-
-            const tableBody = document.getElementById(`${details.section}-body`);
-            if (!tableBody) continue;
-            
-            let html = '';
-            const options = Object.entries(rule);
-            const rowCount = options.length;
-
-            options.forEach(([optionValue, score], index) => {
-                html += '<tr>';
-
-                if (index === 0) {
-                    html += `<td rowspan="${rowCount}">${details.label}</td>`;
-                }
-                
-                // Bruk kartet for å finne pen tekst, ellers bruk verdien som den er
-                const displayText = valueToDisplayTextMap[optionValue] || optionValue;
-                let scoreDisplay = '';
-
-                if (typeof score === 'object' && score.type === 'dependent') {
-                    const dependentScores = Object.entries(score.scores)
-                        .map(([val, pts]) => `${valueToDisplayTextMap[val] || val} (${pts}p)`)
-                        .join(', ');
-                    scoreDisplay = `Avh. av piloter: ${dependentScores}, ellers ${score.default}p`;
-                } else {
-                    scoreDisplay = score;
-                }
-
-                html += `<td>${displayText}</td>`;
-                html += `<td>${scoreDisplay}</td>`;
-                html += '</tr>';
-            });
-            tableBody.innerHTML += html;
+document.addEventListener('DOMContentLoaded', () => {
+    // Funksjon for å hente data fra JSON-filer
+    async function fetchData() {
+        try {
+            const [operatorsRes, scoringRes] = await Promise.all([
+                fetch('../data/operators.json'),
+                fetch('../data/scoring.json')
+            ]);
+            const operatorsData = await operatorsRes.json();
+            const scoringRules = await scoringRes.json();
+            return { operatorsData, scoringRules };
+        } catch (error) {
+            console.error("Klarte ikke å laste inn data:", error);
         }
-
-    } catch (error) {
-        console.error('Kunne ikke laste eller bygge oversiktstabell:', error);
-        document.body.innerHTML += '<p style="color: red;">Klarte ikke å laste poengoversikten.</p>';
     }
+
+    // Funksjon for å lage en måler (gauge)
+    function createGauge(elementId, maxValue, label, size = 'small') {
+        const canvas = document.getElementById(elementId);
+        if (!canvas) return;
+
+        const gaugeOptions = {
+            angle: 0.15,
+            lineWidth: 0.3,
+            radiusScale: size === 'large' ? 0.9 : 1.0,
+            pointer: { length: 0.5, strokeWidth: 0.035, color: '#333' },
+            limitMax: false,
+            limitMin: false,
+            colorStart: '#6FADCF',
+            // Definerer fargestopp med tydelig rødfarge på slutten
+            staticZones: [
+               {strokeStyle: "#30B32D", min: 0, max: maxValue * 0.4},
+               {strokeStyle: "#FFDD00", min: maxValue * 0.4, max: maxValue * 0.75},
+               {strokeStyle: "#F03E3E", min: maxValue * 0.75, max: maxValue}
+            ],
+            strokeColor: '#E0E0E0',
+            generateGradient: true,
+            highDpiSupport: true,
+        };
+        
+        const gauge = new Gauge(canvas).setOptions(gaugeOptions);
+        gauge.maxValue = maxValue;
+        gauge.setMinValue(0);
+        gauge.animationSpeed = 32;
+        gauge.setTextField(document.getElementById(label));
+        return gauge;
+    }
+    
+    // Funksjon for å bygge HTML-tabeller
+    function buildTables(container, operator) {
+        const resourcesHtml = `
+            <table class="info-table">
+                <thead><tr><th>Resources</th><th>Antall</th></tr></thead>
+                <tbody>
+                    <tr><td>Piloter</td><td>${operator.pilots.length}</td></tr>
+                    <tr><td>Luftfartøy</td><td>${operator.aircraft.length}</td></tr>
+                    <tr><td>Flyplasser</td><td>${operator.aerodromes.length}</td></tr>
+                </tbody>
+            </table>
+        `;
+
+        const operationsHtml = `
+            <table class="info-table">
+                <thead><tr><th>Operations</th><th>Status</th></tr></thead>
+                <tbody>
+                    ${Object.entries(operator.operations).map(([op, status]) => `
+                        <tr><td>${op.replace(/_/g, ' ')}</td><td>${status ? 'Ja' : 'Nei'}</td></tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        container.innerHTML = resourcesHtml + operationsHtml;
+    }
+
+
+    // Hovedfunksjon for å bygge siden
+    async function buildPage() {
+        const { operatorsData, scoringRules } = await fetchData();
+        const operator = operatorsData[0]; // Viser data for første operatør
+
+        document.getElementById('operator-name').textContent = operator.name;
+        
+        // Bygg og sett inn tabellene FØRST
+        const tablesContainer = document.getElementById('tables-container');
+        buildTables(tablesContainer, operator);
+
+        // --- Poengberegning ---
+        const pilotsScore = Math.floor(operator.pilots.length / scoringRules.pilots.per) * scoringRules.pilots.points;
+        const aircraftScore = Math.floor(operator.aircraft.length / scoringRules.aircraft.per) * scoringRules.aircraft.points;
+        const aerodromesScore = Math.floor(operator.aerodromes.length / scoringRules.aerodromes.per) * scoringRules.aerodromes.points;
+        const opsTypesScore = Object.values(operator.operations).filter(v => v === true).length * scoringRules.operations.per_type;
+        const totalScore = pilotsScore + aircraftScore + aerodromesScore + opsTypesScore;
+
+        // --- Oppdater tekst og målere ---
+        document.getElementById('pilots-score').textContent = `${pilotsScore} poeng`;
+        // Endret tekst til engelsk og med nøyaktig beregning
+        document.getElementById('pilots-explanation').textContent = `Calculated as ${scoringRules.pilots.points} point(s) for every ${scoringRules.pilots.per} pilot(s).`;
+        
+        document.getElementById('aircraft-score').textContent = `${aircraftScore} poeng`;
+        document.getElementById('aircraft-explanation').textContent = `${scoringRules.aircraft.points} poeng per ${scoringRules.aircraft.per} luftfartøy.`;
+
+        document.getElementById('aerodromes-score').textContent = `${aerodromesScore} poeng`;
+        document.getElementById('aerodromes-explanation').textContent = `${scoringRules.aerodromes.points} poeng per ${scoringRules.aerodromes.per} flyplass.`;
+
+        document.getElementById('ops-types-score').textContent = `${opsTypesScore} poeng`;
+        document.getElementById('ops-types-explanation').textContent = `${scoringRules.operations.per_type} poeng per operasjonstype.`;
+
+        document.getElementById('total-score').textContent = totalScore;
+        
+        // --- Initialiser målere ---
+        const maxTotal = 100; // Juster maks-verdi for totalen etter behov
+        const maxIndividual = maxTotal / 4; // Setter maks for de små til 1/4 av totalen
+
+        const pilotsGauge = createGauge('pilots-gauge', maxIndividual);
+        pilotsGauge.set(pilotsScore);
+
+        const aircraftGauge = createGauge('aircraft-gauge', maxIndividual);
+        aircraftGauge.set(aircraftScore);
+
+        const aerodromesGauge = createGauge('aerodromes-gauge', maxIndividual);
+        aerodromesGauge.set(aerodromesScore);
+
+        const opsTypesGauge = createGauge('ops-types-gauge', maxIndividual);
+        opsTypesGauge.set(opsTypesScore);
+
+        const totalGauge = createGauge('total-gauge', maxTotal, 'total-score', 'large');
+        totalGauge.set(totalScore);
+    }
+
+    buildPage();
 });

@@ -2,60 +2,121 @@
 <html lang="no">
 <head>
     <meta charset="UTF-8">
-    <title>Oversikt Poengberegning - Fixed Wing</title>
-    <link rel="stylesheet" href="css/oversikt_stil.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oversikt - Fixed Wing Operatører</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        main {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px; /* Godt med luft mellom hver operatør-seksjon */
+        }
+        .operator-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.07);
+        }
+        .operator-section h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        .tables-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table th, .info-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .info-table thead th {
+            background-color: #3498db;
+            color: #fff;
+            font-weight: 600;
+        }
+        .info-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .info-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Oversikt over Poengberegning (Fixed Wing)</h1>
-
-    <h2>Resources</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Kriterium</th>
-                <th>Valg</th>
-                <th>Poeng</th>
-            </tr>
-        </thead>
-        <tbody id="resources-body"></tbody>
-    </table>
-
-    <h2>Fleet Specific</h2>
-    <table>
-       <thead>
-            <tr>
-                <th>Kriterium</th>
-                <th>Valg</th>
-                <th>Poeng</th>
-            </tr>
-        </thead>
-        <tbody id="fleet-body"></tbody>
-    </table>
+    <header>
+        <h1>Oversikt - Fixed Wing Operatører</h1>
+    </header>
+    <main id="overview-container">
+        </main>
     
-    <h2>Operations</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Kriterium</th>
-                <th>Valg</th>
-                <th>Poeng</th>
-            </tr>
-        </thead>
-        <tbody id="operations-body"></tbody>
-    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('data/operators.json');
+                const operators = await response.json();
+                const container = document.getElementById('overview-container');
 
-    <h2>Approvals</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Kriterium</th>
-                <th>Valg</th>
-                <th>Poeng</th>
-            </tr>
-        </thead>
-        <tbody id="approvals-body"></tbody>
-    </table>
+                operators.forEach(operator => {
+                    const section = document.createElement('section');
+                    section.className = 'operator-section';
 
-    <script src="js/oversikt_bygger.js" defer></script>
+                    const resourcesHtml = `
+                        <table class="info-table">
+                            <thead><tr><th>Resources</th><th>Antall</th></tr></thead>
+                            <tbody>
+                                <tr><td>Piloter</td><td>${operator.pilots.length}</td></tr>
+                                <tr><td>Luftfartøy</td><td>${operator.aircraft.length}</td></tr>
+                                <tr><td>Flyplasser</td><td>${operator.aerodromes.length}</td></tr>
+                            </tbody>
+                        </table>`;
+                    
+                    const operationsHtml = `
+                        <table class="info-table">
+                            <thead><tr><th>Operations</th><th>Status</th></tr></thead>
+                            <tbody>
+                                ${Object.entries(operator.operations).map(([op, status]) => `
+                                    <tr><td>${op.replace(/_/g, ' ')}</td><td>${status ? 'Ja' : 'Nei'}</td></tr>
+                                `).join('')}
+                            </tbody>
+                        </table>`;
+
+                    section.innerHTML = `
+                        <h2>${operator.name}</h2>
+                        <div class="tables-wrapper">
+                            ${resourcesHtml}
+                            ${operationsHtml}
+                        </div>
+                    `;
+                    container.appendChild(section);
+                });
+
+            } catch (error) {
+                console.error("Klarte ikke bygge oversiktssiden:", error);
+                document.getElementById('overview-container').textContent = "Kunne ikke laste operatørdata.";
+            }
+        });
+    </script>
 </body>
 </html>
