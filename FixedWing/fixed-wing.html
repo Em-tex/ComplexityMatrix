@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Wing Complexity Matrix</title>
+    <link rel="icon" href="smallLogo.png" type="image/png">
+    <link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Fixed Wing Complexity Matrix</h1>
+        <div class="header-info">
+            <div class="info-field">
+                <label for="operator-navn">Operatør:</label>
+                <input type="text" id="operator-navn" list="operator-list" placeholder="Velg eller skriv operatørnavn">
+                <datalist id="operator-list"></datalist> </div>
+            <div class="info-field">
+                <label for="filled-by">Fylt ut av:</label>
+                <input type="text" id="filled-by" placeholder="Skriv inn navn">
+            </div>
+            <div class="info-field">
+                <label for="date">Dato:</label>
+                <input type="date" id="date">
+            </div>
+        </div>
+    </div>
+
+    <div class="total-summary" id="total-summary-block">
+        <div class="total-number" id="grand-total-text">Totalsum: <span id="grand-total-display">0</span> / <span id="grand-max-total-display">91</span></div>
+        
+        <div class="all-gauges-container">
+            <div class="gauge-block" id="gauge-block-resources">
+                <div class="gauge-block-title">Resources</div>
+                <div class="gauge-block-summary"><span id="resources-sum">0</span> / <span id="resources-max-sum">18</span></div>
+                <div class="gauge">
+                    <div class="gauge-bg">
+                           <div class="gauge-cover"></div>
+                    </div>
+                    <div class="gauge-needle" id="resources-needle"></div>
+                    <div class="gauge-value-overlay" id="resources-gauge-value">0</div>
+                </div>
+            </div>
+            <div class="gauge-block" id="gauge-block-fleet">
+                <div class="gauge-block-title">Fleet Specific</div>
+                <div class="gauge-block-summary"><span id="fleet-sum">0</span> / <span id="fleet-max-sum">25</span></div>
+                <div class="gauge">
+                    <div class="gauge-bg">
+                           <div class="gauge-cover"></div>
+                    </div>
+                    <div class="gauge-needle" id="fleet-needle"></div>
+                    <div class="gauge-value-overlay" id="fleet-gauge-value">0</div>
+                </div>
+            </div>
+            <div class="gauge-block" id="gauge-block-operations">
+                <div class="gauge-block-title">Operations</div>
+                <div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">34</span></div>
+                <div class="gauge">
+                    <div class="gauge-bg">
+                           <div class="gauge-cover"></div>
+                    </div>
+                    <div class="gauge-needle" id="operations-needle"></div>
+                    <div class="gauge-value-overlay" id="operations-gauge-value">0</div>
+                </div>
+            </div>
+            <div class="gauge-block" id="gauge-block-approvals">
+                <div class="gauge-block-title">Approvals</div>
+                <div class="gauge-block-summary"><span id="approvals-sum">0</span> / <span id="approvals-max-sum">14</span></div>
+                <div class="gauge">
+                    <div class="gauge-bg">
+                           <div class="gauge-cover"></div>
+                    </div>
+                    <div class="gauge-needle" id="approvals-needle"></div>
+                    <div class="gauge-value-overlay" id="approvals-gauge-value">0</div>
+                </div>
+            </div>
+            <div class="gauge-block" id="gauge-block-total">
+                <div class="gauge-block-title">Total Score</div>
+                <div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">91</span></div>
+                <div class="gauge">
+                    <div class="gauge-bg">
+                        <div class="gauge-cover"></div>
+                    </div>
+                    <div class="gauge-needle" id="total-needle"></div>
+                    <div class="gauge-value-overlay" id="total-gauge-value">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-container">
+        <div class="section" id="section-resources">
+            <div class="section-header">
+                <span>Resources</span>
+                <div class="not-assessed-checkbox">
+                    <input type="checkbox" id="resources-not-assessed" onchange="toggleNotAssessed('resources')">
+                    <label for="resources-not-assessed">Ikke vurdert</label>
+                </div>
+            </div>
+            <div class="section-content" id="resources-content">
+                <div class="header-row">
+                    <div class="header-cell">Kriterie</div>
+                    <div class="header-cell">Valg</div>
+                    <div class="header-cell">Verdi</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">Total Number of staff employed for the operation</div>
+                    <div class="form-cell">
+                        <select id="staff-employed">
+                            <option value="">Velg...</option>
+                            <option value="<10">&lt;10</option>
+                            <option value="11-50">11-50</option>
+                            <option value="51-200">51-200</option>
+                            <option value="200-500">200-500</option>
+                            <option value=">500">&gt;500</option>
+                        </select>
+                    </div>
+                    <div class="form-cell calculated-value" id="staff-employed-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">Number of pilots employed</div>
+                    <div class="form-cell">
+                        <select id="pilots-employed">
+                            <option value="">Velg...</option>
+                            <option value="<50">&lt;50</option>
+                            <option value="51-100">51-100</option>
+                            <option value="101-300">101-300</option>
+                            <option value="301-500">301-500</option>
+                            <option value="501-1000">501-1000</option>
+                            <option value=">1000">&gt;1000</option>
+                        </select>
+                    </div>
+                    <div class="form-cell calculated-value" id="pilots-employed-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">Cabin crew carried</div>
+                    <div class="form-cell">
+                        <select id="cabin-crew">
+                            <option value="">Velg...</option>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-cell calculated-value" id="cabin-crew-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">Leading personell has several roles
+                        <div class="tooltip-container">
+                            <span class="tooltip-icon">?</span>
+                            <span class="tooltip-text">Score avhenger av antall piloter. Under 50 piloter gir 2p, 51-100 piloter gir 1p, over 100 gir 0p.</span>
+                        </div>
+                    </div>
+                    <div class="form-cell">
+                        <select id="leading-personnel-roles">
+                            <option value="">Velg...</option>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-cell calculated-value" id="leading-personnel-roles-value">0</div>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+
+    <div class="comments-section">
+        <label for="comments">Kommentarer:</label>
+        <textarea id="comments" placeholder="Legg til eventuelle kommentarer her..." rows="4"></textarea>
+    </div>
+
+    <div class="action-buttons">
+        </div>
+
+    <div class="footer-links">
+        <a href="oversikt.html" target="_blank">Oversikt over poengberegning</a>
+        </div>
+
+    <script src="js/kalkulator.js"></script>
+</body>
+</html>
