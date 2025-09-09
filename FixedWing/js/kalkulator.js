@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const STORAGE_KEY = 'fixedWingComplexityData';
     let scoringRules = {};
 
-    // Hardkodet for stabilitet. Ingen ekstern fil trengs.
+    // Hardkodet for stabilitet.
     const MAX_SCORES = {
         resources: 21,
         fleet: 25,
@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const needle = document.getElementById(prefix + '-needle');
         if (!needle) return;
         const percentage = maxValue > 0 ? value / maxValue : 0;
-        const rotation = -90 + (percentage * 180);
-        needle.style.transform = `translateX(-50%) rotate(${Math.min(90, Math.max(-90, rotation))}deg)`;
+        const rotation = -90 + (percentage * 180); // Fra -90 (0%) til +90 (100%)
+        needle.style.transform = `rotate(${Math.min(90, Math.max(-90, rotation))}deg)`;
         document.getElementById(`${prefix}-gauge-value`).textContent = value;
     }
 
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         saveData();
     }
 
-    // --- Funksjoner for lagring og lasting ---
+    // --- Funksjoner for lagring, lasting, CSV etc. ---
     function saveData() {
         const dataToSave = {};
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- Initialisering ---
     async function init() {
         try {
+            // Last inn datafiler parallelt for hastighet
             const [scoringRes, operatorsRes] = await Promise.all([
                 fetch('data/scoring.json'),
                 fetch('data/operators.json')
@@ -130,6 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             scoringRules = await scoringRes.json();
             const operators = await operatorsRes.json();
             
+            // Fyll ut operatørlisten
             const datalist = document.getElementById('operator-list');
             operators.forEach(op => {
                 const option = document.createElement('option');
@@ -139,12 +141,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } catch (error) {
             console.error('Klarte ikke å laste inn nødvendige datafiler:', error);
-            alert('FEIL: Kunne ikke laste inn datafiler (scoring/operators).');
+            alert('FEIL: Kunne ikke laste inn datafiler (scoring/operators). Siden kan ikke fungere.');
             return;
         }
 
         // Sett maksverdier i HTML
-        document.getElementById('grand-max-total-display').textContent = MAX_SCORES.total;
         document.getElementById('resources-max-sum').textContent = MAX_SCORES.resources;
         document.getElementById('fleet-max-sum').textContent = MAX_SCORES.fleet;
         document.getElementById('operations-max-sum').textContent = MAX_SCORES.operations;
@@ -154,10 +155,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Fest alle event listeners
         document.querySelectorAll('input, select, textarea').forEach(el => {
             el.addEventListener('change', updateCalculations);
+            el.addEventListener('keyup', saveData); // Lagre ved tastetrykk også for tekstfelt
         });
 
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
-        // ... fest andre knappe-listeners her hvis du har dem
+        // ... (legg til event listeners for CSV/PDF-knapper her hvis du gjeninnfører dem) ...
 
         // Last inn lagret data og sett dato hvis tom
         loadData();
