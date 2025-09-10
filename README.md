@@ -12,6 +12,8 @@ Prosjektet er organisert i undermapper for hver type operasjon:
 
 /ComplexityMatrix
 |-- index.html              <-- Hovedsiden med lenker til de ulike kalkulatorene
+|-- css/
+|   |-- stilark.css         <-- Stilark for hovedsiden
 |-- smallLogo.png           <-- Favicon for prosjektet
 |-- README.md               <-- Denne filen
 |
@@ -22,7 +24,7 @@ Prosjektet er organisert i undermapper for hver type operasjon:
 |   |   |-- stil.css
 |   |   |-- oversikt_stil.css
 |   |-- /js
-|   |   |-- kalkulator.js   <-- Hovedlogikken for kalkulatoren
+|   |   |-- kalkulator.js     <-- Hovedlogikken for kalkulatoren
 |   |   |-- oversikt_bygger.js <-- Skript som bygger oversiktssiden
 |   |-- /data
 |       |-- operators.json  <-- Liste over operatører for nedtrekksmeny
@@ -32,7 +34,7 @@ Prosjektet er organisert i undermapper for hver type operasjon:
 |   |-- (lignende filstruktur)
 |
 |-- /UAS                    <-- Mappe for UAS (droner)
-|-- (lignende filstruktur)
+    |-- (lignende filstruktur)
 
 ## Hvordan det fungerer
 

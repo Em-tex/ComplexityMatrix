@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+.button-group {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.button-single {
+    margin-top: 10px;
+}
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px;
+    font-size: 18px;
+    color: white;
+    background-color: #004f9f; /* Luftfartstilsynets blåfarge */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    min-width: 200px;
+    box-sizing: border-box;
+}
+.button:hover {
+    background-color: #003a75;
+    transform: translateY(-2px);
+}
+.button i, .button .material-symbols-outlined {
+    margin-right: 10px;
+    vertical-align: middle; 
+}
+@media (max-width: 600px) {
+    .button-group {
+        flex-direction: column;
+        align-items: center;
+    }
+    .button {
+        width: 90%;
+        max-width: 300px;
+    }
+}
