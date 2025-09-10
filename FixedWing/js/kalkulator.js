@@ -3,16 +3,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const STORAGE_KEY = 'fixedWingComplexityData';
     let scoringRules = {};
 
-    // ENDRET: Oppdatert maks-poengsummer for den nye beregningen
     const MAX_SCORES = {
         resources: 21, 
         fleet: 25, 
-        operations: 43, // 46 - 5 (cargo) + 2 (mix) = 43
+        operations: 43,
         approvals: 14, 
-        total: 103     // 106 - 5 (cargo) + 2 (mix) = 103
+        total: 103
     };
 
-    // ENDRET: Byttet ut 'cargo-carriage' med 'mix-operations'
     const fieldData = [
         { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
@@ -42,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'frm', label: 'Fatigue Risk Management', section: 'approvals' }, { id: 'ato-lite', label: 'ATO Lite', section: 'approvals' }
     ];
 
-    // --- Kjernefunksjoner (ingen endringer i logikken her) ---
+    // --- Kjernefunksjoner ---
     function calculateFieldScore(fieldId, selectValue, pilotsValue) {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
         if (!fieldInfo) return 0;
@@ -104,7 +102,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         saveData();
     }
 
-    // --- Funksjoner for lagring, lasting, knapper etc. (ingen endringer her) ---
+    // --- Funksjoner for lagring, lasting, knapper etc. ---
     function saveData() {
         const dataToSave = {};
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
@@ -179,6 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return "";
     }
 
+    // ENDRET: Kommentarer flyttet frem i rekkefølgen
     function downloadCSV() {
         if (!validateForm()) {
             return;
@@ -187,36 +186,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
         const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.csv`;
 
-        const headers = ['Operatørnavn', 'Fylt ut av', 'Dato'];
-        fieldData.forEach(field => {
-            headers.push(`${field.label} (Valg)`);
-            headers.push(`${field.label} (Verdi)`);
-        });
-        headers.push('Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum', 'Kommentarer');
-
-        const dataRow = [
-            `"${operatorNavn.replace(/"/g, '""')}"`,
-            `"${document.getElementById('filled-by').value.replace(/"/g, '""')}"`,
-            `"${dateValue}"`
+        const primaryHeaders = [
+            'Operatørnavn', 'Fylt ut av', 'Dato',
+            'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum',
+            'Complexity Rating',
+            'Kommentarer' // Flyttet hit
         ];
+        const detailHeaders = [];
         fieldData.forEach(field => {
-            const selectedText = getSelectedText(field.id);
-            const score = document.getElementById(field.id + '-value').textContent;
-            dataRow.push(`"${selectedText.replace(/"/g, '""')}"`);
-            dataRow.push(score);
+            detailHeaders.push(`${field.label} (Valg)`);
+            detailHeaders.push(`${field.label} (Verdi)`);
         });
+        const allHeaders = primaryHeaders.concat(detailHeaders);
 
         const comments = `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
-        dataRow.push(
+        const primaryData = [
+            `"${operatorNavn.replace(/"/g, '""')}"`,
+            `"${document.getElementById('filled-by').value.replace(/"/g, '""')}"`,
+            `"${dateValue}"`,
             document.getElementById('resources-sum').textContent,
             document.getElementById('fleet-sum').textContent,
             document.getElementById('operations-sum').textContent,
             document.getElementById('approvals-sum').textContent,
             document.getElementById('total-gauge-sum-text').textContent,
-            comments
-        );
-        
-        const csvContent = headers.join(';') + '\r\n' + dataRow.join(';');
+            "", // Tom verdi for Complexity Rating
+            comments // Flyttet hit
+        ];
+        const detailData = [];
+        fieldData.forEach(field => {
+            const selectedText = getSelectedText(field.id);
+            const score = document.getElementById(field.id + '-value').textContent;
+            detailData.push(`"${selectedText.replace(/"/g, '""')}"`);
+            detailData.push(score);
+        });
+        const allData = primaryData.concat(detailData);
+
+        const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
@@ -261,7 +266,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (select) {
                     const choiceHeader = `${field.label} (Valg)`;
                     const choiceIndex = headerMap[choiceHeader];
-                    if (choiceIndex !== undefined) {
+                    if (choiceIndex !== undefined && data[choiceIndex] !== undefined) {
                         const valueToFind = data[choiceIndex];
                         const option = Array.from(select.options).find(opt => opt.text === valueToFind);
                         select.value = option ? option.value : "";
@@ -280,7 +285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.readAsText(file);
     }
 
-    // --- Initialisering (ingen endringer her) ---
+    // --- Initialisering ---
     async function init() {
         try {
             const [scoringRes, operatorsRes] = await Promise.all([
