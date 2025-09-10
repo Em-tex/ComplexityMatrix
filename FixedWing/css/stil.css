@@ -107,6 +107,59 @@ body {
 .bg-weak-yellow { background-color: #fff3cd !important; }
 .bg-weak-red { background-color: #f8d7da !important; }
 
+/* --- Tooltip Styles --- */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 8px;
+    cursor: help;
+}
+.tooltip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    user-select: none;
+}
+.tooltip-text {
+    visibility: hidden;
+    width: 220px;
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -110px; /* Use half of the width to center */
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-weight: normal;
+    font-size: 0.9em;
+}
+.tooltip-text::after { /* Tooltip arrow */
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #343a40 transparent transparent transparent;
+}
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
 .total-summary { text-align: center; }
 .all-gauges-container {
     display: grid;
@@ -149,7 +202,7 @@ body {
     margin-bottom: 5px;
 }
 
-/* -- GAUGE CSS (Helikopter-versjonen) -- */
+/* -- GAUGE CSS -- */
 .gauge {
     position: relative;
 }
@@ -183,14 +236,14 @@ body {
     z-index: 2;
     transform: translateX(-50%) rotate(-90deg);
 }
-/* Størrelser for små gauges */
+/* Sizes for small gauges */
 .small-gauges-grid .gauge-block { min-width: 140px; }
 .small-gauges-grid .gauge { width: 120px; height: 60px; }
 .small-gauges-grid .gauge-bg { border-radius: 60px 60px 0 0; }
 .small-gauges-grid .gauge-cover { border-radius: 50px 50px 0 0; }
 .small-gauges-grid .gauge-needle { height: 50px; }
 
-/* Størrelser for stor gauge */
+/* Sizes for large gauge */
 #gauge-block-total {
     min-width: 320px;
     justify-self: center;
@@ -202,7 +255,7 @@ body {
 #gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; border-radius: 135px 135px 0 0;}
 #gauge-block-total .gauge-needle { height: 125px; }
 
-/* Farger for gauge-bokser og deres covers */
+/* Colors for gauge boxes and their covers */
 #gauge-block-resources .gauge-cover { background-color: #E0F2F7; }
 #gauge-block-fleet .gauge-cover { background-color: #E6F7E6; }
 #gauge-block-operations .gauge-cover { background-color: #FFF2E0; }

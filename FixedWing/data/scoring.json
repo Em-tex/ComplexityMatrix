@@ -103,6 +103,30 @@
         "UStd": 3,
         "NStd": 5
     },
+    "area-of-operation": {
+        "Within Norway only": 1,
+        "Within EU": 2,
+        "Worldwide": 5
+    },
+    "landings": {
+        "N/A": 0,
+        "Ad-hoc landings": 1,
+        "Ad-hoc landings in congested areas": 3
+    },
+    "ifr-imc-operation": {
+        "No": 0,
+        "Yes": 2
+    },
+    "ncc": {
+        "No": 0,
+        "Yes, own a/c": 1,
+        "Yes, managed a/c": 5
+    },
+    "spo": {
+        "No": 0,
+        "Yes": 1,
+        "High risk SPO": 2
+    },
     "generic-approval": {
         "No": 0,
         "Yes": 1
