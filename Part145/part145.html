@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Part-145 Risk Assessment</title>
+    <link rel="stylesheet" href="css/part145_stil.css">
+</head>
+<body>
+    <div class="header"><h1>Part-145 Risk Assessment</h1></div>
+    <div class="total-summary"></div>
+    <div class="container">
+        <div class="section" id="section-performance">
+            <div class="section-header"><span>Performance</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row"><div class="form-cell">1. Level 1 finding</div><div class="form-cell"><select id="perf-level1-finding"><option value="">Velg...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="perf-level1-finding-value">0</div></div>
+                <div class="form-row"><div class="form-cell">2. Corrective actions implemented in time</div><div class="form-cell"><select id="perf-corrective-actions"><option value="">Velg...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="perf-corrective-actions-value">0</div></div>
+                <div class="form-row"><div class="form-cell">3a. MS - Identification of safety hazards</div><div class="form-cell"><select id="perf-ms-hazard-identification"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="perf-ms-hazard-identification-value">0</div></div>
+                <div class="form-row"><div class="form-cell">3b. MS - Management of risks</div><div class="form-cell"><select id="perf-ms-risk-management"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="perf-ms-risk-management-value">0</div></div>
+                <div class="form-row"><div class="form-cell">3c. MS - Management of changes</div><div class="form-cell"><select id="perf-ms-moc"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="perf-ms-moc-value">0</div></div>
+            </div>
+        </div>
+        <div class="section" id="section-complexity">
+            <div class="section-header"><span>Complexity</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection / Input</div><div class="header-cell">Value</div></div>
+                 <div class="form-row"><div class="form-cell">1a. Addressing non-compliances</div><div class="form-cell"><select id="comp-eff-addressing-non-comp"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-addressing-non-comp-value">0</div></div>
+                <div class="form-row"><div class="form-cell">1b. Closure of non-compliances</div><div class="form-cell"><select id="comp-eff-closure-non-comp"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-closure-non-comp-value">0</div></div>
+                <div class="form-row"><div class="form-cell">1c. Addressing safety hazards</div><div class="form-cell"><select id="comp-eff-addressing-hazards"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-addressing-hazards-value">0</div></div>
+                <div class="form-row"><div class="form-cell">2a. ISO 45001</div><div class="form-cell"><select id="comp-iso-45001"><option value="">Velg...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="comp-iso-45001-value">0</div></div>
+                <div class="form-row"><div class="form-cell">2b. ISO 9001</div><div class="form-cell"><select id="comp-iso-9001"><option value="">Velg...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="comp-iso-9001-value">0</div></div>
+                <div class="form-row"><div class="form-cell">2c. Approvals by other authorities (antall)</div><div class="form-cell"><input type="number" id="comp-other-auth-approvals" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-other-auth-approvals-value">0</div></div>
+                <div class="form-row"><div class="form-cell">3. Changes not requiring prior approval</div><div class="form-cell"><select id="comp-proc-changes-no-approval"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-proc-changes-no-approval-value">0</div></div>
+                <div class="form-row"><div class="form-cell">4a. AltMoc Procedure</div><div class="form-cell"><select id="comp-altmoc-procedure"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-altmoc-procedure-value">0</div></div>
+                <div class="form-row"><div class="form-cell">4b. Antall AltMoc prosedyrer</div><div class="form-cell"><input type="number" id="comp-altmoc-number" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-altmoc-number-value">0</div></div>
+                <div class="form-row"><div class="form-cell">5a. Antall base locations</div><div class="form-cell"><input type="number" id="comp-loc-base" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-loc-base-value">0</div></div>
+                <div class="form-row"><div class="form-cell">5b. Antall line locations</div><div class="form-cell"><input type="number" id="comp-loc-line" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-loc-line-value">0</div></div>
+                <div class="form-row"><div class="form-cell">5c. Antall workshop locations</div><div class="form-cell"><input type="number" id="comp-loc-workshop" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-loc-workshop-value">0</div></div>
+                <div class="form-row"><div class="form-cell">6a. Antall underkontrakter</div><div class="form-cell"><input type="number" id="comp-subcontract-number" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-subcontract-number-value">0</div></div>
+                <div class="form-row"><div class="form-cell">6b. Underkontraktør for flere</div><div class="form-cell"><select id="comp-subcontract-multiple"><option value="">Velg...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="comp-subcontract-multiple-value">0</div></div>
+                <div class="form-row"><div class="form-cell">7a. Omfang - Luftfartøy (antall)</div><div class="form-cell"><input type="number" id="comp-scope-aircraft" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-scope-aircraft-value">0</div></div>
+                <div class="form-row"><div class="form-cell">7b. Omfang - Motorer (antall)</div><div class="form-cell"><input type="number" id="comp-scope-engines" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-scope-engines-value">0</div></div>
+                <div class="form-row"><div class="form-cell">7c. Omfang - Komponenter (antall)</div><div class="form-cell"><input type="number" id="comp-scope-components" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-scope-components-value">0</div></div>
+                <div class="form-row"><div class="form-cell">7d. Omfang - NDT (antall)</div><div class="form-cell"><input type="number" id="comp-scope-ndt" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-scope-ndt-value">0</div></div>
+                <div class="form-row"><div class="form-cell">8a. Owner involvement (High vol) antall</div><div class="form-cell"><input type="number" id="comp-owner-high-vol" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-owner-high-vol-value">0</div></div>
+                <div class="form-row"><div class="form-cell">8b. Owner involvement (Medium vol) antall</div><div class="form-cell"><input type="number" id="comp-owner-medium-vol" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-owner-medium-vol-value">0</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/part145_kalkulator.js"></script>
+</body>
+</html>

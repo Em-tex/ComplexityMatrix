@@ -107,7 +107,6 @@ body {
 .bg-weak-yellow { background-color: #fff3cd !important; }
 .bg-weak-red { background-color: #f8d7da !important; }
 
-/* --- Tooltip Styles --- */
 .tooltip-container {
     position: relative;
     display: inline-block;
@@ -202,7 +201,6 @@ body {
     margin-bottom: 5px;
 }
 
-/* -- GAUGE CSS -- */
 .gauge {
     position: relative;
 }
@@ -263,7 +261,6 @@ body {
 .comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif;}
 
 .action-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-/* ENDRET: Inkluderer <a> for lik styling */
 .action-buttons button, .action-buttons a[role="button"] { 
     padding: 10px 20px; 
     font-size: 1em; 
@@ -282,10 +279,17 @@ body {
 #print-pdf-button { background-color: #6f42c1; }
 #clear-form-button { background-color: #dc3545; }
 #load-csv-button { background-color: #ffc107; color: #212529; }
-/* NYTT: Stil for SharePoint-knapp */
 #sharepoint-upload-button { background-color: #0078D4; }
+/* NYTT: Stil for Profiloversikt-knapp */
+#profile-list-button { background-color: #6c757d; }
 
 .svg-icon { height: 1.2em; width: 1.2em; margin-right: 0.5em; fill: currentColor; }
-.footer-links { text-align: center; padding-top: 10px; border-top: 1px solid #eee; }
+/* ENDRET: Ny layout for footer */
+.footer-links {
+    display: flex;
+    justify-content: flex-end; /* Flytter innholdet til høyre */
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
 .footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
 .footer-links a:hover { text-decoration: underline; }
