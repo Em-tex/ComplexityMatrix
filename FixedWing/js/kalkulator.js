@@ -3,16 +3,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const STORAGE_KEY = 'fixedWingComplexityData';
     let scoringRules = {};
 
-    // ENDRET: Oppdatert maks-poengsummer for å inkludere de nye feltene
+    // ENDRET: Oppdatert maks-poengsummer for den nye beregningen
     const MAX_SCORES = {
         resources: 21, 
         fleet: 25, 
-        operations: 46, // 29 + 17 (nye poeng)
+        operations: 43, // 46 - 5 (cargo) + 2 (mix) = 43
         approvals: 14, 
-        total: 106     // 89 + 17 (nye poeng)
+        total: 103     // 106 - 5 (cargo) + 2 (mix) = 103
     };
 
-    // ENDRET: Lagt til de 5 nye operasjonsfeltene her
+    // ENDRET: Byttet ut 'cargo-carriage' med 'mix-operations'
     const fieldData = [
         { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
@@ -27,14 +27,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'aircraft-leasing', label: 'Aircraft leasing', section: 'operations' },
         { id: 'airports-based', label: 'Number of airports where aircraft and/or crews are permanently based', section: 'operations' },
         { id: 'group-airline', label: 'Group Airline', section: 'operations' },
-        { id: 'cargo-carriage', label: 'Cargo Carriage', section: 'operations' },
-        // Nye felter lagt til her:
+        { id: 'mix-operations', label: 'Mix Operations (Cargo, Pax)', section: 'operations' },
         { id: 'area-of-operation', label: 'Area of Operation', section: 'operations' },
         { id: 'landings', label: 'Landings', section: 'operations' },
         { id: 'ifr-imc-operation', label: 'IFR/IMC Operation', section: 'operations' },
         { id: 'ncc', label: 'NCC', section: 'operations' },
         { id: 'spo', label: 'SPO', section: 'operations' },
-        // Slutt på nye felter
         { id: 'rnp-ar-apch', label: 'RNP AR APCH', section: 'approvals' }, { id: 'mnps-nat-hla', label: 'MNPS/ NAT-HLA', section: 'approvals' },
         { id: 'rvsm', label: 'RVSM', section: 'approvals' }, { id: 'lv-takeoff', label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
         { id: 'lv-landing', label: 'Low Visibility operations (LANDING)', section: 'approvals' }, { id: 'etops', label: 'ETOPS', section: 'approvals' },
@@ -44,12 +42,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'frm', label: 'Fatigue Risk Management', section: 'approvals' }, { id: 'ato-lite', label: 'ATO Lite', section: 'approvals' }
     ];
 
-    // --- Kjernefunksjoner ---
+    // --- Kjernefunksjoner (ingen endringer i logikken her) ---
     function calculateFieldScore(fieldId, selectValue, pilotsValue) {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
         if (!fieldInfo) return 0;
         
-        // Approvals har en felles poengregel
         if (fieldInfo.section === 'approvals') {
             return scoringRules['generic-approval']?.[selectValue] ?? 0;
         }
@@ -57,7 +54,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!scoringRules[fieldId] || !selectValue) return 0;
         
         const rule = scoringRules[fieldId][selectValue];
-        // Håndterer avhengighetsregel (f.eks. for "leading-personnel-roles")
         if (typeof rule === 'object' && rule.type === 'dependent') {
             return rule.scores[pilotsValue] ?? rule.default;
         }
@@ -108,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         saveData();
     }
 
-    // --- Funksjoner for lagring, lasting, knapper etc. ---
+    // --- Funksjoner for lagring, lasting, knapper etc. (ingen endringer her) ---
     function saveData() {
         const dataToSave = {};
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
@@ -134,8 +130,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.reload();
         }
     }
-
-    // --- GJENINNFØRT: Funksjoner for validering, CSV-nedlasting og PDF-utskrift ---
 
     function validateForm() {
         const errors = [];
@@ -286,7 +280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.readAsText(file);
     }
 
-    // --- Initialisering ---
+    // --- Initialisering (ingen endringer her) ---
     async function init() {
         try {
             const [scoringRes, operatorsRes] = await Promise.all([
@@ -309,7 +303,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Sett maks-verdier i UI
         Object.keys(MAX_SCORES).forEach(key => {
             const sumEl = document.getElementById(`${key}-max-sum`);
             const gaugeEl = document.getElementById(`${key}-gauge-max-text`);
@@ -324,7 +317,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
         
-        // Koble knapper til funksjoner
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
         document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
         document.getElementById('print-pdf-button').addEventListener('click', printPDF);
@@ -334,7 +326,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadCsvButton.addEventListener('click', () => csvFileInput.click());
         csvFileInput.addEventListener('change', loadCsvFile);
 
-        // Fjern 'invalid' klasse ved input
         document.querySelectorAll('input, select').forEach(el => {
             el.addEventListener('input', () => el.classList.remove('invalid'));
             el.addEventListener('change', () => el.classList.remove('invalid'));

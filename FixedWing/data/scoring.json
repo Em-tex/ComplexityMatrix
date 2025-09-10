@@ -97,11 +97,9 @@
         "No": 0,
         "Yes": 2
     },
-    "cargo-carriage": {
-        "Nil": 0,
-        "BStd": 1,
-        "UStd": 3,
-        "NStd": 5
+    "mix-operations": {
+        "No": 0,
+        "Yes": 2
     },
     "area-of-operation": {
         "Within Norway only": 1,

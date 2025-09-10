@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Denne listen kobler ID fra JSON til en lesbar tittel og riktig seksjon
+    // ENDRET: Byttet ut 'cargo-carriage' med 'mix-operations'
     const fieldIdToDetails = {
         'staff-employed': { label: 'Total Number of staff employed', section: 'resources' },
         'pilots-employed': { label: 'Number of pilots employed', section: 'resources' },
@@ -14,7 +14,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         'aircraft-leasing': { label: 'Aircraft leasing', section: 'operations' },
         'airports-based': { label: 'Number of airports (permanent base)', section: 'operations' },
         'group-airline': { label: 'Group Airline', section: 'operations' },
-        'cargo-carriage': { label: 'Cargo Carriage', section: 'operations' },
+        'mix-operations': { label: 'Mix Operations (Cargo, Pax)', section: 'operations' },
+        'area-of-operation': { label: 'Area of Operation', section: 'operations' },
+        'landings': { label: 'Landings', section: 'operations' },
+        'ifr-imc-operation': { label: 'IFR/IMC Operation', section: 'operations' },
+        'ncc': { label: 'NCC', section: 'operations' },
+        'spo': { label: 'SPO', section: 'operations' },
         'rnp-ar-apch': { label: 'RNP AR APCH', section: 'approvals' },
         'mnps-nat-hla': { label: 'MNPS/ NAT-HLA', section: 'approvals' },
         'rvsm': { label: 'RVSM', section: 'approvals' },
@@ -31,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         'ato-lite': { label: 'ATO Lite', section: 'approvals' }
     };
 
-    // Kart for å oversette tekniske verdier til pen tekst
     const valueToDisplayTextMap = {
         "<10": "< 10", "11-50": "11 - 50", "51-200": "51 - 200", "200-500": "200 - 500", ">500": "> 500",
         "<50": "< 50", "51-100": "51 - 100", "101-300": "101 - 300", "301-500": "301 - 500", "501-1000": "501 - 1 000", ">1000": "> 1 000",
@@ -46,11 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         "Schd S/H or Ad-Hoc L/H": "Scheduled (Short Haul) or Ad-Hoc (Long Haul)",
         "Schd L/H": "Scheduled (Long Haul)",
         "Yes, dry/wet": "Yes (Dry/Wet)",
-        "Both dry and wet leasing": "Both Dry and Wet Leasing",
-        "Nil": "Nil (No Dangerous Goods)",
-        "BStd": "Basic Standard",
-        "UStd": "Unclassified Standard",
-        "NStd": "Non-Standard"
+        "Both dry and wet leasing": "Both Dry and Wet Leasing"
     };
 
     try {
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const scoringRules = await response.json();
 
         for (const [id, details] of Object.entries(fieldIdToDetails)) {
-            const rule = scoringRules[id];
+            const rule = scoringRules[id] || (details.section === 'approvals' ? scoringRules['generic-approval'] : undefined);
             if (!rule) continue;
 
             const tableBody = document.getElementById(`${details.section}-body`);
@@ -72,29 +72,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             const rowCount = options.length;
 
             options.forEach(([optionValue, score], index) => {
-                html += '<tr>';
+                if (details.section === 'approvals' && id !== 'generic-approval') {
+                    if(optionValue === 'No' || optionValue === 'Yes') {
+                        if (index === 0) html += `<tr><td rowspan="2">${details.label}</td>`;
+                        html += `<td>${optionValue}</td><td>${score}</td></tr>`;
+                    }
+                } else if (id !== 'generic-approval') {
+                     html += '<tr>';
+                    if (index === 0) {
+                        html += `<td rowspan="${rowCount}">${details.label}</td>`;
+                    }
+                    const displayText = valueToDisplayTextMap[optionValue] || optionValue;
+                    let scoreDisplay = '';
 
-                if (index === 0) {
-                    html += `<td rowspan="${rowCount}">${details.label}</td>`;
+                    if (typeof score === 'object' && score.type === 'dependent') {
+                        const dependentScores = Object.entries(score.scores)
+                            .map(([val, pts]) => `${valueToDisplayTextMap[val] || val} (${pts}p)`)
+                            .join('<br>');
+                        scoreDisplay = `Avh. av piloter:<br>${dependentScores}<br>ellers ${score.default}p`;
+                    } else {
+                        scoreDisplay = score;
+                    }
+                    html += `<td>${displayText}</td>`;
+                    html += `<td>${scoreDisplay}</td>`;
+                    html += '</tr>';
                 }
-                
-                const displayText = valueToDisplayTextMap[optionValue] || optionValue;
-                let scoreDisplay = '';
-
-                if (typeof score === 'object' && score.type === 'dependent') {
-                    // Forbedret linjeoppdeling og formatering
-                    const dependentScores = Object.entries(score.scores)
-                        .map(([val, pts]) => `${valueToDisplayTextMap[val] || val} (${pts}p)`)
-                        .join(',\n'); // Bruker \n for linjeskift
-                    scoreDisplay = `Avh. av piloter:\n${dependentScores},\nellers ${score.default}p`;
-                    scoreDisplay = scoreDisplay.replace(/\n/g, '<br>'); // Konverter \n til <br> for HTML
-                } else {
-                    scoreDisplay = score;
-                }
-
-                html += `<td>${displayText}</td>`;
-                html += `<td>${scoreDisplay}</td>`;
-                html += '</tr>';
             });
             tableBody.innerHTML += html;
         }
