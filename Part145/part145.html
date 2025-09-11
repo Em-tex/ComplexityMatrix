@@ -2,18 +2,46 @@
 <html lang="no">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Part-145 Risk Assessment</title>
+    <link rel="icon" href="../smallLogo.png" type="image/png">
     <link rel="stylesheet" href="css/part145_stil.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="header"><h1>Part-145 Risk Assessment</h1></div>
-    <div class="total-summary"></div>
+    <div class="header">
+        <h1>Part-145 Risk Assessment</h1>
+        <div class="header-info">
+            <div class="info-field"><label for="operator-navn">Organisasjon:</label><input type="text" id="operator-navn" placeholder="Skriv organisasjonsnavn"></div>
+            <div class="info-field"><label for="filled-by">Fylt ut av:</label><input type="text" id="filled-by" placeholder="Skriv inn navn"></div>
+            <div class="info-field"><label for="date">Dato:</label><input type="date" id="date"></div>
+        </div>
+    </div>
+
+    <div class="total-summary">
+        <div class="all-gauges-container">
+            <div class="small-gauges-grid">
+                <div class="gauge-block" id="gauge-block-performance"><div class="gauge-block-title"><span class="material-icons">check_circle</span> Performance</div><div class="gauge-block-summary"><span id="performance-sum">0</span> / 32</div><div class="gauge"><div class="gauge-bg"></div><div class="gauge-needle" id="performance-needle"></div></div></div>
+                <div class="gauge-block" id="gauge-block-complexity"><div class="gauge-block-title"><span class="material-icons">device_hub</span> Complexity</div><div class="gauge-block-summary"><span id="complexity-sum">0</span></div><div class="gauge"><div class="gauge-bg"></div><div class="gauge-needle" id="complexity-needle"></div></div></div>
+            </div>
+            <div class="gauge-block" id="gauge-block-total"><div class="gauge-block-title">Total Score</div><div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span></div><div class="gauge"><div class="gauge-bg"></div><div class="gauge-needle" id="total-needle"></div></div></div>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="section" id="section-performance">
-            <div class="section-header"><span>Performance</span></div>
+            <div class="section-header"><span>Performance (Høyere score er bedre)</span></div>
             <div class="section-content">
                 <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
-                <div class="form-row"><div class="form-cell">1. Level 1 finding</div><div class="form-cell"><select id="perf-level1-finding"><option value="">Velg...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="perf-level1-finding-value">0</div></div>
+                <div class="form-row multi-input">
+                    <div class="form-cell">1. Level 1 finding</div>
+                    <div class="form-cell">
+                        <select id="perf-level1-finding-choice"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select>
+                        <input type="number" id="perf-level1-finding-number" class="hidden" placeholder="Antall" value="1" min="1">
+                    </div>
+                    <div class="form-cell calculated-value" id="perf-level1-finding-value">0</div>
+                </div>
                 <div class="form-row"><div class="form-cell">2. Corrective actions implemented in time</div><div class="form-cell"><select id="perf-corrective-actions"><option value="">Velg...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="perf-corrective-actions-value">0</div></div>
                 <div class="form-row"><div class="form-cell">3a. MS - Identification of safety hazards</div><div class="form-cell"><select id="perf-ms-hazard-identification"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="perf-ms-hazard-identification-value">0</div></div>
                 <div class="form-row"><div class="form-cell">3b. MS - Management of risks</div><div class="form-cell"><select id="perf-ms-risk-management"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="perf-ms-risk-management-value">0</div></div>
@@ -21,10 +49,10 @@
             </div>
         </div>
         <div class="section" id="section-complexity">
-            <div class="section-header"><span>Complexity</span></div>
+            <div class="section-header"><span>Complexity (Høyere score er økt risiko)</span></div>
             <div class="section-content">
                 <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection / Input</div><div class="header-cell">Value</div></div>
-                 <div class="form-row"><div class="form-cell">1a. Addressing non-compliances</div><div class="form-cell"><select id="comp-eff-addressing-non-comp"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-addressing-non-comp-value">0</div></div>
+                <div class="form-row"><div class="form-cell">1a. Addressing non-compliances</div><div class="form-cell"><select id="comp-eff-addressing-non-comp"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-addressing-non-comp-value">0</div></div>
                 <div class="form-row"><div class="form-cell">1b. Closure of non-compliances</div><div class="form-cell"><select id="comp-eff-closure-non-comp"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-closure-non-comp-value">0</div></div>
                 <div class="form-row"><div class="form-cell">1c. Addressing safety hazards</div><div class="form-cell"><select id="comp-eff-addressing-hazards"><option value="">Velg...</option><option value="P">P</option><option value="S">S</option><option value="O">O</option><option value="E">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-addressing-hazards-value">0</div></div>
                 <div class="form-row"><div class="form-cell">2a. ISO 45001</div><div class="form-cell"><select id="comp-iso-45001"><option value="">Velg...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="comp-iso-45001-value">0</div></div>
@@ -48,6 +76,9 @@
         </div>
     </div>
     
+    <div class="comments-section"><label for="comments">Kommentarer:</label><textarea id="comments" placeholder="Legg til kommentarer..." rows="4"></textarea></div>
+    <div class="action-buttons"><button id="download-csv-button">Last ned CSV</button><button id="print-pdf-button">Skriv ut til PDF</button><button id="load-csv-button" class="load-button">Last inn CSV</button><button id="clear-form-button">Tøm skjema</button><input type="file" id="csv-file-input" accept=".csv" style="display: none;"></div>
+
     <script src="js/part145_kalkulator.js"></script>
 </body>
 </html>

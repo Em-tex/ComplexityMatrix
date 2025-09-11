@@ -1,14 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const STORAGE_KEY = 'part145AssessmentData';
+    const STORAGE_KEY = 'part145AssessmentData_v4';
     let scoringRules = {};
-
-    const MAX_SCORES = {
-        performance: 32,
-        complexity: null, // Udefinert max pga. antallsfelt
-    };
-
-    const fieldData = [
-        { id: 'perf-level1-finding', section: 'performance' },
+    
+    const scoreFieldData = [
+        { id: 'perf-level1-finding', section: 'performance', type: 'level1' },
         { id: 'perf-corrective-actions', section: 'performance' },
         { id: 'perf-ms-hazard-identification', section: 'performance' },
         { id: 'perf-ms-risk-management', section: 'performance' },
@@ -34,104 +29,149 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'comp-owner-high-vol', section: 'complexity' },
         { id: 'comp-owner-medium-vol', section: 'complexity' }
     ];
+    
+    const otherFieldIds = ['operator-navn', 'filled-by', 'date', 'comments', 'perf-level1-finding-choice', 'perf-level1-finding-number'];
 
     async function init() {
         try {
-            const response = await fetch('data/scoring_part145.json');
+            const response = await fetch('data/scoring_part145_sum.json');
             scoringRules = await response.json();
         } catch (error) {
-            console.error('Failed to load scoring rules for Part-145:', error);
-            alert('FEIL: Kunne ikke laste poengregler.');
+            console.error('Failed to load scoring rules:', error);
             return;
         }
-
         setupEventListeners();
         loadData();
-        updateCalculations();
     }
-    
-    // Resten av funksjonene (setupEventListeners, calculateFieldScore, updateCalculations, etc.)
-    // er identiske med de i camo_kalkulator.js. Du kan kopiere dem direkte inn her.
 
     function setupEventListeners() {
-        fieldData.forEach(field => {
-            const element = document.getElementById(field.id);
-            if (element) {
-                element.addEventListener('change', updateCalculations);
-                if (element.type === 'number') {
-                    element.addEventListener('input', updateCalculations);
+        [...scoreFieldData.map(f => f.id), ...otherFieldIds].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('change', updateCalculations);
+                if (el.matches('input, textarea')) {
+                    el.addEventListener('input', saveData);
                 }
             }
         });
+        
+        const level1Choice = document.getElementById('perf-level1-finding-choice');
+        const level1Number = document.getElementById('perf-level1-finding-number');
+        if(level1Choice) {
+            level1Choice.addEventListener('change', () => {
+                level1Number.classList.toggle('hidden', level1Choice.value !== 'Yes');
+            });
+        }
+
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
-        document.getElementById('download-csv-button').addEventListener('click', () => alert('CSV-eksport er ikke implementert ennå.'));
-        document.getElementById('load-csv-button').addEventListener('click', () => alert('CSV-import er ikke implementert ennå.'));
         document.getElementById('print-pdf-button').addEventListener('click', () => window.print());
+        document.getElementById('download-csv-button').addEventListener('click', () => alert('CSV-eksport er ikke tilgjengelig.'));
+        document.getElementById('load-csv-button').addEventListener('click', () => alert('CSV-import er ikke tilgjengelig.'));
     }
 
-    function calculateFieldScore(fieldId, value) {
-        if (!scoringRules[fieldId] || value === '') return 0;
-        const rule = scoringRules[fieldId];
+    function calculateFieldScore(field) {
+        const element = document.getElementById(field.id);
+        const rule = scoringRules[field.id];
+        if (!rule || !element) return 0;
+        
+        if (field.type === 'level1') {
+            const choice = document.getElementById('perf-level1-finding-choice').value;
+            if (choice === 'No') return rule['No'];
+            if (choice === 'Yes') {
+                const count = parseInt(document.getElementById('perf-level1-finding-number').value, 10) || 1;
+                return (count === 1) ? rule['One'] : rule['Multiple'];
+            }
+            return 0;
+        }
+
+        const value = element.value;
+        if (value === '') return 0;
+
         if (rule.type === 'multiplier') {
             return (parseFloat(value) || 0) * rule.factor;
         }
         return rule[value] ?? 0;
     }
     
+    function applyValueCellStyle(valueCell, score, section) {
+        valueCell.className = 'form-cell calculated-value';
+        if (section === 'performance') {
+            if (score >= 6) valueCell.classList.add('bg-weak-green');
+            else if (score >= 3) valueCell.classList.add('bg-weak-yellow');
+            else valueCell.classList.add('bg-weak-red');
+        } else {
+            if (score >= 7) valueCell.classList.add('bg-weak-red');
+            else if (score >= 3) valueCell.classList.add('bg-weak-yellow');
+            else if (score > 0) valueCell.classList.add('bg-weak-green');
+            else valueCell.classList.add('bg-default-gray');
+        }
+    }
+
     function updateCalculations() {
         let totals = { performance: 0, complexity: 0 };
-        fieldData.forEach(field => {
-            const element = document.getElementById(field.id);
-            if (element) {
-                const score = calculateFieldScore(field.id, element.value);
-                totals[field.section] += score;
-                const valueCell = document.getElementById(`${field.id}-value`);
-                if (valueCell) {
-                    valueCell.textContent = (score % 1 !== 0) ? score.toFixed(1) : score;
-                }
+
+        scoreFieldData.forEach(field => {
+            const score = calculateFieldScore(field);
+            totals[field.section] += score;
+            const valueCell = document.getElementById(`${field.id}-value`);
+            if (valueCell) {
+                valueCell.textContent = (score % 1 !== 0) ? score.toFixed(1) : score;
+                applyValueCellStyle(valueCell, score, field.section);
             }
         });
+
         updateGaugesAndSummaries(totals);
         saveData();
     }
-
-    function updateGaugesAndSummaries(totals) {
-        const grandTotal = totals.performance + totals.complexity;
-        document.getElementById('performance-sum').textContent = totals.performance.toFixed(1);
-        document.getElementById('complexity-sum').textContent = totals.complexity.toFixed(1);
-        document.getElementById('total-gauge-sum-text').textContent = grandTotal.toFixed(1);
-        updateGauge('performance', totals.performance, MAX_SCORES.performance);
-        updateGauge('complexity', totals.complexity, 100);
-        updateGauge('total', grandTotal, 150);
-    }
-
-    function updateGauge(prefix, value, maxValue) {
+    
+    function updateGauge(prefix, value, maxValue, invertColors = false) {
         const needle = document.getElementById(`${prefix}-needle`);
-        if (!needle) return;
+        const gaugeBg = needle ? needle.closest('.gauge').querySelector('.gauge-bg') : null;
+        if (!needle || !gaugeBg) return;
+
+        gaugeBg.style.background = invertColors 
+            ? 'conic-gradient(from 180deg at 50% 100%, #ff152c 5%, #fff025 50%, #009122 95%)'
+            : 'conic-gradient(from 180deg at 50% 100%, #009122 5%, #fff025 50%, #ff152c 95%)';
+
         const percentage = maxValue > 0 ? value / maxValue : 0;
         const rotation = -90 + (percentage * 180);
         needle.style.transform = `translateX(-50%) rotate(${Math.min(90, Math.max(-90, rotation))}deg)`;
     }
+
+    function updateGaugesAndSummaries(totals) {
+        const grandTotal = totals.performance - totals.complexity;
+        
+        document.getElementById('performance-sum').textContent = totals.performance.toFixed(1);
+        document.getElementById('complexity-sum').textContent = totals.complexity.toFixed(1);
+        document.getElementById('total-gauge-sum-text').textContent = grandTotal.toFixed(1);
+        
+        updateGauge('performance', totals.performance, 32, true);
+        updateGauge('complexity', totals.complexity, 50, false);
+        updateGauge('total', grandTotal + 50, 82, true);
+    }
     
     function saveData() {
         const data = {};
-        fieldData.forEach(field => {
-            const element = document.getElementById(field.id);
-            if (element) data[field.id] = element.value;
+        [...scoreFieldData.map(f => f.id), ...otherFieldIds].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) data[id] = el.value;
         });
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
     function loadData() {
-        const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if (savedData) {
-            fieldData.forEach(field => {
-                const element = document.getElementById(field.id);
-                if (element && savedData[field.id]) {
-                    element.value = savedData[field.id];
-                }
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (data) {
+            Object.keys(data).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = data[id];
             });
         }
+        if (!document.getElementById('date').value) {
+            document.getElementById('date').valueAsDate = new Date();
+        }
+        document.getElementById('perf-level1-finding-choice')?.dispatchEvent(new Event('change'));
+        updateCalculations();
     }
 
     function clearForm() {

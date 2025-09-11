@@ -29,245 +29,58 @@ body {
     margin-top: 15px;
     align-items: end;
 }
-.info-field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-.info-field label {
-    font-weight: bold;
-    color: #495057;
-}
-.info-field input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-.container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 0;
-    box-shadow: none;
-    background: none;
-}
-@media (min-width: 992px) {
-    .container {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-.section {
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-}
-.section-header {
-    color: white;
-    padding: 12px 15px;
-    font-weight: bold;
-    font-size: 1.2em;
-    display: flex;
-    align-items: center;
-    border-radius: 8px 8px 0 0;
-}
-#section-performance .section-header { background: #4682B4; } /* Steel Blue */
-#section-complexity .section-header { background: #3CB371; } /* Medium Sea Green */
-
-.section-content {
-    border: 1px solid #ddd;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    overflow: hidden;
-    flex-grow: 1;
-}
-.header-row {
-    display: grid;
-    grid-template-columns: 2fr 1.2fr 0.8fr;
-    background: #34495e;
-    color: white;
-    font-weight: bold;
-}
-.header-cell {
-    padding: 8px 12px;
-    text-align: center;
-}
-.form-row {
-    display: grid;
-    grid-template-columns: 2fr 1.2fr 0.8fr;
-    border-bottom: 1px solid #eee;
-    align-items: center;
-}
-.form-row:last-child {
-    border-bottom: none;
-}
-.form-cell {
-    padding: 8px 12px;
-    position: relative;
-}
-.form-cell select, .form-cell input[type="number"] {
-    width: 100%;
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-family: 'Overpass', sans-serif;
-}
-.calculated-value {
-    font-weight: bold;
-    text-align: center;
-    padding: 10px 12px;
-    height: 100%;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+.info-field { display: flex; flex-direction: column; gap: 5px; }
+.info-field label { font-weight: bold; color: #495057; text-align: left; }
+.info-field input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+.container { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 0; box-shadow: none; background: none; margin-top: 20px; }
+@media (min-width: 992px) { .container { grid-template-columns: 1fr 1fr; } }
+.section { padding: 0; display: flex; flex-direction: column; }
+.section-header { color: white; padding: 12px 15px; font-weight: bold; font-size: 1.2em; display: flex; align-items: center; border-radius: 8px 8px 0 0; }
+#section-performance .section-header { background: #4682B4; }
+#section-complexity .section-header { background: #3CB371; }
+.section-content { border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; flex-grow: 1; }
+.header-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; background: #34495e; color: white; font-weight: bold; }
+.header-cell { padding: 8px 12px; text-align: center; }
+.form-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; border-bottom: 1px solid #eee; align-items: center; }
+.form-row:last-child { border-bottom: none; }
+.form-cell { padding: 8px 12px; position: relative; text-align: left; }
+.form-cell select, .form-cell input[type="number"] { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
+.calculated-value { font-weight: bold; text-align: center; height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
 .bg-default-gray { background-color: #e9ecef !important; }
 .bg-weak-green { background-color: #d4edda !important; }
 .bg-weak-yellow { background-color: #fff3cd !important; }
 .bg-weak-red { background-color: #f8d7da !important; }
 
-/* Tooltip Styles */
-.tooltip-container {
-    position: relative;
-    display: inline-block;
-    margin-left: 8px;
-    cursor: help;
-}
-.tooltip-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #6c757d;
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    user-select: none;
-}
-.tooltip-text {
-    visibility: hidden;
-    width: 220px;
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -110px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-weight: normal;
-}
-.tooltip-container:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-}
+/* Styling for Level 1 finding */
+.form-row.multi-input .form-cell:nth-child(2) { display: flex; gap: 10px; }
+.form-cell input.hidden { display: none; }
 
-/* Gauge Styles */
+/* Gauges */
 .total-summary { text-align: center; }
-.all-gauges-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
-.small-gauges-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-.gauge-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-}
-.gauge-block-title {
-    font-weight: 700;
-    margin-bottom: 5px;
-    font-size: 1em;
-}
-.gauge-block-summary {
-    font-size: 0.9em;
-    margin-bottom: 5px;
-}
-.gauge {
-    width: 120px;
-    height: 60px;
-    position: relative;
-}
-.gauge-bg {
-    width: 100%;
-    height: 100%;
-    border-radius: 60px 60px 0 0;
-    background: conic-gradient(from 180deg at 50% 100%, #009122 5%, #fff025 50%, #ff152c 95%);
-    position: relative;
-    overflow: hidden;
-}
-.gauge-cover {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 0;
-    background: #fff;
-    border-radius: 50px 50px 0 0;
-}
-.gauge-needle {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 2px;
-    height: 50px;
-    background: #333;
-    transform-origin: bottom center;
-    transition: transform 0.5s ease;
-    transform: translateX(-50%) rotate(-90deg);
-}
-#gauge-block-total .gauge {
-    width: 300px;
-    height: 150px;
-}
-#gauge-block-total .gauge-bg {
-    border-radius: 150px 150px 0 0;
-}
-#gauge-block-total .gauge-cover {
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    border-radius: 135px 135px 0 0;
-}
-#gauge-block-total .gauge-needle {
-    height: 125px;
-}
+.all-gauges-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px; }
+.small-gauges-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.gauge-block { display: flex; flex-direction: column; align-items: center; padding: 10px; }
+.gauge-block-title { font-weight: 700; margin-bottom: 5px; font-size: 1em; display: flex; align-items: center; }
+.gauge-block-title .material-icons { margin-right: 5px; }
+.gauge-block-summary { font-size: 0.9em; margin-bottom: 5px; }
+.gauge { width: 120px; height: 60px; position: relative; }
+.gauge-bg { width: 100%; height: 100%; border-radius: 60px 60px 0 0; position: relative; overflow: hidden; }
+.gauge-cover { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 0; background: #fff; border-radius: 50px 50px 0 0; }
+.gauge-needle { position: absolute; bottom: 0; left: 50%; width: 2px; height: 50px; background: #333; transform-origin: bottom center; transition: transform 0.5s ease; transform: translateX(-50%) rotate(-90deg); }
+#gauge-block-total { min-width: 320px; }
+#gauge-block-total .gauge { width: 300px; height: 150px; }
+#gauge-block-total .gauge-bg { border-radius: 150px 150px 0 0; }
+#gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; border-radius: 135px 135px 0 0; }
+#gauge-block-total .gauge-needle { height: 125px; }
 #gauge-block-total .gauge-block-title { font-size: 1.6em; }
 #gauge-block-total .gauge-block-summary { font-size: 1.2em; }
 
-/* Action Buttons */
-.action-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-.action-buttons button {
-    padding: 10px 20px;
-    font-size: 1em;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
+/* Comments and Buttons */
+.comments-section { text-align: left; }
+.comments-section label { font-weight: bold; color: #495057; display: block; margin-bottom: 5px; }
+.comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+.action-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+.action-buttons button { padding: 10px 20px; font-size: 1em; color: white; border: none; border-radius: 5px; cursor: pointer; }
 #download-csv-button { background-color: #28a745; }
 #print-pdf-button { background-color: #6f42c1; }
 #clear-form-button { background-color: #dc3545; }
