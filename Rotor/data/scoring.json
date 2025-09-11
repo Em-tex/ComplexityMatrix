@@ -1,0 +1,69 @@
+{
+    "staff-employed": {
+        "<20": 1,
+        "21-50": 2,
+        "51-200": 3,
+        "200-500": 4,
+        ">500": 5
+    },
+    "pilots-employed": {
+        "<10": 1,
+        "11-30": 2,
+        "31-100": 3,
+        "101-200": 4,
+        ">201": 5
+    },
+    "cabin-crew": { "No": 0, "Yes": 1 },
+    "technical-crew": { "No": 0, "Yes": 1 },
+    "leading-personnel-roles": {
+        "No": 0,
+        "Yes": {
+            "type": "dependent",
+            "on": "pilots-employed",
+            "scores": {
+                "<10": 1, "11-30": 2, "31-100": 3, "101-200": 4, ">201": 5
+            },
+            "default": 1
+        }
+    },
+    "types-operated": {
+        "1": 1, "2-3": 3, "4-6": 5, ">6": 7
+    },
+    "multi-engine-offshore": {
+        "N/A": 0, "1-5": 2, "6-10": 4, "11-15": 6, "16-20": 8, ">20": 10
+    },
+    "multi-engine-onshore": {
+        "N/A": 0, "1-5": 2, "6-10": 4, "11-15": 6, "16-20": 8, ">20": 10
+    },
+    "single-engine-helicopters": {
+        "N/A": 0, "1-5": 2, "6-10": 4, "11-15": 6, "16-20": 8, ">20": 10
+    },
+    "ac-leasing": { "No": 0, "Yes": 1 },
+    "special-modification": { "No": 0, "Yes": 3 },
+    "area-of-operation": {
+        "Within Norway only": 1, "Within EU": 2, "Worldwide": 5
+    },
+    "bases-permanently": {
+        "1": 1, "2-5": 2, ">5": 3
+    },
+    "operation-landings": {
+        "N/A": 0, "Ad-hoc landings": 1, "Ad-hoc landings in congested areas": 3
+    },
+    "operation-route": {
+        "A-A": 1, "A-B Restricted": 2, "A-B": 3
+    },
+    "ifr-imc-operation": { "No": 0, "Yes": 2 },
+    "spo": {
+        "No": 0, "Yes": 1, "High risk SPO": 5
+    },
+    "group-airline": { "No": 0, "Yes": 2 },
+    "derogations": {
+        "0": 0, "1": 3, "2": 4, ">2": 5
+    },
+    "hems": { "No": 0, "Yes": 3 },
+    "hofo": { "No": 0, "Yes": 3 },
+    "generic-approval": {
+        "No": 0,
+        "Yes": 1
+    }
+}
