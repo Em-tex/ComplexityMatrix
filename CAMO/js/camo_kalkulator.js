@@ -24,20 +24,34 @@ document.addEventListener('DOMContentLoaded', () => {
         B9: ['B9-perf'], B10: ['B10a-perf']
     };
     
+    const complexitySourceIds = [
+        'B4a-comp', 'B4b-comp', 'B4c-comp', 'B5-comp', 'B6-comp',
+        'B7a-comp', 'B7b-comp', 'B7c-comp', 'B7d-comp',
+        'B8a-comp', 'B8b-comp', 'B9-comp', 'B10-comp', 'B10a-comp'
+    ];
+    const complexityMultipliers = { 'B7d-comp': 0.2 };
+
     const perfThresholds = { E: 5.5, O: 3.6, S: 2.2, P: 0 };
     const compThresholds = { H: 19, M: 12, L: 9, "Non-complex": 7 };
     const performanceLevelMap = { P: 'Present', S: 'Suitable', O: 'Operational', E: 'Effective' };
     const complexityLevelMap = { H: 'High', M: 'Medium', L: 'Low', "Non-complex": 'Non-complex' };
     const criticalityMatrix = { P:{"Non-complex":"critical", L:"critical", M:"critical", H:"critical"}, S:{"Non-complex":"attention req.", L:"attention req.", M:"critical", H:"critical"}, O:{"Non-complex":"normal", L:"normal", M:"normal", H:"normal"}, E:{"Non-complex":"low", L:"low", M:"low", H:"low"} };
     const planMatrix = { critical:{"Non-complex":"immediate action", L:"immediate action", M:"immediate action", H:"immediate action"}, "attention req.":{"Non-complex":"Focused scope", L:"Focused scope", M:"Focused scope", H:"Focused scope"}, normal:{"Non-complex":"basic", L:"basic", M:"basic+", H:"basic+"}, low:{"Non-complex":"basic", L:"basic", M:"basic", H:"basic+"} };
-    const activitiesBase = { "immediate action": 0, "Focused scope": 6, "basic+": 4, "basic": 4, "basic-e": 3, "basic-e+": 4 };
+    const planDetails = {
+        basic: { name: "Basic", audit: "x", splitscope: "", annual: "x", ammeeting: "x", focused: "", unannounced: "" },
+        "basic+": { name: "Basic+", audit: "x", splitscope: "x", annual: "x", ammeeting: "x", focused: "", unannounced: "" },
+        focusedscope: { name: "Focused scope", audit: "x", splitscope: "x", annual: "x", ammeeting: "x", focused: "x", unannounced: "x" },
+        immediateaction: { name: "Immediate action", audit: "-", splitscope: "-", annual: "-", ammeeting: "-", focused: "-", unannounced: "-" },
+        basice: { name: "Basic-e", audit: "x", splitscope: "", annual: "x", ammeeting: "x", focused: "x", unannounced: "" },
+        basiceplus: { name: "Basic-e+", audit: "x", splitscope: "x", annual: "x", ammeeting: "x", focused: "x", unannounced: "" }
+    };
 
     function getElValue(id) {
         const el = document.getElementById(id);
         if (!el || el.value === '' || el.value === 'N/A') return null;
         return parseFloat(el.value);
     }
-
+    
     function formatNumber(num) {
         if (num === null || isNaN(num)) return '-';
         if (num % 1 === 0) return num.toString();
@@ -95,17 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // --- COMPLEXITY CALCULATION ---
         let complexitySum = 0;
-        if(getElValue('B4a-comp') === 1) complexitySum += (getElValue('B4b-comp') ?? 0);
-        complexitySum += getElValue('B5-comp') ?? 0;
-        complexitySum += getElValue('B6-comp') ?? 0;
-        complexitySum += getElValue('B7a-comp') ?? 0;
-        complexitySum += getElValue('B7b-comp') ?? 0;
-        complexitySum += getElValue('B7c-comp') ?? 0;
-        complexitySum += (getElValue('B7d-comp') ?? 0) * 0.2;
-        complexitySum += (getElValue('B8a-comp') ?? 0);
-        complexitySum += getElValue('B8b-comp') ?? 0;
-        complexitySum += getElValue('B9-comp') ?? 0;
-        if(getElValue('B10-comp') === 1) complexitySum += getElValue('B10a-comp') ?? 0;
+        complexitySourceIds.forEach(id => {
+            let score = getElValue(id) ?? 0;
+            if(id === 'B10a-comp' && getElValue('B10-comp') === 0) score = 0;
+            const multiplier = complexityMultipliers[id] || 1;
+            complexitySum += score * multiplier;
+        });
         
         let compLevel = 'H';
         if (complexitySum <= compThresholds["Non-complex"]) compLevel = 'Non-complex';
@@ -116,8 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const criticality = criticalityMatrix[perfLevel][compLevel];
         const surveillancePeriod = (criticality !== 'low' && perfLevel !== 'E') ? "No extension" : "Extension possible";
         const basePlan = planMatrix[criticality][compLevel];
+        
+        let totalActivities = 0;
+        const planKey = basePlan ? basePlan.replace(/\s/g, '').replace('+', 'plus') : null;
+        const currentPlanDetails = planKey ? planDetails[planKey] : null;
+        if(currentPlanDetails) {
+            totalActivities = Object.values(currentPlanDetails).filter(v => v === 'x').length;
+            if (currentPlanDetails.annual === 'x') totalActivities++;
+        }
         const additionalInspections = Math.max(0, (getElValue('B5-comp') ?? 0) - 1) + (getElValue('B6-comp') ?? 0);
-        const totalActivities = (activitiesBase[basePlan] ?? 0) + additionalInspections;
+        totalActivities += additionalInspections;
         
         // --- UPDATE UI ---
         const resPerf = document.getElementById('res-perf-level');
@@ -133,16 +150,35 @@ document.addEventListener('DOMContentLoaded', () => {
         resCrit.className = `result-value crit-${criticality.replace(/\s/g, '')}`;
         resPeriod.textContent = surveillancePeriod;
         resPeriod.className = `result-value period-${surveillancePeriod === 'Extension possible' ? 'ok' : 'no'}`;
-
-        document.getElementById('summary-text-activities').textContent = `Establish a Surveillance programme containing at least ${totalActivities} planned activies.`;
         
-        document.querySelectorAll('.matrix-table td').forEach(cell => cell.classList.remove('highlight'));
+        const summaryContainer = document.getElementById('plan-summary-text');
+        if (currentPlanDetails && basePlan !== "immediate action") {
+            summaryContainer.innerHTML = `<h3>${currentPlanDetails.name}</h3><ul></ul>`;
+            const ul = summaryContainer.querySelector('ul');
+            Object.entries(planDetails.basic).forEach(([key, value]) => {
+                if (currentPlanDetails[key] === 'x') {
+                    const li = document.createElement('li');
+                    li.textContent = `- ${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}`; // Format camelCase
+                    ul.appendChild(li);
+                }
+            });
+            const totalLi = document.createElement('li');
+            totalLi.className = 'total';
+            totalLi.textContent = `Number of activities per planning cycle: ${totalActivities}`;
+            ul.appendChild(totalLi);
+        } else if (basePlan === "immediate action") {
+            summaryContainer.innerHTML = `<h3>Immediate Action Required</h3>`;
+        } else {
+            summaryContainer.textContent = 'Complete the form to see the recommendation.';
+        }
+        
+        document.querySelectorAll('.matrix-table td, #oversight-plan-details-table tr').forEach(el => el.classList.remove('highlight', 'highlight-row'));
         const critCellId = `crit-${perfLevel}-${compLevel.replace(/\s/g, '')}`;
-        const planCellId = `plan-${criticality.replace(/\s/g, '')}-${compLevel.replace(/\s/g, '')}`;
+        const planRowId = `plan-row-${planKey}`;
         const critCell = document.getElementById(critCellId);
-        const planCell = document.getElementById(planCellId);
+        const planRow = document.getElementById(planRowId);
         if(critCell) critCell.classList.add('highlight');
-        if(planCell) planCell.classList.add('highlight');
+        if(planRow) planRow.classList.add('highlight-row');
     }
 
     function setupEventListeners() {
@@ -161,6 +197,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
+        document.getElementById('matrix-toggler').addEventListener('click', (e) => {
+            const content = document.getElementById('matrix-content');
+            const isVisible = content.style.display === 'grid';
+            content.style.display = isVisible ? 'none' : 'grid';
+            e.target.textContent = isVisible ? '► Show Detailed Matrices' : '▼ Hide Detailed Matrices';
+        });
     }
     
     function saveData() {
@@ -170,13 +212,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadData() {
-        const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if (data) {
-            allInputIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el && data[id] !== undefined) el.value = data[id];
-            });
-        }
+        let data = {};
+        try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { console.error("Could not parse stored data"); }
+        allInputIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && data[id] !== undefined) el.value = data[id];
+        });
         if (!document.getElementById('date').value) document.getElementById('date').valueAsDate = new Date();
         const level1Choice = document.getElementById('A3-choice');
         if(level1Choice) document.getElementById('A3-number').classList.toggle('hidden', level1Choice.value !== 'Yes');

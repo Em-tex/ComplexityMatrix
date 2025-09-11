@@ -26,30 +26,40 @@
             <div class="result-card"><span class="result-label">Criticality</span><span class="result-value" id="res-criticality">-</span></div>
             <div class="result-card"><span class="result-label">Surveillance Period</span><span class="result-value" id="res-period">-</span></div>
         </div>
-        <div class="overview-tables">
-            <div class="matrix-container">
-                <table class="matrix-table">
-                    <thead><tr><th colspan="5">Criticality Matrix (Perf. vs Complexity)</th></tr></thead>
-                    <tbody>
-                        <tr><td></td><th>Non-complex</th><th>Low</th><th>Medium</th><th>High</th></tr>
-                        <tr><td class="row-header">Present</td><td id="crit-P-Non-complex">critical</td><td id="crit-P-L">critical</td><td id="crit-P-M">critical</td><td id="crit-P-H">critical</td></tr>
-                        <tr><td class="row-header">Suitable</td><td id="crit-S-Non-complex">attention req.</td><td id="crit-S-L">attention req.</td><td id="crit-S-M">critical</td><td id="crit-S-H">critical</td></tr>
-                        <tr><td class="row-header">Operational</td><td id="crit-O-Non-complex">normal</td><td id="crit-O-L">normal</td><td id="crit-O-M">normal</td><td id="crit-O-H">normal</td></tr>
-                        <tr><td class="row-header">Effective</td><td id="crit-E-Non-complex">low</td><td id="crit-E-L">low</td><td id="crit-E-M">low</td><td id="crit-E-H">low</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="matrix-container">
-                 <table class="matrix-table">
-                    <thead><tr><th colspan="5">Oversight Plan Matrix (Crit. vs Complexity)</th></tr></thead>
-                    <tbody>
-                        <tr><td></td><th>Non-complex</th><th>Low</th><th>Medium</th><th>High</th></tr>
-                        <tr><td class="row-header">low</td><td id="plan-low-Non-complex">basic</td><td id="plan-low-L">basic</td><td id="plan-low-M">basic</td><td id="plan-low-H">basic+</td></tr>
-                        <tr><td class="row-header">normal</td><td id="plan-normal-Non-complex">basic</td><td id="plan-normal-L">basic</td><td id="plan-normal-M">basic+</td><td id="plan-normal-H">basic+</td></tr>
-                        <tr><td class="row-header">attention req.</td><td id="plan-attentionreq-Non-complex">Focused scope</td><td id="plan-attentionreq-L">Focused scope</td><td id="plan-attentionreq-M">Focused scope</td><td id="plan-attentionreq-H">Focused scope</td></tr>
-                        <tr><td class="row-header">critical</td><td id="plan-critical-Non-complex">immediate action</td><td id="plan-critical-L">immediate action</td><td id="plan-critical-M">immediate action</td><td id="plan-critical-H">immediate action</td></tr>
-                    </tbody>
-                </table>
+        
+        <div id="plan-summary-box">
+             <h3>Oversight Plan</h3>
+             <p id="plan-summary-text">Complete the form to see the recommendation.</p>
+        </div>
+
+        <div class="collapsible-header" id="matrix-toggler">► Show Detailed Matrices</div>
+        <div class="collapsible-content" id="matrix-content">
+            <div class="overview-tables">
+                <div class="matrix-container">
+                    <table class="matrix-table">
+                        <thead><tr><th colspan="5">Criticality Matrix (Perf. vs Complexity)</th></tr></thead>
+                        <tbody>
+                            <tr><td></td><th>Non-complex</th><th>Low</th><th>Medium</th><th>High</th></tr>
+                            <tr><td class="row-header">Present</td><td id="crit-P-Non-complex">critical</td><td id="crit-P-L">critical</td><td id="crit-P-M">critical</td><td id="crit-P-H">critical</td></tr>
+                            <tr><td class="row-header">Suitable</td><td id="crit-S-Non-complex">attention req.</td><td id="crit-S-L">attention req.</td><td id="crit-S-M">critical</td><td id="crit-S-H">critical</td></tr>
+                            <tr><td class="row-header">Operational</td><td id="crit-O-Non-complex">normal</td><td id="crit-O-L">normal</td><td id="crit-O-M">normal</td><td id="crit-O-H">normal</td></tr>
+                            <tr><td class="row-header">Effective</td><td id="crit-E-Non-complex">low</td><td id="crit-E-L">low</td><td id="crit-E-M">low</td><td id="crit-E-H">low</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="matrix-container">
+                     <table class="matrix-table" id="oversight-plan-details-table">
+                        <thead><tr><th>Oversight plan</th><th>Audit</th><th>split-scope</th><th>annual assessment</th><th>AM-meeting</th><th>focused insp.</th><th>unannounced</th></tr></thead>
+                        <tbody>
+                            <tr id="plan-row-basic"><td>basic</td><td>x</td><td></td><td>x</td><td>x</td><td></td><td></td></tr>
+                            <tr id="plan-row-basicplus"><td>basic+</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td></td></tr>
+                            <tr id="plan-row-focusedscope"><td>Focused scope</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td></tr>
+                            <tr id="plan-row-immediateaction"><td>Immediate action</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                            <tr id="plan-row-basice"><td>basic-e</td><td>x</td><td></td><td>x</td><td>x</td><td>x</td><td></td></tr>
+                            <tr id="plan-row-basiceplus"><td>basic-e+</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -72,7 +82,7 @@
             <div class="input-row perf-only main-row"><div class="input-label">*6. Tot. number of findings Level 2, by CAA-N - last 24 mth (initial and continous).</div><div class="input-control"><input type="number" id="A6-perf" min="0" value="0"></div><div class="input-score" id="A6-avg">-</div></div>
         </div>
         <div class="input-section-box">
-            <h3>B. Specific nature of the organisation and complexity of its activites...</h3>
+            <h3>B. Specific nature of the organisation and complexity of its activites - result of past certification or oversight activities - Ref CAMO.B.305 - AMC1 CAMO.B305</h3>
             <div class="input-table-header dual-input"><div>Criteria</div><div>Complexity Input</div><div>Performance Input</div><div>Perf. Avg.</div></div>
             <div class="input-row dual-input main-row"><div class="input-label">1. The effectiveness of the organisation’s management system...</div><div></div><div></div><div class="input-score" id="B1-avg">-</div></div>
             <div class="input-row dual-input sub-row"><div class="input-label">a. Identifying and adressing non-compliances (organisation vs CAA)</div><div></div><div class="input-control"><select id="B1a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
@@ -95,7 +105,7 @@
             <div class="input-row dual-input sub-row"><div class="input-label">a. Number of ratings covered by AR-privilege</div><div class="input-control"><input type="number" id="B8a-comp" value="0" min="0"></div><div class="input-control"><select id="B8a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
             <div class="input-row dual-input sub-row"><div class="input-label">b. Issuance of ARC (Y/N)</div><div class="input-control"><select id="B8b-comp"><option value="0">No</option><option value="3">Yes</option></select></div><div class="input-control"><select id="B8b-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
             <div class="input-row dual-input main-row"><div class="input-label">*9. Permit to fly (approved to issue)</div><div class="input-control"><select id="B9-comp"><option value="0">No</option><option value="5">Yes</option></select></div><div class="input-control"><select id="B9-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div class="input-score" id="B9-avg">-</div></div>
-            <div class="input-row dual-input main-row"><div class="input-label">*10. Management system covering more than one approval (Y/N)</div><div class="input-control"><select id="B10-comp"><option value="0">No</option><option value="1">Yes</option></select></div><div></div><div class="input-score" id="B10-avg">-</div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">*10. Management system covering more than one approval (Y/N)</div><div class="input-control"><select id="B10-comp"><option value="0">No</option><option value="1">Yes</option></select></div><div class="input-control"></div><div class="input-score" id="B10-avg">-</div></div>
             <div class="input-row dual-input sub-row"><div class="input-label">a. Total number of ratings covered by Management system</div><div class="input-control"><input type="number" id="B10a-comp" value="0" min="0"></div><div class="input-control"><select id="B10a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
         </div>
     </div>
