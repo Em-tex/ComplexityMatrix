@@ -39,7 +39,7 @@
                         <tbody>
                             <tr><td></td><th>Non-complex</th><th>Low</th><th>Medium</th><th>High</th></tr>
                             <tr><td class="row-header">Present</td><td id="crit-P-Non-complex">critical</td><td id="crit-P-L">critical</td><td id="crit-P-M">critical</td><td id="crit-P-H">critical</td></tr>
-                            <tr><td class="row-header">Suitable</td><td id="crit-S-Non-complex">attention req.</td><td id="crit-S-L">attention req.</td><td id="crit-S-M">critical</td><td id="crit-S-H">critical</td></tr>
+                            <tr><td class="row-header">Suitable</td><td id="crit-S-Non-complex">attention req</td><td id="crit-S-L">attention req</td><td id="crit-S-M">critical</td><td id="crit-S-H">critical</td></tr>
                             <tr><td class="row-header">Operational</td><td id="crit-O-Non-complex">normal</td><td id="crit-O-L">normal</td><td id="crit-O-M">normal</td><td id="crit-O-H">normal</td></tr>
                             <tr><td class="row-header">Effective</td><td id="crit-E-Non-complex">low</td><td id="crit-E-L">low</td><td id="crit-E-M">low</td><td id="crit-E-H">low</td></tr>
                         </tbody>
@@ -52,7 +52,7 @@
                             <tr><td></td><th>Non-complex</th><th>Low</th><th>Medium</th><th>High</th></tr>
                             <tr><td class="row-header">low</td><td id="plan-low-Non-complex">basic</td><td id="plan-low-L">basic</td><td id="plan-low-M">basic</td><td id="plan-low-H">basic+</td></tr>
                             <tr><td class="row-header">normal</td><td id="plan-normal-Non-complex">basic</td><td id="plan-normal-L">basic</td><td id="plan-normal-M">basic+</td><td id="plan-normal-H">basic+</td></tr>
-                            <tr><td class="row-header">attention req.</td><td id="plan-attentionreq-Non-complex">Focused scope</td><td id="plan-attentionreq-L">Focused scope</td><td id="plan-attentionreq-M">Focused scope</td><td id="plan-attentionreq-H">Focused scope</td></tr>
+                            <tr><td class="row-header">attention req</td><td id="plan-attentionreq-Non-complex">Focused scope</td><td id="plan-attentionreq-L">Focused scope</td><td id="plan-attentionreq-M">Focused scope</td><td id="plan-attentionreq-H">Focused scope</td></tr>
                             <tr><td class="row-header">critical</td><td id="plan-critical-Non-complex">immediate action</td><td id="plan-critical-L">immediate action</td><td id="plan-critical-M">immediate action</td><td id="plan-critical-H">immediate action</td></tr>
                         </tbody>
                     </table>
@@ -157,7 +157,11 @@
     </div>
     
     <div class="comments-section"><label for="comments">Comments:</label><textarea id="comments"></textarea></div>
-    <div class="action-buttons"><button id="clear-form-button">Clear Form</button></div>
+    <div class="action-buttons">
+        <button id="download-csv-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M5 20h14v-2H5v2zm7-18L5 9h4v6h6V9h4L12 2z"/></svg> Download CSV</button>
+        <button id="print-pdf-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> Print to PDF</button>
+        <button id="clear-form-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Clear Form</button>
+    </div>
 </div>
 <script src="js/camo_kalkulator.js"></script>
 </body>

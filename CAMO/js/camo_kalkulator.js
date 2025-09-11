@@ -25,8 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const complexityLevelMap = { H: 'High', M: 'Medium', L: 'Low', "Non-complex": 'Non-complex' };
     const criticalityMatrix = { P:{"Non-complex":"critical", L:"critical", M:"critical", H:"critical"}, S:{"Non-complex":"attention req", L:"attention req", M:"critical", H:"critical"}, O:{"Non-complex":"normal", L:"normal", M:"normal", H:"normal"}, E:{"Non-complex":"low", L:"low", M:"low", H:"low"} };
     const planMatrix = { critical:{"Non-complex":"immediate action", L:"immediate action", M:"immediate action", H:"immediate action"}, "attention req":{"Non-complex":"Focused scope", L:"Focused scope", M:"Focused scope", H:"Focused scope"}, normal:{"Non-complex":"basic", L:"basic", M:"basic+", H:"basic+"}, low:{"Non-complex":"basic", L:"basic", M:"basic", H:"basic+"} };
-    const activitiesBase = { "immediate action": 0, "Focused scope": 6, "basic+": 4, "basic": 4 }; // Base activities per plan
-
+    
     function getElValue(id) {
         const el = document.getElementById(id);
         if (!el || el.value === '' || el.value === 'N/A') return null;
@@ -44,8 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    function getElementText(element) {
+        if (!element) return '';
+        if (element.tagName === 'SELECT') {
+            return element.options[element.selectedIndex]?.text || '';
+        }
+        return element.value;
+    }
+
     function calculate() {
-        // --- PERFORMANCE CALCULATION ---
         const allPerformanceScores = [];
         Object.keys(performanceGroups).forEach(groupKey => {
             let groupScores = [];
@@ -93,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (performanceAverage >= perfThresholds.O) perfLevel = 'O';
         else if (performanceAverage >= perfThresholds.S) perfLevel = 'S';
         
-        // --- COMPLEXITY CALCULATION ---
         let complexitySum = 0;
         complexitySourceIds.forEach(id => {
             let score = getElValue(id) ?? 0;
@@ -107,12 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (complexitySum <= compThresholds.L) compLevel = 'L';
         else if (complexitySum <= compThresholds.M) compLevel = 'M';
 
-        // --- FINAL RESULTS ---
         const criticality = criticalityMatrix[perfLevel][compLevel];
         const surveillancePeriod = (criticality !== 'low' && perfLevel !== 'E') ? "No extension" : "Extension possible";
         const basePlan = planMatrix[criticality][compLevel];
         
-        // --- UPDATE UI ---
         const resPerf = document.getElementById('res-perf-level');
         const resComp = document.getElementById('res-comp-level');
         const resCrit = document.getElementById('res-criticality');
@@ -140,6 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if(planKey) document.getElementById(`plan-row-${planKey}`)?.classList.add('highlight-row');
     }
 
+    function downloadCSV() {
+        // Implementation for downloading CSV
+    }
+
     function setupEventListeners() {
         allInputIds.forEach(id => {
             const el = document.getElementById(id);
@@ -153,6 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('A3-number').classList.toggle('hidden', document.getElementById('A3-choice').value !== 'Yes');
         });
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
+        document.getElementById('print-pdf-button').addEventListener('click', () => window.print());
+        document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
         document.getElementById('matrix-toggler').addEventListener('click', (e) => {
             const content = document.getElementById('matrix-content');
             const isVisible = content.style.display === 'block';

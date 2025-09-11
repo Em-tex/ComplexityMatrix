@@ -38,9 +38,8 @@ body {
 }
 .header-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
 .info-field label { font-weight: 600; color: var(--color-gray-medium); display: block; margin-bottom: 5px; }
-.info-field input { width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
 
-/* --- Overview Panel --- */
+/* --- Sticky Results Panel --- */
 .sticky-results {
     position: sticky;
     top: 0;
@@ -53,10 +52,11 @@ body {
     border-radius: 12px;
 }
 .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-.result-card { border: 1px solid var(--color-border); border-radius: 8px; padding: 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+.result-card { border: 1px solid var(--color-border); border-radius: 8px; padding: 10px; text-align: center; }
 .result-label { display: block; font-weight: 600; color: var(--color-gray-medium); margin-bottom: 5px; font-size: 0.9em; }
 .result-value { font-size: 1.3em; font-weight: 700; padding: 5px 10px; border-radius: 6px; transition: background-color 0.3s, color 0.3s; }
 
+/* --- Non-Sticky Details --- */
 .overview-container h2 { text-align: center; color: var(--color-main-blue); margin-top: 0; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
 .collapsible-header { background-color: var(--color-gray-light); border: 1px solid var(--color-border); padding: 12px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; }
 .collapsible-header:hover { background-color: #e2e6ea; }
@@ -68,7 +68,7 @@ body {
 .matrix-table th { background-color: var(--color-main-blue); color: white; }
 .matrix-table .row-header { font-weight: bold; background-color: var(--color-gray-light); }
 .matrix-table td.highlight { background-color: var(--color-orange) !important; color: white; font-weight: bold; }
-#oversight-plan-details-table .highlight-row { background-color: var(--color-light-blue-bg); }
+#oversight-plan-details-table .highlight-row { background-color: var(--color-orange) !important; color: white; }
 
 /* --- Result Colors --- */
 .perf-E, .comp-Non-complex, .comp-L, .crit-Low, .period-ok { background-color: var(--color-green-bg); color: var(--color-green-text); }
@@ -82,10 +82,10 @@ body {
 .input-table-header { display: grid; gap: 15px; font-weight: bold; padding: 10px; background-color: var(--color-gray-dark); color: white; border-radius: 4px; text-align: center; }
 .input-table-header.perf-only { grid-template-columns: 5fr 2fr 1fr; }
 .input-table-header.dual-input { grid-template-columns: 5fr 1.5fr 1.5fr 1fr; }
-.input-row { display: grid; gap: 15px; padding: 10px; align-items: center; border-bottom: 1px solid #eee; }
-.section-group { padding: 0; border-radius: 4px; }
+.input-row { display: grid; gap: 15px; padding: 10px; align-items: center; }
+.section-group { padding: 0; border-radius: 4px; border-bottom: 1px solid #eee; }
+.section-group:last-child { border-bottom: none; }
 .section-group:nth-child(even) { background-color: var(--color-gray-light); }
-.section-group .input-row:last-of-type { border-bottom: none; }
 .input-row.main-row { padding-top: 15px; border-top: 2px solid #cdd5de; margin-top: 15px; }
 .section-group:first-child .input-row.main-row:first-child { border-top: none; margin-top: 0; }
 .input-row.perf-only { grid-template-columns: 5fr 2fr 1fr; }
@@ -93,7 +93,7 @@ body {
 .input-row.main-row > .input-label { font-weight: bold; }
 .input-row.sub-row > .input-label { padding-left: 25px; }
 .input-row.sub-row .input-label { display: flex; align-items: center; gap: 8px; }
-.input-control select, .input-control input[type="number"], .input-control input[type="text"] { width: 100%; max-width: 200px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Overpass', sans-serif; font-size: 1em; }
+.form-input { width: 100%; max-width: 200px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Overpass', sans-serif; font-size: 1em; }
 .input-control.multi-input { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .input-control.dual-control { border-left: 2px solid var(--color-border); padding-left: 15px; }
 .input-control input.hidden { display: none; }
@@ -105,7 +105,7 @@ body {
 
 /* --- Footer --- */
 .comments-section textarea { width: 100%; min-height: 100px; padding: 10px; border: 1px solid var(--color-border); border-radius: 4px; font-family: 'Overpass', sans-serif; }
-.action-buttons { text-align: center; }
+.action-buttons { text-align: center; display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; padding: 0; }
 .action-buttons button { padding: 10px 20px; font-size: 1em; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
 #download-csv-button { background-color: #28a745; }
 #print-pdf-button { background-color: #6f42c1; }
