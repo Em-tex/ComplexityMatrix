@@ -55,8 +55,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'q5-2-4-outcomes', label: '5.2.4 Compliance monitoring outcomes (e.g., audit results) are followed up.', section: 'additional' },
     ];
     
-    function calculateFieldScore(selectValue) {
+    function calculateFieldScore(fieldId, selectValue) {
         if (!selectValue || selectValue === "NA") return null;
+
+        // NEW: Special scoring for signed policy question
+        if (fieldId === 'q1-1-1-signed' && selectValue === 'N') {
+            return 1;
+        }
+        
         return scoringRules['generic-score']?.[selectValue] ?? 0;
     }
 
@@ -97,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const select = document.getElementById(field.id);
             const valueCell = document.getElementById(field.id + '-value');
             if (select && valueCell) {
-                const score = calculateFieldScore(select.value);
+                const score = calculateFieldScore(field.id, select.value);
                 applyValueCellStyle(valueCell, score);
                 if (score !== null) {
                     sums[field.section] += score;
@@ -119,8 +125,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const grandTotalAvg = grandTotalCount > 0 ? grandTotalSum / grandTotalCount : 0;
         document.getElementById('total-gauge-avg-text').textContent = grandTotalAvg.toFixed(1);
-        document.getElementById('total-score-comment').textContent = getRecommendationText(grandTotalAvg);
         updateGauge('total', grandTotalAvg, GAUGE_MAX_VALUE);
+
+        // NEW: Logic to show/hide recommendation text
+        const commentEl = document.getElementById('total-score-comment');
+        if (grandTotalCount > 0) {
+            commentEl.textContent = getRecommendationText(grandTotalAvg);
+        } else {
+            commentEl.textContent = ''; // Clear text if form is empty
+        }
         
         saveData();
     }
@@ -257,9 +270,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const scoringRes = await fetch('data/scoring.json');
             scoringRules = await scoringRes.json();
-
         } catch (error) {
-            console.error('Failed to load necessary data files:', error);
+            console.error('Failed to load data file (scoring.json):', error);
             alert('ERROR: Could not load data file (scoring.json). The page cannot function.');
             return;
         }
