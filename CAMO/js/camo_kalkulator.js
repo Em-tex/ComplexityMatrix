@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const STORAGE_KEY = 'camoAssessment_v16_final';
+    const STORAGE_KEY = 'camoAssessment_v17_final';
     const allInputIds = [
         'org-name', 'org-ref', 'filled-by', 'date', 'comments', 
         'A1a-perf', 'A1b-perf', 'A2a-perf', 'A2b-perf', 'A2c-perf', 'A3-choice', 'A3-number', 'A4-perf', 'A5-perf', 'A5-date', 'A6-perf', 
@@ -11,15 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     
     const performanceGroups = {
-        A1: ['A1a-perf', 'A1b-perf'],
-        A2: ['A2a-perf', 'A2b-perf', 'A2c-perf'],
-        A3: ['A3-choice'], A4: ['A4-perf'], A5: ['A5-perf'], A6: ['A6-perf'],
-        B1: ['B1a-perf', 'B1b-perf'],
-        B2: ['B2a-perf', 'B2b-perf', 'B2c-perf', 'B2d-perf', 'B2e-perf'],
-        B3: ['B3-perf'], B4: ['B4a-perf'], B5: ['B5-perf'], B6: ['B6-perf'],
-        B7: ['B7a-perf', 'B7b-perf', 'B7c-perf', 'B7d-perf'],
-        B8: ['B8a-perf', 'B8b-perf'],
-        B9: ['B9-perf'], B10: ['B10a-perf']
+        A1: ['A1a-perf', 'A1b-perf'], A2: ['A2a-perf', 'A2b-perf', 'A2c-perf'], A3: ['A3-choice'], A4: ['A4-perf'], A5: ['A5-perf'], A6: ['A6-perf'],
+        B1: ['B1a-perf', 'B1b-perf'], B2: ['B2a-perf', 'B2b-perf', 'B2c-perf', 'B2d-perf', 'B2e-perf'], B3: ['B3-perf'], B4: ['B4a-perf'], B5: ['B5-perf'], B6: ['B6-perf'],
+        B7: ['B7a-perf', 'B7b-perf', 'B7c-perf', 'B7d-perf'], B8: ['B8a-perf', 'B8b-perf'], B9: ['B9-perf'], B10: ['B10a-perf']
     };
     
     const complexitySourceIds = [ 'B4a-comp', 'B4b-comp', 'B4c-comp', 'B5-comp', 'B6-comp', 'B7a-comp', 'B7b-comp', 'B7c-comp', 'B7d-comp', 'B8a-comp', 'B8b-comp', 'B9-comp', 'B10-comp', 'B10a-comp' ];
@@ -29,9 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const compThresholds = { H: 19, M: 12, L: 9, "Non-complex": 7 };
     const performanceLevelMap = { P: 'Present', S: 'Suitable', O: 'Operational', E: 'Effective' };
     const complexityLevelMap = { H: 'High', M: 'Medium', L: 'Low', "Non-complex": 'Non-complex' };
-    const criticalityMatrix = { P:{"Non-complex":"critical", L:"critical", M:"critical", H:"critical"}, S:{"Non-complex":"attention req.", L:"attention req.", M:"critical", H:"critical"}, O:{"Non-complex":"normal", L:"normal", M:"normal", H:"normal"}, E:{"Non-complex":"low", L:"low", M:"low", H:"low"} };
-    const planMatrix = { critical:{"Non-complex":"immediate action", L:"immediate action", M:"immediate action", H:"immediate action"}, "attention req.":{"Non-complex":"Focused scope", L:"Focused scope", M:"Focused scope", H:"Focused scope"}, normal:{"Non-complex":"basic", L:"basic", M:"basic+", H:"basic+"}, low:{"Non-complex":"basic", L:"basic", M:"basic", H:"basic+"} };
-    
+    const criticalityMatrix = { P:{"Non-complex":"critical", L:"critical", M:"critical", H:"critical"}, S:{"Non-complex":"attention req", L:"attention req", M:"critical", H:"critical"}, O:{"Non-complex":"normal", L:"normal", M:"normal", H:"normal"}, E:{"Non-complex":"low", L:"low", M:"low", H:"low"} };
+    const planMatrix = { critical:{"Non-complex":"immediate action", L:"immediate action", M:"immediate action", H:"immediate action"}, "attention req":{"Non-complex":"Focused scope", L:"Focused scope", M:"Focused scope", H:"Focused scope"}, normal:{"Non-complex":"basic", L:"basic", M:"basic+", H:"basic+"}, low:{"Non-complex":"basic", L:"basic", M:"basic", H:"basic+"} };
+    const activitiesBase = { "immediate action": 0, "Focused scope": 6, "basic+": 4, "basic": 4 }; // Base activities per plan
+
     function getElValue(id) {
         const el = document.getElementById(id);
         if (!el || el.value === '' || el.value === 'N/A') return null;
@@ -128,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resPerf.className = `result-value perf-${perfLevel}`;
         resComp.textContent = `${complexityLevelMap[compLevel]} (${formatNumber(complexitySum)})`;
         resComp.className = `result-value comp-${compLevel.replace(/\s/g, '')}`;
-        resCrit.textContent = capitalize(criticality.replace(' req.', ' Req.'));
+        resCrit.textContent = capitalize(criticality.replace(' req', ' Req'));
         resCrit.className = `result-value crit-${criticality.replace(/\s/g, '')}`;
         resPeriod.textContent = surveillancePeriod;
         resPeriod.className = `result-value period-${surveillancePeriod === 'Extension possible' ? 'ok' : 'no'}`;
