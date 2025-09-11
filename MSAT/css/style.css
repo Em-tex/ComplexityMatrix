@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap');
+
+body {
+    font-family: 'Overpass', sans-serif;
+    margin: 0 20px 20px 20px;
+    background-color: #f8f9fa;
+}
+.header, .total-summary, .container, .comments-section, .action-buttons, .footer-links {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+.header, .total-summary, .section, .comments-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.header h1 {
+    color: #2c3e50;
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+.header-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+    align-items: end;
+}
+.info-field {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 5px;
+}
+.info-field label {
+    font-weight: bold;
+    color: #495057;
+}
+.info-field input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: 'Overpass', sans-serif;
+}
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0;
+    box-shadow: none;
+    background: none;
+}
+@media (min-width: 992px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.section {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+.section-header {
+    color: white;
+    padding: 12px 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+}
+.section-header .fa-solid {
+    margin-right: 10px;
+}
+
+/* --- UPDATED MSAT COLORS from CAA NOR profile --- */
+#section-policy .section-header { background: #03477F; }    /* Autoritær blå */
+#section-risk .section-header { background: #F06C00; }      /* Oransje */
+#section-assurance .section-header { background: #6A8E7F; } /* Vintergrønn */
+#section-promotion .section-header { background: #03477F; } /* Autoritær blå */
+#section-additional .section-header { background: #6c757d; } /* Neutral Gray */
+
+
+.section-content {
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    flex-grow: 1;
+}
+.header-row {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 0.8fr;
+    background: #34495e;
+    color: white;
+    font-weight: bold;
+}
+.header-cell { padding: 8px 12px; }
+.header-cell:last-child, .header-cell:nth-child(2) { text-align: center; }
+.form-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; border-bottom: 1px solid #eee; align-items: center; }
+.form-row:last-child { border-bottom: none; }
+.form-row.header-group {
+    grid-column: 1 / -1;
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+    padding: 8px 12px;
+}
+.form-cell { padding: 8px 12px; position: relative; }
+.form-cell select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
+
+.calculated-value { font-weight: bold; text-align: center; padding: 10px 12px; height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+.bg-default-gray { background-color: #e9ecef !important; }
+.bg-weak-green { background-color: #d4edda !important; }
+.bg-weak-yellow { background-color: #fff3cd !important; }
+.bg-weak-orange { background-color: #ffe8d1 !important; }
+.bg-weak-red { background-color: #f8d7da !important; }
+
+.total-summary { text-align: center; }
+.all-gauges-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    align-items: center;
+}
+@media (min-width: 768px) {
+    .all-gauges-container {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+}
+.small-gauges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    justify-self: center;
+}
+.gauge-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.gauge-block-title {
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+}
+.gauge-icon {
+    margin-right: 5px;
+    font-size: 1.1em;
+}
+.gauge-block-summary {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+}
+.gauge-block-comment {
+    font-size: 0.9em;
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+    padding: 0 10px;
+}
+
+.gauge { position: relative; }
+.gauge-bg {
+    width: 100%;
+    height: 100%;
+    border-radius: 50% 50% 0 0;
+    position: relative;
+    overflow: hidden;
+    background: conic-gradient(from 180deg at 50% 100%, #ff152c 5%, #fff025 50%, #009122 95%);
+}
+.gauge-cover {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    background-color: inherit;
+    border-radius: 50% 50% 0 0;
+}
+.gauge-needle {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background: #333;
+    transform-origin: bottom center;
+    transition: transform 0.5s ease;
+    border-radius: 2px 2px 0 0;
+    z-index: 2;
+    transform: translateX(-50%) rotate(-90deg);
+}
+.small-gauges-grid .gauge-block { min-width: 140px; }
+.small-gauges-grid .gauge { width: 120px; height: 60px; }
+.small-gauges-grid .gauge-bg { border-radius: 60px 60px 0 0; }
+.small-gauges-grid .gauge-cover { border-radius: 50px 50px 0 0; }
+.small-gauges-grid .gauge-needle { height: 50px; }
+
+#gauge-block-total {
+    min-width: 320px;
+    justify-self: center;
+}
+#gauge-block-total .gauge-block-title { font-size: 1.6em; margin-bottom: 10px; }
+#gauge-block-total .gauge-block-summary { font-size: 1.2em; margin-bottom: 10px; }
+#gauge-block-total .gauge { width: 300px; height: 150px; }
+#gauge-block-total .gauge-bg { border-radius: 150px 150px 0 0; }
+#gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; border-radius: 135px 135px 0 0;}
+#gauge-block-total .gauge-needle { height: 125px; }
+
+/* --- UPDATED MSAT GAUGE COVER COLORS --- */
+#gauge-block-policy .gauge-cover,
+#gauge-block-risk .gauge-cover,
+#gauge-block-assurance .gauge-cover,
+#gauge-block-promotion .gauge-cover,
+#gauge-block-additional .gauge-cover {
+    background-color: #EEFAFF; /* Lysblå */
+}
+#gauge-block-total .gauge-cover { background-color: white; }
+
+.comments-section label { font-weight: bold; color: #495057; display: block; margin-bottom: 5px; }
+.comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif;}
+
+.action-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+.action-buttons button, .action-buttons a[role="button"] { 
+    padding: 10px 20px; 
+    font-size: 1em; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: opacity 0.2s; 
+    display: inline-flex; 
+    align-items: center;
+    text-decoration: none;
+    font-family: 'Overpass', sans-serif;
+}
+.action-buttons button:hover, .action-buttons a[role="button"]:hover { opacity: 0.9; }
+#download-csv-button { background-color: #28a745; }
+#print-pdf-button { background-color: #6f42c1; }
+#clear-form-button { background-color: #dc3545; }
+#load-csv-button { background-color: #ffc107; color: #212529; }
+.svg-icon { height: 1.2em; width: 1.2em; margin-right: 0.5em; fill: currentColor; }
+
+.footer-links {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+.footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
+.footer-links a:hover { text-decoration: underline; }

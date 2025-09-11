@@ -4,6 +4,7 @@
     --color-main-blue: #03477F;
     --color-orange: #F06C00;
     --color-light-blue-bg: #EEFAFF;
+    --color-green: #6A8E7F;
     --color-blue-medium: #0056b3;
     --color-gray-dark: #343a40;
     --color-gray-medium: #495057;
@@ -38,6 +39,7 @@ body {
 }
 .header-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
 .info-field label { font-weight: 600; color: var(--color-gray-medium); display: block; margin-bottom: 5px; }
+.info-field .form-input { width: 100%; }
 
 /* --- Sticky Results Panel --- */
 .sticky-results {
@@ -45,7 +47,7 @@ body {
     top: 0;
     z-index: 1000;
     background-color: white;
-    padding: 15px 20px;
+    padding: 15px;
     margin-bottom: 25px;
     border-bottom: 3px solid var(--color-main-blue);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
