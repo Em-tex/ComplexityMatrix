@@ -4,40 +4,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     let scoringRules = {};
 
     const MAX_SCORES = {
-        resources: 21, 
-        fleet: 25, 
-        operations: 43,
-        approvals: 14, 
-        total: 103
+        resources: 22, 
+        fleet: 20, 
+        operations: 38,
+        approvals: 15, 
+        total: 95
     };
 
     const fieldData = [
+        // Resources
         { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
         { id: 'cabin-crew', label: 'Cabin crew carried', section: 'resources' },
         { id: 'leading-personnel-roles', label: 'Leading personell has several roles', section: 'resources' },
+        // Fleet
         { id: 'types-operated', label: 'Number of types operated', section: 'fleet' },
-        { id: 'aircraft-over-40t', label: 'Number of aircraft operated over 40 000 kg', section: 'fleet' },
-        { id: 'aircraft-5.7-40t', label: 'Number of aircraft operated between 5 700 kg & 40 000 kg', section: 'fleet' },
-        { id: 'aircraft-under-5.7t', label: 'Number of aircraft operated under 5 700 kg', section: 'fleet' },
-        { id: 'sectors-per-annum', label: 'Sectors per annum', section: 'operations' },
+        { id: 'aircraft-mops-over-19', label: 'Number of aircraft with MOPSC of MORE than 19 seats', section: 'fleet' },
+        { id: 'aircraft-mops-under-19', label: 'Number of aircraft with MOPSC of 19 seats or LESS', section: 'fleet' },
+        { id: 'special-modification', label: 'Aircraft with Special Modification', section: 'fleet' },
+        // Operations
         { id: 'type-of-operation', label: 'Type of Operation', section: 'operations' },
-        { id: 'aircraft-leasing', label: 'Aircraft leasing', section: 'operations' },
+        { id: 'special-operation', label: 'Number of special Operation (NOT SPA)', section: 'operations' },
+        { id: 'derogations', label: 'Number of derogations', section: 'operations' },
         { id: 'airports-based', label: 'Number of airports where aircraft and/or crews are permanently based', section: 'operations' },
         { id: 'group-airline', label: 'Group Airline', section: 'operations' },
-        { id: 'mix-operations', label: 'Mix Operations (Cargo, Pax)', section: 'operations' },
-        { id: 'area-of-operation', label: 'Area of Operation', section: 'operations' },
-        { id: 'landings', label: 'Landings', section: 'operations' },
-        { id: 'ifr-imc-operation', label: 'IFR/IMC Operation', section: 'operations' },
-        { id: 'ncc', label: 'NCC', section: 'operations' },
+        { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
+        { id: 'acmi', label: 'ACMI', section: 'operations' },
         { id: 'spo', label: 'SPO', section: 'operations' },
-        { id: 'rnp-ar-apch', label: 'RNP AR APCH', section: 'approvals' }, { id: 'mnps-nat-hla', label: 'MNPS/ NAT-HLA', section: 'approvals' },
-        { id: 'rvsm', label: 'RVSM', section: 'approvals' }, { id: 'lv-takeoff', label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
-        { id: 'lv-landing', label: 'Low Visibility operations (LANDING)', section: 'approvals' }, { id: 'etops', label: 'ETOPS', section: 'approvals' },
-        { id: 'dangerous-goods', label: 'Dangerous Goods', section: 'approvals' }, { id: 'single-engine-imc', label: 'Single-Engined Turbine IMC', section: 'approvals' },
-        { id: 'efb', label: 'Electronic Flight Bag', section: 'approvals' }, { id: 'isolated-aerodromes', label: 'Isolated Aerodromes', section: 'approvals' },
-        { id: 'steep-approach', label: 'Steep Approach', section: 'approvals' }, { id: 'atqp', label: 'ATQP', section: 'approvals' },
-        { id: 'frm', label: 'Fatigue Risk Management', section: 'approvals' }, { id: 'ato-lite', label: 'ATO Lite', section: 'approvals' }
+        // Approvals
+        { id: 'rnp-ar-apch', label: 'RNP AR APCH', section: 'approvals' },
+        { id: 'mnps-nat-hla', label: 'MNPS/ NAT-HLA', section: 'approvals' },
+        { id: 'rvsm', label: 'RVSM', section: 'approvals' },
+        { id: 'lv-takeoff', label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
+        { id: 'lv-landing', label: 'Low Visibility operations (LANDING)', section: 'approvals' },
+        { id: 'etops', label: 'ETOPS', section: 'approvals' },
+        { id: 'dangerous-goods', label: 'Dangerous Goods', section: 'approvals' },
+        { id: 'single-engine-imc', label: 'Single-Engined Turbine IMC', section: 'approvals' },
+        { id: 'efb', label: 'Electronic Flight Bag', section: 'approvals' },
+        { id: 'isolated-aerodromes', label: 'Isolated Aerodromes', section: 'approvals' },
+        { id: 'steep-approach', label: 'Steep Approach', section: 'approvals' },
+        { id: 'atqp', label: 'ATQP', section: 'approvals' },
+        { id: 'ato', label: 'ATO', section: 'approvals' }
     ];
 
     // --- Kjernefunksjoner ---
@@ -45,10 +52,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
         if (!fieldInfo) return 0;
         
+        // Specific logic for approvals that are not "generic"
+        if (fieldId === 'atqp') {
+            return scoringRules['atqp']?.[selectValue] ?? 0;
+        }
+
+        // Generic logic for most approvals
         if (fieldInfo.section === 'approvals') {
             return scoringRules['generic-approval']?.[selectValue] ?? 0;
         }
 
+        // Logic for other sections
         if (!scoringRules[fieldId] || !selectValue) return 0;
         
         const rule = scoringRules[fieldId][selectValue];
@@ -60,8 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function applyValueCellStyle(valueCell, score) {
         valueCell.className = 'form-cell calculated-value';
-        if (score >= 4) valueCell.classList.add('bg-weak-red');
-        else if (score >= 2) valueCell.classList.add('bg-weak-yellow');
+        if (score >= 5) valueCell.classList.add('bg-weak-red');
+        else if (score >= 3) valueCell.classList.add('bg-weak-yellow');
         else if (score > 0) valueCell.classList.add('bg-weak-green');
         else valueCell.classList.add('bg-default-gray');
     }
@@ -177,7 +191,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return "";
     }
 
-    // ENDRET: Kommentarer flyttet frem i rekkefølgen
     function downloadCSV() {
         if (!validateForm()) {
             return;
@@ -190,7 +203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             'Operatørnavn', 'Fylt ut av', 'Dato',
             'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum',
             'Complexity Rating',
-            'Kommentarer' // Flyttet hit
+            'Kommentarer'
         ];
         const detailHeaders = [];
         fieldData.forEach(field => {
@@ -210,7 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('approvals-sum').textContent,
             document.getElementById('total-gauge-sum-text').textContent,
             "", // Tom verdi for Complexity Rating
-            comments // Flyttet hit
+            comments
         ];
         const detailData = [];
         fieldData.forEach(field => {

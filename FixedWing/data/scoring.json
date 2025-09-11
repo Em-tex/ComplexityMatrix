@@ -1,7 +1,7 @@
 {
     "staff-employed": {
-        "<10": 1,
-        "11-50": 2,
+        "<20": 1,
+        "21-50": 2,
         "51-200": 3,
         "200-500": 4,
         ">500": 5
@@ -16,7 +16,7 @@
     },
     "cabin-crew": {
         "No": 0,
-        "Yes": 1
+        "Yes": 2
     },
     "leading-personnel-roles": {
         "No": 0,
@@ -35,30 +35,12 @@
         }
     },
     "types-operated": {
-        "1-3": 1,
-        "4-6": 2,
-        "7-9": 3,
-        "10-12": 4,
-        ">12": 5
+        "1": 1,
+        "2-3": 3,
+        "4-6": 5,
+        ">6": 7
     },
-    "aircraft-over-40t": {
-        "0": 0,
-        "1-3": 1,
-        "4-5": 2,
-        "6-8": 3,
-        "9-10": 4,
-        ">10-100": 5,
-        ">100": 10
-    },
-    "aircraft-5.7-40t": {
-        "0": 0,
-        "1-5": 1,
-        "6-10": 2,
-        "11-15": 3,
-        "16-20": 4,
-        ">20": 5
-    },
-    "aircraft-under-5.7t": {
+    "aircraft-mops-over-19": {
         "0": 0,
         "1-3": 1,
         "4-5": 2,
@@ -66,25 +48,38 @@
         "9-10": 4,
         ">10": 5
     },
-    "sectors-per-annum": {
-        "<10k": 0,
-        "10k-49k": 1,
-        "50k-99k": 2,
-        "100k-199k": 3,
-        "200k-299k": 4,
-        ">300k": 5
+    "aircraft-mops-under-19": {
+        "0": 0,
+        "1-5": 1,
+        "6-10": 2,
+        "11-15": 3,
+        "16-20": 4,
+        ">20": 5
+    },
+    "special-modification": {
+        "No": 0,
+        "Yes": 3
     },
     "type-of-operation": {
         "A-A": 1,
         "A-B Restricted": 2,
-        "Ad-Hoc S/H": 3,
-        "Schd S/H or Ad-Hoc L/H": 6,
-        "Schd L/H": 10
+        "Schd Short Haul": 3,
+        "Schd Long Haul": 6,
+        "add hoc Short Haul": 7
     },
-    "aircraft-leasing": {
-        "No": 0,
-        "Yes, dry/wet": 1,
-        "Both dry and wet leasing": 2
+    "special-operation": {
+        "0": 0,
+        "1": 3,
+        "2": 4,
+        "3": 5,
+        ">3": 7
+    },
+    "derogations": {
+        "0": 0,
+        "1": 3,
+        "2": 4,
+        "3": 5,
+        ">3": 7
     },
     "airports-based": {
         "1-5": 1,
@@ -97,33 +92,26 @@
         "No": 0,
         "Yes": 2
     },
-    "mix-operations": {
+    "subcontractors": {
+        "0": 0,
+        "1-5": 1,
+        "6-10": 2,
+        "11-20": 3,
+        "20-50": 4,
+        ">50": 5
+    },
+    "acmi": {
         "No": 0,
         "Yes": 2
-    },
-    "area-of-operation": {
-        "Within Norway only": 1,
-        "Within EU": 2,
-        "Worldwide": 5
-    },
-    "landings": {
-        "N/A": 0,
-        "Ad-hoc landings": 1,
-        "Ad-hoc landings in congested areas": 3
-    },
-    "ifr-imc-operation": {
-        "No": 0,
-        "Yes": 2
-    },
-    "ncc": {
-        "No": 0,
-        "Yes, own a/c": 1,
-        "Yes, managed a/c": 5
     },
     "spo": {
         "No": 0,
         "Yes": 1,
-        "High risk SPO": 2
+        "High risk SPO": 3
+    },
+    "atqp": {
+        "No": 0,
+        "Yes": 3
     },
     "generic-approval": {
         "No": 0,

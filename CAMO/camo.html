@@ -3,87 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Part-CAMO Risk Assessment</title>
+    <title>CAMO Organisation Assessment</title>
     <link rel="icon" href="../smallLogo.png" type="image/png">
     <link rel="stylesheet" href="css/camo_stil.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<div class="main-wrapper">
     <div class="header">
-        <h1>Part-CAMO Risk Assessment</h1>
+        <h1>CAMO Organisation Assessment</h1>
         <div class="header-info">
-            <div class="info-field"><label for="operator-navn">Organization:</label><input type="text" id="operator-navn" placeholder="Enter organization name"></div>
-            <div class="info-field"><label for="filled-by">Filled out by:</label><input type="text" id="filled-by" placeholder="Enter your name"></div>
-            <div class="info-field"><label for="date">Date:</label><input type="date" id="date"></div>
+            <div class="info-field"><label for="org-name">Organization:</label><input type="text" id="org-name"></div>
+            <div class="info-field"><label for="org-ref">Approval ref:</label><input type="text" id="org-ref"></div>
+            <div class="info-field"><label for="date">Date of assessment:</label><input type="date" id="date"></div>
         </div>
     </div>
 
-    <div id="results-panel">
-        <h2>Results</h2>
-        <div class="results-grid">
-            <div class="result-item"><span class="result-label">Performance Level:</span><span class="result-value" id="result-performance-level">-</span></div>
-            <div class="result-item"><span class="result-label">Complexity Score:</span><span class="result-value" id="result-complexity-score">-</span></div>
-            <div class="result-item"><span class="result-label">Complexity Level:</span><span class="result-value" id="result-complexity-level">-</span></div>
-            <div class="result-item"><span class="result-label">Criticality:</span><span class="result-value" id="result-criticality">-</span></div>
+    <div id="overview-panel">
+        <h2>Assessment Result</h2>
+        <div class="overview-grid">
+            <div class="result-card"><span class="result-label">Performance Level</span><span class="result-value" id="res-perf-level">-</span></div>
+            <div class="result-card"><span class="result-label">Complexity Level</span><span class="result-value" id="res-comp-level">-</span></div>
+            <div class="result-card"><span class="result-label">Criticality</span><span class="result-value" id="res-criticality">-</span></div>
+            <div class="result-card"><span class="result-label">Surveillance Period</span><span class="result-value" id="res-period">-</span></div>
         </div>
-        <div class="action-plan">
-            <h3>Recommended Oversight Plan:</h3>
-            <p id="result-action-plan">Complete the form to see the recommendation.</p>
+        <div class="overview-tables">
+            <div class="matrix-container">
+                <table class="matrix-table">
+                    <thead><tr><th colspan="5">Criticality Matrix (Perf. vs Complexity)</th></tr></thead>
+                    <tbody>
+                        <tr><td></td><th>Non-complex</th><th>Low</th><th>Medium</th><th>High</th></tr>
+                        <tr><td class="row-header">Present</td><td id="crit-P-Non-complex">critical</td><td id="crit-P-L">critical</td><td id="crit-P-M">critical</td><td id="crit-P-H">critical</td></tr>
+                        <tr><td class="row-header">Suitable</td><td id="crit-S-Non-complex">attention req.</td><td id="crit-S-L">attention req.</td><td id="crit-S-M">critical</td><td id="crit-S-H">critical</td></tr>
+                        <tr><td class="row-header">Operational</td><td id="crit-O-Non-complex">normal</td><td id="crit-O-L">normal</td><td id="crit-O-M">normal</td><td id="crit-O-H">normal</td></tr>
+                        <tr><td class="row-header">Effective</td><td id="crit-E-Non-complex">low</td><td id="crit-E-L">low</td><td id="crit-E-M">low</td><td id="crit-E-H">low</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="matrix-container">
+                 <table class="matrix-table">
+                    <thead><tr><th colspan="5">Oversight Plan Matrix (Crit. vs Complexity)</th></tr></thead>
+                    <tbody>
+                        <tr><td></td><th>Non-complex</th><th>Low</th><th>Medium</th><th>High</th></tr>
+                        <tr><td class="row-header">low</td><td id="plan-low-Non-complex">basic</td><td id="plan-low-L">basic</td><td id="plan-low-M">basic</td><td id="plan-low-H">basic+</td></tr>
+                        <tr><td class="row-header">normal</td><td id="plan-normal-Non-complex">basic</td><td id="plan-normal-L">basic</td><td id="plan-normal-M">basic+</td><td id="plan-normal-H">basic+</td></tr>
+                        <tr><td class="row-header">attention req.</td><td id="plan-attentionreq-Non-complex">Focused scope</td><td id="plan-attentionreq-L">Focused scope</td><td id="plan-attentionreq-M">Focused scope</td><td id="plan-attentionreq-H">Focused scope</td></tr>
+                        <tr><td class="row-header">critical</td><td id="plan-critical-Non-complex">immediate action</td><td id="plan-critical-L">immediate action</td><td id="plan-critical-M">immediate action</td><td id="plan-critical-H">immediate action</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="section" id="section-performance">
-            <div class="section-header"><span>Performance</span></div>
-            <div class="section-content">
-                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
-                <div class="form-row"><div class="form-cell">1.1 Identification of safety hazards</div><div class="form-cell"><select id="perf-hazard-identification"><option value="">Select...</option><option value="1">Present (1)</option><option value="2">Suitable (2)</option><option value="4">Operational (4)</option><option value="7">Effective (7)</option></select></div><div class="form-cell calculated-value" id="perf-hazard-identification-value">-</div></div>
-                <div class="form-row"><div class="form-cell">1.2 Management of associated risks</div><div class="form-cell"><select id="perf-hazard-management"><option value="">Select...</option><option value="1">Present (1)</option><option value="2">Suitable (2)</option><option value="4">Operational (4)</option><option value="7">Effective (7)</option></select></div><div class="form-cell calculated-value" id="perf-hazard-management-value">-</div></div>
-                <div class="form-row"><div class="form-cell">2a. MoC process</div><div class="form-cell"><select id="perf-moc"><option value="">Select...</option><option value="1">Present (1)</option><option value="2">Suitable (2)</option><option value="4">Operational (4)</option><option value="7">Effective (7)</option></select></div><div class="form-cell calculated-value" id="perf-moc-value">-</div></div>
-                <div class="form-row"><div class="form-cell">2b. Changes not requiring prior approval</div><div class="form-cell"><select id="perf-changes-no-approval"><option value="">Select...</option><option value="1">Present (1)</option><option value="2">Suitable (2)</option><option value="4">Operational (4)</option><option value="7">Effective (7)</option></select></div><div class="form-cell calculated-value" id="perf-changes-no-approval-value">-</div></div>
-                <div class="form-row"><div class="form-cell">2c. Changes implemented after formal approval</div><div class="form-cell"><select id="perf-changes-after-approval"><option value="">Select...</option><option value="1">Present (1)</option><option value="2">Suitable (2)</option><option value="4">Operational (4)</option><option value="7">Effective (7)</option></select></div><div class="form-cell calculated-value" id="perf-changes-after-approval-value">-</div></div>
-                <div class="form-row multi-input">
-                    <div class="form-cell">3. Level 1 finding</div>
-                    <div class="form-cell">
-                        <select id="perf-level1-finding-choice"><option value="">Select...</option><option value="No">No</option><option value="Yes">Yes</option></select>
-                        <input type="number" id="perf-level1-finding-number" class="hidden" placeholder="Count" value="1" min="1">
-                    </div>
-                    <div class="form-cell calculated-value" id="perf-level1-finding-value">-</div>
-                </div>
-                <div class="form-row"><div class="form-cell">4. Corrective actions implemented in time</div><div class="form-cell"><select id="perf-corrective-actions"><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div class="form-cell calculated-value" id="perf-corrective-actions-value">-</div></div>
-            </div>
+    <div id="input-panel">
+        <h2>Assessment Form</h2>
+        <div class="input-section-box">
+            <h3>A. Surveillance period - Ref CAMO.B.305(d)</h3>
+            <div class="input-table-header perf-only"><div>Criteria</div><div>Performance Input</div><div>Perf. Avg.</div></div>
+            <div class="input-row perf-only main-row"><div class="input-label">1. Identification of aviation safety hazards and management of associated risks</div><div></div><div class="input-score" id="A1-avg">-</div></div>
+            <div class="input-row perf-only sub-row"><div class="input-label">a. Identifying and addressing safety hazards (register, SPI, assessment)</div><div class="input-control"><select id="A1a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row perf-only sub-row"><div class="input-label">b. management</div><div class="input-control"><select id="A1b-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row perf-only main-row"><div class="input-label">2. Continous compliance with point CAMO.A.130 and full control over all changes</div><div></div><div class="input-score" id="A2-avg">-</div></div>
+            <div class="input-row perf-only sub-row"><div class="input-label">a. MoC (P/S/O/E)</div><div class="input-control"><select id="A2a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row perf-only sub-row"><div class="input-label">b. Changes not requiring prior approval, notification to CAA (P/S/O/E)</div><div class="input-control"><select id="A2b-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row perf-only sub-row"><div class="input-label">c. The changes only implemented after reciept of a formal approval from CAA</div><div class="input-control"><select id="A2c-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row perf-only main-row"><div class="input-label">3. Level 1 finding by CAA-N (no allowed) - Y/N</div><div class="input-control multi-input"><select id="A3-choice"><option value="No">No</option><option value="Yes">Yes</option></select><input type="number" id="A3-number" class="hidden" value="1" min="1"></div><div class="input-score" id="A3-avg">-</div></div>
+            <div class="input-row perf-only main-row"><div class="input-label">4. Implementation of corrective actions within time period...</div><div class="input-control"><select id="A4-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div class="input-score" id="A4-avg">-</div></div>
+            <div class="input-row perf-only main-row"><div class="input-label">*5. MSAT score - if applicable, combined with Part-145, Part-21, Part-OPS</div><div class="input-control multi-input"><input type="number" id="A5-perf" placeholder="N/A"><input type="date" id="A5-date" title="Date of assessment"></div><div class="input-score" id="A5-avg">-</div></div>
+            <div class="input-row perf-only main-row"><div class="input-label">*6. Tot. number of findings Level 2, by CAA-N - last 24 mth (initial and continous).</div><div class="input-control"><input type="number" id="A6-perf" min="0" value="0"></div><div class="input-score" id="A6-avg">-</div></div>
         </div>
-        <div class="section" id="section-complexity">
-            <div class="section-header"><span>Complexity</span></div>
-            <div class="section-content">
-                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection / Input</div><div class="header-cell">Value</div></div>
-                <div class="form-row"><div class="form-cell">1a. Addressing non-compliances</div><div class="form-cell"><select id="comp-eff-addressing-non-comp"><option value="">Select...</option><option value="1">P</option><option value="2">S</option><option value="4">O</option><option value="7">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-addressing-non-comp-value">-</div></div>
-                <div class="form-row"><div class="form-cell">1b. Closure of non-compliances</div><div class="form-cell"><select id="comp-eff-closure-non-comp"><option value="">Select...</option><option value="1">P</option><option value="2">S</option><option value="4">O</option><option value="7">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-closure-non-comp-value">-</div></div>
-                <div class="form-row"><div class="form-cell">1c. Addressing safety hazards</div><div class="form-cell"><select id="comp-eff-addressing-hazards"><option value="">Select...</option><option value="1">P</option><option value="2">S</option><option value="4">O</option><option value="7">E</option></select></div><div class="form-cell calculated-value" id="comp-eff-addressing-hazards-value">-</div></div>
-                <div class="form-row"><div class="form-cell">2a. ISO 45001</div><div class="form-cell"><select id="comp-iso-45001"><option value="">Select...</option><option value="2">Yes</option><option value="0">No</option></select></div><div class="form-cell calculated-value" id="comp-iso-45001-value">-</div></div>
-                <div class="form-row"><div class="form-cell">2b. ISO 9001</div><div class="form-cell"><select id="comp-iso-9001"><option value="">Select...</option><option value="0">Yes</option><option value="2">No</option></select></div><div class="form-cell calculated-value" id="comp-iso-9001-value">-</div></div>
-                <div class="form-row"><div class="form-cell">2c. Approvals by other authorities (count)</div><div class="form-cell"><input type="number" id="comp-other-auth-approvals" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-other-auth-approvals-value">-</div></div>
-                <div class="form-row"><div class="form-cell">3. Procedure for changes not requiring prior approval</div><div class="form-cell"><select id="comp-proc-changes-no-approval"><option value="">Select...</option><option value="1">P</option><option value="2">S</option><option value="4">O</option><option value="7">E</option></select></div><div class="form-cell calculated-value" id="comp-proc-changes-no-approval-value">-</div></div>
-                <div class="form-row"><div class="form-cell">4a. AltMoc Procedure</div><div class="form-cell"><select id="comp-altmoc-procedure"><option value="">Select...</option><option value="1">P</option><option value="2">S</option><option value="4">O</option><option value="7">E</option></select></div><div class="form-cell calculated-value" id="comp-altmoc-procedure-value">-</div></div>
-                <div class="form-row"><div class="form-cell">4b. Number of AltMoc procedures</div><div class="form-cell"><input type="number" id="comp-altmoc-number" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-altmoc-number-value">-</div></div>
-                <div class="form-row"><div class="form-cell">5a. Number of line locations (perm)</div><div class="form-cell"><input type="number" id="comp-loc-line-perm" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-loc-line-perm-value">-</div></div>
-                <div class="form-row"><div class="form-cell">5b. Number of base locations</div><div class="form-cell"><input type="number" id="comp-loc-base" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-loc-base-value">-</div></div>
-                <div class="form-row"><div class="form-cell">5c. Number of line locations (non-perm)</div><div class="form-cell"><input type="number" id="comp-loc-line-non-perm" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-loc-line-non-perm-value">-</div></div>
-                <div class="form-row"><div class="form-cell">5d. Number of workshop locations</div><div class="form-cell"><input type="number" id="comp-loc-workshop" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-loc-workshop-value">-</div></div>
-                <div class="form-row"><div class="form-cell">6a. Number of subcontracts</div><div class="form-cell"><input type="number" id="comp-subcontract-number" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-subcontract-number-value">-</div></div>
-                <div class="form-row"><div class="form-cell">6b. Sub-contractor for multiple CAMOs</div><div class="form-cell"><select id="comp-subcontract-multiple"><option value="">Select...</option><option value="1.2">Yes</option><option value="0">No</option></select></div><div class="form-cell calculated-value" id="comp-subcontract-multiple-value">-</div></div>
-                <div class="form-row"><div class="form-cell">7a. Number of large aeroplanes</div><div class="form-cell"><input type="number" id="comp-ac-large-aeroplanes" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-ac-large-aeroplanes-value">-</div></div>
-                <div class="form-row"><div class="form-cell">7b. Number of large helicopters</div><div class="form-cell"><input type="number" id="comp-ac-large-helicopters" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-ac-large-helicopters-value">-</div></div>
-                <div class="form-row"><div class="form-cell">8a. Owner involvement (High vol) count</div><div class="form-cell"><input type="number" id="comp-owner-high-vol" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-owner-high-vol-value">-</div></div>
-                <div class="form-row"><div class="form-cell">8b. Owner involvement (Medium vol) count</div><div class="form-cell"><input type="number" id="comp-owner-medium-vol" min="0" value="0"></div><div class="form-cell calculated-value" id="comp-owner-medium-vol-value">-</div></div>
-            </div>
+        <div class="input-section-box">
+            <h3>B. Specific nature of the organisation and complexity of its activites...</h3>
+            <div class="input-table-header dual-input"><div>Criteria</div><div>Complexity Input</div><div>Performance Input</div><div>Perf. Avg.</div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">1. The effectiveness of the organisation’s management system...</div><div></div><div></div><div class="input-score" id="B1-avg">-</div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">a. Identifying and adressing non-compliances (organisation vs CAA)</div><div></div><div class="input-control"><select id="B1a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">b. closure of non compliances (incl. organisation and authorities)</div><div></div><div class="input-control"><select id="B1b-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">2. The implementation by the organisation of any industry standards...</div><div></div><div></div><div class="input-score" id="B2-avg">-</div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">a. i. ISO 45001 - Occupational health & safety</div><div></div><div class="input-control"><select id="B2i-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">a. ii. ISO 9001 QM systems</div><div></div><div class="input-control"><select id="B2ii-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">3. The procedure applied for and the scope of changes not requiring prior approval</div><div></div><div class="input-control"><select id="B3-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div class="input-score" id="B3-avg">-</div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">4. Any specific procedures implemented... related to any alternative means of compliance used</div><div></div><div></div><div class="input-score" id="B4-avg">-</div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">a. Procedure implemented?</div><div class="input-control"><select id="B4a-comp"><option value="0">No</option><option value="1">Yes</option></select></div><div class="input-control"><select id="B4a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">b. Number of procedures based on "AltMoc"</div><div class="input-control"><input type="number" id="B4b-comp" min="0" value="0"></div><div></div><div></div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">5. The number of approved CAMO-locations...</div><div class="input-control"><input type="number" id="B5-comp" min="0" value="0"></div><div class="input-control"><select id="B5-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div class="input-score" id="B5-avg">-</div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">6. The number and type of any subcontractors...</div><div class="input-control"><input type="number" id="B6-comp" min="0" value="0"></div><div class="input-control"><select id="B6-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div class="input-score" id="B6-avg">-</div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">7. The volume of activity for each aircraft type...</div><div></div><div></div><div class="input-score" id="B7-avg">-</div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">a. Rotary wing and fixed wing (Y/N)</div><div class="input-control"><select id="B7a-comp"><option value="0">No</option><option value="2">Yes</option></select></div><div class="input-control"><select id="B7a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">b. Approved AMP</div><div class="input-control"><input type="number" id="B7b-comp" value="0" min="0"></div><div class="input-control"><select id="B7b-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">c. Complex motorpowered aircraft</div><div class="input-control"><select id="B7c-comp"><option value="0">No</option><option value="5">Yes</option></select></div><div class="input-control"><select id="B7c-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">d. Number of aircraft</div><div class="input-control"><input type="number" id="B7d-comp" value="0" min="0"></div><div class="input-control"><select id="B7d-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">*8. Airworthiness review</div><div></div><div></div><div class="input-score" id="B8-avg">-</div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">a. Number of ratings covered by AR-privilege</div><div class="input-control"><input type="number" id="B8a-comp" value="0" min="0"></div><div class="input-control"><select id="B8a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">b. Issuance of ARC (Y/N)</div><div class="input-control"><select id="B8b-comp"><option value="0">No</option><option value="3">Yes</option></select></div><div class="input-control"><select id="B8b-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">*9. Permit to fly (approved to issue)</div><div class="input-control"><select id="B9-comp"><option value="0">No</option><option value="5">Yes</option></select></div><div class="input-control"><select id="B9-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div class="input-score" id="B9-avg">-</div></div>
+            <div class="input-row dual-input main-row"><div class="input-label">*10. Management system covering more than one approval (Y/N)</div><div class="input-control"><select id="B10-comp"><option value="0">No</option><option value="1">Yes</option></select></div><div></div><div class="input-score" id="B10-avg">-</div></div>
+            <div class="input-row dual-input sub-row"><div class="input-label">a. Total number of ratings covered by Management system</div><div class="input-control"><input type="number" id="B10a-comp" value="0" min="0"></div><div class="input-control"><select id="B10a-perf"><option value="N/A">N/A</option><option value="1">Present</option><option value="2">Suitable</option><option value="4">Operational</option><option value="7">Effective</option></select></div><div></div></div>
         </div>
     </div>
     
-    <div class="comments-section"><label for="comments">Comments:</label><textarea id="comments" placeholder="Add comments here..." rows="4"></textarea></div>
-    <div class="action-buttons"><button id="save-result-button">Save Result</button><button id="print-pdf-button">Print to PDF</button><button id="clear-form-button">Clear Form</button></div>
-
-    <script src="js/camo_kalkulator.js"></script>
+    <div class="comments-section"><label for="comments">Comments:</label><textarea id="comments"></textarea></div>
+    <div class="action-buttons"><button id="clear-form-button">Clear Form</button></div>
+</div>
+<script src="js/camo_kalkulator.js"></script>
 </body>
 </html>
