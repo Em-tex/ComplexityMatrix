@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'special-modification', label: 'Helicopters with special modification', section: 'fleet' },
         // Operations
         { id: 'area-of-operation', label: 'Area of Operation', section: 'operations' },
-        { id: 'bases-permanently', label: 'Number of permanent bases', section: 'operations' },
-        { id: 'operation-landings', label: 'Type of Operation (On-Shore Landings)', section: 'operations' },
-        { id: 'operation-route', label: 'Type of Operation (On-Shore Route)', section: 'operations' },
-        { id: 'ifr-imc-operation', label: 'IFR/IMC Operation', section: 'operations' },
+        { id: 'bases-permanently', label: 'Number of bases with permanent', section: 'operations' },
+        { id: 'operation-landings', label: 'On-Shore Landings', section: 'operations' },
+        { id: 'operation-route', label: 'On-Shore Route', section: 'operations' },
+        { id: 'ifr-imc-operation', label: 'IFR/VFR Operation', section: 'operations' },
         { id: 'spo', label: 'SPO', section: 'operations' },
         { id: 'group-airline', label: 'Group Airline', section: 'operations' },
         { id: 'derogations', label: 'Number of derogations', section: 'operations' },
@@ -55,17 +55,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
         if (!fieldInfo) return 0;
         
-        // Specific logic for approvals that are not "generic"
         if (fieldId === 'hems' || fieldId === 'hofo') {
             return scoringRules[fieldId]?.[selectValue] ?? 0;
         }
 
-        // Generic logic for most approvals
         if (fieldInfo.section === 'approvals') {
             return scoringRules['generic-approval']?.[selectValue] ?? 0;
         }
 
-        // Logic for other sections
         if (!scoringRules[fieldId] || !selectValue) return 0;
         
         const rule = scoringRules[fieldId][selectValue];

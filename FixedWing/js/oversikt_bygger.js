@@ -4,18 +4,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         'staff-employed': { label: 'Total Number of staff employed for the operation', section: 'resources' },
         'pilots-employed': { label: 'Number of pilots employed', section: 'resources' },
         'cabin-crew': { label: 'Cabin crew carried', section: 'resources' },
-        'leading-personnel-roles': { label: 'Leading personell has several roles', section: 'resources' },
+        'leading-personnel-roles': { label: 'Leading personel has several roles', section: 'resources' },
         // Fleet
         'types-operated': { label: 'Number of types operated', section: 'fleet' },
         'aircraft-mops-over-19': { label: 'Number of aircraft with MOPSC of MORE than 19 seats', section: 'fleet' },
         'aircraft-mops-under-19': { label: 'Number of aircraft with MOPSC of 19 seats or LESS', section: 'fleet' },
         'special-modification': { label: 'Aircraft with Special Modification', section: 'fleet' },
         // Operations
-        'type-of-operation': { label: 'Type of Operation', section: 'operations' },
+        'operation-types': { label: 'Number of Operation types', section: 'operations' },
+        'operation-complexity': { label: 'Operation Complexity', section: 'operations' },
         'special-operation': { label: 'Number of special Operation (NOT SPA)', section: 'operations' },
         'derogations': { label: 'Number of derogations', section: 'operations' },
         'airports-based': { label: 'Number of airports where aircraft and/or crews are permanently based', section: 'operations' },
-        'group-airline': { label: 'Group Airline', section: 'operations' },
         'subcontractors': { label: 'Number of Subcontractors', section: 'operations' },
         'acmi': { label: 'ACMI', section: 'operations' },
         'spo': { label: 'SPO', section: 'operations' },
@@ -31,17 +31,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         'efb': { label: 'Electronic Flight Bag', section: 'approvals' },
         'isolated-aerodromes': { label: 'Isolated Aerodromes', section: 'approvals' },
         'steep-approach': { label: 'Steep Approach', section: 'approvals' },
-        'atqp': { label: 'ATQP', section: 'approvals' },
-        'ato': { label: 'ATO', section: 'approvals' }
+        'crew-training': { label: 'Crew Training', section: 'approvals' },
+        'cca-training': { label: 'CCA training', section: 'approvals' }
     };
 
     const valueToDisplayTextMap = {
-        "<20": "< 20", "21-50": "21 - 50", "51-200": "51 - 200", "200-500": "200 - 500", ">500": "> 500",
-        "<50": "< 50", "51-100": "51 - 100", "101-300": "101 - 300", "301-500": "301 - 500", "501-1000": "501 - 1 000", ">1000": "> 1 000",
-        "1": "1", "2-3": "2 - 3", "4-6": "4 - 6", ">6": "> 6",
-        "0": "0", "1-3": "1 - 3", "4-5": "4 - 5", "6-8": "6 - 8", "9-10": "9 - 10", ">10": "> 10",
-        "1-5": "1 - 5", "6-10": "6 - 10", "11-15": "11 - 15", "16-20": "16 - 20", ">20": "> 20",
-        "11-20": "11 - 20", "20-50": "20 - 50", ">50": "> 50",
+        "<20": "< 20", "21-50": "21-50", "51-200": "51-200", "200-500": "200-500", ">500": "> 500",
+        "<50": "< 50", "51-100": "51-100", "101-300": "101-300", "301-500": "301-500", "501-1000": "501 - 1000", ">1000": "> 1000",
+        "2-3": "2-3", "4-6": "4-6", ">6": "> 6",
+        "1-3": "1-3", "4-5": "4-5", "6-8": "6-8", "9-10": "9-10", ">10": "> 10",
+        "1-5": "1-5", "6-10": "6-10", "11-15": "11-15", "16-20": "16-20", ">20": "> 20",
+        "11-20": "11-20", "20-50": "20-50", ">50": "> 50",
         ">3": "> 3",
         "High risk SPO": "High risk SPO"
     };
@@ -54,8 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const scoringRules = await response.json();
 
         for (const [id, details] of Object.entries(fieldIdToDetails)) {
-            let rule = scoringRules[id]; // Prefer specific rule
-            // If no specific rule, and it's an approval, use generic
+            let rule = scoringRules[id]; 
             if (!rule && details.section === 'approvals') {
                 rule = scoringRules['generic-approval'];
             }
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const dependentScores = Object.entries(score.scores)
                         .map(([val, pts]) => `${valueToDisplayTextMap[val] || val} (${pts}p)`)
                         .join('<br>');
-                    scoreDisplay = `Avh. av piloter:<br>${dependentScores}<br>ellers ${score.default}p`;
+                    scoreDisplay = `Avhengig av piloter:<br>${dependentScores}<br>Standard: ${score.default}p`;
                 } else {
                     scoreDisplay = score;
                 }

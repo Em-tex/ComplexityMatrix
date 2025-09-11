@@ -1,14 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const STORAGE_KEY = 'camoAssessment_v14_final';
+    const STORAGE_KEY = 'camoAssessment_v16_final';
     const allInputIds = [
-        'org-name', 'org-ref', 'date', 'comments', 
+        'org-name', 'org-ref', 'filled-by', 'date', 'comments', 
         'A1a-perf', 'A1b-perf', 'A2a-perf', 'A2b-perf', 'A2c-perf', 'A3-choice', 'A3-number', 'A4-perf', 'A5-perf', 'A5-date', 'A6-perf', 
-        'B1a-perf', 'B1b-perf', 'B2i-perf', 'B2ii-perf', 'B3-perf', 
-        'B4a-comp', 'B4a-perf', 'B4b-comp', 'B4c-comp', 
-        'B5-comp', 'B5-perf', 'B6-comp', 'B6-perf', 
+        'B1a-perf', 'B1b-perf', 'B2a-perf', 'B2b-perf', 'B2c-perf', 'B2d-label', 'B2d-perf', 'B2e-label', 'B2e-perf', 'B3-perf', 
+        'B4a-comp', 'B4a-perf', 'B4b-comp', 'B4c-comp', 'B5-comp', 'B5-perf', 'B6-comp', 'B6-perf', 
         'B7a-comp', 'B7a-perf', 'B7b-comp', 'B7b-perf', 'B7c-comp', 'B7c-perf', 'B7d-comp', 'B7d-perf',
-        'B8a-comp', 'B8a-perf', 'B8b-comp', 'B8b-perf',
-        'B9-comp', 'B9-perf', 
+        'B8a-comp', 'B8a-perf', 'B8b-comp', 'B8b-perf', 'B9-comp', 'B9-perf', 
         'B10-comp', 'B10a-comp', 'B10a-perf'
     ];
     
@@ -17,18 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
         A2: ['A2a-perf', 'A2b-perf', 'A2c-perf'],
         A3: ['A3-choice'], A4: ['A4-perf'], A5: ['A5-perf'], A6: ['A6-perf'],
         B1: ['B1a-perf', 'B1b-perf'],
-        B2: ['B2i-perf', 'B2ii-perf'],
+        B2: ['B2a-perf', 'B2b-perf', 'B2c-perf', 'B2d-perf', 'B2e-perf'],
         B3: ['B3-perf'], B4: ['B4a-perf'], B5: ['B5-perf'], B6: ['B6-perf'],
         B7: ['B7a-perf', 'B7b-perf', 'B7c-perf', 'B7d-perf'],
         B8: ['B8a-perf', 'B8b-perf'],
         B9: ['B9-perf'], B10: ['B10a-perf']
     };
     
-    const complexitySourceIds = [
-        'B4a-comp', 'B4b-comp', 'B4c-comp', 'B5-comp', 'B6-comp',
-        'B7a-comp', 'B7b-comp', 'B7c-comp', 'B7d-comp',
-        'B8a-comp', 'B8b-comp', 'B9-comp', 'B10-comp', 'B10a-comp'
-    ];
+    const complexitySourceIds = [ 'B4a-comp', 'B4b-comp', 'B4c-comp', 'B5-comp', 'B6-comp', 'B7a-comp', 'B7b-comp', 'B7c-comp', 'B7d-comp', 'B8a-comp', 'B8b-comp', 'B9-comp', 'B10-comp', 'B10a-comp' ];
     const complexityMultipliers = { 'B7d-comp': 0.2 };
 
     const perfThresholds = { E: 5.5, O: 3.6, S: 2.2, P: 0 };
@@ -37,15 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const complexityLevelMap = { H: 'High', M: 'Medium', L: 'Low', "Non-complex": 'Non-complex' };
     const criticalityMatrix = { P:{"Non-complex":"critical", L:"critical", M:"critical", H:"critical"}, S:{"Non-complex":"attention req.", L:"attention req.", M:"critical", H:"critical"}, O:{"Non-complex":"normal", L:"normal", M:"normal", H:"normal"}, E:{"Non-complex":"low", L:"low", M:"low", H:"low"} };
     const planMatrix = { critical:{"Non-complex":"immediate action", L:"immediate action", M:"immediate action", H:"immediate action"}, "attention req.":{"Non-complex":"Focused scope", L:"Focused scope", M:"Focused scope", H:"Focused scope"}, normal:{"Non-complex":"basic", L:"basic", M:"basic+", H:"basic+"}, low:{"Non-complex":"basic", L:"basic", M:"basic", H:"basic+"} };
-    const planDetails = {
-        basic: { name: "Basic", audit: "x", splitscope: "", annual: "x", ammeeting: "x", focused: "", unannounced: "" },
-        "basic+": { name: "Basic+", audit: "x", splitscope: "x", annual: "x", ammeeting: "x", focused: "", unannounced: "" },
-        focusedscope: { name: "Focused scope", audit: "x", splitscope: "x", annual: "x", ammeeting: "x", focused: "x", unannounced: "x" },
-        immediateaction: { name: "Immediate action", audit: "-", splitscope: "-", annual: "-", ammeeting: "-", focused: "-", unannounced: "-" },
-        basice: { name: "Basic-e", audit: "x", splitscope: "", annual: "x", ammeeting: "x", focused: "x", unannounced: "" },
-        basiceplus: { name: "Basic-e+", audit: "x", splitscope: "x", annual: "x", ammeeting: "x", focused: "x", unannounced: "" }
-    };
-
+    
     function getElValue(id) {
         const el = document.getElementById(id);
         if (!el || el.value === '' || el.value === 'N/A') return null;
@@ -56,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (num === null || isNaN(num)) return '-';
         if (num % 1 === 0) return num.toString();
         return num.toFixed(2);
+    }
+
+    function capitalize(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     function calculate() {
@@ -126,59 +117,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const surveillancePeriod = (criticality !== 'low' && perfLevel !== 'E') ? "No extension" : "Extension possible";
         const basePlan = planMatrix[criticality][compLevel];
         
-        let totalActivities = 0;
-        const planKey = basePlan ? basePlan.replace(/\s/g, '').replace('+', 'plus') : null;
-        const currentPlanDetails = planKey ? planDetails[planKey] : null;
-        if(currentPlanDetails) {
-            totalActivities = Object.values(currentPlanDetails).filter(v => v === 'x').length;
-            if (currentPlanDetails.annual === 'x') totalActivities++;
-        }
-        const additionalInspections = Math.max(0, (getElValue('B5-comp') ?? 0) - 1) + (getElValue('B6-comp') ?? 0);
-        totalActivities += additionalInspections;
-        
         // --- UPDATE UI ---
         const resPerf = document.getElementById('res-perf-level');
         const resComp = document.getElementById('res-comp-level');
         const resCrit = document.getElementById('res-criticality');
         const resPeriod = document.getElementById('res-period');
+        const resPlan = document.getElementById('res-oversight-plan');
 
         resPerf.textContent = `${performanceLevelMap[perfLevel]} (${formatNumber(performanceAverage)})`;
         resPerf.className = `result-value perf-${perfLevel}`;
         resComp.textContent = `${complexityLevelMap[compLevel]} (${formatNumber(complexitySum)})`;
         resComp.className = `result-value comp-${compLevel.replace(/\s/g, '')}`;
-        resCrit.textContent = criticality;
+        resCrit.textContent = capitalize(criticality.replace(' req.', ' Req.'));
         resCrit.className = `result-value crit-${criticality.replace(/\s/g, '')}`;
         resPeriod.textContent = surveillancePeriod;
         resPeriod.className = `result-value period-${surveillancePeriod === 'Extension possible' ? 'ok' : 'no'}`;
+        resPlan.textContent = capitalize(basePlan);
         
-        const summaryContainer = document.getElementById('plan-summary-text');
-        if (currentPlanDetails && basePlan !== "immediate action") {
-            summaryContainer.innerHTML = `<h3>${currentPlanDetails.name}</h3><ul></ul>`;
-            const ul = summaryContainer.querySelector('ul');
-            Object.entries(planDetails.basic).forEach(([key, value]) => {
-                if (currentPlanDetails[key] === 'x') {
-                    const li = document.createElement('li');
-                    li.textContent = `- ${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}`; // Format camelCase
-                    ul.appendChild(li);
-                }
-            });
-            const totalLi = document.createElement('li');
-            totalLi.className = 'total';
-            totalLi.textContent = `Number of activities per planning cycle: ${totalActivities}`;
-            ul.appendChild(totalLi);
-        } else if (basePlan === "immediate action") {
-            summaryContainer.innerHTML = `<h3>Immediate Action Required</h3>`;
-        } else {
-            summaryContainer.textContent = 'Complete the form to see the recommendation.';
-        }
-        
-        document.querySelectorAll('.matrix-table td, #oversight-plan-details-table tr').forEach(el => el.classList.remove('highlight', 'highlight-row'));
+        document.querySelectorAll('.matrix-table td').forEach(cell => cell.classList.remove('highlight'));
         const critCellId = `crit-${perfLevel}-${compLevel.replace(/\s/g, '')}`;
-        const planRowId = `plan-row-${planKey}`;
-        const critCell = document.getElementById(critCellId);
-        const planRow = document.getElementById(planRowId);
-        if(critCell) critCell.classList.add('highlight');
-        if(planRow) planRow.classList.add('highlight-row');
+        const planCellId = `plan-${criticality.replace(/\s/g, '')}-${compLevel.replace(/\s/g, '')}`;
+        document.getElementById(critCellId)?.classList.add('highlight');
+        document.getElementById(planCellId)?.classList.add('highlight');
+        
+        document.querySelectorAll('#oversight-plan-details-table tbody tr').forEach(row => row.classList.remove('highlight-row'));
+        const planKey = basePlan ? basePlan.replace(/\s/g, '').replace('+', 'plus') : null;
+        if(planKey) document.getElementById(`plan-row-${planKey}`)?.classList.add('highlight-row');
     }
 
     function setupEventListeners() {
@@ -190,18 +154,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        const level1Choice = document.getElementById('A3-choice');
-        if(level1Choice) {
-            level1Choice.addEventListener('change', () => {
-                document.getElementById('A3-number').classList.toggle('hidden', level1Choice.value !== 'Yes');
-            });
-        }
+        document.getElementById('A3-choice')?.addEventListener('change', () => {
+            document.getElementById('A3-number').classList.toggle('hidden', document.getElementById('A3-choice').value !== 'Yes');
+        });
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
         document.getElementById('matrix-toggler').addEventListener('click', (e) => {
             const content = document.getElementById('matrix-content');
-            const isVisible = content.style.display === 'grid';
-            content.style.display = isVisible ? 'none' : 'grid';
-            e.target.textContent = isVisible ? '► Show Detailed Matrices' : '▼ Hide Detailed Matrices';
+            const isVisible = content.style.display === 'block';
+            content.style.display = isVisible ? 'none' : 'block';
+            e.target.textContent = isVisible ? '► Show Detailed Matrices & Oversight Plan' : '▼ Hide Detailed Matrices & Oversight Plan';
         });
     }
     

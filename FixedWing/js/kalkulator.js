@@ -1,37 +1,32 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // --- Globale konstanter og variabler ---
     const STORAGE_KEY = 'fixedWingComplexityData';
     let scoringRules = {};
 
     const MAX_SCORES = {
         resources: 22, 
         fleet: 20, 
-        operations: 38,
-        approvals: 15, 
-        total: 95
+        operations: 35,
+        approvals: 17, 
+        total: 94
     };
 
     const fieldData = [
-        // Resources
         { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
         { id: 'cabin-crew', label: 'Cabin crew carried', section: 'resources' },
-        { id: 'leading-personnel-roles', label: 'Leading personell has several roles', section: 'resources' },
-        // Fleet
+        { id: 'leading-personnel-roles', label: 'Leading personel has several roles', section: 'resources' },
         { id: 'types-operated', label: 'Number of types operated', section: 'fleet' },
         { id: 'aircraft-mops-over-19', label: 'Number of aircraft with MOPSC of MORE than 19 seats', section: 'fleet' },
         { id: 'aircraft-mops-under-19', label: 'Number of aircraft with MOPSC of 19 seats or LESS', section: 'fleet' },
         { id: 'special-modification', label: 'Aircraft with Special Modification', section: 'fleet' },
-        // Operations
-        { id: 'type-of-operation', label: 'Type of Operation', section: 'operations' },
+        { id: 'operation-types', label: 'Number of Operation types', section: 'operations' },
+        { id: 'operation-complexity', label: 'Operation Complexity', section: 'operations' },
         { id: 'special-operation', label: 'Number of special Operation (NOT SPA)', section: 'operations' },
         { id: 'derogations', label: 'Number of derogations', section: 'operations' },
         { id: 'airports-based', label: 'Number of airports where aircraft and/or crews are permanently based', section: 'operations' },
-        { id: 'group-airline', label: 'Group Airline', section: 'operations' },
         { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
         { id: 'acmi', label: 'ACMI', section: 'operations' },
         { id: 'spo', label: 'SPO', section: 'operations' },
-        // Approvals
         { id: 'rnp-ar-apch', label: 'RNP AR APCH', section: 'approvals' },
         { id: 'mnps-nat-hla', label: 'MNPS/ NAT-HLA', section: 'approvals' },
         { id: 'rvsm', label: 'RVSM', section: 'approvals' },
@@ -43,26 +38,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'efb', label: 'Electronic Flight Bag', section: 'approvals' },
         { id: 'isolated-aerodromes', label: 'Isolated Aerodromes', section: 'approvals' },
         { id: 'steep-approach', label: 'Steep Approach', section: 'approvals' },
-        { id: 'atqp', label: 'ATQP', section: 'approvals' },
-        { id: 'ato', label: 'ATO', section: 'approvals' }
+        { id: 'crew-training', label: 'Crew Training', section: 'approvals' },
+        { id: 'cca-training', label: 'CCA training', section: 'approvals' }
     ];
 
-    // --- Kjernefunksjoner ---
     function calculateFieldScore(fieldId, selectValue, pilotsValue) {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
         if (!fieldInfo) return 0;
-        
-        // Specific logic for approvals that are not "generic"
-        if (fieldId === 'atqp') {
-            return scoringRules['atqp']?.[selectValue] ?? 0;
+
+        if (fieldId === 'crew-training' || fieldId === 'cca-training') {
+            return scoringRules[fieldId]?.[selectValue] ?? 0;
         }
 
-        // Generic logic for most approvals
         if (fieldInfo.section === 'approvals') {
             return scoringRules['generic-approval']?.[selectValue] ?? 0;
         }
 
-        // Logic for other sections
         if (!scoringRules[fieldId] || !selectValue) return 0;
         
         const rule = scoringRules[fieldId][selectValue];
@@ -117,6 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- Funksjoner for lagring, lasting, knapper etc. ---
+    // (Resten av funksjonene er uendret)
     function saveData() {
         const dataToSave = {};
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
@@ -192,24 +184,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function downloadCSV() {
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) { return; }
         const operatorNavn = document.getElementById('operator-navn').value || "UkjentOperatør";
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
         const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.csv`;
 
-        const primaryHeaders = [
-            'Operatørnavn', 'Fylt ut av', 'Dato',
-            'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum',
-            'Complexity Rating',
-            'Kommentarer'
-        ];
-        const detailHeaders = [];
-        fieldData.forEach(field => {
-            detailHeaders.push(`${field.label} (Valg)`);
-            detailHeaders.push(`${field.label} (Verdi)`);
-        });
+        const primaryHeaders = ['Operatørnavn', 'Fylt ut av', 'Dato', 'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum', 'Kommentarer'];
+        const detailHeaders = fieldData.map(field => [`${field.label} (Valg)`, `${field.label} (Verdi)`]).flat();
         const allHeaders = primaryHeaders.concat(detailHeaders);
 
         const comments = `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
@@ -222,18 +203,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('operations-sum').textContent,
             document.getElementById('approvals-sum').textContent,
             document.getElementById('total-gauge-sum-text').textContent,
-            "", // Tom verdi for Complexity Rating
             comments
         ];
-        const detailData = [];
-        fieldData.forEach(field => {
+        const detailData = fieldData.map(field => {
             const selectedText = getSelectedText(field.id);
             const score = document.getElementById(field.id + '-value').textContent;
-            detailData.push(`"${selectedText.replace(/"/g, '""')}"`);
-            detailData.push(score);
-        });
+            return [`"${selectedText.replace(/"/g, '""')}"`, score];
+        }).flat();
+        
         const allData = primaryData.concat(detailData);
-
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
