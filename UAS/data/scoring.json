@@ -1,0 +1,36 @@
+{
+    "tyngste-fartoy": { "<250g": 0, "250g-2kg": 1, "2-4kg": 2, "4-25kg": 3, "25-250kg": 5, ">250kg": 7 },
+    "synsvidde": { "VLOS": 0, "BVLOS-observer": 1, "BVLOS-no-observer": 5 },
+    "c2link": { "Direkte": 0, "GSM/SATCOM": 1, "Ingen": 5 },
+    "flyhoyde": { "under-400": 0, "fareomrade": 1, "over-400": 3 },
+    "operasjonsmiljo": { "Spredtbefolket": 0, "Befolket": 3, "Flyplass": 3 },
+    "redusert-grc": { "Nei": 0, "minus-1-2": 1, "minus-3-mer": 3 },
+    "omrade": { "Presist": 0, "Generisk": 3 },
+    "sail": { "I": 1, "II": 2, "III": 4, "IV": 7, "V": 11, "VI": 16 },
+    "annen-risiko": { "Nei": 0, "Noe": 1, "Betydelig": 3 },
+    "antall-baser": { "kun-hovedbase": 0, "3-eller-mindre": 1, "4-eller-mer": 3 },
+    "antall-piloter": { "10-eller-mindre": 0, "10-20": 1, "20-eller-flere": 3 },
+    "ledende-personell-roller": {
+        "Nei": 0,
+        "Ja": {
+            "type": "additive-dependent",
+            "on": ["antall-piloter", "antall-baser"],
+            "baseValue": 1
+        }
+    },
+    "krav-eksamen": { "STS": 0, "A1/A3/A2": 1, "Nei": 3 },
+    "manualverk": { "laget-selv": 0, "kjopt": 3 },
+    "antall-fartoy": { "1-5": 0, "6-15": 1, "16-50": 3, "over-50": 5 },
+    "antall-typer": { "1": 0, "2-3": 2, "over-3": 5 },
+    "modifiserte-fartoy": { "Nei": 0, "Ja": 3 },
+    "flytimer": { "under-100": 0, "over-100": 3, "over-1000": 5 },
+    "bekymringsmeldinger": { "Ingen": 0, "Noe": 1, "Middels": 3, "Alvorlig": 5 },
+    "veiledningsbehov": { "Lite": 0, "Middels": 1, "Stort": 3 },
+    "mangler-oat-empic": { "Nei": 0, "Ja": 3 },
+    "tid-siste-tilsyn": { "under-1ar": 0, "1-2ar": 1, "2-3ar": 3, "over-3ar": 7 },
+    "tid-forstegangsgodkjenning": { "under-1ar": 0, "1-2ar": 3, "over-2ar": 7 },
+    "niva1-avvik": { "Nei": 0, "Ja": 5 },
+    "niva2-avvik": { "0-3": 0, "4-7": 1, "8-11": 3, "over-11": 5 },
+    "frist-lukking": { "Overholdt": 0, "Overskredet": 3 },
+    "sms-tilsyn": { "N/A": 0, "Present": -1, "Suitable": -2, "Operating": -4, "Effective": -7 }
+}
