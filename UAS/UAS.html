@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAS Complexity Matrix</title>
+    <link rel="icon" href="../smallLogo.png" type="image/png">
+    <link rel="stylesheet" href="css/stil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>UAS Complexity Matrix</h1>
+        <div class="header-info">
+            <div class="info-field">
+                <label for="operator-navn">Operatør:</label>
+                <input type="text" id="operator-navn" list="operator-list" placeholder="Velg eller skriv operatørnavn" autocomplete="off">
+                <datalist id="operator-list"></datalist>
+            </div>
+            <div class="info-field">
+                <label for="filled-by">Fylt ut av:</label>
+                <input type="text" id="filled-by" placeholder="Skriv inn navn">
+            </div>
+            <div class="info-field">
+                <label for="date">Dato:</label>
+                <input type="date" id="date">
+            </div>
+        </div>
+    </div>
+
+    <div class="total-summary" id="total-summary-block">
+        <div class="all-gauges-container">
+            <div class="small-gauges-grid">
+                <div class="gauge-block" id="gauge-block-resources">
+                    <div class="gauge-block-title"><i class="fa-solid fa-users gauge-icon"></i> Resources</div>
+                    <div class="gauge-block-summary"><span id="resources-sum">0</span> / <span id="resources-max-sum">17</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="resources-needle"></div>
+                    </div>
+                </div>
+                <div class="gauge-block" id="gauge-block-fleet">
+                    <div class="gauge-block-title"><i class="fa-solid fa-plane gauge-icon"></i> Fleet Specific</div>
+                    <div class="gauge-block-summary"><span id="fleet-sum">0</span> / <span id="fleet-max-sum">11</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="fleet-needle"></div>
+                    </div>
+                </div>
+                <div class="gauge-block" id="gauge-block-operations">
+                    <div class="gauge-block-title"><i class="fa-solid fa-arrows-to-eye gauge-icon"></i> Operations</div>
+                    <div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">25</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="operations-needle"></div>
+                    </div>
+                </div>
+                <div class="gauge-block" id="gauge-block-performance">
+                    <div class="gauge-block-title"><i class="fa-solid fa-chart-line gauge-icon"></i> Performance</div>
+                    <div class="gauge-block-summary"><span id="performance-sum">0</span> / <span id="performance-max-sum">36</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="performance-needle"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="gauge-block" id="gauge-block-total">
+                <div class="gauge-block-title">Total Score</div>
+                <div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">89</span></div>
+                <div class="gauge">
+                    <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                    <div class="gauge-needle" id="total-needle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-container">
+        <div class="section" id="section-resources">
+            <div class="section-header"><i class="fa-solid fa-users gauge-icon"></i><span>Resources</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row"><div class="form-cell">Antall baser</div><div class="form-cell"><select id="antall-baser"><option value="">Velg...</option><option value="ingen">Ingen</option><option value="3-eller-mindre">3 eller mindre</option><option value="4-eller-mer">4 eller mer</option></select></div><div class="form-cell calculated-value" id="antall-baser-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Antall piloter</div><div class="form-cell"><select id="antall-piloter"><option value="">Velg...</option><option value="10-eller-mindre">10 eller mindre</option><option value="10-20">10 - 20</option><option value="20-eller-flere">20 eller flere</option></select></div><div class="form-cell calculated-value" id="antall-piloter-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Ansvarsfordeling</div><div class="form-cell"><select id="ansvarsfordeling"><option value="">Velg...</option><option value="ok">OK</option><option value="flere-roller">Flere roller på én person</option></select></div><div class="form-cell calculated-value" id="ansvarsfordeling-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Krav til eksamen</div><div class="form-cell"><select id="krav-eksamen"><option value="">Velg...</option><option value="Nei">Nei</option><option value="Ja, A1/A3/A2">Ja, A1/A3/A2</option><option value="Ja, STS">Ja, STS</option></select></div><div class="form-cell calculated-value" id="krav-eksamen-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Kjøpt OM?</div><div class="form-cell"><select id="kjopt-om"><option value="">Velg...</option><option value="Nei">Nei</option><option value="Ja">Ja</option></select></div><div class="form-cell calculated-value" id="kjopt-om-value">0</div></div>
+                <div class="form-row"><div class="form-cell">SMS (Organisasjon)</div><div class="form-cell"><select id="sms-org"><option value="">Velg...</option><option value="Til stede">Til stede</option><option value="N/A">N/A</option></select></div><div class="form-cell calculated-value" id="sms-org-value">0</div></div>
+            </div>
+        </div>
+
+        <div class="section" id="section-fleet">
+             <div class="section-header"><i class="fa-solid fa-plane gauge-icon"></i><span>Fleet Specific</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row"><div class="form-cell">Fartøyvekt</div><div class="form-cell"><select id="fartoyvekt"><option value="">Velg...</option><option value="under-4kg">Under 4 kg</option><option value="4-25kg">4 - 25 kg</option><option value="over-25kg">Over 25 kg</option></select></div><div class="form-cell calculated-value" id="fartoyvekt-value">0</div></div>
+                <div class="form-row"><div class="form-cell">C2 link</div><div class="form-cell"><select id="c2link"><option value="">Velg...</option><option value="Direkte">Direkte</option><option value="GSM/SATCOM">GSM/SATCOM</option><option value="Ingen">Ingen (automasjon/autonomi)</option></select></div><div class="form-cell calculated-value" id="c2link-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Eksternt vedlikehold</div><div class="form-cell"><select id="eksternt-vedlikehold"><option value="">Velg...</option><option value="Nei">Nei</option><option value="Ja">Ja</option></select></div><div class="form-cell calculated-value" id="eksternt-vedlikehold-value">0</div></div>
+            </div>
+        </div>
+
+        <div class="section" id="section-operations">
+            <div class="section-header"><i class="fa-solid fa-arrows-to-eye gauge-icon"></i><span>Operations</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row"><div class="form-cell">Synsvidde</div><div class="form-cell"><select id="synsvidde"><option value="">Velg...</option><option value="VLOS">VLOS</option><option value="BVLOS-observer">BVLOS med observatør</option><option value="BVLOS-no-observer">BVLOS uten observatør</option></select></div><div class="form-cell calculated-value" id="synsvidde-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Flyhøyde</div><div class="form-cell"><select id="flyhoyde"><option value="">Velg...</option><option value="under-400">Under 400'</option><option value="over-400">Over 400'</option><option value="fareomrade">I fareområde</option></select></div><div class="form-cell calculated-value" id="flyhoyde-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Operasjonsmiljø</div><div class="form-cell"><select id="operasjonsmiljo"><option value="">Velg...</option><option value="Spredtbefolket">Spredtbefolket</option><option value="Befolket">Befolket</option><option value="Flyplass">Flyplass</option></select></div><div class="form-cell calculated-value" id="operasjonsmiljo-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Redusert GRC</div><div class="form-cell"><select id="redusert-grc"><option value="">Velg...</option><option value="Nei">Nei</option><option value="minus-1-2">-1 eller -2</option><option value="minus-3-mer">-3 eller mer</option></select></div><div class="form-cell calculated-value" id="redusert-grc-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Område</div><div class="form-cell"><select id="omrade"><option value="">Velg...</option><option value="Presist">Presist</option><option value="Generisk">Generisk</option></select></div><div class="form-cell calculated-value" id="omrade-value">0</div></div>
+                <div class="form-row"><div class="form-cell">SAIL</div><div class="form-cell"><select id="sail"><option value="">Velg...</option><option value="1-2">I - II</option><option value="3-4">III - IV</option><option value="5-6">V - VI</option></select></div><div class="form-cell calculated-value" id="sail-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Annen økt risiko<div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">F.eks. frakt av farlig gods, komplekst dronesystem eller svermoperasjoner</span></div></div><div class="form-cell"><select id="annen-risiko"><option value="">Velg...</option><option value="Nei">Nei</option><option value="Noe">Noe</option><option value="Betydelig">Betydelig</option></select></div><div class="form-cell calculated-value" id="annen-risiko-value">0</div></div>
+            </div>
+        </div>
+
+        <div class="section" id="section-performance">
+            <div class="section-header"><i class="fa-solid fa-chart-line gauge-icon"></i><span>Performance</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row"><div class="form-cell">Flytimer i året</div><div class="form-cell"><select id="flytimer"><option value="">Velg...</option><option value="under-100">Under 100</option><option value="over-100">Over 100</option><option value="over-1000">Over 1 000</option></select></div><div class="form-cell calculated-value" id="flytimer-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Bekymringsmeldinger</div><div class="form-cell"><select id="bekymringsmeldinger"><option value="">Velg...</option><option value="Ingen">Ingen</option><option value="Noe">Noe</option><option value="Middels">Middels</option><option value="Alvorlig">Alvorlig</option></select></div><div class="form-cell calculated-value" id="bekymringsmeldinger-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Veiledningsbehov</div><div class="form-cell"><select id="veiledningsbehov"><option value="">Velg...</option><option value="Lite">Lite</option><option value="Middels">Middels</option><option value="Stort">Stort</option></select></div><div class="form-cell calculated-value" id="veiledningsbehov-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Direkte nivå 1 avvik</div><div class="form-cell"><select id="niva1-avvik"><option value="">Velg...</option><option value="Nei">Nei</option><option value="Ja">Ja</option></select></div><div class="form-cell calculated-value" id="niva1-avvik-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Antall nivå 2 avvik</div><div class="form-cell"><select id="niva2-avvik"><option value="">Velg...</option><option value="0-3">0 - 3</option><option value="4-7">4 - 7</option><option value="over-7">Over 7</option></select></div><div class="form-cell calculated-value" id="niva2-avvik-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Frist for lukking</div><div class="form-cell"><select id="frist-lukking"><option value="">Velg...</option><option value="Overholdt">Overholdt</option><option value="Overskredet">Overskredet</option></select></div><div class="form-cell calculated-value" id="frist-lukking-value">0</div></div>
+                <div class="form-row"><div class="form-cell">SMS (Tilsyn)</div><div class="form-cell"><select id="sms-tilsyn"><option value="">Velg...</option><option value="Fungerer">Fungerer</option><option value="N/A">N/A</option><option value="Til stede">Til stede</option></select></div><div class="form-cell calculated-value" id="sms-tilsyn-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Tid siden siste kontakt/revisjon</div><div class="form-cell"><select id="siste-kontakt"><option value="">Velg...</option><option value="under-12mnd">Under 12 måneder</option><option value="over-12mnd">Mer enn 12 måneder</option><option value="over-18mnd">Mer enn 18 måneder</option></select></div><div class="form-cell calculated-value" id="siste-kontakt-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Manglende data i EMPIC</div><div class="form-cell"><select id="empic-data"><option value="">Velg...</option><option value="Nei">Nei</option><option value="Ja">Ja</option></select></div><div class="form-cell calculated-value" id="empic-data-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Mangler i OAT</div><div class="form-cell"><select id="oat-mangler"><option value="">Velg...</option><option value="Nei">Nei</option><option value="Ja">Ja</option></select></div><div class="form-cell calculated-value" id="oat-mangler-value">0</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="comments-section">
+        <label for="comments">Kommentarer:</label>
+        <textarea id="comments" placeholder="Legg til eventuelle kommentarer her..." rows="4"></textarea>
+    </div>
+
+    <div class="action-buttons">
+        <button id="download-csv-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Last ned CSV</button>
+        <button id="print-pdf-button">Skriv ut til PDF</button>
+        <button id="load-csv-button" class="load-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16h6V8h4L12 3 5 8h4zm-4 5h14v-2H5z"/></svg> Last inn CSV</button>
+        <button id="clear-form-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Tøm skjema</button>
+        <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
+    </div>
+
+    <div class="footer-links">
+        <a href="https://caano.sharepoint.com/:f:/r/teams/FUL2/Delte%20dokumenter/Godkjenning%20og%20tilsyn/Risikoprofiler/CSV%20Innboks%20for%20Risikoprofiler?csf=1&web=1&e=PIE0pJ" target="_blank">Last opp til SharePoint</a>
+        <a href="https://caano.sharepoint.com/:l:/r/teams/FUL2/Lists/Risikoprofiler_Masterdata?e=OzAbsm" target="_blank">Profiloversikt</a>
+        <a href="oversikt.html" target="_blank">Oversikt over poengberegning</a>
+    </div>
+
+    <script src="js/kalkulator.js"></script>
+</body>
+</html>
