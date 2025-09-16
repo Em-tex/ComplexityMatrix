@@ -48,13 +48,39 @@
     },
     "special-modification": { "No": 0, "Yes": 3 },
     "operation-types": { "1": 1, "2": 2, "3": 3 },
-    "operation-complexity": { "1": 1, "2": 2, "3": 3 },
-    "special-operation": { "0": 0, "1": 3, "2": 4, "3": 5, ">3": 7 },
-    "derogations": { "0": 0, "1": 3, "2": 4, "3": 5, ">3": 7 },
+    "operation-complexity": { 
+        "0": 0, 
+        "1": 3, 
+        "2": 4, 
+        "3": 5, 
+        ">3": 7 
+    },
+    "special-operation": { 
+        "0": 0, 
+        "1": 3, 
+        "2": 4, 
+        "3": 5, 
+        ">3": 7 
+    },
+    "derogations": { 
+        "0": 0, 
+        "1": 3, 
+        "2": 4, 
+        "3": 5, 
+        ">3": 7 
+    },
     "airports-based": { "1-5": 1, "6-10": 2, "11-15": 3, "16-20": 4, ">20": 5 },
     "subcontractors": { "0": 0, "1-5": 1, "6-10": 2, "11-20": 3, "20-50": 4, ">50": 5 },
     "acmi": { "No": 0, "Yes": 2 },
-    "spo": { "No": 0, "Yes": 1, "High risk SPO": 3 },
+    "certificate": {
+        "AOC": 20,
+        "SPO": 10,
+        "NCC": 0
+    },
+    "hr-spo": {
+        "No": 0,
+        "Yes": 3
+    },
     "crew-training": {
         "Legacy": 1,
         "ATQP": 3,

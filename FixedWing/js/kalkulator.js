@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const MAX_SCORES = {
         resources: 22, 
         fleet: 20, 
-        operations: 35,
+        operations: 59,
         approvals: 17, 
-        total: 94
+        total: 118
     };
 
     const fieldData = [
@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'airports-based', label: 'Number of airports where aircraft and/or crews are permanently based', section: 'operations' },
         { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
         { id: 'acmi', label: 'ACMI', section: 'operations' },
-        { id: 'spo', label: 'SPO', section: 'operations' },
+        { id: 'certificate', label: 'Certificate', section: 'operations' },
+        { id: 'hr-spo', label: 'HR SPO', section: 'operations' },
         { id: 'rnp-ar-apch', label: 'RNP AR APCH', section: 'approvals' },
         { id: 'mnps-nat-hla', label: 'MNPS/ NAT-HLA', section: 'approvals' },
         { id: 'rvsm', label: 'RVSM', section: 'approvals' },
@@ -107,8 +108,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         saveData();
     }
 
-    // --- Funksjoner for lagring, lasting, knapper etc. ---
-    // (Resten av funksjonene er uendret)
     function saveData() {
         const dataToSave = {};
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
@@ -276,7 +275,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.readAsText(file);
     }
 
-    // --- Initialisering ---
     async function init() {
         try {
             const [scoringRes, operatorsRes] = await Promise.all([
@@ -325,7 +323,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('input, select').forEach(el => {
             el.addEventListener('input', () => el.classList.remove('invalid'));
             el.addEventListener('change', () => el.classList.remove('invalid'));
-        });
+});
 
         loadData();
         if (!document.getElementById('date').value) {

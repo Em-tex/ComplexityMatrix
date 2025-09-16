@@ -52,7 +52,7 @@
                 </div>
                 <div class="gauge-block" id="gauge-block-operations">
                     <div class="gauge-block-title"><i class="fa-solid fa-plane-departure gauge-icon"></i> Operations</div>
-                    <div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">35</span></div>
+                    <div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">59</span></div>
                     <div class="gauge">
                         <div class="gauge-bg"><div class="gauge-cover"></div></div>
                         <div class="gauge-needle" id="operations-needle"></div>
@@ -69,7 +69,7 @@
             </div>
             <div class="gauge-block" id="gauge-block-total">
                 <div class="gauge-block-title">Total Score</div>
-                <div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">94</span></div>
+                <div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">118</span></div>
                 <div class="gauge">
                     <div class="gauge-bg"><div class="gauge-cover"></div></div>
                     <div class="gauge-needle" id="total-needle"></div>
@@ -104,13 +104,14 @@
             <div class="section-content">
                 <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
                 <div class="form-row"><div class="form-cell">Number of Operation types</div><div class="form-cell"><select id="operation-types"><option value="">Velg...</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div><div class="form-cell calculated-value" id="operation-types-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Operation Complexity</div><div class="form-cell"><select id="operation-complexity"><option value="">Velg...</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div><div class="form-cell calculated-value" id="operation-complexity-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Operation Complexity</div><div class="form-cell"><select id="operation-complexity"><option value="">Velg...</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value=">3">&gt; 3</option></select></div><div class="form-cell calculated-value" id="operation-complexity-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of special Operation (NOT SPA)</div><div class="form-cell"><select id="special-operation"><option value="">Velg...</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value=">3">&gt; 3</option></select></div><div class="form-cell calculated-value" id="special-operation-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of derogations</div><div class="form-cell"><select id="derogations"><option value="">Velg...</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value=">3">&gt; 3</option></select></div><div class="form-cell calculated-value" id="derogations-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of airports where aircraft and/or crews are permanently based</div><div class="form-cell"><select id="airports-based"><option value="">Velg...</option><option value="1-5">1 - 5</option><option value="6-10">6 - 10</option><option value="11-15">11 - 15</option><option value="16-20">16 - 20</option><option value=">20">&gt; 20</option></select></div><div class="form-cell calculated-value" id="airports-based-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of Subcontractors</div><div class="form-cell"><select id="subcontractors"><option value="">Velg...</option><option value="0">0</option><option value="1-5">1 - 5</option><option value="6-10">6 - 10</option><option value="11-20">11 - 20</option><option value="20-50">20 - 50</option><option value=">50">&gt; 50</option></select></div><div class="form-cell calculated-value" id="subcontractors-value">0</div></div>
                 <div class="form-row"><div class="form-cell">ACMI</div><div class="form-cell"><select id="acmi"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="acmi-value">0</div></div>
-                <div class="form-row"><div class="form-cell">SPO</div><div class="form-cell"><select id="spo"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option><option value="High risk SPO">High risk SPO</option></select></div><div class="form-cell calculated-value" id="spo-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Certificate</div><div class="form-cell"><select id="certificate"><option value="">Velg...</option><option value="AOC">AOC</option><option value="SPO">SPO</option><option value="NCC">NCC</option></select></div><div class="form-cell calculated-value" id="certificate-value">0</div></div>
+                <div class="form-row"><div class="form-cell">HR SPO</div><div class="form-cell"><select id="hr-spo"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="hr-spo-value">0</div></div>
             </div>
         </div>
         <div class="section" id="section-approvals">
