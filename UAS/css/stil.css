@@ -426,3 +426,18 @@ body {
 .invalid { 
     border-color: #dc3545 !important; 
 }
+
+/* === GAUGE LABEL STYLES === */
+.gauge-label {
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: color 0.5s, background-color 0.5s;
+}
+
+.gauge-label.label-green { color: #155724; background-color: #d4edda; }
+.gauge-label.label-yellow { color: #856404; background-color: #fff3cd; }
+.gauge-label.label-orange { color: #854a04; background-color: #ffecb3; }
+.gauge-label.label-red { color: #721c24; background-color: #f8d7da; }

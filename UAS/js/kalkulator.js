@@ -1,14 +1,19 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const STORAGE_KEY = 'uasComplexityData_v4';
+    const STORAGE_KEY = 'uasComplexityData_v7'; // Final version
     let scoringRules = {};
 
-    const MAX_SCORES = {
-        resources: 19, 
-        fleet: 25, 
-        operations: 36,
-        performance: 36, 
-        total: 116
+    // Final base max scores after all adjustments
+    const BASE_MAX_SCORES = {
+        resources: 19,
+        fleet: 32,
+        operations: 43,
+        performance: 31,
+        total: 125
     };
+    
+    // Final audit score calculation: 7(tid) + 5(niva1) + 5(niva2) + 3(frist)
+    const AUDIT_FIELDS_MAX_SCORE = 20; 
+    const INITIAL_APPROVAL_MAX_SCORE = 7;
 
     const fieldData = [
         // Resources
@@ -22,20 +27,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'antall-fartoy', label: 'Number of aircraft', section: 'fleet' },
         { id: 'antall-typer', label: 'Number of different aircraft types', section: 'fleet' },
         { id: 'c2link', label: 'C2 link', section: 'fleet' },
-        { id: 'modifiserte-fartoy', label: 'Modified aircraft', section: 'fleet' },
+        { id: 'modifiserte-fartoy', label: 'Modified aircraft', section: 'fleet', needsComment: true },
+        { id: 'test-development', label: 'Test and Development', section: 'fleet' },
         // Operations
         { id: 'synsvidde', label: 'Line of sight', section: 'operations' },
         { id: 'flyhoyde', label: 'Flight altitude', section: 'operations' },
         { id: 'operasjonsmiljo', label: 'Operational environment', section: 'operations' },
+        { id: 'flytimer', label: 'Annual flight hours', section: 'operations' },
         { id: 'redusert-grc', label: 'Reduced GRC', section: 'operations' },
         { id: 'omrade', label: 'Area', section: 'operations' },
         { id: 'sail', label: 'SAIL', section: 'operations' },
-        { id: 'annen-risiko', label: 'Other increased risk', section: 'operations' },
+        { id: 'annen-risiko', label: 'Other increased risk', section: 'operations', needsComment: true },
         // Performance
-        { id: 'flytimer', label: 'Annual flight hours', section: 'performance' },
-        { id: 'bekymringsmeldinger', label: 'Reports of concern', section: 'performance' },
+        { id: 'bekymringsmeldinger', label: 'Reports of concern', section: 'performance', needsComment: true },
         { id: 'veiledningsbehov', label: 'Need for guidance', section: 'performance' },
-        { id: 'mangler-oat-empic', label: 'Missing data in OAT or EMPIC', section: 'performance' },
+        { id: 'mangler-oat-empic', label: 'Missing data in EMPIC', section: 'performance' },
         { id: 'tid-siste-tilsyn', label: 'Time since last audit', section: 'performance', group: 'tilsyn' },
         { id: 'niva1-avvik', label: 'Level 1 finding', section: 'performance', group: 'tilsyn' },
         { id: 'niva2-avvik', label: 'Number of level 2 findings', section: 'performance', group: 'tilsyn' },
@@ -74,6 +80,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         needle.style.transform = `translateX(-50%) rotate(${Math.min(90, Math.max(-90, rotation))}deg)`;
     }
 
+    function updateGaugeLabel(prefix, value, maxValue) {
+        const labelEl = document.getElementById(prefix + '-label');
+        if (!labelEl) return;
+        const percentage = maxValue > 0 ? (value / maxValue) * 100 : 0;
+        let text = '';
+        let className = 'gauge-label ';
+
+        if (percentage < 25) { text = 'Low Risk'; className += 'label-green'; }
+        else if (percentage < 50) { text = 'Medium Risk'; className += 'label-yellow'; }
+        else { text = 'High Risk'; className += 'label-red'; }
+        
+        labelEl.textContent = text;
+        labelEl.className = className;
+    }
+
     function toggleTilsynFields() {
         const hasHadTilsyn = !document.getElementById('aldri-hatt-tilsyn').checked;
         document.getElementById('tilsyn-fields-container').classList.toggle('hidden', !hasHadTilsyn);
@@ -90,6 +111,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     function updateCalculations() {
         let totals = { resources: 0, fleet: 0, operations: 0, performance: 0 };
         let currentScores = {};
+        
+        let currentMaxScores = { ...BASE_MAX_SCORES };
+        if (document.getElementById('aldri-hatt-tilsyn').checked) {
+            currentMaxScores.performance = BASE_MAX_SCORES.performance - AUDIT_FIELDS_MAX_SCORE + INITIAL_APPROVAL_MAX_SCORE;
+            currentMaxScores.total = BASE_MAX_SCORES.total - AUDIT_FIELDS_MAX_SCORE + INITIAL_APPROVAL_MAX_SCORE;
+        }
+
         fieldData.forEach(field => {
             if (field.id === 'antall-piloter' || field.id === 'antall-baser') {
                 const select = document.getElementById(field.id);
@@ -98,6 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         });
+
         fieldData.forEach(field => {
             const select = document.getElementById(field.id);
             const valueCell = document.getElementById(field.id + '-value');
@@ -113,14 +142,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 totals[field.section] += score;
             }
         });
+
         let grandTotal = 0;
         for (const section in totals) {
             document.getElementById(`${section}-sum`).textContent = totals[section];
-            updateGauge(section, totals[section], MAX_SCORES[section]);
+            document.getElementById(`${section}-max-sum`).textContent = currentMaxScores[section];
+            updateGauge(section, totals[section], currentMaxScores[section]);
             grandTotal += totals[section];
         }
+
         document.getElementById('total-gauge-sum-text').textContent = grandTotal;
-        updateGauge('total', grandTotal, MAX_SCORES.total);
+        document.getElementById('total-gauge-max-text').textContent = currentMaxScores.total;
+        updateGauge('total', grandTotal, currentMaxScores.total);
+        updateGaugeLabel('total', grandTotal, currentMaxScores.total);
+
         saveData();
     }
     
@@ -155,13 +190,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             performance: parseFloat(document.getElementById('performance-sum').textContent),
             total: parseFloat(document.getElementById('total-gauge-sum-text').textContent)
         };
-        const percent = {
-            resources: ((sums.resources / MAX_SCORES.resources) * 100).toFixed(1),
-            fleet: ((sums.fleet / MAX_SCORES.fleet) * 100).toFixed(1),
-            operations: ((sums.operations / MAX_SCORES.operations) * 100).toFixed(1),
-            performance: ((sums.performance / MAX_SCORES.performance) * 100).toFixed(1),
-            total: ((sums.total / MAX_SCORES.total) * 100).toFixed(1)
+        const maxSums = {
+            resources: parseFloat(document.getElementById('resources-max-sum').textContent),
+            fleet: parseFloat(document.getElementById('fleet-max-sum').textContent),
+            operations: parseFloat(document.getElementById('operations-max-sum').textContent),
+            performance: parseFloat(document.getElementById('performance-max-sum').textContent),
+            total: parseFloat(document.getElementById('total-gauge-max-text').textContent)
         };
+
+        const percent = {
+            resources: ((sums.resources / maxSums.resources) * 100).toFixed(1),
+            fleet: ((sums.fleet / maxSums.fleet) * 100).toFixed(1),
+            operations: ((sums.operations / maxSums.operations) * 100).toFixed(1),
+            performance: ((sums.performance / maxSums.performance) * 100).toFixed(1),
+            total: ((sums.total / maxSums.total) * 100).toFixed(1)
+        };
+
         const primaryHeaders = [
             'Operator', 'Filled out by', 'Date', 
             'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Performance Sum', 'Total Sum',
@@ -243,6 +287,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const sel = document.getElementById(selectId);
         return sel.options[sel.selectedIndex]?.text;
     }
+
+    function handleCommentAlert(event) {
+        const fieldId = event.target.id;
+        const selectedValue = event.target.value;
+        const score = calculateFieldScore(fieldId, selectedValue, {});
+        if (score > 0) {
+            setTimeout(() => {
+                alert("Please provide a justification for this selection in the comments field.");
+            }, 100);
+        }
+    }
     
     async function init() {
         try {
@@ -256,24 +311,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('ERROR: Could not load data files (scoring.json/operators.json).');
             return;
         }
-        Object.keys(MAX_SCORES).forEach(key => {
-            const sumEl = document.getElementById(`${key}-max-sum`);
-            const gaugeEl = document.getElementById(`${key}-gauge-max-text`);
-            if (sumEl) sumEl.textContent = MAX_SCORES[key];
-            if (gaugeEl) gaugeEl.textContent = MAX_SCORES[key];
-        });
+
         document.querySelectorAll('input, select, textarea').forEach(el => {
             el.addEventListener('change', updateCalculations);
             if (el.matches('input[type="text"], textarea')) el.addEventListener('keyup', saveData);
             if (el.tagName === 'SELECT' || el.type === 'text') el.addEventListener('input', () => el.classList.remove('invalid'));
         });
+
+        fieldData.filter(f => f.needsComment).forEach(field => {
+            document.getElementById(field.id).addEventListener('change', handleCommentAlert);
+        });
+
         document.getElementById('aldri-hatt-tilsyn').addEventListener('change', toggleTilsynFields);
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
         document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
         document.getElementById('print-pdf-button').addEventListener('click', printPDF);
+        
         loadData();
         if (!document.getElementById('date').value) document.getElementById('date').valueAsDate = new Date();
         toggleTilsynFields();
     }
+    
     init();
 });
