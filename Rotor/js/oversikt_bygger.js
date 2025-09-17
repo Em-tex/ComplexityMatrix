@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         'ac-leasing': { label: 'A/C Leasing', section: 'fleet' },
         'special-modification': { label: 'Helicopters with special modification', section: 'fleet' },
         // Operations
-        'area-of-operation': { label: 'Area of Operation', section: 'operations' },
-        'bases-permanently': { label: 'Number of bases with permanent', section: 'operations' },
-        'operation-landings': { label: 'On-Shore Landings', section: 'operations' },
-        'operation-route': { label: 'On-Shore Route', section: 'operations' },
-        'ifr-imc-operation': { label: 'IFR/VFR Operation', section: 'operations' },
-        'spo': { label: 'SPO', section: 'operations' },
+        'number-operation-types': { label: 'Number of Operation types', section: 'operations' },
+        'operation-complexity': { label: 'Operation Complexity', section: 'operations' },
+        'bases-permanently': { label: 'Number of bases where aircraft and/or crews are permanently based', section: 'operations' },
+        'ifr-imc-operation': { label: 'IFR/VFR operation', section: 'operations' },
+        'certificate': { label: 'Certificate', section: 'operations' },
+        'hr-spo': { label: 'HR SPO', section: 'operations' },
         'group-airline': { label: 'Group Airline', section: 'operations' },
         'derogations': { label: 'Number of derogations', section: 'operations' },
         // Approvals
@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'lv-takeoff': { label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
         'lv-landing': { label: 'Low Visibility Operations (LANDING)', section: 'approvals' },
         'dangerous-goods': { label: 'Dangerous Goods', section: 'approvals' },
+        'cat-pol-h-305': { label: 'CAT.POL.H.305', section: 'approvals' },
         'nvis': { label: 'NVIS', section: 'approvals' },
         'hho': { label: 'HHO', section: 'approvals' },
         'hems': { label: 'HEMS', section: 'approvals' },
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         "1-5": "1-5", "6-10": "6-10", "11-15": "11-15", "16-20": "16-20", ">20": "> 20",
         "2-5": "2-5", ">5": "> 5",
         ">2": "> 2",
-        "High risk SPO": "High risk SPO"
+        ">3": "> 3"
     };
 
     try {

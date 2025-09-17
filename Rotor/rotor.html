@@ -54,7 +54,7 @@
                 </div>
                 <div class="gauge-block" id="gauge-block-operations">
                     <div class="gauge-block-title"><i class="fa-solid fa-helicopter-symbol gauge-icon"></i> Operations</div>
-                    <div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">28</span></div>
+                    <div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">52</span></div>
                     <div class="gauge">
                         <div class="gauge-bg"><div class="gauge-cover"></div></div>
                         <div class="gauge-needle" id="operations-needle"></div>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="gauge-block" id="gauge-block-approvals">
                     <div class="gauge-block-title"><i class="fa-solid fa-check"></i> Approvals</div>
-                    <div class="gauge-block-summary"><span id="approvals-sum">0</span> / <span id="approvals-max-sum">17</span></div>
+                    <div class="gauge-block-summary"><span id="approvals-sum">0</span> / <span id="approvals-max-sum">19</span></div>
                     <div class="gauge">
                         <div class="gauge-bg"><div class="gauge-cover"></div></div>
                         <div class="gauge-needle" id="approvals-needle"></div>
@@ -71,7 +71,7 @@
             </div>
             <div class="gauge-block" id="gauge-block-total">
                 <div class="gauge-block-title">Total Score</div>
-                <div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">103</span></div>
+                <div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">129</span></div>
                 <div class="gauge">
                     <div class="gauge-bg"><div class="gauge-cover"></div></div>
                     <div class="gauge-needle" id="total-needle"></div>
@@ -108,12 +108,12 @@
             <div class="section-header"><i class="fa-solid fa-helicopter-symbol gauge-icon"></i><span>Operations</span></div>
             <div class="section-content">
                 <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
-                <div class="form-row"><div class="form-cell">Area of Operation</div><div class="form-cell"><select id="area-of-operation"><option value="">Velg...</option><option value="Within Norway only">Within Norway only</option><option value="Within EU">Within EU</option><option value="Worldwide">Worldwide</option></select></div><div class="form-cell calculated-value" id="area-of-operation-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Number of permanent baseswins</div><div class="form-cell"><select id="bases-permanently"><option value="">Velg...</option><option value="1">1</option><option value="2-5">2 - 5</option><option value=">5">&gt; 5</option></select></div><div class="form-cell calculated-value" id="bases-permanently-value">0</div></div>
-                <div class="form-row"><div class="form-cell">On-Shore Landings</div><div class="form-cell"><select id="operation-landings"><option value="">Velg...</option><option value="N/A">N/A</option><option value="Ad-hoc landings">Ad-hoc landings</option><option value="Ad-hoc landings in congested areas">Ad-hoc landings in congested areas</option></select></div><div class="form-cell calculated-value" id="operation-landings-value">0</div></div>
-                <div class="form-row"><div class="form-cell">On-Shore Route</div><div class="form-cell"><select id="operation-route"><option value="">Velg...</option><option value="A-A">A-A</option><option value="A-B Restricted">A-B Restricted</option><option value="A-B">A-B</option></select></div><div class="form-cell calculated-value" id="operation-route-value">0</div></div>
-                <div class="form-row"><div class="form-cell">IFR/VFR Operation</div><div class="form-cell"><select id="ifr-imc-operation"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="ifr-imc-operation-value">0</div></div>
-                <div class="form-row"><div class="form-cell">SPO</div><div class="form-cell"><select id="spo"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option><option value="High risk SPO">High risk SPO</option></select></div><div class="form-cell calculated-value" id="spo-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Number of Operation types</div><div class="form-cell"><select id="number-operation-types"><option value="">Velg...</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div><div class="form-cell calculated-value" id="number-operation-types-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Operation Complexity</div><div class="form-cell"><select id="operation-complexity"><option value="">Velg...</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value=">3">&gt;3</option></select></div><div class="form-cell calculated-value" id="operation-complexity-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Number of bases where aircraft and/or crews are permanently based</div><div class="form-cell"><select id="bases-permanently"><option value="">Velg...</option><option value="1">1</option><option value="2-5">2 - 5</option><option value=">5">&gt; 5</option></select></div><div class="form-cell calculated-value" id="bases-permanently-value">0</div></div>
+                <div class="form-row"><div class="form-cell">IFR/VFR operation</div><div class="form-cell"><select id="ifr-imc-operation"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="ifr-imc-operation-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Certificate</div><div class="form-cell"><select id="certificate"><option value="">Velg...</option><option value="AOC">AOC</option><option value="SPO">SPO</option><option value="NCC">NCC</option></select></div><div class="form-cell calculated-value" id="certificate-value">0</div></div>
+                <div class="form-row"><div class="form-cell">HR SPO</div><div class="form-cell"><select id="hr-spo"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="hr-spo-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Group Airline</div><div class="form-cell"><select id="group-airline"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="group-airline-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of derogations</div><div class="form-cell"><select id="derogations"><option value="">Velg...</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value=">2">&gt; 2</option></select></div><div class="form-cell calculated-value" id="derogations-value">0</div></div>
             </div>
@@ -126,6 +126,7 @@
                 <div class="form-row"><div class="form-cell">Low Visibility operations (TAKEOFF)</div><div class="form-cell"><select id="lv-takeoff"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="lv-takeoff-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Low Visibility Operations (LANDING)</div><div class="form-cell"><select id="lv-landing"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="lv-landing-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Dangerous Goods</div><div class="form-cell"><select id="dangerous-goods"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="dangerous-goods-value">0</div></div>
+                <div class="form-row"><div class="form-cell">CAT.POL.H.305</div><div class="form-cell"><select id="cat-pol-h-305"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="cat-pol-h-305-value">0</div></div>
                 <div class="form-row"><div class="form-cell">NVIS</div><div class="form-cell"><select id="nvis"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="nvis-value">0</div></div>
                 <div class="form-row"><div class="form-cell">HHO</div><div class="form-cell"><select id="hho"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="hho-value">0</div></div>
                 <div class="form-row"><div class="form-cell">HEMS</div><div class="form-cell"><select id="hems"><option value="">Velg...</option><option value="No">No</option><option value="Yes">Yes</option></select></div><div class="form-cell calculated-value" id="hems-value">0</div></div>

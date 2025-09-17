@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const MAX_SCORES = {
         resources: 17, 
         fleet: 41, 
-        operations: 28,
-        approvals: 17, 
-        total: 103
+        operations: 52,
+        approvals: 19, 
+        total: 129
     };
 
     const fieldData = [
@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'ac-leasing', label: 'A/C Leasing', section: 'fleet' },
         { id: 'special-modification', label: 'Helicopters with special modification', section: 'fleet' },
         // Operations
-        { id: 'area-of-operation', label: 'Area of Operation', section: 'operations' },
-        { id: 'bases-permanently', label: 'Number of bases with permanent', section: 'operations' },
-        { id: 'operation-landings', label: 'On-Shore Landings', section: 'operations' },
-        { id: 'operation-route', label: 'On-Shore Route', section: 'operations' },
-        { id: 'ifr-imc-operation', label: 'IFR/VFR Operation', section: 'operations' },
-        { id: 'spo', label: 'SPO', section: 'operations' },
+        { id: 'number-operation-types', label: 'Number of Operation types', section: 'operations' },
+        { id: 'operation-complexity', label: 'Operation Complexity', section: 'operations' },
+        { id: 'bases-permanently', label: 'Number of bases where aircraft and/or crews are permanently based', section: 'operations' },
+        { id: 'ifr-imc-operation', label: 'IFR/VFR operation', section: 'operations' },
+        { id: 'certificate', label: 'Certificate', section: 'operations' },
+        { id: 'hr-spo', label: 'HR SPO', section: 'operations' },
         { id: 'group-airline', label: 'Group Airline', section: 'operations' },
         { id: 'derogations', label: 'Number of derogations', section: 'operations' },
         // Approvals
@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'lv-takeoff', label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
         { id: 'lv-landing', label: 'Low Visibility Operations (LANDING)', section: 'approvals' },
         { id: 'dangerous-goods', label: 'Dangerous Goods', section: 'approvals' },
+        { id: 'cat-pol-h-305', label: 'CAT.POL.H.305', section: 'approvals' },
         { id: 'nvis', label: 'NVIS', section: 'approvals' },
         { id: 'hho', label: 'HHO', section: 'approvals' },
         { id: 'hems', label: 'HEMS', section: 'approvals' },
@@ -55,10 +56,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
         if (!fieldInfo) return 0;
         
-        if (fieldId === 'hems' || fieldId === 'hofo') {
+        // Handle approvals with specific scores
+        if (fieldId === 'hems' || fieldId === 'hofo' || fieldId === 'ato') {
             return scoringRules[fieldId]?.[selectValue] ?? 0;
         }
 
+        // Handle generic approvals
         if (fieldInfo.section === 'approvals') {
             return scoringRules['generic-approval']?.[selectValue] ?? 0;
         }
