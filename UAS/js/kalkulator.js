@@ -1,50 +1,42 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const STORAGE_KEY = 'uasComplexityData_v11'; // Inkrementert versjon
+    const STORAGE_KEY = 'uasComplexityData_v11'; 
     let scoringRules = {};
     let VALID_OPERATION_TYPES = [];
 
-    // I toppen av js/kalkulator.js
-
     const operationIcons = {
-        "Agriculture": "fa-solid fa-seedling",
-        "Dangerous goods": "fa-solid fa-triangle-exclamation",
-        "Drone-in-a-box": "fa-solid fa-box-archive",
-        "Inspection": "fa-solid fa-magnifying-glass",
-        "Lightshow": "fa-solid fa-wand-magic-sparkles",
-        "Mapping": "fa-solid fa-map-location-dot",
-        "Offshore": "fa-solid fa-water",
-        "Photo/film": "fa-solid fa-camera-retro",
-        "Pollution control": "fa-solid fa-leaf",
-        "Power generation": "fa-solid fa-bolt",
-        "Powerline inspection": "fa-solid fa-plug-circle-bolt", // ENDRET
-        "Research": "fa-solid fa-flask-vial",
-        "SAR": "fa-solid fa-square-plus", // ENDRET
-        "Sling load": "images/slingload.png",
-        "State operations": "fa-solid fa-building-columns",
-        "Surveillance": "fa-solid fa-video",
-        "Swarm": "fa-solid fa-layer-group",
-        "Tethered": "fa-solid fa-link",
-        "Transport": "fa-solid fa-truck-plane",
-        "UAS development": "fa-solid fa-gears",
-        "Washing": "fa-solid fa-shower",
-        "Weather sensor": "fa-solid fa-cloud-sun-rain",
+        "Agriculture": "fa-solid fa-seedling", "Dangerous goods": "fa-solid fa-triangle-exclamation",
+        "Drone-in-a-box": "fa-solid fa-box-archive", "Inspection": "fa-solid fa-magnifying-glass",
+        "Lightshow": "fa-solid fa-wand-magic-sparkles", "Mapping": "fa-solid fa-map-location-dot",
+        "Offshore": "fa-solid fa-water", "Photo/film": "fa-solid fa-camera-retro",
+        "Pollution control": "fa-solid fa-leaf", "Power generation": "fa-solid fa-bolt",
+        "Powerline inspection": "fa-solid fa-plug-circle-bolt", "Research": "fa-solid fa-flask-vial",
+        "SAR": "fa-solid fa-square-plus", "Sling load": "images/slingload.png",
+        "State operations": "fa-solid fa-building-columns", "Surveillance": "fa-solid fa-video",
+        "Swarm": "fa-solid fa-layer-group", "Tethered": "fa-solid fa-link",
+        "Transport": "fa-solid fa-truck-plane", "UAS development": "fa-solid fa-gears",
+        "Washing": "fa-solid fa-shower", "Weather sensor": "fa-solid fa-cloud-sun-rain",
         "Default": "fa-solid fa-circle-question"
     };
+    
+    // ENDRET: Oppdaterte maksimale poengsummer
     const BASE_MAX_SCORES = {
-        resources: 20,
+        resources: 25,
         fleet: 32,
-        operations: 48,
-        performance: 31,
-        total: 130
+        operations: 52,
+        performance: 38,
+        total: 147
     };
     
-    const AUDIT_FIELDS_MAX_SCORE = 20;  
+    // ENDRET: AUDIT_FIELDS_MAX_SCORE reflekterer nye poeng i performance-seksjonen
+    const AUDIT_FIELDS_MAX_SCORE = 27; 
     const INITIAL_APPROVAL_MAX_SCORE = 7;
 
+    // ENDRET: La til 'pilot-employment'
     const fieldData = [
         // Resources
         { id: 'antall-baser', label: 'Number of bases', section: 'resources' },
         { id: 'antall-piloter', label: 'Number of pilots', section: 'resources' },
+        { id: 'pilot-employment', label: 'Pilot employment', section: 'resources' }, // Nytt felt
         { id: 'ledende-personell-roller', label: 'Leading personnel has multiple roles', section: 'resources' },
         { id: 'krav-eksamen', label: 'Exam requirements', section: 'resources' },
         { id: 'manualverk', label: 'Manuals', section: 'resources' },
@@ -55,15 +47,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'c2link', label: 'C2 link', section: 'fleet' },
         { id: 'modifiserte-fartoy', label: 'Modified aircraft', section: 'fleet', needsComment: true },
         { id: 'test-development', label: 'Test and Development', section: 'fleet' },
-        // Operations
+        // Operations (NB: rekkefølgen her påvirker kun CSV, ikke visuell rekkefølge)
+        { id: 'sail', label: 'SAIL', section: 'operations' },
+        { id: 'omrade', label: 'Area', section: 'operations' },
         { id: 'synsvidde', label: 'Line of sight', section: 'operations' },
         { id: 'flyhoyde', label: 'Flight altitude', section: 'operations' },
         { id: 'operasjonsmiljo', label: 'Operational environment', section: 'operations' },
+        { id: 'redusert-grc', label: 'Reduced GRC', section: 'operations' },
         { id: 'antall-oats-luc', label: 'Number of OATs', section: 'operations' },
         { id: 'flytimer', label: 'Annual flight hours', section: 'operations' },
-        { id: 'redusert-grc', label: 'Reduced GRC', section: 'operations' },
-        { id: 'omrade', label: 'Area', section: 'operations' },
-        { id: 'sail', label: 'SAIL', section: 'operations' },
         { id: 'annen-risiko', label: 'Other increased risk', section: 'operations', needsComment: true },
         // Performance
         { id: 'bekymringsmeldinger', label: 'Reports of concern', section: 'performance', needsComment: true },
@@ -77,82 +69,74 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'tid-forstegangsgodkjenning', label: 'Time since initial approval', section: 'performance', group: 'forstegang' }
     ];
 
-    // I js/kalkulator.js
+    function createCustomDropdown(originalSelect) {
+        const container = document.createElement('div');
+        container.className = 'custom-select-container';
+        originalSelect.parentNode.insertBefore(container, originalSelect);
 
-function createCustomDropdown(originalSelect) {
-    const container = document.createElement('div');
-    container.className = 'custom-select-container';
-    originalSelect.parentNode.insertBefore(container, originalSelect);
-
-    const selectedDisplay = document.createElement('div');
-    selectedDisplay.className = 'select-selected';
-    
-    // Intern funksjon for å lage ikon-HTML (enten <i> eller <img>)
-    const createIconHtml = (value) => {
-        const iconPathOrClass = operationIcons[value] || operationIcons.Default;
-        if (iconPathOrClass.includes('.png') || iconPathOrClass.includes('.svg')) {
-            return `<img src="${iconPathOrClass}" class="custom-select-icon">`;
-        }
-        return `<i class="${iconPathOrClass}"></i>`;
-    };
-
-    const updateSelectedDisplay = () => {
-        const selectedOption = originalSelect.options[originalSelect.selectedIndex];
-        const text = selectedOption.textContent;
-        if (selectedOption.value) {
-            selectedDisplay.innerHTML = `${createIconHtml(selectedOption.value)}<span>${text}</span>`;
-            selectedDisplay.classList.remove('placeholder');
-        } else {
-            selectedDisplay.innerHTML = `<span>${text}</span>`;
-            selectedDisplay.classList.add('placeholder');
-        }
-    };
-    updateSelectedDisplay();
-    container.appendChild(selectedDisplay);
-
-    const optionsList = document.createElement('div');
-    optionsList.className = 'select-items select-hide';
-    
-    Array.from(originalSelect.options).forEach(option => {
-        const optionDiv = document.createElement('div');
-        if (option.value) {
-            optionDiv.innerHTML = `${createIconHtml(option.value)}<span>${option.textContent}</span>`;
-        } else {
-            optionDiv.innerHTML = `<span>${option.textContent}</span>`;
-        }
+        const selectedDisplay = document.createElement('div');
+        selectedDisplay.className = 'select-selected';
         
-        optionDiv.addEventListener('click', function() {
-            originalSelect.value = option.value;
-            originalSelect.dispatchEvent(new Event('change')); 
-            updateSelectedDisplay();
-            selectedDisplay.click();
+        const createIconHtml = (value) => {
+            const iconPathOrClass = operationIcons[value] || operationIcons.Default;
+            if (iconPathOrClass.includes('.png') || iconPathOrClass.includes('.svg')) {
+                return `<img src="${iconPathOrClass}" class="custom-select-icon">`;
+            }
+            return `<i class="${iconPathOrClass}"></i>`;
+        };
+
+        const updateSelectedDisplay = () => {
+            const selectedOption = originalSelect.options[originalSelect.selectedIndex];
+            const text = selectedOption.textContent;
+            if (selectedOption.value) {
+                selectedDisplay.innerHTML = `${createIconHtml(selectedOption.value)}<span>${text}</span>`;
+                selectedDisplay.classList.remove('placeholder');
+            } else {
+                selectedDisplay.innerHTML = `<span>${text}</span>`;
+                selectedDisplay.classList.add('placeholder');
+            }
+        };
+        updateSelectedDisplay();
+        container.appendChild(selectedDisplay);
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'select-items select-hide';
+        
+        Array.from(originalSelect.options).forEach(option => {
+            const optionDiv = document.createElement('div');
+            if (option.value) {
+                optionDiv.innerHTML = `${createIconHtml(option.value)}<span>${option.textContent}</span>`;
+            } else {
+                optionDiv.innerHTML = `<span>${option.textContent}</span>`;
+            }
+            
+            optionDiv.addEventListener('click', function() {
+                originalSelect.value = option.value;
+                originalSelect.dispatchEvent(new Event('change')); 
+                updateSelectedDisplay();
+                selectedDisplay.click();
+            });
+            optionsList.appendChild(optionDiv);
         });
-        optionsList.appendChild(optionDiv);
-    });
-    container.appendChild(optionsList);
+        container.appendChild(optionsList);
 
-    selectedDisplay.addEventListener('click', function(e) {
-        e.stopPropagation();
-        closeAllSelects(this);
-        optionsList.classList.toggle('select-hide');
-        this.classList.toggle('select-arrow-active');
-    });
+        selectedDisplay.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeAllSelects(this);
+            optionsList.classList.toggle('select-hide');
+            this.classList.toggle('select-arrow-active');
+        });
 
-    originalSelect.style.display = 'none';
-}
-    
+        originalSelect.style.display = 'none';
+    }
+        
     function closeAllSelects(elmnt) {
-        // Finner alle dropdown-lister
         const allItemLists = document.getElementsByClassName('select-items');
-        // Finner alle boksene som viser det valgte elementet
         const allSelectedDisplays = document.getElementsByClassName('select-arrow-active');
-    
-        // Går gjennom alle elementene som er merket som "åpne"
+        
         for (const display of allSelectedDisplays) {
-            // Hvis den åpne boksen IKKE er den du nettopp klikket på, lukk den.
             if (display !== elmnt) {
                 display.classList.remove('select-arrow-active');
-                // Finner den tilhørende listen (som er neste element) og skjuler den
                 display.nextElementSibling.classList.add('select-hide');
             }
         }
@@ -230,10 +214,12 @@ function createCustomDropdown(originalSelect) {
         let totals = { resources: 0, fleet: 0, operations: 0, performance: 0 };
         let currentScores = {};
         let currentMaxScores = { ...BASE_MAX_SCORES };
+
         if (document.getElementById('aldri-hatt-tilsyn').checked) {
             currentMaxScores.performance = BASE_MAX_SCORES.performance - AUDIT_FIELDS_MAX_SCORE + INITIAL_APPROVAL_MAX_SCORE;
             currentMaxScores.total = BASE_MAX_SCORES.total - AUDIT_FIELDS_MAX_SCORE + INITIAL_APPROVAL_MAX_SCORE;
         }
+
         fieldData.forEach(field => {
             if (field.id === 'antall-piloter' || field.id === 'antall-baser') {
                 const select = document.getElementById(field.id);
@@ -242,6 +228,7 @@ function createCustomDropdown(originalSelect) {
                 }
             }
         });
+        
         fieldData.forEach(field => {
             const select = document.getElementById(field.id);
             const valueCell = document.getElementById(field.id + '-value');
@@ -254,9 +241,12 @@ function createCustomDropdown(originalSelect) {
                 }
                 valueCell.textContent = score;
                 applyValueCellStyle(valueCell, score);
-                totals[field.section] += score;
+                if (totals[field.section] !== undefined) {
+                    totals[field.section] += score;
+                }
             }
         });
+
         let grandTotal = 0;
         for (const section in totals) {
             document.getElementById(`${section}-sum`).textContent = totals[section];
@@ -264,6 +254,7 @@ function createCustomDropdown(originalSelect) {
             updateGauge(section, totals[section], currentMaxScores[section]);
             grandTotal += totals[section];
         }
+
         document.getElementById('total-gauge-sum-text').textContent = grandTotal;
         document.getElementById('total-gauge-max-text').textContent = currentMaxScores.total;
         updateGauge('total', grandTotal, currentMaxScores.total);
@@ -271,6 +262,7 @@ function createCustomDropdown(originalSelect) {
         saveData();
     }
     
+    // ENDRET: Oppdatert CSV-nedlasting med "Audit flag"
     function downloadCSV() {
         const operatorInput = document.getElementById('operator-navn');
         const filledByInput = document.getElementById('filled-by');
@@ -326,7 +318,23 @@ function createCustomDropdown(originalSelect) {
             }
             return [`${field.label} (Selection)`, `${field.label} (Value)`]
         }).flat();
-        const allHeaders = [...primaryHeaders, 'Comments', ...detailHeaders];
+        
+        // Logikk for Audit Flag
+        let auditFlag = 0;
+        const hasNeverBeenAudited = document.getElementById('aldri-hatt-tilsyn').checked;
+        if (hasNeverBeenAudited) {
+            const timeSinceInitial = document.getElementById('tid-forstegangsgodkjenning').value;
+            if (timeSinceInitial === 'over-2ar') {
+                auditFlag = 1;
+            }
+        } else {
+            const timeSinceAudit = document.getElementById('tid-siste-tilsyn').value;
+            if (timeSinceAudit === 'over-3ar') {
+                auditFlag = 1;
+            }
+        }
+
+        const allHeaders = [...primaryHeaders, 'Comments', 'Audit flag', ...detailHeaders];
         const primaryData = [
             `"${operatorName.replace(/"/g, '""')}"`, `"${filledByInput.value.replace(/"/g, '""')}"`, `"${dateValue}"`,
             `"${document.getElementById('main-approval-type').value}"`,
@@ -343,7 +351,8 @@ function createCustomDropdown(originalSelect) {
             return [`"${selectedText.replace(/"/g, '""')}"`, score];
         }).flat();
         const comments = `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
-        const allData = [...primaryData, comments, ...detailData];
+        
+        const allData = [...primaryData, comments, auditFlag, ...detailData];
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
@@ -403,7 +412,7 @@ function createCustomDropdown(originalSelect) {
         const opSelect2 = document.getElementById('operation-select-2');
         const opSelect3 = document.getElementById('operation-select-3');
         const selects = [opSelect1, opSelect2, opSelect3];
-        const customSelects = selects.map(s => s.previousSibling);
+        const customSelects = selects.map(s => s.parentElement.querySelector('.select-selected'));
 
         customSelects.forEach(cs => cs.classList.remove('invalid'));
     
@@ -504,7 +513,9 @@ function createCustomDropdown(originalSelect) {
         document.getElementById('print-pdf-button').addEventListener('click', printPDF);
         
         loadData();
-        if (!document.getElementById('date').value) document.getElementById('date').valueAsDate = new Date();
+        
+        // ENDRET: Setter alltid datoen til i dag ved lasting
+        document.getElementById('date').valueAsDate = new Date();
         
         updateOatLucLabel();
         toggleTilsynFields();

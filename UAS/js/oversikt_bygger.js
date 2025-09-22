@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // ENDRET: La til 'pilot-employment'
     const fieldIdToDetails = {
         // Resources
         'antall-baser': { label: 'Number of bases', section: 'resources' },
         'antall-piloter': { label: 'Number of pilots', section: 'resources' },
+        'pilot-employment': { label: 'Pilot employment', section: 'resources' }, // Nytt felt
         'ledende-personell-roller': { label: 'Leading personnel has multiple roles', section: 'resources' },
         'krav-eksamen': { label: 'Exam requirements', section: 'resources' },
         'manualverk': { label: 'Manuals', section: 'resources' },
@@ -18,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'flyhoyde': { label: 'Flight altitude', section: 'operations' },
         'operasjonsmiljo': { label: 'Operational environment', section: 'operations' },
         'flytimer': { label: 'Annual flight hours', section: 'operations' },
-        'antall-oats-luc': { label: 'Number of OATs / LUC privileges', section: 'operations' }, // <-- DENNE LINJEN VAR MANGLENDE
+        'antall-oats-luc': { label: 'Number of OATs / LUC privileges', section: 'operations' },
         'redusert-grc': { label: 'Reduced GRC', section: 'operations' },
         'omrade': { label: 'Area', section: 'operations' },
         'sail': { label: 'SAIL', section: 'operations' },
@@ -35,17 +37,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         'tid-forstegangsgodkjenning': { label: 'Time since initial approval', section: 'performance' }
     };
 
+    // ENDRET: La til visningstekster for nye valg
     const valueToDisplayTextMap = {
         '<250g': '< 250 g', '250g-2kg': '250 g - 2 kg', '2-4kg': '2 - 4 kg', '4-25kg': '4 - 25 kg', '25-250kg': '25 - 250 kg', '>250kg': '> 250 kg',
         'BVLOS-observer': 'BVLOS with observer', 'BVLOS-no-observer': 'BVLOS without observer',
         'Ingen': 'None (automation/autonomy)', 'Direkte': 'Direct',
         'under-400': "Under 400'", 'over-400': "Over 400'", 'fareomrade': 'In hazardous area',
-        'Spredtbefolket': 'Sparsely populated', 'Befolket': 'Populated', 'Flyplass': 'Airport',
+        'Spredtbefolket': 'Sparsely populated', 'Befolket': 'Populated', 'afis-flyplass': 'AFIS Airport', 'ctr-flyplass': 'CTR Airport',
         'minus-1-2': '-1 or -2', 'minus-3-mer': '-3 or more',
         'Presist': 'Precise', 'Generisk': 'Generic',
         'Noe': 'Some', 'Betydelig': 'Significant', 'Nei': 'No', 'Ja': 'Yes',
         'kun-hovedbase': 'Main base only', '3-eller-mindre': '3 or less', '4-eller-mer': '4 or more',
         '10-eller-mindre': '10 or less', '10-20': '10 - 20', '20-eller-flere': '20 or more',
+        'ansatt-hos-operator': 'Employed by operator', 'annet-selskap': 'Other company',
         'laget-selv': 'Self-authored', 'kjopt': 'Purchased',
         '1-5': '1 - 5', '6-15': '6 - 15', '16-50': '16 - 50', 'over-50': '> 50',
         '2-3': '2 - 3', 'over-3': '> 3',
@@ -55,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'under-1ar': 'Under 1 year', '1-2ar': '1 - 2 years', '2-3ar': '2 - 3 years', 'over-3ar': 'Over 3 years', 'over-2ar': 'Over 2 years',
         '0-3': '0 - 3', '4-7': '4 - 7', '8-11': '8 - 11', 'over-11': 'Over 11',
         'Overholdt': 'Met', 'Overskredet': 'Exceeded',
-        '3-4': '3-4', 'over-5': '>5' // <-- La til disse for penere visning
+        '3-4': '3-4', 'over-5': '>5'
     };
 
     try {
