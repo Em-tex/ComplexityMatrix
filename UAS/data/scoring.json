@@ -18,7 +18,7 @@
             "baseValue": 1
         }
     },
-    "krav-eksamen": { "STS": 0, "A1/A3/A2": 1, "Nei": 3 },
+    "krav-eksamen": { "STS": 0, "A2": 1, "A1/A3": 2, "Nei": 4 },
     "manualverk": { "laget-selv": 0, "kjopt": 3 },
     "antall-fartoy": { "1-5": 0, "6-15": 1, "16-50": 3, "over-50": 5 },
     "antall-typer": { "1": 0, "2-3": 2, "over-3": 7 },

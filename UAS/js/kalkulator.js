@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         "Default": "fa-solid fa-circle-question"
     };
     const BASE_MAX_SCORES = {
-        resources: 19,
+        resources: 20,
         fleet: 32,
         operations: 48,
         performance: 31,
