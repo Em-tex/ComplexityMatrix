@@ -13,12 +13,51 @@
     <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="header">
+
+    <div class="header-container">
         <h1>UAS Complexity Matrix</h1>
-        <div class="header-info">
-            <div class="info-field"><label for="operator-navn">Operator:</label><input type="text" id="operator-navn" list="operator-list" placeholder="Select or enter name" autocomplete="off"><datalist id="operator-list"></datalist></div>
-            <div class="info-field"><label for="filled-by">Filled out by:</label><input type="text" id="filled-by" placeholder="Enter name"></div>
-            <div class="info-field"><label for="date">Date:</label><input type="date" id="date"></div>
+        <div class="meta-info">
+            <div class="info-item">
+                <label for="filled-by">Filled out by:</label>
+                <input type="text" id="filled-by" placeholder="Enter name">
+            </div>
+            <div class="info-item">
+                <label for="date">Date:</label>
+                <input type="date" id="date">
+            </div>
+        </div>
+    </div>
+    <div class="operator-info-container">
+        <h2>Operator Information</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <label for="operator-navn">Operator:</label>
+                <input type="text" id="operator-navn" list="operator-list" placeholder="Select or enter name" autocomplete="off">
+                <datalist id="operator-list"></datalist>
+            </div>
+            <div class="info-item">
+                <label for="main-approval-type">Main approval type:</label>
+                <select id="main-approval-type">
+                    <option value="OAT" selected>OAT</option>
+                    <option value="LUC">LUC</option>
+                    <option value="PDRA">PDRA</option>
+                    <option value="STS">STS</option>
+                </select>
+            </div>
+            <div class="info-item wide">
+                <label>Main operation types:</label>
+                <div class="operation-selects">
+                    <select id="operation-select-1">
+                        <option value="">Select type 1 (required)</option>
+                    </select>
+                    <select id="operation-select-2">
+                        <option value="">Select type 2 (optional)</option>
+                    </select>
+                    <select id="operation-select-3">
+                        <option value="">Select type 3 (optional)</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -27,10 +66,10 @@
             <div class="small-gauges-grid">
                 <div class="gauge-block" id="gauge-block-resources"><div class="gauge-block-title"><i class="fa-solid fa-users gauge-icon"></i> Resources</div><div class="gauge-block-summary"><span id="resources-sum">0</span> / <span id="resources-max-sum">19</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="resources-needle"></div></div></div>
                 <div class="gauge-block" id="gauge-block-fleet"><div class="gauge-block-title"><span class="material-symbols-outlined gauge-icon">drone_2</span> Fleet Specific</div><div class="gauge-block-summary"><span id="fleet-sum">0</span> / <span id="fleet-max-sum">32</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="fleet-needle"></div></div></div>
-                <div class="gauge-block" id="gauge-block-operations"><div class="gauge-block-title"><i class="fa-solid fa-location-crosshairs gauge-icon"></i> Operations</div><div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">43</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="operations-needle"></div></div></div>
+                <div class="gauge-block" id="gauge-block-operations"><div class="gauge-block-title"><i class="fa-solid fa-location-crosshairs gauge-icon"></i> Operations</div><div class="gauge-block-summary"><span id="operations-sum">0</span> / <span id="operations-max-sum">48</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="operations-needle"></div></div></div>
                 <div class="gauge-block" id="gauge-block-performance"><div class="gauge-block-title"><i class="fa-solid fa-chart-line gauge-icon"></i> Performance</div><div class="gauge-block-summary"><span id="performance-sum">0</span> / <span id="performance-max-sum">31</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="performance-needle"></div></div></div>
             </div>
-            <div class="gauge-block" id="gauge-block-total"><div class="gauge-block-title">Total Score</div><div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">125</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="total-needle"></div></div><div class="gauge-label" id="total-label">Low Risk</div></div>
+            <div class="gauge-block" id="gauge-block-total"><div class="gauge-block-title">Total Score</div><div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">130</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="total-needle"></div></div><div class="gauge-label" id="total-label">Low Risk</div></div>
         </div>
     </div>
 
@@ -46,35 +85,51 @@
                 <div class="form-row"><div class="form-cell">Manuals</div><div class="form-cell"><select id="manualverk"><option value="">Select...</option><option value="laget-selv">Self-authored</option><option value="kjopt">Purchased</option></select></div><div class="form-cell calculated-value" id="manualverk-value">0</div></div>
             </div>
         </div>
-
         <div class="section" id="section-fleet">
             <div class="section-header"><span class="material-symbols-outlined gauge-icon">drone_2</span><span>Fleet Specific</span></div>
             <div class="section-content">
                 <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
                 <div class="form-row"><div class="form-cell">Heaviest aircraft</div><div class="form-cell"><select id="tyngste-fartoy"><option value="">Select...</option><option value="<250g">&lt; 250 g</option><option value="250g-2kg">250 g - 2 kg</option><option value="2-4kg">2 - 4 kg</option><option value="4-25kg">4 - 25 kg</option><option value="25-250kg">25 - 250 kg</option><option value=">250kg">&gt; 250 kg</option></select></div><div class="form-cell calculated-value" id="tyngste-fartoy-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Number of aircraft</div><div class="form-cell"><select id="antall-fartoy"><option value="">Select...</option><option value="1-5">1 - 5</option><option value="6-15">6 - 15</option><option value="16-50">16 - 50</option><option value="over-50">&gt; 50</option></select></div><div class="form-cell calculated-value" id="antall-fartoy-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Number of different aircraft types<div class="tooltip-container"><i class="fa-solid fa-circle-info tooltip-icon"></i><span class="tooltip-text">If the operator has a combination of e.g. multirotor, fixed wing, VTOL etc.</span></div></div><div class="form-cell"><select id="antall-typer"><option value="">Select...</option><option value="1">1</option><option value="2-3">2 - 3</option><option value="over-3">&gt; 3</option></select></div><div class="form-cell calculated-value" id="antall-typer-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Number of aircraft types<div class="tooltip-container"><i class="fa-solid fa-circle-info tooltip-icon"></i><span class="tooltip-text">If the operator has a combination of e.g. multirotor, fixed wing, VTOL etc.</span></div></div><div class="form-cell"><select id="antall-typer"><option value="">Select...</option><option value="1">1</option><option value="2-3">2 - 3</option><option value="over-3">&gt; 3</option></select></div><div class="form-cell calculated-value" id="antall-typer-value">0</div></div>
                 <div class="form-row"><div class="form-cell">C2 link</div><div class="form-cell"><select id="c2link"><option value="">Select...</option><option value="Direkte">Direct</option><option value="GSM/SATCOM">GSM/SATCOM</option><option value="Ingen">None (automation/autonomy)</option></select></div><div class="form-cell calculated-value" id="c2link-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Modified aircraft<div class="tooltip-container"><i class="fa-solid fa-circle-info tooltip-icon"></i><span class="tooltip-text">E.g. cleaning equipment</span></div></div><div class="form-cell"><select id="modifiserte-fartoy"><option value="">Select...</option><option value="Nei">No</option><option value="Ja">Yes</option></select></div><div class="form-cell calculated-value" id="modifiserte-fartoy-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Modified aircraft<div class="tooltip-container"><i class="fa-solid fa-circle-info tooltip-icon"></i><span class="tooltip-text">E.g. washing equipment, drop mechanism</span></div></div><div class="form-cell"><select id="modifiserte-fartoy"><option value="">Select...</option><option value="Nei">No</option><option value="Ja">Yes</option></select></div><div class="form-cell calculated-value" id="modifiserte-fartoy-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Test and Development</div><div class="form-cell"><select id="test-development"><option value="">Select...</option><option value="Nei">No</option><option value="Ja">Yes</option></select></div><div class="form-cell calculated-value" id="test-development-value">0</div></div>
             </div>
         </div>
-
         <div class="section" id="section-operations">
             <div class="section-header"><i class="fa-solid fa-location-crosshairs gauge-icon"></i><span>Operations</span></div>
             <div class="section-content">
                 <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
                 <div class="form-row"><div class="form-cell">Line of sight</div><div class="form-cell"><select id="synsvidde"><option value="">Select...</option><option value="VLOS">VLOS</option><option value="BVLOS-observer">BVLOS with observer</option><option value="BVLOS-no-observer">BVLOS without observer</option></select></div><div class="form-cell calculated-value" id="synsvidde-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Flight altitude</div><div class="form-cell"><select id="flyhoyde"><option value="">Select...</option><option value="under-400">Under 400'</option><option value="over-400">Over 400'</option><option value="fareomrade">In hazardous area</option></select></div><div class="form-cell calculated-value" id="flyhoyde-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Flight altitude</div><div class="form-cell"><select id="flyhoyde"><option value="">Select...</option><option value="under-400">Under 400'</option><option value="over-400">Over 400'</option><option value="fareomrade">In danger area</option></select></div><div class="form-cell calculated-value" id="flyhoyde-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Operational environment</div><div class="form-cell"><select id="operasjonsmiljo"><option value="">Select...</option><option value="Spredtbefolket">Sparsely populated</option><option value="Befolket">Populated</option><option value="Flyplass">Airport</option></select></div><div class="form-cell calculated-value" id="operasjonsmiljo-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Annual flight hours</div><div class="form-cell"><select id="flytimer"><option value="">Select...</option><option value="under-100">Under 100</option><option value="over-100">Over 100</option><option value="over-1000">Over 1,000</option></select></div><div class="form-cell calculated-value" id="flytimer-value">0</div></div>
+                <div class="form-row">
+                    <div class="form-cell" id="oat-luc-label-container">
+                        <span id="oat-luc-label-text">Number of OATs</span>
+                        <div class="tooltip-container" id="luc-privileges-tooltip" style="display: none;">
+                            <i class="fa-solid fa-circle-info tooltip-icon"></i>
+                            <span class="tooltip-text">Not counted PDRAs</span>
+                        </div>
+                    </div>
+                    <div class="form-cell">
+                        <select id="antall-oats-luc">
+                            <option value="">Select...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3-4">3-4</option>
+                            <option value="over-5">&gt;5</option>
+                        </select>
+                    </div>
+                    <div class="form-cell calculated-value" id="antall-oats-luc-value">0</div>
+                </div>
+                <div class="form-row"><div class="form-cell">Expected annual flight hours</div><div class="form-cell"><select id="flytimer"><option value="">Select...</option><option value="under-100">Under 100</option><option value="over-100">Over 100</option><option value="over-1000">Over 1,000</option></select></div><div class="form-cell calculated-value" id="flytimer-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Reduced GRC</div><div class="form-cell"><select id="redusert-grc"><option value="">Select...</option><option value="Nei">No</option><option value="minus-1-2">-1 or -2</option><option value="minus-3-mer">-3 or more</option></select></div><div class="form-cell calculated-value" id="redusert-grc-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Area</div><div class="form-cell"><select id="omrade"><option value="">Select...</option><option value="Presist">Precise</option><option value="Generisk">Generic</option></select></div><div class="form-cell calculated-value" id="omrade-value">0</div></div>
-                <div class="form-row"><div class="form-cell">SAIL</div><div class="form-cell"><select id="sail"><option value="">Select...</option><option value="I">I</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option><option value="V">V</option><option value="VI">VI</option></select></div><div class="form-cell calculated-value" id="sail-value">0</div></div>
-                <div class="form-row"><div class="form-cell">Other increased risk<div class="tooltip-container"><i class="fa-solid fa-circle-info tooltip-icon"></i><span class="tooltip-text">E.g. dangerous goods, complex drone system or swarm operations</span></div></div><div class="form-cell"><select id="annen-risiko"><option value="">Select...</option><option value="Nei">No</option><option value="Noe">Some</option><option value="Betydelig">Significant</option></select></div><div class="form-cell calculated-value" id="annen-risiko-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Area of approval</div><div class="form-cell"><select id="omrade"><option value="">Select...</option><option value="Presist">Precise</option><option value="Generisk">Generic</option></select></div><div class="form-cell calculated-value" id="omrade-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Highest SAIL</div><div class="form-cell"><select id="sail"><option value="">Select...</option><option value="I">I</option><option value="II">II</option><option value="III">III</option><option value="IV">IV</option><option value="V">V</option><option value="VI">VI</option></select></div><div class="form-cell calculated-value" id="sail-value">0</div></div>
+                <div class="form-row"><div class="form-cell">Other increased complexity<div class="tooltip-container"><i class="fa-solid fa-circle-info tooltip-icon"></i><span class="tooltip-text">E.g. dangerous goods, complex drone system or swarm operations</span></div></div><div class="form-cell"><select id="annen-risiko"><option value="">Select...</option><option value="Nei">No</option><option value="Noe">Some</option><option value="Betydelig">Significant</option></select></div><div class="form-cell calculated-value" id="annen-risiko-value">0</div></div>
             </div>
         </div>
-
         <div class="section" id="section-performance">
             <div class="section-header"><i class="fa-solid fa-chart-line gauge-icon"></i><span>Performance</span></div>
             <div class="section-content">
@@ -82,7 +137,6 @@
                 <div class="form-row"><div class="form-cell">Reports of concern</div><div class="form-cell"><select id="bekymringsmeldinger"><option value="">Select...</option><option value="Ingen">None</option><option value="Noe">Some</option><option value="Middels">Medium</option><option value="Alvorlig">Severe</option></select></div><div class="form-cell calculated-value" id="bekymringsmeldinger-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Need for guidance</div><div class="form-cell"><select id="veiledningsbehov"><option value="">Select...</option><option value="Lite">Little</option><option value="Middels">Medium</option><option value="Stort">High</option></select></div><div class="form-cell calculated-value" id="veiledningsbehov-value">0</div></div>
                 <div class="form-row"><div class="form-cell">Missing data in EMPIC<div class="tooltip-container"><i class="fa-solid fa-circle-info tooltip-icon"></i><span class="tooltip-text">E.g missing data on leading personell or description of approved operations.</span></div></div><div class="form-cell"><select id="mangler-oat-empic"><option value="">Select...</option><option value="Nei">No</option><option value="Ja">Yes</option></select></div><div class="form-cell calculated-value" id="mangler-oat-empic-value">0</div></div>
-
                 <div class="subsection-header">
                     Last Audit
                     <div class="subsection-checkbox">

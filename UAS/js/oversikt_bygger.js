@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'flyhoyde': { label: 'Flight altitude', section: 'operations' },
         'operasjonsmiljo': { label: 'Operational environment', section: 'operations' },
         'flytimer': { label: 'Annual flight hours', section: 'operations' },
+        'antall-oats-luc': { label: 'Number of OATs / LUC privileges', section: 'operations' }, // <-- DENNE LINJEN VAR MANGLENDE
         'redusert-grc': { label: 'Reduced GRC', section: 'operations' },
         'omrade': { label: 'Area', section: 'operations' },
         'sail': { label: 'SAIL', section: 'operations' },
@@ -53,7 +54,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         'Lite': 'Little', 'Stort': 'High',
         'under-1ar': 'Under 1 year', '1-2ar': '1 - 2 years', '2-3ar': '2 - 3 years', 'over-3ar': 'Over 3 years', 'over-2ar': 'Over 2 years',
         '0-3': '0 - 3', '4-7': '4 - 7', '8-11': '8 - 11', 'over-11': 'Over 11',
-        'Overholdt': 'Met', 'Overskredet': 'Exceeded'
+        'Overholdt': 'Met', 'Overskredet': 'Exceeded',
+        '3-4': '3-4', 'over-5': '>5' // <-- La til disse for penere visning
     };
 
     try {
