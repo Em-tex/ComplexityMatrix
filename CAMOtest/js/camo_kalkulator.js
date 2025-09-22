@@ -43,8 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    function getElementText(element) {
+        if (!element) return '';
+        if (element.tagName === 'SELECT') {
+            return element.options[element.selectedIndex]?.text.split('(')[0].trim() || '';
+        }
+        return element.value;
+    }
+
     function calculate() {
-        // --- PERFORMANCE CALCULATION ---
         const allPerformanceScores = [];
         Object.keys(performanceGroups).forEach(groupKey => {
             let groupScores = [];
@@ -92,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (performanceAverage >= perfThresholds.O) perfLevel = 'O';
         else if (performanceAverage >= perfThresholds.S) perfLevel = 'S';
         
-        // --- COMPLEXITY CALCULATION ---
         let complexitySum = 0;
         complexitySourceIds.forEach(id => {
             let score = getElValue(id) ?? 0;
@@ -106,12 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (complexitySum <= compThresholds.L) compLevel = 'L';
         else if (complexitySum <= compThresholds.M) compLevel = 'M';
 
-        // --- FINAL RESULTS ---
         const criticality = criticalityMatrix[perfLevel][compLevel];
         const surveillancePeriod = (criticality !== 'low' && perfLevel !== 'E') ? "No extension" : "Extension possible";
         const basePlan = planMatrix[criticality][compLevel];
         
-        // --- UPDATE UI ---
         const resPerf = document.getElementById('res-perf-level');
         const resComp = document.getElementById('res-comp-level');
         const resCrit = document.getElementById('res-criticality');
@@ -139,19 +143,65 @@ document.addEventListener('DOMContentLoaded', () => {
         if(planKey) document.getElementById(`plan-row-${planKey}`)?.classList.add('highlight-row');
     }
 
+    function downloadCSV() {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        const rows = [
+            ["Category", "Value"],
+            ["Organization", document.getElementById('org-name').value],
+            ["Approval Ref", document.getElementById('org-ref').value],
+            ["Filled out by", document.getElementById('filled-by').value],
+            ["Date", document.getElementById('date').value],
+            [],
+            ["--- RESULTS ---"],
+            ["Performance Level", document.getElementById('res-perf-level').textContent],
+            ["Complexity Level", document.getElementById('res-comp-level').textContent],
+            ["Criticality", document.getElementById('res-criticality').textContent],
+            ["Oversight Plan", document.getElementById('res-oversight-plan').textContent],
+            [],
+            ["--- INPUT DATA ---"],
+            ["Criteria", "Complexity Input", "Performance Input"]
+        ];
+
+        document.querySelectorAll('.input-row').forEach(row => {
+            const label = '"' + row.querySelector('.input-label').textContent.trim().replace(/"/g, '""') + '"';
+            const compEl = row.querySelector('[id$="-comp"]');
+            const perfEl = row.querySelector('[id$="-perf"], [id$="-choice"]');
+            
+            const compValue = compEl ? getElementText(compEl) : '';
+            const perfValue = perfEl ? getElementText(perfEl) : '';
+            rows.push([label, compValue, perfValue]);
+        });
+
+        rows.push([]);
+        rows.push(["Comments", `"${document.getElementById('comments').value.replace(/"/g, '""')}"`]);
+
+        csvContent += rows.map(e => e.join(";")).join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        const orgName = document.getElementById('org-name').value.replace(/ /g, "_") || 'assessment';
+        link.setAttribute("download", `${orgName}_camo_assessment.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     function setupEventListeners() {
         allInputIds.forEach(id => {
             const el = document.getElementById(id);
             if(el) {
-                el.addEventListener('input', () => { calculate(); saveData(); });
-                el.addEventListener('change', () => { calculate(); saveData(); });
+                const update = () => { calculate(); saveData(); };
+                el.addEventListener('input', update);
+                el.addEventListener('change', update);
             }
         });
         
-        document.getElementById('A3-choice')?.addEventListener('change', () => {
-            document.getElementById('A3-number').classList.toggle('hidden', document.getElementById('A3-choice').value !== 'Yes');
+        document.getElementById('A3-choice')?.addEventListener('change', (e) => {
+            document.getElementById('A3-number').classList.toggle('hidden', e.target.value !== 'Yes');
         });
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
+        document.getElementById('print-pdf-button').addEventListener('click', () => window.print());
+        document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
         document.getElementById('matrix-toggler').addEventListener('click', (e) => {
             const content = document.getElementById('matrix-content');
             const isVisible = content.style.display === 'block';

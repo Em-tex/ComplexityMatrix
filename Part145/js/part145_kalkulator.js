@@ -181,65 +181,68 @@ document.addEventListener('DOMContentLoaded', () => {
         if(planKey) document.getElementById(`plan-row-${planKey}`)?.classList.add('highlight-row');
     }
 
+    // START ENDRING: Ny funksjon for CSV-nedlasting
     function downloadCSV() {
-        let csvContent = "data:text/csv;charset=utf-8,";
+        const orgNameValue = document.getElementById('org-name').value;
         const rows = [
-            ["Category", "Value"],
-            ["Organization", document.getElementById('org-name').value],
-            ["Approval Ref", document.getElementById('org-ref').value],
-            ["Filled out by", document.getElementById('filled-by').value],
-            ["Date", document.getElementById('date').value],
+            ["Parameter", "Value"],
+            ["Organization", `"${orgNameValue.replace(/"/g, '""')}"`],
+            ["Type", "Part-145"],
+            ["Approval ref", `"${document.getElementById('org-ref').value.replace(/"/g, '""')}"`],
+            ["Filled out by", `"${document.getElementById('filled-by').value.replace(/"/g, '""')}"`],
+            ["Date of assessment", document.getElementById('date').value],
             [],
             ["--- RESULTS ---"],
-            ["Performance Level", document.getElementById('res-perf-level').textContent],
-            ["Complexity Level", document.getElementById('res-comp-level').textContent],
-            ["Criticality", document.getElementById('res-criticality').textContent],
-            ["Oversight Plan", document.getElementById('res-oversight-plan').textContent],
+            ["Performance Level", `"${document.getElementById('res-perf-level').textContent}"`],
+            ["Complexity Level", `"${document.getElementById('res-comp-level').textContent}"`],
+            ["Criticality", `"${document.getElementById('res-criticality').textContent}"`],
+            ["Surveillance Period", `"${document.getElementById('res-period').textContent}"`],
+            ["Oversight Plan", `"${document.getElementById('res-oversight-plan').textContent}"`],
             [],
-            ["--- INPUT DATA ---"],
+            ["--- DETAILED INPUTS ---"],
             ["Criteria", "Complexity Input", "Performance Input"]
         ];
 
-        document.querySelectorAll('.input-row.sub-row, .input-row.main-row[id*="-avg"]').forEach(row => {
+        document.querySelectorAll('.input-row').forEach(row => {
             const labelEl = row.querySelector('.input-label');
-            if (!labelEl) return;
-
-            let labelText = Array.from(labelEl.childNodes)
-                .filter(node => node.nodeType === Node.TEXT_NODE)
-                .map(node => node.textContent.trim())
-                .join(' ');
+            let labelText = '';
+            if (labelEl) {
+                const labelClone = labelEl.cloneNode(true);
+                labelClone.querySelectorAll('input').forEach(inp => inp.remove());
+                labelText = labelClone.textContent.trim();
                 
-            const labelInput = labelEl.querySelector('input[type="text"]');
-            if (labelInput && labelInput.value) {
-                labelText += ` ${labelInput.value}`;
+                const customLabelInput = labelEl.querySelector('input[type="text"]');
+                if (customLabelInput && customLabelInput.value) {
+                    labelText += ` (${customLabelInput.value})`;
+                }
             }
-            labelText = labelText.trim();
-            const label = '"' + labelText.replace(/"/g, '""') + '"';
-
+            
+            const label = `"${labelText.replace(/"/g, '""')}"`;
             const compEl = row.querySelector('[id$="-comp"], [id$="-vol"]');
             const perfEl = row.querySelector('[id$="-perf"], [id$="-choice"]');
+            const compValue = `"${getElementText(compEl).replace(/"/g, '""')}"`;
+            const perfValue = `"${getElementText(perfEl).replace(/"/g, '""')}"`;
             
-            const compValue = compEl ? getElementText(compEl) : '';
-            const perfValue = perfEl ? getElementText(perfEl) : '';
-
             if (labelText) {
                  rows.push([label, compValue, perfValue]);
             }
         });
 
         rows.push([]);
-        rows.push(["Comments", `"${document.getElementById('comments').value.replace(/"/g, '""')}"`]);
+        rows.push(["Comments", `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`]);
 
-        csvContent += rows.map(e => e.join(";")).join("\n");
-        const encodedUri = encodeURI(csvContent);
+        const csvContent = "\uFEFF" + rows.map(e => e.join(";")).join("\n");
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        const orgName = document.getElementById('org-name').value.replace(/ /g, "_") || 'assessment';
-        link.setAttribute("download", `${orgName}_part145_assessment.csv`);
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        const fileName = `${orgNameValue.replace(/[\\/:*?"<>|]/g, '').replace(/ /g, "_") || 'assessment'}_part145_assessment.csv`;
+        link.setAttribute("download", fileName);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
+    // SLUTT ENDRING
 
     function setupEventListeners() {
         allInputIds.forEach(id => {
