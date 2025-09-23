@@ -48,7 +48,6 @@ body {
     font-family: 'Overpass', sans-serif;
 }
 
-/* NEW: Two-column layout for main content */
 .container {
     display: grid;
     grid-template-columns: 1fr; /* Default for mobile */
@@ -71,9 +70,9 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
-    background: white; /* Added background for consistency within column */
-    border-radius: 8px; /* Added radius for consistency */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Added shadow for consistency */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .section-header {
@@ -88,13 +87,11 @@ body {
     margin-right: 10px;
 }
 
-/* --- UPDATED MSAT COLORS from CAA NOR profile --- */
-#section-policy .section-header { background: #03477F; }    /* Autoritær blå */
-#section-risk .section-header { background: #F06C00; }      /* Oransje */
-#section-assurance .section-header { background: #6A8E7F; } /* Vintergrønn */
-#section-promotion .section-header { background: #03477F; } /* Autoritær blå */
-#section-additional .section-header { background: #6c757d; } /* Neutral Gray */
-
+#section-policy .section-header { background: #03477F; }
+#section-risk .section-header { background: #F06C00; }
+#section-assurance .section-header { background: #6A8E7F; }
+#section-promotion .section-header { background: #03477F; }
+#section-additional .section-header { background: #6c757d; }
 
 .section-content {
     border: 1px solid #ddd;
@@ -143,7 +140,6 @@ body {
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     }
 }
-/* NEW: Layout for small gauges */
 .small-gauges-wrapper {
     display: flex;
     flex-direction: column;
@@ -241,7 +237,6 @@ body {
 #gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; border-radius: 135px 135px 0 0;}
 #gauge-block-total .gauge-needle { height: 125px; }
 
-/* --- UPDATED MSAT GAUGE COVER COLORS --- */
 #gauge-block-policy .gauge-cover,
 #gauge-block-risk .gauge-cover,
 #gauge-block-assurance .gauge-cover,
@@ -283,3 +278,59 @@ body {
 }
 .footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
 .footer-links a:hover { text-decoration: underline; }
+
+/* --- UPDATED POPUP STYLES --- */
+.form-cell strong.popup-opener {
+    cursor: help;
+}
+
+#details-popup {
+    display: none;
+    position: absolute;
+    max-width: 800px;
+    min-width: 500px;
+    width: auto;
+    background-color: #f8f9fa;
+    border: 1px solid #adb5bd;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    padding: 20px;
+    z-index: 1000;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #212529;
+}
+
+#popup-close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 0;
+    font-weight: bold;
+}
+#popup-close-button:hover {
+    color: #212529;
+}
+
+
+#details-popup h4 {
+    margin-top: 0;
+    padding-right: 30px; /* Space for close button */
+    color: #03477F;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+}
+
+#details-popup .popup-section {
+    margin-bottom: 8px;
+}
+
+#details-popup .popup-section strong {
+    color: #000000;
+}
