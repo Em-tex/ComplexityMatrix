@@ -24,7 +24,7 @@ Prosjektet er organisert i undermapper for hver type operasjon:
 |   |   |-- stil.css
 |   |   |-- oversikt_stil.css
 |   |-- /js
-|   |   |-- kalkulator.js     <-- Hovedlogikken for kalkulatoren
+|   |   |-- kalkulator.js      <-- Hovedlogikken for kalkulatoren
 |   |   |-- oversikt_bygger.js <-- Skript som bygger oversiktssiden
 |   |-- /data
 |       |-- operators.json  <-- Liste over operatører for nedtrekksmeny
@@ -34,7 +34,26 @@ Prosjektet er organisert i undermapper for hver type operasjon:
 |   |-- (lignende filstruktur)
 |
 |-- /UAS                    <-- Mappe for UAS (droner)
-    |-- (lignende filstruktur)
+|   |-- (lignende filstruktur)
+|
+|-- /CAMO                   <-- Mappe for CAMO-kalkulatoren
+|   |-- camo.html           <-- Hovedsiden for kalkulatoren
+|   |-- /css
+|   |   |-- camo_stil.css
+|   |-- /js
+|   |   |-- camo_kalkulator.js
+|   |-- /data
+|       |-- (JSON-filer med poengregler)
+|
+|-- /Part145                <-- Mappe for Part145-kalkulatoren
+    |-- part145.html        <-- Hovedsiden for kalkulatoren
+    |-- /css
+    |   |-- part145_stil.css
+    |-- /js
+    |   |-- part145_kalkulator.js
+    |-- /data
+        |-- scoring_part145.json
+        |-- scoring_part145_sum.json
 
 ## Hvordan det fungerer
 
@@ -47,3 +66,18 @@ Hver kalkulator (f.eks. `FixedWing`) er en frittstående applikasjon.
   - Visuell oppdatering av verdier og "gauges".
   - Funksjonalitet for knapper (lagre, laste, tømme).
 - **Data (`/data`):** JSON-filer som inneholder de faktiske poengreglene og listene. Dette gjør det enkelt å oppdatere poeng uten å endre koden.
+
+
+## Fargeprofil (Color Profile)
+
+Prosjektet bruker en definert fargepalett for å sikre et konsistent visuelt uttrykk.
+
+| Farge          | HEX       | RGB             | Bruksområde                                        |
+| :------------- | :-------- | :-------------- | :------------------------------------------------- |
+| Mørk Blå       | `#03477F` | `3, 71, 127`    | Hovedfarge for overskrifter, primære tabellhoder.    |
+| Oransje        | `#F06C00` | `240, 108, 0`   | Fremheving, markerte celler i matriser.            |
+| Dempet Grønn   | `#6A8E7F` | `106, 142, 127` | Sekundære tabellhoder (Kritikalitet, Plan).        |
+| Lys Himmelblå  | `#9ADFF3` | `154, 223, 243` | Potensiell fremtidig bruk for UI-elementer.        |
+| Veldig Lys Blå | `#EEFAFF` | `238, 250, 255` | Bakgrunnsfarge for seksjonsbokser.                 |
+| Sort           | `#000000` | `0, 0, 0`       | Brødtekst og generelle grenser.                    |
+| Hvit           | `#FFFFFF` | `255, 255, 255` | Bakgrunnsfarge for hovedinnhold, tekst i fargede hoder. |

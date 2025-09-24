@@ -12,7 +12,11 @@
     <div class="header">
         <h1>Part-145 Organisation Assessment</h1>
         <div class="header-info">
-            <div class="info-field"><label for="org-name">Organization:</label><input class="form-input" type="text" id="org-name"></div>
+            <div class="info-field autocomplete-container">
+                <label for="org-name">Organization:</label>
+                <input class="form-input" type="text" id="org-name" autocomplete="off">
+            </div>
+            
             <div class="info-field"><label for="org-ref">Approval ref:</label><input class="form-input" type="text" id="org-ref"></div>
             <div class="info-field"><label for="filled-by">Filled out by:</label><input class="form-input" type="text" id="filled-by"></div>
             <div class="info-field"><label for="date">Date of assessment:</label><input class="form-input" type="date" id="date"></div>
@@ -58,7 +62,7 @@
                     </table>
                 </div>
             </div>
-            <div class="matrix-container" style="margin-top: 20px;">
+            <div class="matrix-container" id="oversight-plan-details-table-container">
                 <table class="matrix-table" id="oversight-plan-details-table">
                     <thead><tr><th>Oversight plan</th><th>Audit</th><th>split-scope</th><th>annual assessment</th><th>AM-meeting</th><th>focused insp.</th><th>unannounced</th></tr></thead>
                     <tbody>

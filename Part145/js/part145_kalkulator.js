@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const STORAGE_KEY = 'part145Assessment_v2'; // Updated version key
+    const STORAGE_KEY = 'part145Assessment_v2';
+
+    // Denne variabelen vil holde listen over organisasjoner
+    let organizationsList = [];
 
     const allInputIds = [
         'org-name', 'org-ref', 'filled-by', 'date', 'comments',
@@ -63,6 +66,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const criticalityMatrix = { P:{"Non-complex":"critical", L:"critical", M:"critical", H:"critical"}, S:{"Non-complex":"attention req", L:"attention req", M:"critical", H:"critical"}, O:{"Non-complex":"normal", L:"normal", M:"normal", H:"normal"}, E:{"Non-complex":"low", L:"low", M:"low", H:"low"} };
     const planMatrix = { critical:{"Non-complex":"immediate action", L:"immediate action", M:"immediate action", H:"immediate action"}, "attention req":{"Non-complex":"Focused scope", L:"Focused scope", M:"Focused scope", H:"Focused scope"}, normal:{"Non-complex":"basic", L:"basic", M:"basic+", H:"basic+"}, low:{"Non-complex":"basic", L:"basic", M:"basic", H:"basic+"} };
 
+    async function fetchOrganizations() {
+        try {
+            const response = await fetch('data/part145_organizations.json');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            organizationsList = await response.json();
+        } catch (error) {
+            console.error("Could not fetch organizations list:", error);
+        }
+    }
+
+    function setupAutocomplete(inp) {
+        if (!inp) return;
+    
+        // Hjelpefunksjon som bygger og viser listen med forslag
+        function showSuggestions(currentValue) {
+            closeAllLists();
+            if (!organizationsList || organizationsList.length === 0) return;
+    
+            const listContainer = document.createElement("DIV");
+            listContainer.setAttribute("class", "autocomplete-items");
+            inp.parentNode.appendChild(listContainer);
+    
+            for (const orgName of organizationsList) {
+                // Vis alle hvis feltet er tomt, ellers filtrer
+                if (currentValue === "" || orgName.toUpperCase().includes(currentValue.toUpperCase())) {
+                    const suggestionItem = document.createElement("DIV");
+                    let boldedText = orgName;
+    
+                    // Uthev den matchende teksten hvis brukeren har skrevet noe
+                    if (currentValue !== "") {
+                        const matchIndex = orgName.toUpperCase().indexOf(currentValue.toUpperCase());
+                        if (matchIndex > -1) {
+                            boldedText = `${orgName.substring(0, matchIndex)}<strong>${orgName.substring(matchIndex, matchIndex + currentValue.length)}</strong>${orgName.substring(matchIndex + currentValue.length)}`;
+                        }
+                    }
+                    
+                    suggestionItem.innerHTML = boldedText;
+                    suggestionItem.dataset.value = orgName;
+    
+                    suggestionItem.addEventListener("click", function() {
+                        inp.value = this.dataset.value;
+                        closeAllLists();
+                        calculate();
+                        saveData();
+                    });
+                    listContainer.appendChild(suggestionItem);
+                }
+            }
+        }
+    
+        // Viser listen mens brukeren skriver
+        inp.addEventListener("input", function() {
+            showSuggestions(this.value);
+        });
+    
+        // NYTT: Viser listen umiddelbart ved klikk
+        inp.addEventListener("click", function() {
+            // Sjekker om listen ikke allerede er åpen før vi viser den
+            if (!document.querySelector(".autocomplete-items")) {
+                showSuggestions(this.value);
+            }
+        });
+    
+        function closeAllLists(elmnt) {
+            const items = document.getElementsByClassName("autocomplete-items");
+            // Går baklengs for å trygt fjerne elementer fra listen
+            for (let i = items.length - 1; i >= 0; i--) {
+                if (elmnt !== items[i] && elmnt !== inp) {
+                    items[i].parentNode.removeChild(items[i]);
+                }
+            }
+        }
+    
+        // Lukker listen når man klikker et annet sted på siden
+        document.addEventListener("click", (e) => {
+            closeAllLists(e.target);
+        });
+    }
+
     function getElValue(id) {
         const el = document.getElementById(id);
         if (!el || el.value === '' || el.value === 'N/A') return null;
@@ -71,28 +153,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function formatNumber(num) {
         if (num === null || isNaN(num)) return '-';
-        if (num % 1 === 0) return num.toString();
-        return num.toFixed(2);
+        return (num % 1 === 0) ? num.toString() : num.toFixed(2);
     }
 
     function capitalize(str) {
-        if (!str) return '';
-        return str.charAt(0).toUpperCase() + str.slice(1);
+        return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
     }
 
-    function getElementText(element) {
-        if (!element) return '';
-        if (element.tagName === 'SELECT') {
-            return element.options[element.selectedIndex]?.text.split('(')[0].trim() || '';
-        }
-        return element.value;
+    function getElementText(el) {
+        if (!el) return '';
+        return (el.tagName === 'SELECT') ? el.options[el.selectedIndex]?.text.split('(')[0].trim() || '' : el.value;
     }
-
+    
     function calculate() {
         const allPerformanceScores = [];
         Object.keys(performanceGroups).forEach(groupKey => {
             let groupScores = [];
-            
             if (groupKey === 'A3') {
                 const choice = document.getElementById('A3-choice').value;
                 if (choice === 'No') groupScores.push(7);
@@ -114,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (score !== null) groupScores.push(score);
                 });
             }
-            
             const avg = groupScores.length > 0 ? groupScores.reduce((a, b) => a + b, 0) / groupScores.length : null;
             if (avg !== null) allPerformanceScores.push(avg);
             
@@ -142,14 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
             let score = getElValue(id) ?? 0;
             if(id === 'B10a-comp' && getElValue('B10-comp') === 0) score = 0;
             if (!id.startsWith('B7') || !id.endsWith('-vol')) {
-                 baseComplexitySum += score;
+                baseComplexitySum += score;
             }
         });
 
-        const volumeFactors = ['B7a-vol', 'B7b-vol', 'B7c-vol', 'B7d-vol']
-            .map(getElValue)
-            .filter(v => v !== null);
-
+        const volumeFactors = ['B7a-vol', 'B7b-vol', 'B7c-vol', 'B7d-vol'].map(getElValue).filter(v => v !== null);
         const averageVolumeFactor = volumeFactors.length > 0 ? volumeFactors.reduce((a, b) => a + b, 0) / volumeFactors.length : 1;
         const complexitySum = baseComplexitySum * averageVolumeFactor;
 
@@ -181,7 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if(planKey) document.getElementById(`plan-row-${planKey}`)?.classList.add('highlight-row');
     }
 
-    // START ENDRING: Ny funksjon for CSV-nedlasting
     function downloadCSV() {
         const orgNameValue = document.getElementById('org-name').value;
         const rows = [
@@ -210,21 +281,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const labelClone = labelEl.cloneNode(true);
                 labelClone.querySelectorAll('input').forEach(inp => inp.remove());
                 labelText = labelClone.textContent.trim();
-                
                 const customLabelInput = labelEl.querySelector('input[type="text"]');
                 if (customLabelInput && customLabelInput.value) {
                     labelText += ` (${customLabelInput.value})`;
                 }
             }
-            
             const label = `"${labelText.replace(/"/g, '""')}"`;
             const compEl = row.querySelector('[id$="-comp"], [id$="-vol"]');
             const perfEl = row.querySelector('[id$="-perf"], [id$="-choice"]');
             const compValue = `"${getElementText(compEl).replace(/"/g, '""')}"`;
             const perfValue = `"${getElementText(perfEl).replace(/"/g, '""')}"`;
             
-            if (labelText) {
-                 rows.push([label, compValue, perfValue]);
+            if (labelText && !row.classList.contains('main-row')) {
+                rows.push([label, compValue, perfValue]);
             }
         });
 
@@ -236,21 +305,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
-        const fileName = `${orgNameValue.replace(/[\\/:*?"<>|]/g, '').replace(/ /g, "_") || 'assessment'}_part145_assessment.csv`;
+        const fileName = `${orgNameValue.replace(/[\\/:*?"<>|]/g, '').replace(/ /g, "_") || 'assessment'}_part145.csv`;
         link.setAttribute("download", fileName);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
-    // SLUTT ENDRING
-
+    
     function setupEventListeners() {
         allInputIds.forEach(id => {
             const el = document.getElementById(id);
-            if(el) {
-                const update = () => { calculate(); saveData(); };
-                el.addEventListener('input', update);
-                el.addEventListener('change', update);
+            if (el) {
+                // Autocomplete håndterer 'input' for org-name, så vi unngår doble lyttere.
+                // Vi legger kun til 'change' for å fange opp når brukeren manuelt
+                // redigerer og så klikker ut av feltet.
+                if (id !== 'org-name') {
+                    const update = () => { calculate(); saveData(); };
+                    el.addEventListener('input', update);
+                    el.addEventListener('change', update);
+                } else {
+                     el.addEventListener('change', () => { calculate(); saveData(); });
+                }
             }
         });
         
@@ -270,20 +345,29 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function saveData() {
         const data = {};
-        allInputIds.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
+        allInputIds.forEach(id => { const el = document.getElementById(id); if (el) data[id] = el.value; });
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
     function loadData() {
         let data = {};
-        try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { console.error("Could not parse stored data"); }
+        try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { console.error("Could not parse stored data", e); }
         allInputIds.forEach(id => {
             const el = document.getElementById(id);
             if (el && data[id] !== undefined) el.value = data[id];
         });
-        if (!document.getElementById('date').value) document.getElementById('date').valueAsDate = new Date();
+        
+        if (!document.getElementById('date').value) {
+            // Sett dagens dato automatisk hvis feltet er tomt
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
+        }
+
         const level1Choice = document.getElementById('A3-choice');
-        if(level1Choice) document.getElementById('A3-number').classList.toggle('hidden', level1Choice.value !== 'Yes');
+        if (level1Choice) document.getElementById('A3-number').classList.toggle('hidden', level1Choice.value !== 'Yes');
         calculate();
     }
 
@@ -294,6 +378,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    loadData();
-    setupEventListeners();
+    // Kjører funksjonene i riktig rekkefølge ved oppstart
+    async function initialize() {
+        await fetchOrganizations();
+        setupAutocomplete(document.getElementById("org-name"));
+        loadData();
+        setupEventListeners();
+    }
+
+    initialize();
 });
