@@ -11,49 +11,47 @@ Verktøyene er designet for å gi en standardisert poengsum basert på en rekke 
 Prosjektet er organisert i undermapper for hver type operasjon:
 
 /ComplexityMatrix
-|-- index.html              <-- Hovedsiden med lenker til de ulike kalkulatorene
+|-- index.html                  <-- Hovedsiden med lenker til de ulike kalkulatorene
 |-- css/
-|   |-- stilark.css         <-- Stilark for hovedsiden
-|-- smallLogo.png           <-- Favicon for prosjektet
-|-- README.md               <-- Denne filen
+|   |-- stilark.css             <-- Stilark for hovedsiden
+|-- smallLogo.png               <-- Favicon for prosjektet
+|-- README.md                   <-- Denne filen
 |
-|-- /FixedWing              <-- Mappe for Fixed Wing-kalkulatoren
-|   |-- fixed-wing.html     <-- Hovedsiden for kalkulatoren
-|   |-- oversikt.html       <-- En side som viser alle poengreglene
+|-- /FixedWing                  <-- Mappe for Fixed Wing-kalkulatoren
+|   |-- fixed-wing.html         <-- Hovedsiden for kalkulatoren
+|   |-- oversikt.html           <-- En side som viser alle poengreglene
 |   |-- /css
 |   |   |-- stil.css
 |   |   |-- oversikt_stil.css
 |   |-- /js
-|   |   |-- kalkulator.js      <-- Hovedlogikken for kalkulatoren
-|   |   |-- oversikt_bygger.js <-- Skript som bygger oversiktssiden
+|   |   |-- kalkulator.js         <-- Hovedlogikken for kalkulatoren
+|   |   |-- oversikt_bygger.js  <-- Skript som bygger oversiktssiden
 |   |-- /data
-|       |-- operators.json  <-- Liste over operatører for nedtrekksmeny
-|       |-- scoring.json    <-- Alle poengreglene for kalkulatoren
+|       |-- operators.json      <-- Liste over operatører for nedtrekksmeny
+|       |-- scoring.json        <-- Alle poengreglene for kalkulatoren
 |
-|-- /Rotary                 <-- Mappe for Rotary Wing (helikopter)
+|-- /Rotary                     <-- Mappe for Rotary Wing (helikopter)
 |   |-- (lignende filstruktur)
 |
-|-- /UAS                    <-- Mappe for UAS (droner)
+|-- /UAS                        <-- Mappe for UAS (droner)
 |   |-- (lignende filstruktur)
 |
-|-- /CAMO                   <-- Mappe for CAMO-kalkulatoren
-|   |-- camo.html           <-- Hovedsiden for kalkulatoren
-|   |-- /css
-|   |   |-- camo_stil.css
-|   |-- /js
-|   |   |-- camo_kalkulator.js
-|   |-- /data
-|       |-- (JSON-filer med poengregler)
+|-- /CAMO                       <-- Mappe for CAMO-kalkulatoren
+|   |-- (lignende filstruktur)
 |
-|-- /Part145                <-- Mappe for Part145-kalkulatoren
-    |-- part145.html        <-- Hovedsiden for kalkulatoren
+|-- /Part145                    <-- Mappe for Part145-kalkulatoren
+|   |-- (lignende filstruktur)
+|
+|-- /MSAT                       <-- Mappe for Management System Assessment Tool
+    |-- msat.html               <-- Hovedsiden for verktøyet
     |-- /css
-    |   |-- part145_stil.css
+    |   |-- style.css
     |-- /js
-    |   |-- part145_kalkulator.js
+    |   |-- calculator.js       <-- Hovedlogikken for verktøyet
     |-- /data
-        |-- scoring_part145.json
-        |-- scoring_part145_sum.json
+        |-- msat_data.json      <-- Spørsmål og struktur for skjemaet
+        |-- scoring.json        <-- Poengregler for P, S, O, E
+        |-- organisation_types.json <-- Liste over organisasjonstyper for autofullføring
 
 ## Hvordan det fungerer
 

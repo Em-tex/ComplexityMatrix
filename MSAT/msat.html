@@ -17,7 +17,12 @@
         <div class="header-info">
             <div class="info-field">
                 <label for="organisation-name">Name of Organisation:</label>
-                <input type="text" id="organisation-name" placeholder="Type organisation name" autocomplete="off">
+                <input type="text" id="organisation-name" placeholder="Enter organisation name" autocomplete="off">
+            </div>
+            <div class="info-field">
+                <label for="organisation-type">Organisation type:</label>
+                <input type="text" id="organisation-type" placeholder="Select or type" list="org-types-list">
+                <datalist id="org-types-list"></datalist>
             </div>
             <div class="info-field">
                 <label for="assessed-by">Assessed by:</label>
@@ -28,7 +33,7 @@
                 <input type="date" id="assessment-date">
             </div>
              <div class="info-field">
-                <label for="empic-id">Empic assessment ID:</label>
+                <label for="empic-id">Empic ID:</label>
                 <input type="text" id="empic-id" placeholder="Enter ID">
             </div>
         </div>

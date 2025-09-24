@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             sectionContentHtml += '</div>';
             sectionEl.innerHTML = sectionContentHtml;
             
-            // UPDATED: New column layout
             if (["1", "2"].includes(section.number)) {
                 column1.appendChild(sectionEl);
             } else {
@@ -61,6 +60,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         container.appendChild(column1);
         container.appendChild(column2);
+    }
+
+    // NY FUNKSJON for å fylle ut organisasjonstyper
+    function populateOrgTypes(types) {
+        const datalist = document.getElementById('org-types-list');
+        if (datalist) {
+            datalist.innerHTML = '';
+            types.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type;
+                datalist.appendChild(option);
+            });
+        }
     }
     
     function showPopup(targetElement) {
@@ -232,8 +244,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         return "";
     }
     
+    // OPPDATERT FUNKSJON
     function downloadCSV() {
         const orgName = document.getElementById('organisation-name').value || "UnknownOrganisation";
+        const orgType = document.getElementById('organisation-type').value || "UnknownType"; // Hent org type
         const dateValue = document.getElementById('assessment-date').value;
         
         let formattedDate = "";
@@ -256,10 +270,12 @@ document.addEventListener('DOMContentLoaded', async () => {
              formattedDate = today.toLocaleDateString('no-NO'); // Fallback to local format
         }
 
-        const fileName = `${orgName} - MSAT - ${formattedDate}.csv`;
+        // OPPDATERT FILNAVN
+        const fileName = `${orgName} - ${orgType} - MSAT - ${formattedDate}.csv`;
 
+        // OPPDATERT HEADERS
         const primaryHeaders = [
-            'Organisation Name', 'Assessed By', 'Date', 'Empic ID',
+            'Organisation Name', 'Organisation type', 'Assessed By', 'Date', 'Empic ID',
             'Policy Avg', 'Risk Avg', 'Assurance Avg', 'Promotion Avg', 'Additional Avg',
             'Total Avg Score', 'Comments'
         ];
@@ -267,8 +283,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const allHeaders = primaryHeaders.concat(detailHeaders);
         
         const comments = `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
+        
+        // OPPDATERT DATA
         const primaryData = [
             `"${orgName.replace(/"/g, '""')}"`,
+            `"${orgType.replace(/"/g, '""')}"`,
             `"${document.getElementById('assessed-by').value.replace(/"/g, '""')}"`,
             `"${dateValue}"`,
             `"${document.getElementById('empic-id').value.replace(/"/g, '""')}"`,
@@ -308,6 +327,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return field;
     }
 
+    // OPPDATERT FUNKSJON
     function loadCsvFile(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -325,6 +345,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const headerMap = Object.fromEntries(headers.map((h, i) => [h, i]));
 
             document.getElementById('organisation-name').value = data[headerMap['Organisation Name']] || '';
+            document.getElementById('organisation-type').value = data[headerMap['Organisation type']] || ''; // Last inn org type
             document.getElementById('assessed-by').value = data[headerMap['Assessed By']] || '';
             document.getElementById('assessment-date').value = data[headerMap['Date']] || '';
             document.getElementById('empic-id').value = data[headerMap['Empic ID']] || '';
@@ -353,17 +374,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.readAsText(file, "UTF-8");
     }
 
+    // OPPDATERT FUNKSJON
     async function init() {
         try {
-            const [scoringRes, msatRes] = await Promise.all([
+            const [scoringRes, msatRes, orgTypesRes] = await Promise.all([
                 fetch('data/scoring.json'),
-                fetch('data/msat_data.json')
+                fetch('data/msat_data.json'),
+                fetch('data/organisation_types.json') // Hent den nye filen
             ]);
             scoringRules = await scoringRes.json();
             msatData = await msatRes.json();
+            const orgTypes = await orgTypesRes.json(); // Hent ut data
+            
+            populateOrgTypes(orgTypes); // Kall den nye funksjonen
         } catch (error) {
             console.error('Failed to load data files:', error);
-            alert('ERROR: Could not load data files (scoring.json, msat_data.json). The page cannot function.');
+            alert('ERROR: Could not load essential data files. The page cannot function.');
             return;
         }
 

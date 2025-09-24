@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         "Default": "fa-solid fa-circle-question"
     };
     
-    // ENDRET: Oppdaterte maksimale poengsummer
     const BASE_MAX_SCORES = {
         resources: 25,
         fleet: 32,
@@ -27,16 +26,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         total: 147
     };
     
-    // ENDRET: AUDIT_FIELDS_MAX_SCORE reflekterer nye poeng i performance-seksjonen
     const AUDIT_FIELDS_MAX_SCORE = 27; 
     const INITIAL_APPROVAL_MAX_SCORE = 7;
 
-    // ENDRET: La til 'pilot-employment'
     const fieldData = [
         // Resources
         { id: 'antall-baser', label: 'Number of bases', section: 'resources' },
         { id: 'antall-piloter', label: 'Number of pilots', section: 'resources' },
-        { id: 'pilot-employment', label: 'Pilot employment', section: 'resources' }, // Nytt felt
+        { id: 'pilot-employment', label: 'Pilot employment', section: 'resources' },
         { id: 'ledende-personell-roller', label: 'Leading personnel has multiple roles', section: 'resources' },
         { id: 'krav-eksamen', label: 'Exam requirements', section: 'resources' },
         { id: 'manualverk', label: 'Manuals', section: 'resources' },
@@ -47,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'c2link', label: 'C2 link', section: 'fleet' },
         { id: 'modifiserte-fartoy', label: 'Modified aircraft', section: 'fleet', needsComment: true },
         { id: 'test-development', label: 'Test and Development', section: 'fleet' },
-        // Operations (NB: rekkefølgen her påvirker kun CSV, ikke visuell rekkefølge)
+        // Operations
         { id: 'sail', label: 'SAIL', section: 'operations' },
         { id: 'omrade', label: 'Area', section: 'operations' },
         { id: 'synsvidde', label: 'Line of sight', section: 'operations' },
@@ -262,102 +259,84 @@ document.addEventListener('DOMContentLoaded', async () => {
         saveData();
     }
     
-    // ENDRET: Oppdatert CSV-nedlasting med "Audit flag"
+    // OPPDATERT FUNKSJON: Omskrevet for garantert rekkefølge og robusthet.
     function downloadCSV() {
         const operatorInput = document.getElementById('operator-navn');
         const filledByInput = document.getElementById('filled-by');
-        let formIsValid = true;
-        [operatorInput, filledByInput].forEach(input => {
-            if (!input.value.trim()) {
-                input.classList.add('invalid');
-                formIsValid = false;
-            } else {
-                input.classList.remove('invalid');
-            }
-        });
-        if (!formIsValid) {
+        
+        // Validering
+        if (!operatorInput.value.trim() || !filledByInput.value.trim()) {
             alert("'Operator' and 'Filled out by' must be completed before downloading.");
+            if (!operatorInput.value.trim()) operatorInput.classList.add('invalid');
+            if (!filledByInput.value.trim()) filledByInput.classList.add('invalid');
             return;
         }
         if (!validateForm() || !validateOperationTypes()) return;
 
-        const operatorName = operatorInput.value || "Unknown_Operator";
-        const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
-        const fileName = `${operatorName.replace(/ /g, "_")}_${dateValue}.csv`;
+        // Data-innsamling
+        const operatorName = operatorInput.value;
+        const dateValue = document.getElementById('date').value;
+        const hasNeverBeenAudited = document.getElementById('aldri-hatt-tilsyn').checked;
+        
         const sums = {
-            resources: parseFloat(document.getElementById('resources-sum').textContent),
-            fleet: parseFloat(document.getElementById('fleet-sum').textContent),
-            operations: parseFloat(document.getElementById('operations-sum').textContent),
-            performance: parseFloat(document.getElementById('performance-sum').textContent),
-            total: parseFloat(document.getElementById('total-gauge-sum-text').textContent)
+            resources: document.getElementById('resources-sum').textContent,
+            fleet: document.getElementById('fleet-sum').textContent,
+            operations: document.getElementById('operations-sum').textContent,
+            performance: document.getElementById('performance-sum').textContent,
+            total: document.getElementById('total-gauge-sum-text').textContent
         };
         const maxSums = {
-            resources: parseFloat(document.getElementById('resources-max-sum').textContent),
-            fleet: parseFloat(document.getElementById('fleet-max-sum').textContent),
-            operations: parseFloat(document.getElementById('operations-max-sum').textContent),
-            performance: parseFloat(document.getElementById('performance-max-sum').textContent),
-            total: parseFloat(document.getElementById('total-gauge-max-text').textContent)
+            resources: document.getElementById('resources-max-sum').textContent,
+            fleet: document.getElementById('fleet-max-sum').textContent,
+            operations: document.getElementById('operations-max-sum').textContent,
+            performance: document.getElementById('performance-max-sum').textContent,
+            total: document.getElementById('total-gauge-max-text').textContent
         };
         const percent = {
-            resources: ((sums.resources / maxSums.resources) * 100).toFixed(1),
-            fleet: ((sums.fleet / maxSums.fleet) * 100).toFixed(1),
-            operations: ((sums.operations / maxSums.operations) * 100).toFixed(1),
-            performance: ((sums.performance / maxSums.performance) * 100).toFixed(1),
-            total: ((sums.total / maxSums.total) * 100).toFixed(1)
+            resources: ((parseFloat(sums.resources) / parseFloat(maxSums.resources)) * 100).toFixed(1),
+            fleet: ((parseFloat(sums.fleet) / parseFloat(maxSums.fleet)) * 100).toFixed(1),
+            operations: ((parseFloat(sums.operations) / parseFloat(maxSums.operations)) * 100).toFixed(1),
+            performance: ((parseFloat(sums.performance) / parseFloat(maxSums.performance)) * 100).toFixed(1),
+            total: ((parseFloat(sums.total) / parseFloat(maxSums.total)) * 100).toFixed(1)
         };
-        const primaryHeaders = [
-            'Operator', 'Filled out by', 'Date', 
-            'Main Approval Type', 'Main Operation Type 1', 'Main Operation Type 2', 'Main Operation Type 3',
-            'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Performance Sum', 'Total Sum',
-            'Resources Percent', 'Fleet Percent', 'Operations Percent', 'Performance Percent', 'Total Percent',
-        ];
-        const detailHeaders = fieldData.map(field => {
-            if (field.id === 'antall-oats-luc') {
-                const currentLabel = document.getElementById('oat-luc-label-text').textContent;
-                return [`${currentLabel} (Selection)`, `${currentLabel} (Value)`];
-            }
-            return [`${field.label} (Selection)`, `${field.label} (Value)`]
-        }).flat();
         
-        // Logikk for Audit Flag
         let auditFlag = 0;
-        const hasNeverBeenAudited = document.getElementById('aldri-hatt-tilsyn').checked;
         if (hasNeverBeenAudited) {
-            const timeSinceInitial = document.getElementById('tid-forstegangsgodkjenning').value;
-            if (timeSinceInitial === 'over-2ar') {
-                auditFlag = 1;
-            }
+            if (document.getElementById('tid-forstegangsgodkjenning').value === 'over-2ar') auditFlag = 1;
         } else {
-            const timeSinceAudit = document.getElementById('tid-siste-tilsyn').value;
-            if (timeSinceAudit === 'over-3ar') {
-                auditFlag = 1;
-            }
+            if (document.getElementById('tid-siste-tilsyn').value === 'over-3ar') auditFlag = 1;
         }
-
-        const allHeaders = [...primaryHeaders, 'Comments', 'Audit flag', ...detailHeaders];
-        const primaryData = [
-            `"${operatorName.replace(/"/g, '""')}"`, `"${filledByInput.value.replace(/"/g, '""')}"`, `"${dateValue}"`,
-            `"${document.getElementById('main-approval-type').value}"`,
-            `"${document.getElementById('operation-select-1').value}"`,
-            `"${document.getElementById('operation-select-2').value}"`,
-            `"${document.getElementById('operation-select-3').value}"`,
-            sums.resources, sums.fleet, sums.operations, sums.performance, sums.total,
-            percent.resources, percent.fleet, percent.operations, percent.performance, percent.total,
-        ];
-        const detailData = fieldData.map(field => {
-            const select = document.getElementById(field.id);
-            const selectedText = select.disabled ? "N/A" : (getSelectedText(field.id) || "");
-            const score = document.getElementById(field.id + '-value').textContent;
-            return [`"${selectedText.replace(/"/g, '""')}"`, score];
-        }).flat();
         const comments = `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
-        
-        const allData = [...primaryData, comments, auditFlag, ...detailData];
-        const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
+
+        // Bygg headers og data-rader med garantert rekkefølge
+        const headers = [];
+        const data = [];
+
+        // Primær-seksjon
+        headers.push('Operator', 'Filled out by', 'Date', 'Main Approval Type', 'Main Operation Type 1', 'Main Operation Type 2', 'Main Operation Type 3', 'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Performance Sum', 'Total Sum', 'Resources Percent', 'Fleet Percent', 'Operations Percent', 'Performance Percent', 'Total Percent', 'Comments', 'Audit flag', 'Never Been Audited');
+        data.push(`"${operatorName.replace(/"/g, '""')}"`, `"${filledByInput.value.replace(/"/g, '""')}"`, `"${dateValue}"`, `"${document.getElementById('main-approval-type').value}"`, `"${document.getElementById('operation-select-1').value}"`, `"${document.getElementById('operation-select-2').value}"`, `"${document.getElementById('operation-select-3').value}"`, sums.resources, sums.fleet, sums.operations, sums.performance, sums.total, percent.resources, percent.fleet, percent.operations, percent.performance, percent.total, comments, auditFlag, hasNeverBeenAudited);
+
+        // Detalj-seksjon
+        fieldData.forEach(field => {
+            const select = document.getElementById(field.id);
+            const valueCell = document.getElementById(field.id + '-value');
+            let label = field.label;
+            if (field.id === 'antall-oats-luc') {
+                label = document.getElementById('oat-luc-label-text').textContent;
+            }
+            const selectionText = select.disabled ? "N/A" : (getSelectedText(field.id) || "");
+            const score = valueCell.textContent;
+
+            headers.push(`${label} (Selection)`, `${label} (Value)`);
+            data.push(`"${selectionText.replace(/"/g, '""')}"`, score);
+        });
+
+        // Generer og last ned fil
+        const fileName = `${operatorName.replace(/ /g, "_")}_${dateValue}.csv`;
+        const csvContent = headers.join(';') + '\r\n' + data.join(';');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
+        link.setAttribute("href", URL.createObjectURL(blob));
         link.setAttribute("download", fileName);
         document.body.appendChild(link);
         link.click();
@@ -407,12 +386,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         return isValid;
     }
 
+    // OPPDATERT FUNKSJON: Fikset feil i hvordan den fant de egendefinerte select-boksene.
     function validateOperationTypes() {
         const opSelect1 = document.getElementById('operation-select-1');
         const opSelect2 = document.getElementById('operation-select-2');
         const opSelect3 = document.getElementById('operation-select-3');
         const selects = [opSelect1, opSelect2, opSelect3];
-        const customSelects = selects.map(s => s.parentElement.querySelector('.select-selected'));
+        
+        // Fikset måten den finner det visuelle elementet på.
+        const customSelects = selects.map(s => s.previousElementSibling.querySelector('.select-selected'));
 
         customSelects.forEach(cs => cs.classList.remove('invalid'));
     
@@ -422,11 +404,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             return false;
         }
     
-        const filledValues = selects
-            .map(select => select.value)
-            .filter(value => value !== '');
-    
+        const filledValues = selects.map(select => select.value).filter(value => value !== '');
         const uniqueValues = new Set(filledValues);
+
         if (uniqueValues.size !== filledValues.length) {
             alert("Main operation types cannot be duplicates.");
             const counts = filledValues.reduce((acc, val) => ({...acc, [val]: (acc[val] || 0) + 1}), {});
@@ -458,6 +438,83 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert("Please provide a justification for this selection in the comments field.");
             }, 100);
         }
+    }
+
+    function parseCsvField(field) {
+        field = field ? field.trim() : '';
+        if (field.startsWith('"') && field.endsWith('"')) {
+            field = field.substring(1, field.length - 1).replace(/""/g, '"');
+        }
+        return field;
+    }
+
+    function loadCsvFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const lines = e.target.result.split(/\r?\n/);
+                if (lines.length < 2) throw new Error("CSV file is empty or invalid.");
+
+                const headers = lines[0].split(';').map(h => parseCsvField(h));
+                const data = lines[1].split(';').map(d => parseCsvField(d));
+                const headerMap = Object.fromEntries(headers.map((h, i) => [h, i]));
+
+                const setValue = (id, headerName) => {
+                    const el = document.getElementById(id);
+                    const index = headerMap[headerName];
+                    if (el && index !== undefined && data[index] !== undefined) {
+                        if (el.type === 'checkbox') {
+                            el.checked = data[index].toLowerCase() === 'true';
+                        } else {
+                            el.value = data[index];
+                        }
+                    }
+                };
+                
+                setValue('operator-navn', 'Operator');
+                setValue('filled-by', 'Filled out by');
+                setValue('date', 'Date');
+                setValue('main-approval-type', 'Main Approval Type');
+                setValue('operation-select-1', 'Main Operation Type 1');
+                setValue('operation-select-2', 'Main Operation Type 2');
+                setValue('operation-select-3', 'Main Operation Type 3');
+                setValue('comments', 'Comments');
+                setValue('aldri-hatt-tilsyn', 'Never Been Audited');
+
+                fieldData.forEach(field => {
+                    const select = document.getElementById(field.id);
+                    if (select) {
+                        let headerName = `${field.label} (Selection)`;
+                        if (field.id === 'antall-oats-luc') {
+                           const lucLabel = 'LUC privileges (Selection)';
+                           const oatLabel = 'Number of OATs (Selection)';
+                           headerName = headerMap[lucLabel] !== undefined ? lucLabel : oatLabel;
+                        }
+                        
+                        const index = headerMap[headerName];
+                        if (index !== undefined && data[index] !== undefined) {
+                            const valueToFind = data[index];
+                            const option = Array.from(select.options).find(opt => opt.text === valueToFind);
+                            select.value = option ? option.value : "";
+                        }
+                    }
+                });
+
+                document.querySelectorAll('.custom-select-container + select').forEach(s => s.dispatchEvent(new Event('change', { bubbles: true })));
+                updateOatLucLabel();
+                toggleTilsynFields();
+                
+                alert("CSV file loaded successfully!");
+
+            } catch (error) {
+                console.error("Error loading CSV:", error);
+                alert("Failed to load CSV file. Please check the file format and content.");
+            }
+        };
+        reader.readAsText(file, "UTF-8");
     }
     
     async function init() {
@@ -494,12 +551,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('input, select, textarea').forEach(el => {
             el.addEventListener('change', updateCalculations);
             if (el.matches('input[type="text"], textarea')) el.addEventListener('keyup', saveData);
-            if (el.tagName === 'SELECT' || el.type === 'text') el.addEventListener('input', () => {
-                el.classList.remove('invalid');
-                if (el.previousSibling && el.previousSibling.classList.contains('select-selected')) {
-                    el.previousSibling.classList.remove('invalid');
-                }
-            });
+            if (el.tagName === 'SELECT' || el.matches('input[type="text"]')) {
+                el.addEventListener('input', () => {
+                    el.classList.remove('invalid');
+                    const customSelectDisplay = el.previousElementSibling?.querySelector('.select-selected');
+                    if (customSelectDisplay) {
+                        customSelectDisplay.classList.remove('invalid');
+                    }
+                });
+            }
         });
 
         fieldData.filter(f => f.needsComment).forEach(field => {
@@ -512,9 +572,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
         document.getElementById('print-pdf-button').addEventListener('click', printPDF);
         
+        const loadCsvButton = document.getElementById('load-csv-button');
+        const csvFileInput = document.getElementById('csv-file-input');
+        loadCsvButton.addEventListener('click', () => csvFileInput.click());
+        csvFileInput.addEventListener('change', loadCsvFile);
+
         loadData();
         
-        // ENDRET: Setter alltid datoen til i dag ved lasting
         document.getElementById('date').valueAsDate = new Date();
         
         updateOatLucLabel();
