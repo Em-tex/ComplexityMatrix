@@ -5,7 +5,6 @@
     --color-orange: #F06C00;
     --color-light-blue-bg: #EEFAFF;
     --color-green: #6A8E7F;
-    --color-blue-medium: #0056b3;
     --color-gray-dark: #343a40;
     --color-gray-medium: #495057;
     --color-gray-light: #f8f9fa;
@@ -25,7 +24,6 @@ body {
     max-width: 1400px;
     margin: 20px auto;
 }
-/* Ny kode */
 .header, .overview-container, #input-panel, .comments-section {
     background: #ffffff;
     padding: 25px;
@@ -46,7 +44,7 @@ body {
 .sticky-results {
     position: sticky;
     top: 0;
-    z-index: 90;
+    z-index: 1000;
     background-color: white;
     padding: 15px;
     margin-bottom: 25px;
@@ -60,11 +58,10 @@ body {
 .result-value { font-size: 1.3em; font-weight: 700; padding: 5px 10px; border-radius: 6px; transition: background-color 0.3s, color 0.3s; }
 
 /* --- Non-Sticky Details --- */
-.overview-container h2 { text-align: center; color: var(--color-main-blue); margin-top: 0; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
-.collapsible-header { background-color: var(--color-gray-light); border: 1px solid var(--color-border); padding: 12px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+.collapsible-header { background-color: var(--color-gray-light); border: 1px solid var(--color-border); padding: 12px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 .collapsible-header:hover { background-color: #e2e6ea; }
-.collapsible-content { display: none; padding: 20px 0; border-top: 1px solid var(--color-border); margin-top: 15px; }
-.overview-tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 25px; margin-bottom: 25px;}
+.collapsible-content { display: none; padding-top: 20px; }
+.overview-tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 25px; }
 .matrix-container { border: 1px solid var(--color-border); border-radius: 8px; padding: 15px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 .matrix-table { width: 100%; border-collapse: collapse; }
 .matrix-table th, .matrix-table td { border: 1px solid var(--color-border); padding: 8px; text-align: center; font-size: 0.9em; }
@@ -74,114 +71,188 @@ body {
 #oversight-plan-details-table .highlight-row { background-color: var(--color-orange) !important; color: white; }
 
 /* --- Result Colors --- */
-.perf-E, .comp-Non-complex, .comp-L, .crit-Low, .period-ok { background-color: var(--color-green-bg); color: var(--color-green-text); }
-.perf-O, .perf-S, .comp-M, .crit-Normal, .crit-Attentionreq { background-color: var(--color-yellow-bg); color: var(--color-yellow-text); }
-.perf-P, .comp-H, .crit-Critical, .period-no { background-color: var(--color-red-bg); color: var(--color-red-text); }
+.perf-E, .comp-Non-complex, .comp-L, .crit-low, .period-ok { background-color: var(--color-green-bg); color: var(--color-green-text); }
+.perf-O, .perf-S, .comp-M, .crit-normal, .crit-attentionreq { background-color: var(--color-yellow-bg); color: var(--color-yellow-text); }
+.perf-P, .comp-H, .crit-critical, .period-no { background-color: var(--color-red-bg); color: var(--color-red-text); }
 
 /* --- Input Panel --- */
 #input-panel h2 { color: var(--color-main-blue); text-align: center; margin-top: 0; }
-.input-section-box { border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+.input-section-box { 
+    border: 1px solid #e0e0e0; 
+    border-radius: 8px; 
+    padding: 20px; 
+    margin-bottom: 40px; 
+}
 .input-section-box h3 { background-color: var(--color-light-blue-bg); border-left: 5px solid var(--color-main-blue); color: var(--color-main-blue); padding: 12px 15px; border-radius: 4px; margin-top: 0; font-size: 1.2em; }
 .input-table-header { display: grid; gap: 15px; font-weight: bold; padding: 10px; background-color: var(--color-gray-dark); color: white; border-radius: 4px; text-align: center; }
 .input-table-header.perf-only { grid-template-columns: 5fr 2fr 1fr; }
-.input-table-header.dual-input { grid-template-columns: 5fr 1.5fr 1.5fr 1fr; }
-.input-row { display: grid; gap: 15px; padding: 10px; align-items: center; }
-.section-group { padding: 0; border-radius: 4px; border-bottom: 1px solid #eee; }
-.section-group:last-child { border-bottom: none; }
-.section-group:nth-child(even) { background-color: var(--color-gray-light); }
-.input-row.main-row { padding-top: 15px; border-top: 2px solid #cdd5de; margin-top: 15px; }
-.section-group:first-child .input-row.main-row:first-child { border-top: none; margin-top: 0; }
+.input-table-header.dual-input { grid-template-columns: 5fr 1.5fr 1.5fr 1fr; margin-bottom: 10px; }
+
+
+/* NY OG FORBEDRET LAYOUT FOR INPUT-TABELLER */
+.input-row { display: grid; gap: 15px; align-items: center; padding: 8px 10px; min-height: 40px; }
+.section-group { border-top: 1px solid var(--color-border); }
+.input-section-box > .section-group:first-child,
+.column > .section-group:first-child {
+    border-top: none; /* Fjerner unødvendig linje øverst */
+}
+.input-row.main-row .input-label { font-weight: bold; }
+.input-row.sub-row .input-label { font-weight: normal; color: var(--color-gray-medium); padding-left: 25px; }
+.input-row.sub-row { border-top: 1px dashed var(--color-border); }
 .input-row.perf-only { grid-template-columns: 5fr 2fr 1fr; }
 .input-row.dual-input { grid-template-columns: 5fr 1.5fr 1.5fr 1fr; }
-.input-row.main-row > .input-label { font-weight: bold; }
-.input-row.sub-row > .input-label { padding-left: 25px; }
 .input-row.sub-row .input-label { display: flex; align-items: center; gap: 8px; }
 
-.form-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: 'Overpass', sans-serif;
-    font-size: 1em;
-    box-sizing: border-box;
+
+/* SPESIFIKKE REGLER FOR TABELL A */
+
+/* Definerer grid for både header og innhold */
+.a-section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    position: relative;
 }
 
+/* Stil for de nye, enkle headerne */
+.single-column-header {
+    grid-template-columns: 5fr 2fr 1fr;
+}
+
+.header-grid {
+    margin-bottom: 10px;
+}
+
+/* Legger til den vertikale skillelinjen midt i mellomrommet */
+.a-section-grid > *:first-child::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    /* Plasserer linjen midt i gap'et (40px / 2 = 20px) */
+    right: -20px;
+    height: 100%;
+    width: 1px;
+    background-color: var(--color-border);
+}
+
+/* Sørger for at linjen i headeren blir mørkere så den synes mot den mørke bakgrunnen */
+.header-grid > *:first-child::after {
+    background-color: #6c757d; /* Litt lysere enn header-bakgrunnen */
+}
+
+
+.a-section-grid .column .section-group:not(:first-child) {
+    border-top: 1px solid var(--color-border);
+}
+
+#section-A > .input-table-header.perf-only { display: none; }
+
+
+@media (max-width: 1200px) { 
+    /* Stabler grid-kolonnene på mindre skjermer */
+    .a-section-grid { 
+        grid-template-columns: 1fr; 
+        gap: 0;
+    } 
+    /* Fjerner den vertikale skillelinjen når alt er stablet */
+    .a-section-grid > *:first-child::after {
+        display: none;
+    }
+
+    .a-section-grid .column .section-group {
+        border-top: 1px solid var(--color-border);
+    }
+    .a-section-grid .column:first-child .section-group:first-child {
+        border-top: none;
+    }
+    
+    /* Viser den gamle, enkle headeren og skjuler den nye doble */
+    .header-grid { display: none; } 
+    #section-A > .input-table-header.perf-only { display: grid; } 
+}
+
+
+.form-input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Overpass', sans-serif; font-size: 1em; box-sizing: border-box; }
 .input-control.multi-input { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .input-control.dual-control { border-left: 2px solid var(--color-border); padding-left: 15px; }
 .input-control input.hidden { display: none; }
 .input-score { text-align: center; font-weight: bold; font-size: 1.1em; padding: 5px 8px; border-radius: 4px; }
 .score-dark-green { background-color: #28a745; color: white; }
-.score-light-green { background-color: #d4edda; color: #155724; }
-.score-yellow { background-color: #fff3cd; color: #856404; }
-.score-red { background-color: #f8d7da; color: #721c24; }
+.score-light-green { background-color: var(--color-green-bg); color: var(--color-green-text); }
+.score-yellow { background-color: var(--color-yellow-bg); color: var(--color-yellow-text); }
+.score-red { background-color: var(--color-red-bg); color: var(--color-red-text); }
 
 /* --- Footer --- */
 .comments-section textarea { width: 100%; min-height: 100px; padding: 10px; border: 1px solid var(--color-border); border-radius: 4px; font-family: 'Overpass', sans-serif; }
-/* Ny kode */
-.action-buttons {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 25px; /* Sørger for luft over knappene */
-}
-.action-buttons button { padding: 10px 20px; font-size: 1em; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.2s; font-family: 'Overpass', sans-serif; }
+.action-buttons { text-align: center; display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 25px; }
+.action-buttons button { padding: 10px 20px; font-size: 1em; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s; font-family: 'Overpass', sans-serif; }
+.action-buttons button:hover { opacity: 0.9; }
 #download-csv-button { background-color: #28a745; }
 #print-pdf-button { background-color: #6f42c1; }
 #clear-form-button { background-color: #dc3545; }
-
-/* --- START ENDRING: Lagt til SVG-styling og skillelinjer --- */
-.action-buttons button:hover {
-    opacity: 0.9;
-}
-.svg-icon {
-    height: 1.2em;
-    width: 1.2em;
-    margin-right: 0.5em;
-    fill: currentColor;
-}
-.input-row.sub-row {
-    border-top: 1px solid #e9ecef;
-}
-/* --- SLUTT ENDRING --- */
+.svg-icon { width: 1.2em; height: 1.2em; fill: white; }
 
 /* --- Autocomplete Styles --- */
-.autocomplete-container {
+.autocomplete-container { position: relative; }
+.autocomplete-items { position: absolute; border: 1px solid #d4d4d4; border-bottom: none; border-top: none; z-index: 1001; top: 100%; left: 0; right: 0; max-height: 200px; overflow-y: auto; background-color: #ffffff; }
+.autocomplete-items div { padding: 10px; cursor: pointer; border-bottom: 1px solid #d4d4d4; }
+.autocomplete-items div:hover { background-color: #e9e9e9; }
+
+/* --- Matrise-spesifikk styling --- */
+.overview-tables .matrix-table th { background-color: #6A8E7F; }
+#oversight-plan-details-table-container { margin-top: 40px; }
+
+/* SPESIFIKKE REGLER FOR TABELL B */
+
+/* Definerer grid for både header og innhold i Seksjon B */
+.b-section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
     position: relative;
 }
 
-.autocomplete-items {
+/* Stil for de nye, delte headerne i Seksjon B */
+.dual-input-header {
+    /* ENDRING: Komprimerer kolonnene i headeren */
+    grid-template-columns: 4fr 1.5fr 1.5fr 1fr;
+}
+
+/* Legger til vertikal skillelinje for Seksjon B */
+.b-section-grid > *:first-child::after {
+    content: '';
     position: absolute;
-    border: 1px solid #d4d4d4;
-    border-bottom: none;
-    border-top: none;
-    z-index: 99;
-    top: 100%;
-    left: 0;
-    right: 0;
-    max-height: 400px; /* Justerbar høyde */
-    overflow-y: auto;
-    background-color: #ffffff;
+    top: 0;
+    right: -20px; /* Halve gap-bredden */
+    height: 100%;
+    width: 1px;
+    background-color: var(--color-border);
 }
 
-.autocomplete-items div {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #d4d4d4;
+/* Mørkere linje i headeren */
+#section-B .header-grid > *:first-child::after {
+    background-color: #6c757d;
 }
 
-.autocomplete-items div:hover {
-    background-color: #e9e9e9;
+/* ENDRING: Komprimerer kolonnene i selve radene for et strammere utseende */
+#section-B .input-row.dual-input {
+    grid-template-columns: 4fr 1.5fr 1.5fr 1fr;
 }
 
-/* NY REGEL: Egen farge for de to øverste matrise-tabellene */
-.overview-tables .matrix-table th {
-    background-color: #6A8E7F; /* Dempet Grønn */
-}
-
-/* NY REGEL: Økt avstand for den store oversiktstabellen */
-#oversight-plan-details-table-container {
-    margin-top: 40px; /* Økt fra 20px til 40px */
+/* Responsive regler for Seksjon B */
+@media (max-width: 1200px) { 
+    .b-section-grid { 
+        grid-template-columns: 1fr; 
+        gap: 0;
+    }
+    .b-section-grid > *:first-child::after {
+        display: none;
+    }
+    #section-B .header-grid {
+        display: none;
+    }
+    /* Gjenoppretter original kolonnebredde på små skjermer */
+    #section-B .input-row.dual-input {
+        grid-template-columns: 5fr 1.5fr 1.5fr 1fr;
+    }
 }
