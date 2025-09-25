@@ -286,7 +286,17 @@ body {
 .footer-links { display: flex; justify-content: flex-end; padding-top: 10px; border-top: 1px solid #eee; }
 .footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
 .footer-links a:hover { text-decoration: underline; }
-.invalid { border-color: #dc3545 !important; }
+select.invalid, 
+input.invalid {
+    border: 2px solid #dc3545 !important;
+    background-color: #f8d7da;
+}
+
+/* For de nye, egendefinerte select-boksene med ikoner */
+.select-selected.invalid {
+    border: 2px solid #dc3545 !important;
+    background-color: #f8d7da;
+}
 
 .gauge-label { margin-top: 8px; font-weight: bold; font-size: 0.9em; padding: 3px 8px; border-radius: 4px; transition: color 0.5s, background-color 0.5s; }
 .gauge-label.label-green { color: #155724; background-color: #d4edda; }

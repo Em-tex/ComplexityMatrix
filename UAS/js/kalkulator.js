@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         total: 147
     };
     
-    const AUDIT_FIELDS_MAX_SCORE = 27; 
+    const AUDIT_FIELDS_MAX_SCORE = 22; 
     const INITIAL_APPROVAL_MAX_SCORE = 7;
 
     const fieldData = [
