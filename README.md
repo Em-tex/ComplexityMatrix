@@ -10,48 +10,49 @@ Verktøyene er designet for å gi en standardisert poengsum basert på en rekke 
 
 Prosjektet er organisert i undermapper for hver type operasjon:
 
-/ComplexityMatrix
-|-- index.html                  <-- Hovedsiden med lenker til de ulike kalkulatorene
-|-- css/
-|   |-- stilark.css             <-- Stilark for hovedsiden
-|-- smallLogo.png               <-- Favicon for prosjektet
-|-- README.md                   <-- Denne filen
-|
-|-- /FixedWing                  <-- Mappe for Fixed Wing-kalkulatoren
-|   |-- fixed-wing.html         <-- Hovedsiden for kalkulatoren
-|   |-- oversikt.html           <-- En side som viser alle poengreglene
-|   |-- /css
-|   |   |-- stil.css
-|   |   |-- oversikt_stil.css
-|   |-- /js
-|   |   |-- kalkulator.js         <-- Hovedlogikken for kalkulatoren
-|   |   |-- oversikt_bygger.js  <-- Skript som bygger oversiktssiden
-|   |-- /data
-|       |-- operators.json      <-- Liste over operatører for nedtrekksmeny
-|       |-- scoring.json        <-- Alle poengreglene for kalkulatoren
-|
-|-- /Rotary                     <-- Mappe for Rotary Wing (helikopter)
-|   |-- (lignende filstruktur)
-|
-|-- /UAS                        <-- Mappe for UAS (droner)
-|   |-- (lignende filstruktur)
-|
-|-- /CAMO                       <-- Mappe for CAMO-kalkulatoren
-|   |-- (lignende filstruktur)
-|
-|-- /Part145                    <-- Mappe for Part145-kalkulatoren
-|   |-- (lignende filstruktur)
-|
-|-- /MSAT                       <-- Mappe for Management System Assessment Tool
-    |-- msat.html               <-- Hovedsiden for verktøyet
-    |-- /css
-    |   |-- style.css
-    |-- /js
-    |   |-- calculator.js       <-- Hovedlogikken for verktøyet
-    |-- /data
-        |-- msat_data.json      <-- Spørsmål og struktur for skjemaet
-        |-- scoring.json        <-- Poengregler for P, S, O, E
-        |-- organisation_types.json <-- Liste over organisasjonstyper for autofullføring
+/ComplexityMatrix/
+├── index.html                  <-- Hovedsiden med lenker til kalkulatorene
+├── README.md                   <-- Denne filen
+├── smallLogo.png               <-- Favicon for prosjektet
+├── css/
+│   └── stilark.css             <-- Stilark for hovedsiden
+│
+├── FixedWing/                  <-- Mappe for Fixed Wing-kalkulatoren
+│   ├── fixed-wing.html         <-- Hovedsiden for kalkulatoren
+│   ├── oversikt.html           <-- En side som viser alle poengreglene
+│   ├── css/
+│   │   ├── stil.css
+│   │   └── oversikt_stil.css
+│   ├── js/
+│   │   ├── kalkulator.js       <-- Hovedlogikken
+│   │   └── oversikt_bygger.js  <-- Skript som bygger oversiktssiden
+│   └── data/
+│       ├── operators.json      <-- Liste over operatører
+│       └── scoring.json        <-- Alle poengreglene
+│
+├── Rotary/                     <-- Mappe for Rotary Wing (helikopter)
+│   └── (lignende filstruktur)
+│
+├── UAS/                        <-- Mappe for UAS (droner)
+│   └── (lignende filstruktur)
+│
+├── CAMO/                       <-- Mappe for CAMO-kalkulatoren
+│   └── (lignende filstruktur)
+│
+├── Part145/                    <-- Mappe for Part145-kalkulatoren
+│   └── (lignende filstruktur)
+│
+└── MSAT/                       <-- Mappe for Management System Assessment Tool
+    ├── msat.html               <-- Hovedsiden for verktøyet
+    ├── css/
+    │   └── style.css
+    ├── js/
+    │   └── calculator.js       <-- Hovedlogikken
+    └── data/
+        ├── msat_data.json      <-- Spørsmål og struktur for skjemaet
+        ├── scoring.json        <-- Poengregler for P, S, O, E
+        └── organisation_types.json <-- Liste over organisasjonstyper
+
 
 ## Hvordan det fungerer
 
@@ -79,3 +80,5 @@ Prosjektet bruker en definert fargepalett for å sikre et konsistent visuelt utt
 | Veldig Lys Blå | `#EEFAFF` | `238, 250, 255` | Bakgrunnsfarge for seksjonsbokser.                 |
 | Sort           | `#000000` | `0, 0, 0`       | Brødtekst og generelle grenser.                    |
 | Hvit           | `#FFFFFF` | `255, 255, 255` | Bakgrunnsfarge for hovedinnhold, tekst i fargede hoder. |
+
+
