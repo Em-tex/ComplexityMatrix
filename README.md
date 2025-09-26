@@ -10,6 +10,7 @@ Verktøyene er designet for å gi en standardisert poengsum basert på en rekke 
 
 Prosjektet er organisert i undermapper for hver type operasjon:
 
+```
 /ComplexityMatrix/
 ├── index.html                  <-- Hovedsiden med lenker til kalkulatorene
 ├── README.md                   <-- Denne filen
@@ -52,7 +53,7 @@ Prosjektet er organisert i undermapper for hver type operasjon:
         ├── msat_data.json      <-- Spørsmål og struktur for skjemaet
         ├── scoring.json        <-- Poengregler for P, S, O, E
         └── organisation_types.json <-- Liste over organisasjonstyper
-
+```
 
 ## Hvordan det fungerer
 
