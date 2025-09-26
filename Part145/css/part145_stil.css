@@ -69,33 +69,53 @@ body {
 .matrix-table .row-header { font-weight: bold; background-color: var(--color-gray-light); }
 .matrix-table td.highlight { background-color: var(--color-orange) !important; color: white; font-weight: bold; }
 #oversight-plan-details-table .highlight-row { background-color: var(--color-orange) !important; color: white; }
+#oversight-plan-details-table-container { margin-top: 20px; }
+
 
 /* --- Result Colors --- */
 .perf-E, .comp-Non-complex, .comp-L, .crit-low, .period-ok { background-color: var(--color-green-bg); color: var(--color-green-text); }
 .perf-O, .perf-S, .comp-M, .crit-normal, .crit-attentionreq { background-color: var(--color-yellow-bg); color: var(--color-yellow-text); }
 .perf-P, .comp-H, .crit-critical, .period-no { background-color: var(--color-red-bg); color: var(--color-red-text); }
 
-/* --- Input Panel --- */
+/* --- Input Panel (Forenklet) --- */
 #input-panel h2 { color: var(--color-main-blue); text-align: center; margin-top: 0; }
 .input-section-box { 
     border: 1px solid #e0e0e0; 
     border-radius: 8px; 
     padding: 20px; 
-    margin-bottom: 40px; 
+    margin-bottom: 25px; 
 }
 .input-section-box h3 { background-color: var(--color-light-blue-bg); border-left: 5px solid var(--color-main-blue); color: var(--color-main-blue); padding: 12px 15px; border-radius: 4px; margin-top: 0; font-size: 1.2em; }
-.input-table-header { display: grid; gap: 15px; font-weight: bold; padding: 10px; background-color: var(--color-gray-dark); color: white; border-radius: 4px; text-align: center; }
+
+.input-table-header { 
+    display: grid; 
+    gap: 15px; 
+    font-weight: bold; 
+    padding: 10px; 
+    background-color: var(--color-gray-dark); 
+    color: white; 
+    border-radius: 4px; 
+    text-align: center; 
+    margin-bottom: 10px;
+}
 .input-table-header.perf-only { grid-template-columns: 5fr 2fr 1fr; }
-.input-table-header.dual-input { grid-template-columns: 5fr 1.5fr 1.5fr 1fr; margin-bottom: 10px; }
+.input-table-header.dual-input { grid-template-columns: 5fr 1.5fr 1.5fr 1fr; }
 
+.input-row { 
+    display: grid; 
+    gap: 15px; 
+    align-items: center; 
+    padding: 8px 10px; 
+    min-height: 40px; 
+}
 
-/* NY OG FORBEDRET LAYOUT FOR INPUT-TABELLER */
-.input-row { display: grid; gap: 15px; align-items: center; padding: 8px 10px; min-height: 40px; }
-.section-group { border-top: 1px solid var(--color-border); }
-.input-section-box > .section-group:first-child,
-.column > .section-group:first-child {
+.section-group { 
+    border-top: 1px solid var(--color-border); 
+}
+.input-section-box > .section-group:first-of-type {
     border-top: none; /* Fjerner unødvendig linje øverst */
 }
+
 .input-row.main-row .input-label { font-weight: bold; }
 .input-row.sub-row .input-label { font-weight: normal; color: var(--color-gray-medium); padding-left: 25px; }
 .input-row.sub-row { border-top: 1px dashed var(--color-border); }
@@ -103,76 +123,15 @@ body {
 .input-row.dual-input { grid-template-columns: 5fr 1.5fr 1.5fr 1fr; }
 .input-row.sub-row .input-label { display: flex; align-items: center; gap: 8px; }
 
-
-/* SPESIFIKKE REGLER FOR TABELL A */
-
-/* Definerer grid for både header og innhold */
-.a-section-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    position: relative;
+.form-input { 
+    width: 100%; 
+    padding: 8px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    font-family: 'Overpass', sans-serif; 
+    font-size: 1em; 
+    box-sizing: border-box; 
 }
-
-/* Stil for de nye, enkle headerne */
-.single-column-header {
-    grid-template-columns: 5fr 2fr 1fr;
-}
-
-.header-grid {
-    margin-bottom: 10px;
-}
-
-/* Legger til den vertikale skillelinjen midt i mellomrommet */
-.a-section-grid > *:first-child::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    /* Plasserer linjen midt i gap'et (40px / 2 = 20px) */
-    right: -20px;
-    height: 100%;
-    width: 1px;
-    background-color: var(--color-border);
-}
-
-/* Sørger for at linjen i headeren blir mørkere så den synes mot den mørke bakgrunnen */
-.header-grid > *:first-child::after {
-    background-color: #6c757d; /* Litt lysere enn header-bakgrunnen */
-}
-
-
-.a-section-grid .column .section-group:not(:first-child) {
-    border-top: 1px solid var(--color-border);
-}
-
-#section-A > .input-table-header.perf-only { display: none; }
-
-
-@media (max-width: 1200px) { 
-    /* Stabler grid-kolonnene på mindre skjermer */
-    .a-section-grid { 
-        grid-template-columns: 1fr; 
-        gap: 0;
-    } 
-    /* Fjerner den vertikale skillelinjen når alt er stablet */
-    .a-section-grid > *:first-child::after {
-        display: none;
-    }
-
-    .a-section-grid .column .section-group {
-        border-top: 1px solid var(--color-border);
-    }
-    .a-section-grid .column:first-child .section-group:first-child {
-        border-top: none;
-    }
-    
-    /* Viser den gamle, enkle headeren og skjuler den nye doble */
-    .header-grid { display: none; } 
-    #section-A > .input-table-header.perf-only { display: grid; } 
-}
-
-
-.form-input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Overpass', sans-serif; font-size: 1em; box-sizing: border-box; }
 .input-control.multi-input { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .input-control.dual-control { border-left: 2px solid var(--color-border); padding-left: 15px; }
 .input-control input.hidden { display: none; }
@@ -197,62 +156,3 @@ body {
 .autocomplete-items { position: absolute; border: 1px solid #d4d4d4; border-bottom: none; border-top: none; z-index: 1001; top: 100%; left: 0; right: 0; max-height: 500px; overflow-y: auto; background-color: #ffffff; }
 .autocomplete-items div { padding: 10px; cursor: pointer; border-bottom: 1px solid #d4d4d4; }
 .autocomplete-items div:hover { background-color: #e9e9e9; }
-
-/* --- Matrise-spesifikk styling --- */
-.overview-tables .matrix-table th { background-color: #6A8E7F; }
-#oversight-plan-details-table-container { margin-top: 40px; }
-
-/* SPESIFIKKE REGLER FOR TABELL B */
-
-/* Definerer grid for både header og innhold i Seksjon B */
-.b-section-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    position: relative;
-}
-
-/* Stil for de nye, delte headerne i Seksjon B */
-.dual-input-header {
-    /* ENDRING: Komprimerer kolonnene i headeren */
-    grid-template-columns: 4fr 1.5fr 1.5fr 1fr;
-}
-
-/* Legger til vertikal skillelinje for Seksjon B */
-.b-section-grid > *:first-child::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: -20px; /* Halve gap-bredden */
-    height: 100%;
-    width: 1px;
-    background-color: var(--color-border);
-}
-
-/* Mørkere linje i headeren */
-#section-B .header-grid > *:first-child::after {
-    background-color: #6c757d;
-}
-
-/* ENDRING: Komprimerer kolonnene i selve radene for et strammere utseende */
-#section-B .input-row.dual-input {
-    grid-template-columns: 4fr 1.5fr 1.5fr 1fr;
-}
-
-/* Responsive regler for Seksjon B */
-@media (max-width: 1200px) { 
-    .b-section-grid { 
-        grid-template-columns: 1fr; 
-        gap: 0;
-    }
-    .b-section-grid > *:first-child::after {
-        display: none;
-    }
-    #section-B .header-grid {
-        display: none;
-    }
-    /* Gjenoppretter original kolonnebredde på små skjermer */
-    #section-B .input-row.dual-input {
-        grid-template-columns: 5fr 1.5fr 1.5fr 1fr;
-    }
-}
