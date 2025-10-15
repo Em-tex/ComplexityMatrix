@@ -13,7 +13,6 @@
         "101-200": 4,
         ">201": 5
     },
-    "cabin-crew": { "No": 0, "Yes": 1 },
     "technical-crew": { "No": 0, "Yes": 1 },
     "leading-personnel-roles": {
         "No": 0,
@@ -48,6 +47,14 @@
     },
     "bases-permanently": {
         "1": 1, "2-5": 2, ">5": 3
+    },
+    "subcontractors": {
+        "0": 0,
+        "1-5": 1,
+        "6-10": 2,
+        "11-20": 3,
+        "20-50": 4,
+        ">50": 5
     },
     "ifr-imc-operation": { "No": 0, "Yes": 2 },
     "certificate": {

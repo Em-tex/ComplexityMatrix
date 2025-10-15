@@ -4,18 +4,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     let scoringRules = {};
 
     const MAX_SCORES = {
-        resources: 17, 
+        resources: 16, 
         fleet: 41, 
-        operations: 52,
+        operations: 57,
         approvals: 19, 
-        total: 129
+        total: 133
     };
 
     const fieldData = [
         // Resources
         { id: 'staff-employed', label: 'Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
-        { id: 'cabin-crew', label: 'Cabin Crew Carried', section: 'resources' },
         { id: 'technical-crew', label: 'Technical Crew Carried', section: 'resources' },
         { id: 'leading-personnel-roles', label: 'Leading personnel has several roles', section: 'resources' },
         // Fleet
@@ -29,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'number-operation-types', label: 'Number of Operation types', section: 'operations' },
         { id: 'operation-complexity', label: 'Operation Complexity', section: 'operations' },
         { id: 'bases-permanently', label: 'Number of bases where aircraft and/or crews are permanently based', section: 'operations' },
+        { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
         { id: 'ifr-imc-operation', label: 'IFR/VFR operation', section: 'operations' },
         { id: 'certificate', label: 'Certificate', section: 'operations' },
         { id: 'hr-spo', label: 'HR SPO', section: 'operations' },

@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Resources
         'staff-employed': { label: 'Number of staff employed for the operation', section: 'resources' },
         'pilots-employed': { label: 'Number of pilots employed', section: 'resources' },
-        'cabin-crew': { label: 'Cabin Crew Carried', section: 'resources' },
         'technical-crew': { label: 'Technical Crew Carried', section: 'resources' },
         'leading-personnel-roles': { label: 'Leading personnel has several roles', section: 'resources' },
         // Fleet
@@ -17,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'number-operation-types': { label: 'Number of Operation types', section: 'operations' },
         'operation-complexity': { label: 'Operation Complexity', section: 'operations' },
         'bases-permanently': { label: 'Number of bases where aircraft and/or crews are permanently based', section: 'operations' },
+        'subcontractors': { label: 'Number of Subcontractors', section: 'operations' },
         'ifr-imc-operation': { label: 'IFR/VFR operation', section: 'operations' },
         'certificate': { label: 'Certificate', section: 'operations' },
         'hr-spo': { label: 'HR SPO', section: 'operations' },
@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         "<10": "< 10", "11-30": "11-30", "31-100": "31-100", "101-200": "101-200", ">201": "> 201",
         "2-3": "2-3", "4-6": "4-6", ">6": "> 6",
         "1-5": "1-5", "6-10": "6-10", "11-15": "11-15", "16-20": "16-20", ">20": "> 20",
+        "11-20": "11-20", "20-50": "20-50", ">50": "> 50", /* Added for subcontractors */
         "2-5": "2-5", ">5": "> 5",
         ">2": "> 2",
         ">3": "> 3"

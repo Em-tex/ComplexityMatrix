@@ -3,16 +3,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     let scoringRules = {};
 
     const MAX_SCORES = {
-        resources: 20, 
+        resources: 22, 
         fleet: 20, 
         operations: 59,
         approvals: 17, 
-        total: 116
+        total: 118
     };
 
     const fieldData = [
         { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
+        { id: 'cabin-crew', label: 'Cabin crew carried', section: 'resources' },
         { id: 'leading-personnel-roles', label: 'Leading personel has several roles', section: 'resources' },
         { id: 'types-operated', label: 'Number of types operated', section: 'fleet' },
         { id: 'aircraft-mops-over-19', label: 'Number of aircraft with MOPSC of MORE than 19 seats', section: 'fleet' },
