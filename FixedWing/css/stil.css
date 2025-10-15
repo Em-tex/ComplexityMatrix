@@ -109,16 +109,19 @@ body {
 
 .tooltip-container {
     position: relative;
+    top: -2px; /* <-- Legg til denne linjen for å flytte den opp */
     display: inline-block;
     margin-left: 8px;
     cursor: help;
 }
 .tooltip-icon {
     display: inline-flex;
-    align-items: center;
+    /* align-items: center;  <-- Fjern eller kommenter ut denne */
     justify-content: center;
     width: 16px;
     height: 16px;
+    padding-top: 1px;       /* <-- Legg til denne for å justere */
+    box-sizing: border-box; /* <-- Legg til for å unngå at boksen blir større */
     border-radius: 50%;
     background-color: #6c757d;
     color: white;
