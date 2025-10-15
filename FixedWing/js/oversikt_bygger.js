@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Resources
         'staff-employed': { label: 'Total Number of staff employed for the operation', section: 'resources' },
         'pilots-employed': { label: 'Number of pilots employed', section: 'resources' },
-        'cabin-crew': { label: 'Cabin crew carried', section: 'resources' },
         'leading-personnel-roles': { label: 'Leading personel has several roles', section: 'resources' },
         // Fleet
         'types-operated': { label: 'Number of types operated', section: 'fleet' },
