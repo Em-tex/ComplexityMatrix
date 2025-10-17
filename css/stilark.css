@@ -4,6 +4,10 @@ body {
     text-align: center;
     padding: 2em;
     color: #333;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Gjemmer hoved-H1, men beholder den for skjermlesere */
@@ -19,23 +23,43 @@ body {
     border: 0;
 }
 
+/* Hoved-wrapper for å lage en fleksibel grid */
+.main-content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2em; /* Mellomrom mellom boksene */
+    width: 100%;
+    max-width: 1600px; /* Maksimal bredde for innholdet */
+}
+
 .section-container {
-    max-width: 900px;
-    margin: 0 auto 3.5em auto; /* God avstand mellom seksjonene */
+    background-color: #EEFAFF; /* Veldig Lys Blå fra fargeprofil */
+    border: 1px solid #d4eaf1;
+    border-radius: 8px;
+    padding: 2em;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    
+    /* Fleksibel bredde-kontroll */
+    flex-grow: 1;
+    flex-basis: 300px; /* Minimums-"ønske" for bredde før wrapping */
+    max-width: 450px; /* Maks bredde per boks */
 }
 
 h2 {
-    font-size: 2.2em;
-    color: #000000; /* Helt svart */
+    font-size: 2em;
+    color: #000000; /* Endret til svart */
     font-weight: 600;
-    margin-bottom: 1em;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    /* cursor: help; er fjernet */
 }
 
 .button-group {
     display: flex;
     justify-content: center;
     gap: 1em;
-    flex-wrap: wrap; /* Knapper legger seg under hverandre om det blir for trangt */
+    flex-wrap: wrap; 
 }
 
 .button {
@@ -45,35 +69,22 @@ h2 {
     padding: 0.8em 1.5em;
     font-size: 1.1em;
     text-decoration: none;
-    color: #ffffff;
-    background-color: #0056b3; /* Endret til den mørkeblå fargen */
+    color: #FFFFFF;
+    background-color: #03477F;
     border: none;
     border-radius: 6px;
-    transition: background-color 0.2s ease-in-out;
-    min-width: 220px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+    min-width: 200px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .button:hover {
-    background-color: #00448f; /* En litt mørkere nyanse for hover-effekt */
+    background-color: #023663;
+    transform: translateY(-2px);
 }
 
 .button i, .button .material-symbols-outlined {
     margin-right: 0.8em;
     font-size: 1.3em;
-}
-
-/* ... (all CSS fra forrige svar) ... */
-.form-row.sub-header .form-cell {
-    grid-column: 1 / -1; /* Lar cellen strekke seg over alle kolonner */
-    background-color: #f8f9fa;
-    font-weight: bold;
-    color: #495057;
-    border-bottom: 1px solid #ddd;
-}
-.form-cell.indented {
-    padding-left: 2.5em;
-}
-.gauge-bg { /* Sørger for at fargen er riktig fra start */
-    background: conic-gradient(from 180deg at 50% 100%, #ff152c 5%, #fff025 50%, #009122 95%);
+    vertical-align: middle;
 }

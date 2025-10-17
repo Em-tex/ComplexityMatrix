@@ -2,7 +2,7 @@
 <html lang="no">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CAA NOR - Vurderingsverktøy</title>
     <link rel="icon" href="smallLogo.png" type="image/png">
     
@@ -15,50 +15,65 @@
 
     <h1 class="visually-hidden">Vurderingsverktøy for Luftfart</h1>
 
-    <div class="section-container">
-        <h2>Complexity Matrix</h2>
-        <div class="button-group">
-            <a href="FixedWing/fixed-wing.html" class="button">
-                <i class="fa-solid fa-plane"></i>
-                Fixed Wing
-            </a>
-            <a href="https://training.caa.no/ComplexityMatrix/Rotor/rotor.html" class="button">
-                <i class="fa-solid fa-helicopter"></i>
-                Rotor Wing
-            </a>
+    <main class="main-content-wrapper">
+        <div class="section-container">
+            <h2 title="Flyoperativ">FFO</h2>
+            <div class="button-group">
+                <a href="FixedWing/fixed-wing.html" class="button">
+                    <i class="fa-solid fa-plane"></i>
+                    Fixed Wing
+                </a>
+                <a href="Rotor/rotor.html" class="button">
+                    <i class="fa-solid fa-helicopter"></i>
+                    Rotor Wing
+                </a>
+            </div>
         </div>
-    </div>
 
-    <div class="section-container">
-        <h2>Risk Profile</h2>
-        <div class="button-group">
-            <a href="https://training.caa.no/ComplexityMatrix/ATO/ato.html" class="button">
-                <i class="fa-solid fa-graduation-cap"></i>
-                ATO
-            </a>
-            <a href="https://training.caa.no/ComplexityMatrix/UAS/UAS.html" class="button">
-                <span class="material-symbols-outlined">drone_2</span>
-                UAS
-            </a>
+        <div class="section-container">
+            <h2 title="Luftdyktighet">FLD</h2>
+            <div class="button-group">
+                <a href="CAMO/camo.html" class="button">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                    Part-CAMO
+                </a>
+                <a href="Part145/part145.html" class="button">
+                    <i class="fa-solid fa-wrench"></i>
+                    Part-145
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="section-container">
-        <h2>Organisation Assessment</h2>
-        <div class="button-group">
-            <a href="CAMO/camo.html" class="button">
-                <i class="fa-solid fa-clipboard-check"></i>
-                Part-CAMO
-            </a>
-            <a href="Part145/part145.html" class="button">
-                <i class="fa-solid fa-wrench"></i>
-                Part-145
-            </a>
-            <a href="https://training.caa.no/ComplexityMatrix/MSAT/msat.html" class="button">
-                <i class="fa-solid fa-gear"></i>
-                MSAT
-            </a>
+
+        <div class="section-container">
+            <h2 title="Operativ utdanning, flymedisin og arbeidstyn">FOA</h2>
+            <div class="button-group">
+                <a href="ATO/ato.html" class="button">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    ATO
+                </a>
+            </div>
         </div>
-    </div>
+        
+        <div class="section-container">
+            <h2 title="Ubemannet luftfart">FUL</h2>
+            <div class="button-group">
+                <a href="UAS/UAS.html" class="button">
+                    <span class="material-symbols-outlined">drone_2</span>
+                    UAS
+                </a>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <h2>Felles</h2>
+            <div class="button-group">
+                <a href="MSAT/msat.html" class="button">
+                    <i class="fa-solid fa-gear"></i>
+                    MSAT
+                </a>
+            </div>
+        </div>
+    </main>
     
 </body>
 </html>

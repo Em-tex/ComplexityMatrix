@@ -185,7 +185,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     function saveData() { const dataToSave = {}; document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => { if (el.id) dataToSave[el.id] = el.value; }); localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave)); }
     function loadData() { const savedData = localStorage.getItem(STORAGE_KEY); if (savedData) { const data = JSON.parse(savedData); for (const id in data) { const el = document.getElementById(id); if (el) el.value = data[id]; } } }
     function clearForm() { if (confirm("Are you sure you want to clear the form? All saved data will be deleted.")) { localStorage.removeItem(STORAGE_KEY); window.location.reload(); } }
-    function printPDF() { window.print(); }
     function getSelectedText(selectId) { const selectElement = document.getElementById(selectId); if (selectElement && selectElement.selectedIndex >= 0) { return selectElement.options[selectElement.selectedIndex].text; } return ""; }
 
     function downloadCSV() {
@@ -196,19 +195,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         try { const today = new Date(); formattedDate = today.toLocaleDateString('no-NO').replace(/\./g, '-'); if (dateValue) { const date = new Date(dateValue); const inputDay = String(date.getDate()).padStart(2, '0'); const inputMonth = String(date.getMonth() + 1).padStart(2, '0'); const inputYear = date.getFullYear(); formattedDate = `${inputDay}-${inputMonth}-${inputYear}`; } } catch (e) { const today = new Date(); formattedDate = today.toLocaleDateString('no-NO'); }
         const fileName = `${orgName} - ${orgType} - MSAT - ${formattedDate}.csv`;
 
+        // --- START OF CHANGES ---
+        
+        // Determine if extension is possible
+        const financialScore = scoringRules['extension-scores']?.financial?.[document.getElementById('q-financial-management').value] ?? null;
+        const level1Score = scoringRules['extension-scores']?.level1?.[document.getElementById('q-level1-findings').value] ?? null;
+        const criticalItemsMet = criticalItemsIds.every(id => {
+            const cell = document.getElementById(`q${id.replace(/\./g, '-')}-value`);
+            return cell && parseInt(cell.textContent) === 7;
+        });
+        const financialMet = financialScore !== null && financialScore >= 4;
+        const level1Met = level1Score !== null && level1Score === 7;
+        const allConditionsMet = criticalItemsMet && financialMet && level1Met;
+        const extensionPossible = allConditionsMet ? 'Yes' : 'No';
+
+        // Define headers in new order
         const primaryHeaders = ['Organisation Name', 'Organisation type', 'Assessed By', 'Date', 'Empic ID', 'Policy Avg', 'Risk Avg', 'Assurance Avg', 'Promotion Avg', 'Additional Avg', 'Total Avg Score'];
-        const detailHeaders = fieldData.map(field => [`${field.label} (Choice)`, `${field.label} (Score)`]).flat();
-        const extensionHeaders = ['6.1 Financial management (Choice)', '6.1 Financial management (Score)', '6.2 Level 1 findings (Choice)', '6.2 Level 1 findings (Score)'];
+        const extensionPossibleHeader = ['Extension Possible'];
         const commentFields = [ { id: 'comments-compliance', header: 'Comments (Compliance)' }, { id: 'comments-flightops', header: 'Comments (Flight Ops)' }, { id: 'comments-safety', header: 'Comments (Safety Dept)' }, { id: 'comments-training', header: 'Comments (Training)' }, { id: 'comments-planning', header: 'Comments (Planning & FTL)' }, { id: 'comments-reporting', header: 'Comments (Reporting)' }, { id: 'comments-other', header: 'Comments (Other)' } ];
         const commentHeaders = commentFields.map(f => f.header);
-        const allHeaders = primaryHeaders.concat(detailHeaders, extensionHeaders, commentHeaders);
+        const detailHeaders = fieldData.map(field => [`${field.label} (Choice)`, `${field.label} (Score)`]).flat();
+        const extensionHeaders = ['6.1 Financial management (Choice)', '6.1 Financial management (Score)', '6.2 Level 1 findings (Choice)', '6.2 Level 1 findings (Score)'];
         
+        const allHeaders = primaryHeaders.concat(extensionPossibleHeader, commentHeaders, detailHeaders, extensionHeaders);
+        
+        // Gather data in new order
         const primaryData = [ `"${orgName.replace(/"/g, '""')}"`, `"${orgType.replace(/"/g, '""')}"`, `"${document.getElementById('assessed-by').value.replace(/"/g, '""')}"`, `"${dateValue}"`, `"${document.getElementById('empic-id').value.replace(/"/g, '""')}"`, document.getElementById('policy-avg').textContent, document.getElementById('risk-avg').textContent, document.getElementById('assurance-avg').textContent, document.getElementById('promotion-avg').textContent, document.getElementById('additional-avg').textContent, document.getElementById('total-gauge-avg-text').textContent ];
+        const extensionPossibleData = [extensionPossible];
+        const commentData = commentFields.map(field => { const textarea = document.getElementById(field.id); const value = textarea ? textarea.value : ''; return `"${value.replace(/"/g, '""').replace(/\n/g, ' ')}"`; });
         const detailData = fieldData.map(field => { const selectedText = getSelectedText(field.id); const scoreText = document.getElementById(field.id + '-value').textContent; return [`"${selectedText.replace(/"/g, '""')}"`, scoreText]; }).flat();
         const extensionData = [ `"${getSelectedText('q-financial-management').replace(/"/g, '""')}"`, document.getElementById('q-financial-management-value').textContent, `"${getSelectedText('q-level1-findings').replace(/"/g, '""')}"`, document.getElementById('q-level1-findings-value').textContent ];
-        const commentData = commentFields.map(field => { const textarea = document.getElementById(field.id); const value = textarea ? textarea.value : ''; return `"${value.replace(/"/g, '""').replace(/\n/g, ' ')}"`; });
 
-        const allData = primaryData.concat(detailData, extensionData, commentData);
+        const allData = primaryData.concat(extensionPossibleData, commentData, detailData, extensionData);
+
+        // --- END OF CHANGES ---
+
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
@@ -278,7 +299,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
         document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
-        document.getElementById('print-pdf-button').addEventListener('click', printPDF);
         
         const loadCsvButton = document.getElementById('load-csv-button');
         const csvFileInput = document.getElementById('csv-file-input');

@@ -367,7 +367,8 @@ body {
 .action-buttons button, .action-buttons a[role="button"] { padding: 10px 20px; font-size: 1em; color: white; border: none; border-radius: 5px; cursor: pointer; transition: opacity 0.2s; display: inline-flex; align-items: center; text-decoration: none; font-family: 'Overpass', sans-serif;}
 .action-buttons button:hover, .action-buttons a[role="button"]:hover { opacity: 0.9; }
 #download-csv-button { background-color: #28a745; }
-#print-pdf-button { background-color: #6f42c1; }
+#sharepoint-upload-button { background-color: #0078D4; }
+#msat-overview-button { background-color: #6c757d; }
 #clear-form-button { background-color: #dc3545; }
 #load-csv-button { background-color: #ffc107; color: #212529; }
 .svg-icon { height: 1.2em; width: 1.2em; margin-right: 0.5em; fill: currentColor; }
