@@ -127,3 +127,25 @@ body {
     border-top: 1px solid #e9ecef;
 }
 /* --- SLUTT ENDRING --- */
+
+.home-button {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 1.8em; /* Juster størrelsen etter behov */
+    color: #03477F; /* Bruker mørkeblå farge fra profilen */
+    text-decoration: none;
+    z-index: 1001; /* Sikrer at den ligger over annet innhold */
+}
+.home-button:hover {
+    color: #023663; /* Litt mørkere ved hover */
+}
+/* Juster body padding for å unngå overlapp med knappen om nødvendig */
+body {
+    padding-top: 50px; /* Eksempel, juster verdien etter behov */
+    position: relative; /* Nødvendig for absolutt posisjonering av barn */
+}
+/* Noen sider kan trenge spesifikk justering */
+.header-container, .header {
+    margin-top: 10px; /* Litt ekstra margin for header på noen sider */
+}
