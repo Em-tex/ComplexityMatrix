@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     let scoringRules = {};
 
     const MAX_SCORES = {
-        resources: 22, 
-        fleet: 20, 
+        resources: 22,
+        fleet: 20,
         operations: 59,
-        approvals: 17, 
+        approvals: 17,
         total: 118
     };
 
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (!scoringRules[fieldId] || !selectValue) return 0;
-        
+
         const rule = scoringRules[fieldId][selectValue];
         if (typeof rule === 'object' && rule.type === 'dependent') {
             return rule.scores[pilotsValue] ?? rule.default;
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateGauge(section, totals[section], MAX_SCORES[section]);
             grandTotal += totals[section];
         }
-        
+
         document.getElementById('total-gauge-sum-text').textContent = grandTotal;
         updateGauge('total', grandTotal, MAX_SCORES.total);
 
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
     }
-    
+
     function clearForm() {
         if (confirm("Er du sikker på at du vil tømme skjemaet? All lagret data vil bli slettet.")) {
             localStorage.removeItem(STORAGE_KEY);
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             filledByInput.classList.add('invalid');
             isValid = false;
         }
-        
+
         fieldData.forEach(field => {
             const select = document.getElementById(field.id);
             if (select && select.value === "") {
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const score = document.getElementById(field.id + '-value').textContent;
             return [`"${selectedText.replace(/"/g, '""')}"`, score];
         }).flat();
-        
+
         const allData = primaryData.concat(detailData);
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('operator-navn').value = data[headerMap['Operatørnavn']] || '';
             document.getElementById('filled-by').value = data[headerMap['Fylt ut av']] || '';
             document.getElementById('date').value = data[headerMap['Dato']] || '';
-            
+
             fieldData.forEach(field => {
                 const select = document.getElementById(field.id);
                 if (select) {
@@ -268,11 +268,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (commentsIndex !== undefined) {
                 document.getElementById('comments').value = data[commentsIndex] || '';
             }
-            
+
             updateCalculations();
             alert("CSV-fil lastet inn!");
         };
-        reader.readAsText(file);
+        reader.readAsText(file, "UTF-8"); // Leser som UTF-8
     }
 
     async function init() {
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ]);
             scoringRules = await scoringRes.json();
             const operators = await operatorsRes.json();
-            
+
             const datalist = document.getElementById('operator-list');
             operators.forEach(op => {
                 const option = document.createElement('option');
@@ -303,18 +303,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (sumEl) sumEl.textContent = MAX_SCORES[key];
             if (gaugeEl) gaugeEl.textContent = MAX_SCORES[key];
         });
-        
+
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
             el.addEventListener('change', updateCalculations);
             if (el.matches('input[type="text"], textarea')) {
                 el.addEventListener('keyup', saveData);
             }
         });
-        
+
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
         document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
         document.getElementById('print-pdf-button').addEventListener('click', printPDF);
-        
+
         const loadCsvButton = document.getElementById('load-csv-button');
         const csvFileInput = document.getElementById('csv-file-input');
         loadCsvButton.addEventListener('click', () => csvFileInput.click());
@@ -323,7 +323,55 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('input, select').forEach(el => {
             el.addEventListener('input', () => el.classList.remove('invalid'));
             el.addEventListener('change', () => el.classList.remove('invalid'));
-    });
+        });
+
+        // --- START Dra-og-slipp funksjonalitet ---
+        const dropZone = document.body; // Slipp hvor som helst på siden
+
+        // Forhindre standardoppførsel for å tillate slipp
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        // Visuell feedback når fil dras over
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover-active'), false);
+        });
+
+        // Fjern visuell feedback
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover-active'), false);
+        });
+
+        // Håndter slipp av fil
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+
+            if (files.length > 0) {
+                // Sjekk om filen er en CSV-fil (valgfritt men anbefalt)
+                if (files[0].type === 'text/csv' || files[0].name.toLowerCase().endsWith('.csv')) {
+                    // Simuler et event-objekt som loadCsvFile forventer
+                    const simulatedEvent = {
+                        target: {
+                            files: files
+                        }
+                    };
+                    loadCsvFile(simulatedEvent); // Bruk den eksisterende funksjonen
+                } else {
+                    alert("Vennligst slipp kun CSV-filer.");
+                }
+            }
+        }
+        // --- SLUTT Dra-og-slipp funksjonalitet ---
+
 
         loadData();
         if (!document.getElementById('date').value) {

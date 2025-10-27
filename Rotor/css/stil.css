@@ -261,15 +261,15 @@ body {
 .comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif;}
 
 .action-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-.action-buttons button, .action-buttons a[role="button"] { 
-    padding: 10px 20px; 
-    font-size: 1em; 
-    color: white; 
-    border: none; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    transition: opacity 0.2s; 
-    display: inline-flex; 
+.action-buttons button, .action-buttons a[role="button"] {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: inline-flex;
     align-items: center;
     text-decoration: none;
     font-family: 'Overpass', sans-serif;
@@ -290,8 +290,10 @@ body {
 .footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
 .footer-links a:hover { text-decoration: underline; }
 
-.invalid {
-    border-color: #dc3545 !important;
+/* Stil for valideringsfeil */
+select.invalid, input.invalid {
+    border: 2px solid #dc3545 !important; /* Rød kantlinje */
+    background-color: #f8d7da; /* Svak rød bakgrunn */
 }
 
 .home-button {
@@ -306,12 +308,20 @@ body {
 .home-button:hover {
     color: #023663; /* Litt mørkere ved hover */
 }
-/* Juster body padding for å unngå overlapp med knappen om nødvendig */
+
 body {
     padding-top: 50px; /* Eksempel, juster verdien etter behov */
     position: relative; /* Nødvendig for absolutt posisjonering av barn */
 }
-/* Noen sider kan trenge spesifikk justering */
+
 .header-container, .header {
     margin-top: 10px; /* Litt ekstra margin for header på noen sider */
+}
+
+/* Stil for dra-og-slipp feedback */
+body.dragover-active {
+  outline: 3px dashed #007bff;
+  outline-offset: -10px;
+  background-color: #e9ecef; /* Lys grå bakgrunn */
+  transition: background-color 0.2s ease, outline 0.2s ease; /* Jevn overgang */
 }
