@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const MAX_SCORES = {
         resources: 16,
         fleet: 41,
-        operations: 57,
+        operations: 60,
         approvals: 19,
-        total: 133
+        total: 136
     };
 
     const fieldData = [
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'bases-permanently', label: 'Number of bases where aircraft and/or crews are permanently based', section: 'operations' },
         { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
         { id: 'ifr-imc-operation', label: 'IFR/VFR operation', section: 'operations' },
+        { id: 'single-pilot', label: 'Singlepilot operation', section: 'operations' },
         { id: 'certificate', label: 'Certificate', section: 'operations' },
         { id: 'hr-spo', label: 'HR SPO', section: 'operations' },
         { id: 'group-airline', label: 'Group Airline', section: 'operations' },
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'sar', label: 'SAR', section: 'approvals' },
         { id: 'police-operations', label: 'Police operations', section: 'approvals' },
         { id: 'efb-approval', label: 'EFB Approval', section: 'approvals' },
-        { id: 'fms', label: 'FMS', section: 'approvals' },
+        { id: 'frms', label: 'FRMS', section: 'approvals' },
         { id: 'ato', label: 'ATO', section: 'approvals' }
     ];
 
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!fieldInfo) return 0;
 
         // Handle approvals with specific scores
-        if (fieldId === 'hems' || fieldId === 'hofo' || fieldId === 'ato') {
+        if (fieldId === 'hems' || fieldId === 'hofo' || fieldId === 'ato' || fieldId === 'single-pilot') {
             return scoringRules[fieldId]?.[selectValue] ?? 0;
         }
 

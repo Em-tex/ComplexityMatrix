@@ -57,6 +57,7 @@
         ">50": 5
     },
     "ifr-imc-operation": { "No": 0, "Yes": 2 },
+    "single-pilot": { "N/A": 0, "Yes": 3 },
     "certificate": {
         "AOC": 20, "SPO": 10, "NCC": 0
     },

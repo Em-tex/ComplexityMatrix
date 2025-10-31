@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'bases-permanently': { label: 'Number of bases where aircraft and/or crews are permanently based', section: 'operations' },
         'subcontractors': { label: 'Number of Subcontractors', section: 'operations' },
         'ifr-imc-operation': { label: 'IFR/VFR operation', section: 'operations' },
+        'single-pilot': { label: 'Singlepilot operation', section: 'operations' },
         'certificate': { label: 'Certificate', section: 'operations' },
         'hr-spo': { label: 'HR SPO', section: 'operations' },
         'group-airline': { label: 'Group Airline', section: 'operations' },
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'sar': { label: 'SAR', section: 'approvals' },
         'police-operations': { label: 'Police operations', section: 'approvals' },
         'efb-approval': { label: 'EFB Approval', section: 'approvals' },
-        'fms': { label: 'FMS', section: 'approvals' },
+        'frms': { label: 'FRMS', section: 'approvals' },
         'ato': { label: 'ATO', section: 'approvals' }
     };
 

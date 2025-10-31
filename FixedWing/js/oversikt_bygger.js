@@ -24,7 +24,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         'rnp-ar-apch': { label: 'RNP AR APCH', section: 'approvals' },
         'mnps-nat-hla': { label: 'MNPS/ NAT-HLA', section: 'approvals' },
         'rvsm': { label: 'RVSM', section: 'approvals' },
-        //... resten av approvals er uendret
+        'lv-takeoff': { label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
+        'lv-landing': { label: 'Low Visibility operations (LANDING)', section: 'approvals' },
+        'etops': { label: 'ETOPS', section: 'approvals' },
+        'dangerous-goods': { label: 'Dangerous Goods', section: 'approvals' },
+        'single-engine-imc': { label: 'Single-Engined Turbine IMC', section: 'approvals' },
+        'efb': { label: 'Electronic Flight Bag', section: 'approvals' },
+        'isolated-aerodromes': { label: 'Isolated Aerodromes', section: 'approvals' },
+        'steep-approach': { label: 'Steep Approach', section: 'approvals' },
+        'frms': { label: 'FRMS', section: 'approvals' },
         'crew-training': { label: 'Crew Training', section: 'approvals' },
         'cca-training': { label: 'CCA training', section: 'approvals' }
     };

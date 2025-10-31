@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         resources: 22,
         fleet: 20,
         operations: 59,
-        approvals: 17,
-        total: 118
+        approvals: 18,
+        total: 119
     };
 
     const fieldData = [
@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'efb', label: 'Electronic Flight Bag', section: 'approvals' },
         { id: 'isolated-aerodromes', label: 'Isolated Aerodromes', section: 'approvals' },
         { id: 'steep-approach', label: 'Steep Approach', section: 'approvals' },
+        { id: 'frms', label: 'FRMS', section: 'approvals' },
         { id: 'crew-training', label: 'Crew Training', section: 'approvals' },
         { id: 'cca-training', label: 'CCA training', section: 'approvals' }
     ];
@@ -47,8 +48,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
         if (!fieldInfo) return 0;
 
-        if (fieldId === 'crew-training' || fieldId === 'cca-training') {
-            return scoringRules[fieldId]?.[selectValue] ?? 0;
+        if (fieldId === 'crew-training' || fieldId === 'cca-training' || fieldId === 'frms') {
+            return scoringRules[fieldId]?.[selectValue] ?? scoringRules['generic-approval']?.[selectValue] ?? 0;
         }
 
         if (fieldInfo.section === 'approvals') {
