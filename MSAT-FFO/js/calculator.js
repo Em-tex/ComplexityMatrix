@@ -161,7 +161,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const needle = document.getElementById(prefix + '-needle');
         if (!needle) return;
         const percentage = maxValue > 0 ? value / maxValue : 0;
-        // Begrenser rotasjon til mellom -90 og +90 grader
         const rotation = -90 + (percentage * 180);
         needle.style.transform = `translateX(-50%) rotate(${Math.min(90, Math.max(-90, rotation))}deg)`;
     }
