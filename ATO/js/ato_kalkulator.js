@@ -53,12 +53,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         return rule ?? 0;
     }
 
-    function applyValueCellStyle(valueCell, score) {
+    // Oppdatert fargelogikk: Håndterer "ikke valgt" eksplisitt
+    function applyValueCellStyle(valueCell, score, isSelected) {
         valueCell.className = 'form-cell calculated-value';
-        if (score >= 5) valueCell.classList.add('bg-weak-red');
-        else if (score >= 3) valueCell.classList.add('bg-weak-yellow');
-        else if (score > 0) valueCell.classList.add('bg-weak-green');
-        else valueCell.classList.add('bg-default-gray');
+        
+        if (!isSelected) {
+            valueCell.classList.add('bg-default-gray');
+            return;
+        }
+
+        if (score >= 4) {
+            valueCell.classList.add('bg-weak-red');
+        } else if (score >= 2) {
+            valueCell.classList.add('bg-weak-yellow');
+        } else {
+            // Covers < 2 and 0
+            valueCell.classList.add('bg-weak-green');
+        }
     }
 
     function updateGauge(prefix, value, maxValue) {
@@ -71,7 +82,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function updateCalculations() {
         let totals = { resources: 0, operations: 0, fleet: 0, approvals: 0 };
-        // Dependency for Leading Personnel Roles is now Employed Instructors
         const employedInstructorsVal = document.getElementById('employed-instructors').value;
 
         fieldData.forEach(field => {
@@ -85,7 +95,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const score = calculateFieldScore(field.id, select.value, dependency);
                 valueCell.textContent = score;
-                applyValueCellStyle(valueCell, score);
+                
+                // Sjekk om noe er valgt (tom streng betyr "Velg...")
+                const isSelected = select.value !== "";
+                applyValueCellStyle(valueCell, score, isSelected);
+
                 if(totals.hasOwnProperty(field.section)) {
                     totals[field.section] += score;
                 }
@@ -185,7 +199,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
         const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.csv`;
 
-        const primaryHeaders = ['OperatorName', 'FilledOutBy', 'Date', 'Resources Sum', 'Operations Sum', 'Fleet Specific Sum', 'Approvals Sum', 'TotalSum', 'Comments'];
+        // Hent summer fra DOM
+        const resourcesSum = parseFloat(document.getElementById('resources-sum').textContent);
+        const operationsSum = parseFloat(document.getElementById('operations-sum').textContent);
+        const fleetSum = parseFloat(document.getElementById('fleet-sum').textContent);
+        const approvalsSum = parseFloat(document.getElementById('approvals-sum').textContent);
+        const totalSum = parseFloat(document.getElementById('total-gauge-sum-text').textContent);
+
+        // Beregn prosenter
+        const resourcesPct = ((resourcesSum / MAX_SCORES.resources) * 100).toFixed(1);
+        const operationsPct = ((operationsSum / MAX_SCORES.operations) * 100).toFixed(1);
+        const fleetPct = ((fleetSum / MAX_SCORES.fleet) * 100).toFixed(1);
+        const approvalsPct = ((approvalsSum / MAX_SCORES.approvals) * 100).toFixed(1);
+        const totalPct = ((totalSum / MAX_SCORES.total) * 100).toFixed(1);
+
+        // Oppdaterte headers med prosent og sum
+        const primaryHeaders = [
+            'OperatorName', 'FilledOutBy', 'Date', 
+            'Resources Sum', 'Resources %',
+            'Operations Sum', 'Operations %',
+            'Fleet Specific Sum', 'Fleet Specific %',
+            'Approvals Sum', 'Approvals %',
+            'TotalSum', 'Total %',
+            'Comments'
+        ];
         const detailHeaders = fieldData.map(field => [`${field.label} (Choice)`, `${field.label} (Value)`]).flat();
         const allHeaders = primaryHeaders.concat(detailHeaders);
 
@@ -194,11 +231,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             `"${operatorNavn.replace(/"/g, '""')}"`,
             `"${document.getElementById('filled-by').value.replace(/"/g, '""')}"`,
             `"${dateValue}"`,
-            document.getElementById('resources-sum').textContent,
-            document.getElementById('operations-sum').textContent,
-            document.getElementById('fleet-sum').textContent,
-            document.getElementById('approvals-sum').textContent,
-            document.getElementById('total-gauge-sum-text').textContent,
+            resourcesSum, resourcesPct,
+            operationsSum, operationsPct,
+            fleetSum, fleetPct,
+            approvalsSum, approvalsPct,
+            totalSum, totalPct,
             comments
         ];
         const detailData = fieldData.map(field => {
@@ -299,10 +336,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         Object.keys(MAX_SCORES).forEach(key => {
-            const sumEl = document.getElementById(`${key}-sum`); // Fikset id
-            const maxSumEl = document.getElementById(`${key}-max-sum`);
-            if (maxSumEl) maxSumEl.textContent = MAX_SCORES[key];
+            const sumEl = document.getElementById(`${key}-sum`);
+            const maxEl = document.getElementById(`${key}-max-sum`);
+            if (maxEl) maxEl.textContent = MAX_SCORES[key];
+            // sumEl oppdateres av updateCalculations
         });
+        
         const totalMaxEl = document.getElementById('total-gauge-max-text');
         if(totalMaxEl) totalMaxEl.textContent = MAX_SCORES.total;
         

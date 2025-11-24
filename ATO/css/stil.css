@@ -27,21 +27,26 @@ body {
 .info-field label { font-weight: bold; color: #495057; }
 .info-field input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
 
+/* --- LAYOUT ENDRING: FLEX COLUMN --- */
 .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto 1fr;
+    display: flex;
     gap: 20px;
     align-items: start;
     padding: 0;
     box-shadow: none;
     background: none;
 }
-#section-resources   { grid-area: 1 / 1 / 2 / 2; }
-#section-fleet       { grid-area: 2 / 1 / 3 / 2; }
-#section-approvals   { grid-area: 3 / 1 / 4 / 2; }
-#section-operations  { grid-area: 1 / 2 / 3 / 3; }
-#section-performance { grid-area: 3 / 2 / 4 / 3; }
+.column-left, .column-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+@media (max-width: 992px) {
+    .container {
+        flex-direction: column;
+    }
+}
 
 .section { padding: 0; display: flex; flex-direction: column; }
 .section-header { color: white; padding: 12px 15px; font-weight: bold; display: flex; align-items: center; border-radius: 8px 8px 0 0; }
@@ -49,7 +54,7 @@ body {
 #section-fleet .section-header { background: #3CB371; }
 #section-operations .section-header { background: #FF8C00; }
 #section-approvals .section-header { background: #6A5ACD; }
-#section-performance .section-header { background: #9b59b6; }
+
 .section-content { border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; flex-grow: 1; }
 .header-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; background: #34495e; color: white; font-weight: bold; }
 .header-cell { padding: 8px 12px; text-align: center; }
@@ -57,80 +62,33 @@ body {
 .form-row:last-child { border-bottom: none; }
 .form-cell { padding: 8px 12px; position: relative; }
 .form-cell select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
-.calculated-value { font-weight: bold; text-align: center; padding: 10px 12px; height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
-.bg-default-gray { background-color: #e9ecef !important; }
-.bg-weak-green { background-color: #d4edda !important; }
-.bg-weak-yellow { background-color: #fff3cd !important; }
-.bg-weak-red { background-color: #f8d7da !important; }
+.calculated-value { font-weight: bold; text-align: center; padding: 10px 12px; height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: black; } /* Satt tekstfarge til sort */
 
-/* === START: GAUGE STYLES (ENDELIG VERSJON) === */
-.total-summary { 
-    text-align: center; 
-}
+/* --- FARGER: Tekst er nå alltid sort --- */
+.bg-default-gray { background-color: #e9ecef !important; color: black !important; }
+.bg-weak-green { background-color: #d4edda !important; color: black !important; }
+.bg-weak-yellow { background-color: #fff3cd !important; color: black !important; }
+.bg-weak-red { background-color: #f8d7da !important; color: black !important; }
 
-.all-gauges-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-    align-items: start;
-}
-@media (min-width: 992px) {
-    .all-gauges-container {
-        grid-template-columns: 2fr 1fr;
-    }
-}
+/* === GAUGE STYLES === */
+.total-summary { text-align: center; }
+.all-gauges-container { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
+@media (min-width: 992px) { .all-gauges-container { grid-template-columns: 2fr 1fr; } }
 
-.small-gauges-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    justify-self: center; 
-    transform: translateX(-100px);
-}
-@media (min-width: 600px) {
-    .small-gauges-wrapper {
-        flex-direction: row;
-        align-items: center;
-    }
-}
+.small-gauges-wrapper { display: flex; flex-direction: column; gap: 15px; justify-self: center; transform: translateX(-100px); }
+@media (min-width: 600px) { .small-gauges-wrapper { flex-direction: row; align-items: center; } }
 
-.four-gauges-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    flex-grow: 1;
-}
-
-.side-gauge-container {
-    display: flex;
-    justify-content: center;
-}
-
-.gauge-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    min-width: 150px;
-}
-
+.four-gauges-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; flex-grow: 1; }
+.gauge-block { display: flex; flex-direction: column; align-items: center; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 150px; }
 .gauge-block-title { font-weight: 700; margin-bottom: 5px; font-size: 0.9em; display: flex; align-items: center; }
 .gauge-icon { margin-right: 5px; font-size: 1.1em; }
 .gauge-block-summary { font-size: 0.8em; margin-bottom: 5px; }
-
 .gauge { position: relative; width: 120px; height: 60px; }
 .gauge-bg { width: 100%; height: 100%; border-radius: 60px 60px 0 0; position: relative; overflow: hidden; background: conic-gradient(from 180deg at 50% 100%, #009122 5%, #fff025 45%, #ff0019e8 80%); }
 .gauge-cover { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 0; background-color: inherit; border-radius: 50px 50px 0 0; }
 .gauge-needle { position: absolute; bottom: 0; left: 50%; width: 2px; height: 50px; background: #333; transform-origin: bottom center; transition: transform 0.5s ease; border-radius: 2px 2px 0 0; z-index: 2; transform: translateX(-50%) rotate(-90deg); }
 
-/* JUSTERT: Større Total Gauge og midtstilt */
-#gauge-block-total {
-    min-width: 320px;
-    justify-self: center;
-    transform: translateX(-150px);
-}
+#gauge-block-total { min-width: 320px; justify-self: center; transform: translateX(-150px); }
 #gauge-block-total .gauge-block-title { font-size: 1.6em; margin-bottom: 10px; }
 #gauge-block-total .gauge-block-summary { font-size: 1.2em; margin-bottom: 10px; }
 #gauge-block-total .gauge { width: 300px; height: 150px; }
@@ -138,14 +96,11 @@ body {
 #gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; border-radius: 135px 135px 0 0;}
 #gauge-block-total .gauge-needle { height: 125px; }
 
-/* Farger for gauge-bakgrunner */
 #gauge-block-resources .gauge-cover { background-color: #E0F2F7; }
 #gauge-block-fleet .gauge-cover { background-color: #E6F7E6; }
 #gauge-block-operations .gauge-cover { background-color: #FFF2E0; }
 #gauge-block-approvals .gauge-cover { background-color: #EAEAF7; }
-#gauge-block-performance .gauge-cover { background-color: #f4eaf7; }
 #gauge-block-total .gauge-cover { background-color: white; }
-/* === SLUTT: GAUGE STYLES === */
 
 .comments-section label { font-weight: bold; color: #495057; display: block; margin-bottom: 5px; }
 .comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif;}
@@ -163,30 +118,8 @@ body {
 .footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
 .footer-links a:hover { text-decoration: underline; }
 
-/* === STIL FOR VALIDERINGSFEIL === */
-select.invalid, input.invalid {
-    border: 2px solid #dc3545 !important; /* Rød kantlinje */
-    background-color: #f8d7da; /* Svak rød bakgrunn */
-}
-
-.home-button {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    font-size: 1.8em; /* Juster størrelsen etter behov */
-    color: #03477F; /* Bruker mørkeblå farge fra profilen */
-    text-decoration: none;
-    z-index: 1001; /* Sikrer at den ligger over annet innhold */
-}
-.home-button:hover {
-    color: #023663; /* Litt mørkere ved hover */
-}
-/* Juster body padding for å unngå overlapp med knappen om nødvendig */
-body {
-    padding-top: 50px; /* Eksempel, juster verdien etter behov */
-    position: relative; /* Nødvendig for absolutt posisjonering av barn */
-}
-/* Noen sider kan trenge spesifikk justering */
-.header-container, .header {
-    margin-top: 10px; /* Litt ekstra margin for header på noen sider */
-}
+select.invalid, input.invalid { border: 2px solid #dc3545 !important; background-color: #f8d7da; }
+.home-button { position: absolute; top: 15px; left: 15px; font-size: 1.8em; color: #03477F; text-decoration: none; z-index: 1001; }
+.home-button:hover { color: #023663; }
+body { padding-top: 50px; position: relative; }
+.header-container, .header { margin-top: 10px; }
