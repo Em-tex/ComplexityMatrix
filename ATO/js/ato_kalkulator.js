@@ -1,46 +1,46 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const STORAGE_KEY = 'atoComplexityData';
+    const STORAGE_KEY = 'atoComplexityData_v2';
     let scoringRules = {};
 
     const MAX_SCORES = {
-        resources: 17,
-        operations: 24,
-        fleet: 10,
-        approvals: 19,
-        performance: 20,
-        total: 90
+        resources: 22,
+        operations: 25,
+        fleet: 20,
+        approvals: 33,
+        total: 100
     };
 
     const fieldData = [
-        { id: 'staff-employed', label: 'Number of staff for the operation (FTE)', section: 'resources' },
-        { id: 'instructors-total', label: 'Number of instructors', section: 'resources' },
-        { id: 'instructors-part-time', label: 'Number of part-time instructors on contract', section: 'resources' },
+        // Resources
+        { id: 'staff-fte', label: 'Number of staff for the operation (FTE)', section: 'resources' },
+        { id: 'employed-instructors', label: 'Number of employed instructors', section: 'resources' },
+        { id: 'contract-instructors', label: 'Number of part-time instructors on contract', section: 'resources' },
+        { id: 'complex-organisation', label: 'Complex organisation (declared)', section: 'resources' },
         { id: 'leading-personnel-roles', label: 'Leading personnel has several roles', section: 'resources' },
-        { id: 'number-of-bases', label: 'Number of bases (main and secondary)', section: 'operations' },
-        { id: 'bases-outside-norway', label: 'Secondary base(s) outside Norway', section: 'operations' },
+        // Operations
         { id: 'ifr-operation', label: 'IFR operation', section: 'operations' },
-        { id: 'ncc-operation', label: 'NCC operation', section: 'operations' },
-        { id: 'spa-operation', label: 'SPA operation', section: 'operations' },
+        { id: 'nco-operation', label: 'NCO', section: 'operations' },
+        { id: 'ncc-operation', label: 'NCC', section: 'operations' },
+        { id: 'spa-spo-operation', label: 'SPA or SPO', section: 'operations' },
         { id: 'holds-aoc', label: 'Operator also holds an AOC', section: 'operations' },
         { id: 'own-camo', label: 'ATO has its own CAMO', section: 'operations' },
-        { id: 'leasing-from-aoc', label: 'Leasing aircraft from an AOC', section: 'operations' },
-        { id: 'number-of-types', label: 'Number of different types operated by ATO', section: 'fleet' },
-        { id: 'me-helicopters', label: 'Number of ME helicopters', section: 'fleet' },
-        { id: 'se-helicopters', label: 'Number of SE helicopters', section: 'fleet' },
-        { id: 'leased-helicopters', label: 'Number of leased helicopters', section: 'fleet' },
+        { id: 'has-fstd-org', label: 'Organisation also has an FSTD organisation', section: 'operations' },
+        { id: 'subcontractors', label: 'Number of subcontractors', section: 'operations' },
+        // Fleet
+        { id: 'number-of-types', label: 'Number of different types or classes (models) operated by ATO', section: 'fleet' },
+        { id: 'me-aircraft', label: 'Number of ME aircraft', section: 'fleet' },
+        { id: 'se-aircraft', label: 'Number of SE aircraft', section: 'fleet' },
+        { id: 'leased-from-aoc', label: 'Leased aircraft from AOC outside own organisation', section: 'fleet' },
+        { id: 'privately-leased', label: 'Privatly leased aircraft', section: 'fleet' },
+        { id: 'number-of-fstds', label: 'Number of FSTDs used for training', section: 'fleet' },
+        // Approvals
         { id: 'integrated-courses', label: 'Integrated courses', section: 'approvals' },
         { id: 'fcl-courses', label: 'Number of approved FCL courses', section: 'approvals' },
-        { id: 'certificate-courses', label: 'Number of courses for certificate issuance', section: 'approvals' },
-        { id: 'type-rating-courses', label: 'Number of type rating courses', section: 'approvals' },
-        { id: 'instructor-courses', label: 'Number of instructor courses', section: 'approvals' },
-        { id: 'theory-ppl', label: 'Theory course for PPL certificate', section: 'approvals' },
-        { id: 'theory-cpl-atpl-ir', label: 'Theory course for CPL/ATPL/IR', section: 'approvals' },
-        { id: 'risk-management', label: '(1) Effective identification and management of own risk', section: 'performance' },
-        { id: 'change-management', label: '(2) System for change management', section: 'performance' },
-        { id: 'level-1-findings', label: '(3) Level 1 findings in the last 24 months', section: 'performance' },
-        { id: 'findings-handling', label: '(4) Ability to manage findings within given deadlines', section: 'performance' },
-        { id: 'general-performance', label: 'General performance of ATO management system', section: 'performance' },
-        { id: 'economy', label: 'Economy', section: 'performance' }
+        { id: 'theory-lapl-ppl', label: 'Stand alone theory course for LAPL/ PPL', section: 'approvals' },
+        { id: 'theory-cpl-atpl-ir', label: 'Stand alone theory course for CPL/ATPL/IR', section: 'approvals' },
+        { id: 'number-of-bases', label: 'Number of bases (main and secondary)', section: 'approvals' },
+        { id: 'bases-outside-norway', label: 'Secondary base(s) outside Norway', section: 'approvals' },
+        { id: 'part-is', label: 'Part-IS', section: 'approvals' }
     ];
 
     function calculateFieldScore(fieldId, selectValue, dependencyValue) {
@@ -70,8 +70,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function updateCalculations() {
-        let totals = { resources: 0, operations: 0, fleet: 0, approvals: 0, performance: 0 };
-        const instructorsValue = document.getElementById('instructors-total').value;
+        let totals = { resources: 0, operations: 0, fleet: 0, approvals: 0 };
+        // Dependency for Leading Personnel Roles is now Employed Instructors
+        const employedInstructorsVal = document.getElementById('employed-instructors').value;
 
         fieldData.forEach(field => {
             const select = document.getElementById(field.id);
@@ -79,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (select && valueCell) {
                 let dependency = null;
                 if (field.id === 'leading-personnel-roles') {
-                    dependency = instructorsValue;
+                    dependency = employedInstructorsVal;
                 }
 
                 const score = calculateFieldScore(field.id, select.value, dependency);
@@ -93,7 +94,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         let grandTotal = 0;
         for (const section in totals) {
-            document.getElementById(`${section}-sum`).textContent = totals[section];
+            const sumEl = document.getElementById(`${section}-sum`);
+            if(sumEl) sumEl.textContent = totals[section];
             updateGauge(section, totals[section], MAX_SCORES[section]);
             grandTotal += totals[section];
         }
@@ -181,12 +183,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!validateForm()) { return; }
         const operatorNavn = document.getElementById('operator-navn').value || "UnknownOperator";
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
-        
-        // === ENDRING ER HER ===
         const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.csv`;
-        // ======================
 
-        const primaryHeaders = ['OperatorName', 'FilledOutBy', 'Date', 'Resources Sum', 'Operations Sum', 'Fleet Specific Sum', 'Approvals Sum', 'Performance Sum', 'TotalSum', 'Comments'];
+        const primaryHeaders = ['OperatorName', 'FilledOutBy', 'Date', 'Resources Sum', 'Operations Sum', 'Fleet Specific Sum', 'Approvals Sum', 'TotalSum', 'Comments'];
         const detailHeaders = fieldData.map(field => [`${field.label} (Choice)`, `${field.label} (Value)`]).flat();
         const allHeaders = primaryHeaders.concat(detailHeaders);
 
@@ -199,7 +198,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('operations-sum').textContent,
             document.getElementById('fleet-sum').textContent,
             document.getElementById('approvals-sum').textContent,
-            document.getElementById('performance-sum').textContent,
             document.getElementById('total-gauge-sum-text').textContent,
             comments
         ];
@@ -301,11 +299,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         Object.keys(MAX_SCORES).forEach(key => {
-            const sumEl = document.getElementById(`${key}-max-sum`);
-            const gaugeEl = document.getElementById(`${key}-gauge-max-text`);
-            if (sumEl) sumEl.textContent = MAX_SCORES[key];
-            if (gaugeEl) gaugeEl.textContent = MAX_SCORES[key];
+            const sumEl = document.getElementById(`${key}-sum`); // Fikset id
+            const maxSumEl = document.getElementById(`${key}-max-sum`);
+            if (maxSumEl) maxSumEl.textContent = MAX_SCORES[key];
         });
+        const totalMaxEl = document.getElementById('total-gauge-max-text');
+        if(totalMaxEl) totalMaxEl.textContent = MAX_SCORES.total;
         
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
             el.addEventListener('change', updateCalculations);
