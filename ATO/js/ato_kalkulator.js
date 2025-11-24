@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             'OperatorName', 'FilledOutBy', 'Date', 
             'Resources Sum', 'Resources %',
             'Operations Sum', 'Operations %',
-            'Fleet Specific Sum', 'Fleet Specific %',
+            'Fleet & FSTD Sum', 'Fleet & FSTD %',
             'Approvals Sum', 'Approvals %',
             'TotalSum', 'Total %',
             'Comments'
