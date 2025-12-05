@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let scoringRules = {};
     let msatData = {};
     let fieldData = [];
+    let commentHelpData = {}; // Variabel for å lagre hjelpetekster for kommentarer
     const GAUGE_MAX_VALUE = 7;
     const criticalItemsIds = ['2.1.1', '2.2.1', '2.2.2', '3.2.1', '5.2.1', '5.2.2', '5.2.3', '5.2.4'];
 
@@ -39,19 +40,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         container.innerHTML = '';
         const column1 = document.createElement('div'); column1.className = 'column';
         const column2 = document.createElement('div'); column2.className = 'column';
+        
         data.sections.forEach((section) => {
             const sectionEl = document.createElement('div');
             sectionEl.className = 'section';
             sectionEl.id = `section-${section.id}`;
             let sectionContentHtml = `<div class="section-header"><i class="fa-solid ${section.icon}"></i><span>${section.number}. ${section.title}</span></div><div class="section-content"><div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Score</div></div>`;
+            
             section.subsections.forEach(subsection => {
                 subsection.items.forEach(item => {
                     const selectId = `q${item.id.replace(/\./g, '-')}`;
-                    // Lagrer feltdata for senere bruk i beregninger
-                    fieldData.push({ id: selectId, label: `${item.id} ${item.text}`, section: section.id, itemId: item.id }); // Lagt til itemId
+                    fieldData.push({ id: selectId, label: `${item.id} ${item.text}`, section: section.id, itemId: item.id });
+                    
                     const isCritical = criticalItemsIds.includes(item.id);
                     const starHtml = isCritical ? ' <span class="critical-marker">*</span>' : '';
-                    sectionContentHtml += `<div class="form-row"><div class="form-cell"><strong data-item-id="${item.id}" class="popup-opener">${item.id}</strong> ${item.text}${starHtml}</div><div class="form-cell"><select id="${selectId}"><option value="">Select...</option><option value="NA">Not Applicable</option><option value="P">Present (1)</option><option value="S">Suitable (2)</option><option value="O">Operating (4)</option><option value="E">Effective (7)</option></select></div><div class="form-cell calculated-value" id="${selectId}-value">0</div></div>`;
+                    
+                    // OPPDATERT: Hele teksten er nå pakket inn i en span med klassen popup-opener
+                    sectionContentHtml += `
+                        <div class="form-row">
+                            <div class="form-cell">
+                                <span data-item-id="${item.id}" class="popup-opener">
+                                    <strong>${item.id}</strong> ${item.text}
+                                </span>
+                                ${starHtml}
+                            </div>
+                            <div class="form-cell">
+                                <select id="${selectId}">
+                                    <option value="">Select...</option>
+                                    <option value="NA">Not Applicable</option>
+                                    <option value="P">Present (1)</option>
+                                    <option value="S">Suitable (2)</option>
+                                    <option value="O">Operating (4)</option>
+                                    <option value="E">Effective (7)</option>
+                                </select>
+                            </div>
+                            <div class="form-cell calculated-value" id="${selectId}-value">0</div>
+                        </div>`;
                 });
             });
             sectionContentHtml += '</div>';
@@ -66,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function updateCalculations() {
         let sums = { policy: 0, risk: 0, assurance: 0, promotion: 0, additional: 0 };
         let counts = { policy: 0, risk: 0, assurance: 0, promotion: 0, additional: 0 };
-        let allMinimumScoreMet = true; // Sjekker om alle relevante items har minst score 4
+        let allMinimumScoreMet = true;
 
         fieldData.forEach(field => {
             const select = document.getElementById(field.id);
@@ -77,14 +101,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (score !== null) {
                     sums[field.section] += score;
                     counts[field.section]++;
-                     // Sjekk om scoren er under 4 (hvis det ikke er et extension-item)
+                    
                     if (!field.id.startsWith('q-financial-management') && !field.id.startsWith('q-level1-findings')) {
                          if (score < 4) {
                              allMinimumScoreMet = false;
                          }
                     }
-                } else { // Hvis score er N/A, regnes det ikke mot minimumskravet
-                   // Behandler N/A som OK ift. minimumskravet, men teller ikke i snittet
                 }
             }
         });
@@ -93,6 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const level1Select = document.getElementById('q-level1-findings');
         const financialScore = scoringRules['extension-scores']?.financial?.[financialSelect.value] ?? null;
         const level1Score = scoringRules['extension-scores']?.level1?.[level1Select.value] ?? null;
+        
         applyValueCellStyle(document.getElementById('q-financial-management-value'), financialScore);
         applyValueCellStyle(document.getElementById('q-level1-findings-value'), level1Score);
 
@@ -118,7 +141,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const financialMet = financialScore !== null && financialScore >= 4;
         const level1Met = level1Score !== null && level1Score === 7;
 
-        // Oppdatert sjekk for alle betingelser
         const allConditionsMet = criticalItemsMet && financialMet && level1Met && allMinimumScoreMet;
 
         updateExtensionChecklist(criticalItemsMet, financialMet, level1Met, allMinimumScoreMet, allConditionsMet);
@@ -135,7 +157,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="${getClass(criticalMet)}"><i class="fa-solid ${getIcon(criticalMet)}"></i><span>All 8 <a href="#" id="critical-items-link" class="critical-items-link">critical items</a><span class="critical-marker">*</span> have a score of 7</span></div>
             <div class="${getClass(financialMet)}"><i class="fa-solid ${getIcon(financialMet)}"></i><span>Financial management score is 4 or higher</span></div>
             <div class="${getClass(level1Met)}"><i class="fa-solid ${getIcon(level1Met)}"></i><span>No level 1 findings in the last 24 months</span></div>
-            <div class="${getClass(allMinimumMet)}"><i class="fa-solid ${getIcon(allMinimumMet)}"></i><span>All other items have a minimum score of 4</span></div>`; // Ny linje lagt til
+            <div class="${getClass(allMinimumMet)}"><i class="fa-solid ${getIcon(allMinimumMet)}"></i><span>All other items have a minimum score of 4</span></div>`;
 
         if (allConditionsMetUpdated) {
             finalCommentEl.textContent = "Extension of oversight cycle may be considered (36 months).";
@@ -146,15 +168,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-
     function applyValueCellStyle(valueCell, score) {
         valueCell.className = 'form-cell calculated-value';
         if (score === null) { valueCell.classList.add('bg-default-gray'); valueCell.textContent = 'N/A'; return; }
         valueCell.textContent = score;
         if (score >= 7) valueCell.classList.add('bg-weak-green');
         else if (score >= 4) valueCell.classList.add('bg-weak-yellow');
-        else if (score >= 2) valueCell.classList.add('bg-weak-orange'); // Antar vi vil ha oransje for 2 og 3
-        else if (score >= 0) valueCell.classList.add('bg-weak-red'); // Rød for 0 og 1
+        else if (score >= 2) valueCell.classList.add('bg-weak-orange');
+        else if (score >= 0) valueCell.classList.add('bg-weak-red');
     }
 
     function updateGauge(prefix, value, maxValue) {
@@ -168,7 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function populateOrgTypes(types) {
         const datalist = document.getElementById('org-types-list');
         if (datalist) {
-            datalist.innerHTML = ''; // Tømmer listen først
+            datalist.innerHTML = '';
             types.forEach(type => {
                 const option = document.createElement('option');
                 option.value = type;
@@ -182,7 +203,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const popup = document.getElementById('details-popup');
         let itemData = null;
 
-        // Søk etter itemData i msatData
         for (const section of msatData.sections) {
             for (const subsection of section.subsections) {
                 const found = subsection.items.find(i => i.id === itemId);
@@ -249,24 +269,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         displayPopup(popup, targetElement);
     }
 
+    // NY FUNKSJON: Viser popup for kommentarer
+    function showCommentPopup(targetElement, fieldKey) {
+        const popup = document.getElementById('details-popup');
+        const text = commentHelpData[fieldKey] || "Ingen informasjon tilgjengelig.";
+        
+        popup.innerHTML = `
+            <button id="popup-close-button" aria-label="Close">&times;</button>
+            <div class="popup-section">${text}</div>
+        `;
+        displayPopup(popup, targetElement);
+    }
+
     function displayPopup(popup, targetElement) {
         popup.style.display = 'block';
         const rect = targetElement.getBoundingClientRect();
         let top = rect.bottom + window.scrollY + 5;
         let left = rect.left + window.scrollX;
 
-        // Juster posisjon hvis popup går utenfor skjermen
         if (left + popup.offsetWidth > window.innerWidth) {
-            left = window.innerWidth - popup.offsetWidth - 20; // 20px margin
+            left = window.innerWidth - popup.offsetWidth - 20; 
         }
         if (top + popup.offsetHeight > window.innerHeight + window.scrollY) {
-            top = rect.top + window.scrollY - popup.offsetHeight - 5; // Plasser over elementet
+            top = rect.top + window.scrollY - popup.offsetHeight - 5; 
         }
 
         popup.style.top = `${top}px`;
         popup.style.left = `${left}px`;
     }
-
 
     function hidePopup() {
         document.getElementById('details-popup').style.display = 'none';
@@ -295,7 +325,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             } catch (e) {
                 console.error("Error parsing saved data:", e);
-                localStorage.removeItem(STORAGE_KEY); // Fjerner korrupt data
+                localStorage.removeItem(STORAGE_KEY);
             }
         }
     }
@@ -310,7 +340,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     function getSelectedText(selectId) {
         const selectElement = document.getElementById(selectId);
         if (selectElement && selectElement.selectedIndex >= 0) {
-            // Sørger for at vi returnerer tom streng hvis ingen option er valgt
             return selectElement.options[selectElement.selectedIndex]?.text || "";
         }
         return "";
@@ -326,22 +355,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             formattedDate = today.toLocaleDateString('no-NO').replace(/\./g, '-');
             if (dateValue) {
                 const date = new Date(dateValue);
-                 // PadStart for å sikre to siffer
                 const inputDay = String(date.getDate()).padStart(2, '0');
-                const inputMonth = String(date.getMonth() + 1).padStart(2, '0'); // Måneder er 0-indeksert
+                const inputMonth = String(date.getMonth() + 1).padStart(2, '0');
                 const inputYear = date.getFullYear();
                 formattedDate = `${inputDay}-${inputMonth}-${inputYear}`;
             }
         } catch (e) {
-            // Fallback til dagens dato hvis input er ugyldig
             const today = new Date();
-             formattedDate = today.toLocaleDateString('no-NO'); // Bruker standard norsk format som fallback
+             formattedDate = today.toLocaleDateString('no-NO');
         }
         const fileName = `${orgName} - ${orgType} - MSAT - ${formattedDate}.csv`;
 
-        // --- START OF CHANGES ---
-
-        // Determine if extension is possible (henter status direkte fra UI-elementer)
         const criticalMet = document.querySelector('#extension-checklist div:nth-child(1)').classList.contains('status-pass');
         const financialMet = document.querySelector('#extension-checklist div:nth-child(2)').classList.contains('status-pass');
         const level1Met = document.querySelector('#extension-checklist div:nth-child(3)').classList.contains('status-pass');
@@ -349,7 +373,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const allConditionsMet = criticalMet && financialMet && level1Met && allMinimumMet;
         const extensionPossible = allConditionsMet ? 'Yes' : 'No';
 
-        // Define headers in new order
         const primaryHeaders = ['Organisation Name', 'Organisation type', 'Assessed By', 'Date', 'Empic ID', 'Policy Avg', 'Risk Avg', 'Assurance Avg', 'Promotion Avg', 'Additional Avg', 'Total Avg Score'];
         const extensionPossibleHeader = ['Extension Possible'];
         const commentFields = [
@@ -367,11 +390,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const allHeaders = primaryHeaders.concat(extensionPossibleHeader, commentHeaders, detailHeaders, extensionHeaders);
 
-        // Escape function for CSV fields
         const escapeCsv = (str) => `"${(str || '').replace(/"/g, '""')}"`;
-        const escapeCsvMultiline = (str) => `"${(str || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`; // Erstatter newline med space
+        const escapeCsvMultiline = (str) => `"${(str || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`;
 
-        // Gather data in new order
         const primaryData = [
             escapeCsv(orgName),
             escapeCsv(orgType),
@@ -404,10 +425,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const allData = primaryData.concat(extensionPossibleData, commentData, detailData, extensionData);
 
-        // --- END OF CHANGES ---
-
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
-        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // Legger til BOM for Excel
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); 
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
@@ -416,9 +435,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        URL.revokeObjectURL(url); // Frigjør minne
+        URL.revokeObjectURL(url); 
     }
-
 
      function loadCsvFile(event) {
         const file = event.target.files[0];
@@ -430,11 +448,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const lines = e.target.result.split(/\r?\n/);
                 if (lines.length < 2) throw new Error("CSV file is empty or invalid.");
 
-                // Helper function to parse CSV fields, handling quotes and escaped quotes
                 const parseCsvField = (field) => {
                     field = field ? field.trim() : '';
                     if (field.startsWith('"') && field.endsWith('"')) {
-                        // Fjerner ytterste anførselstegn og erstatter doble anførselstegn med enkle
                         field = field.substring(1, field.length - 1).replace(/""/g, '"');
                     }
                     return field;
@@ -443,34 +459,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const headers = lines[0].split(';').map(h => parseCsvField(h));
                 const data = lines[1].split(';').map(d => parseCsvField(d));
 
-                // Lager et map fra header-navn til kolonneindeks for enkel oppslag
                 const headerMap = Object.fromEntries(headers.map((h, i) => [h, i]));
-
-                // Funksjon for å trygt hente data basert på headernavn
                 const getData = (headerName) => data[headerMap[headerName]] || '';
 
-                // Laster inn primærdata
                 document.getElementById('organisation-name').value = getData('Organisation Name');
                 document.getElementById('organisation-type').value = getData('Organisation type');
                 document.getElementById('assessed-by').value = getData('Assessed By');
                 document.getElementById('assessment-date').value = getData('Date');
                 document.getElementById('empic-id').value = getData('Empic ID');
 
-                // Laster inn detaljdata (valg i select-bokser)
                 fieldData.forEach(field => {
                     const select = document.getElementById(field.id);
                     if (select) {
                         const choiceHeader = `${field.label} (Choice)`;
                         const choiceValue = getData(choiceHeader);
                          if (choiceValue !== undefined) {
-                            // Finner option basert på synlig tekst
                             const option = Array.from(select.options).find(opt => opt.text === choiceValue);
-                            select.value = option ? option.value : ""; // Setter verdien hvis funnet, ellers tømmer
+                            select.value = option ? option.value : "";
                          }
                     }
                 });
 
-                // Laster inn extension-data
                 const financialChoice = getData('6.1 Financial management (Choice)');
                 const level1Choice = getData('6.2 Level 1 findings (Choice)');
                 const financialSelect = document.getElementById('q-financial-management');
@@ -484,7 +493,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     level1Select.value = option ? option.value : "";
                 }
 
-                // Laster inn kommentarer
                 const commentFields = [
                     { id: 'comments-compliance', header: 'Comments (Compliance)' },
                     { id: 'comments-flightops', header: 'Comments (Flight Ops)' },
@@ -501,91 +509,89 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 });
 
-                updateCalculations(); // Oppdaterer alle beregninger og UI
+                updateCalculations();
                 alert("CSV file loaded successfully!");
 
             } catch (error) {
                 console.error("Error loading CSV file:", error);
                  alert(`Failed to load CSV file. Error: ${error.message}. Please check the file format and content.`);
             } finally {
-                 // Reset file input slik at samme fil kan lastes igjen hvis brukeren ønsker
                  event.target.value = null;
             }
         };
         reader.onerror = function() {
             alert("Error reading the CSV file.");
-            event.target.value = null; // Reset input ved lesefeil også
+            event.target.value = null;
         };
-        reader.readAsText(file, "UTF-8"); // Leser filen som UTF-8
+        reader.readAsText(file, "UTF-8");
     }
-
 
     async function init() {
         try {
-            // Laster inn nødvendige datafiler parallelt
-            const [scoringRes, msatRes, orgTypesRes] = await Promise.all([
+            const [scoringRes, msatRes, orgTypesRes, commentHelpRes] = await Promise.all([
                 fetch('data/scoring.json'),
                 fetch('data/msat_data.json'),
-                fetch('data/organisation_types.json')
+                fetch('data/organisation_types.json'),
+                fetch('data/comment_help.json')
             ]);
 
-            // Sjekker om alle fetch-kall var vellykkede
             if (!scoringRes.ok) throw new Error(`Failed to load scoring.json: ${scoringRes.statusText}`);
             if (!msatRes.ok) throw new Error(`Failed to load msat_data.json: ${msatRes.statusText}`);
             if (!orgTypesRes.ok) throw new Error(`Failed to load organisation_types.json: ${orgTypesRes.statusText}`);
+            if (!commentHelpRes.ok) throw new Error(`Failed to load comment_help.json: ${commentHelpRes.statusText}`);
 
-            // Parser JSON-data
             scoringRules = await scoringRes.json();
             msatData = await msatRes.json();
             const orgTypes = await orgTypesRes.json();
+            commentHelpData = await commentHelpRes.json();
 
-            populateOrgTypes(orgTypes); // Fyller inn organisasjonstyper i datalisten
+            populateOrgTypes(orgTypes);
 
         } catch (error) {
             console.error('Failed to load initial data files:', error);
             alert(`ERROR: Could not load essential data files. The application might not work correctly.\nDetails: ${error.message}`);
-            // Går ikke videre hvis kritiske data mangler
             return;
         }
 
-        buildForm(msatData); // Bygger skjemaet basert på msat_data.json
+        buildForm(msatData);
 
-        // Legger til event listeners for alle input-elementer for å trigge beregninger ved endring
         document.querySelectorAll('input, textarea, select').forEach(el => {
             el.addEventListener('change', updateCalculations);
-            // For input og textarea, oppdater også ved keyup for sanntidslagring
             if(el.tagName !== 'SELECT') {
-                el.addEventListener('keyup', saveData); // Lagrer ved hver tastetrykk
+                el.addEventListener('keyup', saveData); 
             } else {
-                 el.addEventListener('change', saveData); // Lagrer select-endringer
+                 el.addEventListener('change', saveData); 
             }
         });
 
-        // Event listener for klikk på hele dokumentet for å håndtere popups
         document.addEventListener('click', (e) => {
             const popup = document.getElementById('details-popup');
-            if (!popup) return; // Sikkerhetssjekk
+            if (!popup) return; 
 
-            if (e.target.id === 'critical-items-link') {
-                e.preventDefault(); // Forhindrer standard lenke-oppførsel
+            if (e.target.classList.contains('comment-help-icon')) {
+                e.preventDefault();
+                const fieldKey = e.target.getAttribute('data-field');
+                showCommentPopup(e.target, fieldKey);
+            }
+            else if (e.target.id === 'critical-items-link') {
+                e.preventDefault(); 
                 showCriticalItemsPopup(e.target);
-            } else if (e.target.matches('.popup-opener')) {
-                showPopup(e.target);
+            } else if (e.target.closest('.popup-opener')) {
+                // OPPDATERT: Sjekk om vi klikker på (eller inni) en popup-opener span
+                const opener = e.target.closest('.popup-opener');
+                showPopup(opener);
             } else if (e.target.id === 'extension-help-icon') {
                  showExtensionHelpPopup(e.target);
             } else if (e.target.id === 'popup-close-button') {
                 hidePopup();
-            } else if (popup.style.display === 'block' && !popup.contains(e.target) && !e.target.closest('.popup-opener, .help-icon, .critical-items-link')) {
-                 // Lukker popup hvis man klikker utenfor den og ikke på en trigger
+            } else if (popup.style.display === 'block' && !popup.contains(e.target) && !e.target.closest('.popup-opener, .help-icon, .critical-items-link, .comment-help-icon')) {
                 hidePopup();
             }
         });
 
-        // Kobler knapper til funksjoner
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
         document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
 
-        // Setter opp "Load CSV"-knappen til å trigge filinput-feltet
         const loadCsvButton = document.getElementById('load-csv-button');
         const csvFileInput = document.getElementById('csv-file-input');
         if (loadCsvButton && csvFileInput) {
@@ -593,17 +599,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             csvFileInput.addEventListener('change', loadCsvFile);
         }
 
-        loadData(); // Laster inn eventuell lagret data fra localStorage
+        loadData();
 
-        // Setter dagens dato hvis datofeltet er tomt
         const dateInput = document.getElementById('assessment-date');
         if (dateInput && !dateInput.value) {
              dateInput.valueAsDate = new Date();
-             saveData(); // Lagrer den satte datoen
+             saveData();
         }
 
-        updateCalculations(); // Kjører en initiell beregning for å vise korrekte verdier basert på lastet/default data
+        updateCalculations();
     }
 
-    init(); // Starter initialiseringen av applikasjonen
+    init(); 
 });

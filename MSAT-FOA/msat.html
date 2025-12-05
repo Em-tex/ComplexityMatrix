@@ -68,31 +68,31 @@
         <h2>Comments</h2>
         <div class="comments-grid">
             <div class="comment-field">
-                <label for="comments-compliance">Compliance</label>
+                <label for="comments-compliance">Compliance <i class="fa-solid fa-circle-info comment-help-icon" data-field="compliance"></i></label>
                 <textarea id="comments-compliance" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-flightops">Flight Operations</label>
+                <label for="comments-flightops">Flight Operations <i class="fa-solid fa-circle-info comment-help-icon" data-field="flightops"></i></label>
                 <textarea id="comments-flightops" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-safety">Safety Department</label>
+                <label for="comments-safety">Safety Department <i class="fa-solid fa-circle-info comment-help-icon" data-field="safety"></i></label>
                 <textarea id="comments-safety" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-training">Training</label>
+                <label for="comments-training">Training <i class="fa-solid fa-circle-info comment-help-icon" data-field="training"></i></label>
                 <textarea id="comments-training" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-planning">Planning & FTL</label>
+                <label for="comments-planning">Planning & FTL <i class="fa-solid fa-circle-info comment-help-icon" data-field="planning"></i></label>
                 <textarea id="comments-planning" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-reporting">Reporting</label>
+                <label for="comments-reporting">Reporting <i class="fa-solid fa-circle-info comment-help-icon" data-field="reporting"></i></label>
                 <textarea id="comments-reporting" rows="4"></textarea>
             </div>
             <div class="comment-field comment-field-full">
-                <label for="comments-other">Other</label>
+                <label for="comments-other">Other <i class="fa-solid fa-circle-info comment-help-icon" data-field="other"></i></label>
                 <textarea id="comments-other" rows="4"></textarea>
             </div>
         </div>
@@ -100,8 +100,8 @@
 
     <div class="action-buttons">
         <button id="download-csv-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> 1. Download CSV</button>
-        <a href="https://caano.sharepoint.com/:f:/r/teams/CAA-MSAT/Delte%20dokumenter/Organisation%20Assessment/FOA-MSAT?csf=1&web=1&e=zXrcGb" target="_blank" id="sharepoint-upload-button" role="button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 15v4H5v-4H3v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-4h-2zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5-5 5z"/></svg> 2. Upload to SharePoint</a>
-        <a href="https://caano.sharepoint.com/teams/CAA-MSAT/Lists/MSAT/AllItems.aspx?viewid=a5442e65-14fa-4f00-a372-e8930ff61dba" target="_blank" id="msat-overview-button" role="button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg> 3. MSAT Overview</a>
+        <a href="https://caano.sharepoint.com/:f:/r/teams/CAA-MSAT/Delte%20dokumenter/MSAT/csv-files?csf=1&web=1&e=NZZb84" target="_blank" id="sharepoint-upload-button" role="button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 15v4H5v-4H3v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-4h-2zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5-5 5z"/></svg> 2. Upload to SharePoint</a>
+        <a href="https://caano.sharepoint.com/:l:/r/teams/CAA-MSAT/Lists/MSAT?e=2rAM1r" target="_blank" id="msat-overview-button" role="button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg> 3. MSAT Overview</a>
         <button id="load-csv-button" class="load-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16h6V8h4L12 3 5 8h4zm-4 5h14v-2H5z"/></svg> Load CSV</button>
         <button id="clear-form-button"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Clear Form</button>
         <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
