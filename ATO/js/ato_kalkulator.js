@@ -197,7 +197,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!validateForm()) { return; }
         const operatorNavn = document.getElementById('operator-navn').value || "UnknownOperator";
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
-        const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.csv`;
+        
+        // ENDRING: Bruker .dat for å sikre at Power Automate leser den som binærfil
+        const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.dat`;
 
         // Hent summer fra DOM
         const resourcesSum = parseFloat(document.getElementById('resources-sum').textContent);
@@ -246,7 +248,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const allData = primaryData.concat(detailData);
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
-        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        // ENDRING: Setter type til 'application/octet-stream'
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'application/octet-stream' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);

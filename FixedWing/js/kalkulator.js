@@ -183,11 +183,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         return "";
     }
 
+    
     function downloadCSV() {
         if (!validateForm()) { return; }
         const operatorNavn = document.getElementById('operator-navn').value || "UkjentOperatør";
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
-        const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.csv`;
+        
+        // ENDRING: Bruker .dat for å tvinge Power Automate til å tro det er binærfil
+        // (Da virker den gamle base64ToString-formelen din, og Excel holder seg unna)
+        const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.dat`;
 
         const primaryHeaders = ['Operatørnavn', 'Fylt ut av', 'Dato', 'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum', 'Kommentarer'];
         const detailHeaders = fieldData.map(field => [`${field.label} (Valg)`, `${field.label} (Verdi)`]).flat();
@@ -213,7 +217,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const allData = primaryData.concat(detailData);
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
-        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+        
+        // Vi bruker 'application/octet-stream' for å sikre at det behandles som binærdata
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'application/octet-stream' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
@@ -352,26 +358,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.stopPropagation();
         }
 
+        // Erstatt den eksisterende handleDrop-funksjonen med denne:
         function handleDrop(e) {
             let dt = e.dataTransfer;
             let files = dt.files;
-
+    
             if (files.length > 0) {
-                // Sjekk om filen er en CSV-fil (valgfritt men anbefalt)
-                if (files[0].type === 'text/csv' || files[0].name.toLowerCase().endsWith('.csv')) {
-                    // Simuler et event-objekt som loadCsvFile forventer
+                const fileName = files[0].name.toLowerCase();
+                // Godta både .csv, .txt og .dat
+                const isValidFile = fileName.endsWith('.csv') || fileName.endsWith('.txt') || fileName.endsWith('.dat');
+    
+                if (isValidFile) {
                     const simulatedEvent = {
                         target: {
                             files: files
                         }
                     };
-                    loadCsvFile(simulatedEvent); // Bruk den eksisterende funksjonen
+                    loadCsvFile(simulatedEvent); 
                 } else {
-                    alert("Vennligst slipp kun CSV-filer.");
+                    alert("Vennligst slipp kun .dat (eller .csv/.txt) filer.");
                 }
             }
         }
-        // --- SLUTT Dra-og-slipp funksjonalitet ---
 
 
         loadData();

@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return "";
     }
 
-     function downloadCSV() {
+    function downloadCSV() {
         const orgName = document.getElementById('organisation-name').value || "UnknownOrganisation";
         const orgType = document.getElementById('organisation-type').value || "UnknownType";
         const dateValue = document.getElementById('assessment-date').value;
@@ -364,7 +364,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const today = new Date();
              formattedDate = today.toLocaleDateString('no-NO');
         }
-        const fileName = `${orgName} - ${orgType} - MSAT - ${formattedDate}.csv`;
+        
+        // ENDRING: .dat filendelse
+        const fileName = `${orgName} - ${orgType} - MSAT - ${formattedDate}.dat`;
 
         const criticalMet = document.querySelector('#extension-checklist div:nth-child(1)').classList.contains('status-pass');
         const financialMet = document.querySelector('#extension-checklist div:nth-child(2)').classList.contains('status-pass');
@@ -426,7 +428,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const allData = primaryData.concat(extensionPossibleData, commentData, detailData, extensionData);
 
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
-        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); 
+        
+        // ENDRING: application/octet-stream
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'application/octet-stream' }); 
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
