@@ -1,0 +1,115 @@
+body {
+    font-family: 'Overpass', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    padding: 20px;
+    margin: 0;
+}
+
+.home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #03477F;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    z-index: 1000;
+}
+
+.header {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+}
+
+h1 { text-align: center; color: #03477F; margin-top: 0; }
+
+.header-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-field { display: flex; flex-direction: column; }
+.info-field label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+.info-field input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+
+/* Kart */
+#map { height: 350px; width: 100%; border-radius: 4px; border: 1px solid #ccc; z-index: 1; }
+.map-section { margin-top: 20px; }
+.map-controls { margin-top: 5px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9em; color: #666; }
+.small-btn { padding: 4px 8px; font-size: 0.8em; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; }
+
+/* Gauge */
+.total-summary { display: flex; justify-content: center; margin-bottom: 30px; }
+.gauge-block { background: white; padding: 20px; border-radius: 8px; text-align: center; width: 250px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.gauge { position: relative; width: 200px; height: 100px; margin: 0 auto; overflow: hidden; }
+.gauge-bg { position: absolute; width: 200px; height: 200px; background: conic-gradient(from 270deg, #4caf50 0deg, #ffeb3b 90deg, #f44336 180deg); border-radius: 50%; }
+.gauge-cover { position: absolute; top: 20px; left: 20px; width: 160px; height: 160px; background: white; border-radius: 50%; }
+.gauge-needle { position: absolute; bottom: 0; left: 50%; width: 4px; height: 100px; background: #333; transform-origin: bottom center; transform: rotate(-90deg); transition: transform 0.5s ease-out; }
+.gauge-block-title { font-weight: bold; margin-bottom: 5px; font-size: 1.2em; }
+.risk-label { margin-top: 10px; font-weight: bold; font-size: 1.2em; }
+
+/* Criteria Grid Box Layout */
+.criteria-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto 30px auto;
+}
+
+.criterion-box {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-left: 5px solid #03477F;
+    display: flex;
+    flex-direction: column;
+}
+
+.criterion-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.criterion-title { font-weight: bold; font-size: 1.1em; color: #333; }
+
+/* Tooltip */
+.tooltip-icon {
+    background: #03477F; color: white; width: 20px; height: 20px; border-radius: 50%;
+    text-align: center; line-height: 20px; font-size: 12px; cursor: help; margin-left: 10px; display: inline-block;
+}
+.tooltip-container { position: relative; display: inline-block; }
+.tooltip-text {
+    visibility: hidden; width: 250px; background-color: #333; color: #fff; text-align: left;
+    padding: 10px; border-radius: 6px; position: absolute; z-index: 100; bottom: 125%;
+    left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; font-size: 0.9em; font-weight: normal;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+.criterion-select {
+    width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px; font-size: 1em;
+}
+
+.criterion-comment {
+    width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ddd; resize: vertical; box-sizing: border-box; font-family: inherit;
+}
+
+/* Actions */
+.action-buttons { text-align: center; margin-top: 40px; margin-bottom: 50px; }
+.action-buttons button, .load-button {
+    background-color: #03477F; color: white; border: none; padding: 12px 24px;
+    border-radius: 5px; font-size: 1em; cursor: pointer; margin: 0 10px; display: inline-flex; align-items: center; gap: 8px;
+}
+.action-buttons button:hover { background-color: #023663; }
+#clear-form-button { background-color: #e74c3c; }
+#clear-form-button:hover { background-color: #c0392b; }

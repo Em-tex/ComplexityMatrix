@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risikovurdering Luftfartshinder</title>
+    <link rel="icon" href="../smallLogo.png" type="image/png">
+    
+    <link rel="stylesheet" href="css/stil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <a href="../index.html" class="home-button" aria-label="Gå til hovedsiden">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="header">
+        <h1>Luftfartshinder Risikovurdering</h1>
+        
+        <div class="header-info-grid">
+            <div class="info-field">
+                <label for="hindereier">Eier:</label>
+                <input type="text" id="hindereier" placeholder="Navn på eier">
+            </div>
+            <div class="info-field">
+                <label for="hindertype">Hindertype:</label>
+                <input type="text" id="hindertype" placeholder="F.eks. Mast, Kraftlinje">
+            </div>
+            <div class="info-field">
+                <label for="sted">Sted/Navn:</label>
+                <input type="text" id="sted" placeholder="Stedsnavn">
+            </div>
+            <div class="info-field">
+                <label for="filled-by">Fylt ut av:</label>
+                <input type="text" id="filled-by" placeholder="Ditt navn">
+            </div>
+            <div class="info-field">
+                <label for="date">Dato:</label>
+                <input type="date" id="date">
+            </div>
+        </div>
+
+        <div class="map-section">
+            <label>Marker plassering i kart (klikk på kartet):</label>
+            <div id="map"></div>
+            <div class="map-controls">
+                <span id="koordinater-visning">Ingen plassering valgt</span>
+                <button type="button" id="undo-map-button" class="small-btn">Fjern markør</button>
+            </div>
+            <input type="hidden" id="latitude">
+            <input type="hidden" id="longitude">
+        </div>
+    </div>
+
+    <div class="total-summary">
+        <div class="gauge-block" id="gauge-block-risk">
+            <div class="gauge-block-title"><i class="fa-solid fa-triangle-exclamation"></i> Risikoscore</div>
+            <div class="gauge-block-summary"><span id="total-score">0</span> / <span id="max-score">55</span></div>
+            <div class="gauge">
+                <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                <div class="gauge-needle" id="risk-needle"></div>
+            </div>
+            <div class="risk-label" id="risk-label-text">Lav Risiko</div>
+        </div>
+    </div>
+
+    <div class="criteria-container" id="criteria-container"></div>
+
+    <div class="action-buttons">
+        <button id="download-csv-button"><i class="fa-solid fa-file-csv"></i> Last ned CSV</button>
+        <button id="clear-form-button"><i class="fa-solid fa-trash"></i> Tøm skjema</button>
+        <input type="file" id="csv-file-input" accept=".dat,.csv" style="display: none;">
+        <button id="load-csv-button" class="load-button"><i class="fa-solid fa-upload"></i> Last inn fil</button>
+    </div>
+
+    <script src="js/kalkulator.js"></script>
+</body>
+</html>
