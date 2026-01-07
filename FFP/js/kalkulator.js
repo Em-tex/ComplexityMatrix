@@ -338,7 +338,9 @@ document.addEventListener('DOMContentLoaded', () => {
         criteriaData.forEach(c => {
             csvContent += `${c.title} (Verdi);${c.title} (Kommentar);`;
         });
-        csvContent += "\n";
+        
+        // VIKTIG ENDRING: Bruker \r\n (CRLF) for at Power Automate split() skal virke likt som på andre skjema
+        csvContent += "\r\n";
 
         // Values
         const lat = document.getElementById('latitude').value;
