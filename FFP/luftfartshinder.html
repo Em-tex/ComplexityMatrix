@@ -21,6 +21,19 @@
     <div class="header">
         <h1>Luftfartshinder Risikovurdering</h1>
         
+        <div class="header-row-primary">
+            <div class="info-field">
+                <label for="filled-by">Fylt ut av:</label>
+                <input type="text" id="filled-by" placeholder="Ditt navn">
+            </div>
+            <div class="info-field">
+                <label for="date">Dato:</label>
+                <input type="date" id="date">
+            </div>
+        </div>
+
+        <hr class="divider">
+
         <div class="header-info-grid">
             <div class="info-field">
                 <label for="hindereier">Eier:</label>
@@ -34,47 +47,57 @@
                 <label for="sted">Sted/Navn:</label>
                 <input type="text" id="sted" placeholder="Stedsnavn">
             </div>
-            <div class="info-field">
-                <label for="filled-by">Fylt ut av:</label>
-                <input type="text" id="filled-by" placeholder="Ditt navn">
-            </div>
-            <div class="info-field">
-                <label for="date">Dato:</label>
-                <input type="date" id="date">
-            </div>
         </div>
 
-        <div class="map-section">
-            <label>Marker plassering i kart (klikk på kartet):</label>
-            <div id="map"></div>
-            <div class="map-controls">
-                <span id="koordinater-visning">Ingen plassering valgt</span>
-                <button type="button" id="undo-map-button" class="small-btn">Fjern markør</button>
-            </div>
-            <input type="hidden" id="latitude">
-            <input type="hidden" id="longitude">
-        </div>
-    </div>
+        <hr class="divider">
 
-    <div class="total-summary">
-        <div class="gauge-block" id="gauge-block-risk">
-            <div class="gauge-block-title"><i class="fa-solid fa-triangle-exclamation"></i> Risikoscore</div>
-            <div class="gauge-block-summary"><span id="total-score">0</span> / <span id="max-score">55</span></div>
-            <div class="gauge">
-                <div class="gauge-bg"><div class="gauge-cover"></div></div>
-                <div class="gauge-needle" id="risk-needle"></div>
+        <div class="map-gauge-container">
+            <div class="gauge-section">
+                <div class="gauge-block" id="gauge-block-risk">
+                    <div class="gauge-block-title"><i class="fa-solid fa-triangle-exclamation"></i> Risikoscore</div>
+                    <div class="gauge-block-summary"><span id="total-score">0</span> / <span id="max-score">55</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="risk-needle"></div>
+                    </div>
+                    <div class="risk-label" id="risk-label-text">Vurderer...</div>
+                </div>
             </div>
-            <div class="risk-label" id="risk-label-text">Lav Risiko</div>
+
+            <div class="map-section">
+                <label>Marker plassering i kart:</label>
+                <div id="map"></div>
+                <div class="map-controls">
+                    <span id="koordinater-visning">Ingen plassering valgt</span>
+                    <button type="button" id="undo-map-button" class="small-btn">Fjern markør</button>
+                </div>
+                <input type="hidden" id="latitude">
+                <input type="hidden" id="longitude">
+            </div>
         </div>
     </div>
 
     <div class="criteria-container" id="criteria-container"></div>
 
+    <div class="comments-section">
+        <label for="main-comment">Overordnet kommentar / Konklusjon:</label>
+        <textarea id="main-comment" rows="3" placeholder="Skriv en oppsummering..."></textarea>
+    </div>
+
     <div class="action-buttons">
-        <button id="download-csv-button"><i class="fa-solid fa-file-csv"></i> Last ned CSV</button>
+        <button id="download-dat-button"><i class="fa-solid fa-file-export"></i> 1. Last ned fil (.dat)</button>
+        
+        <a href="https://caano.sharepoint.com/:f:/r/teams/CAA-MSAT/Delte%20dokumenter/Organisation%20Assessment/FFP/Luftfarthinder%20data?csf=1&web=1&e=Nr3PPx" target="_blank" class="button-link">
+            <i class="fa-brands fa-microsoft"></i> 2. Last opp til SharePoint
+        </a>
+        
+        <a href="https://caano.sharepoint.com/:l:/r/teams/CAA-MSAT/Lists/Luftfartshinder?e=vfuE9E" target="_blank" class="button-link">
+            <i class="fa-solid fa-list"></i> 3. Profiloversikt
+        </a>
+
+        <button id="load-dat-button" class="load-button"><i class="fa-solid fa-upload"></i> Last inn fil</button>
         <button id="clear-form-button"><i class="fa-solid fa-trash"></i> Tøm skjema</button>
-        <input type="file" id="csv-file-input" accept=".dat,.csv" style="display: none;">
-        <button id="load-csv-button" class="load-button"><i class="fa-solid fa-upload"></i> Last inn fil</button>
+        <input type="file" id="dat-file-input" accept=".dat,.csv,.txt" style="display: none;">
     </div>
 
     <script src="js/kalkulator.js"></script>
