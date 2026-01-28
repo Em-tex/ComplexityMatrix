@@ -369,6 +369,7 @@ body {
 #download-csv-button { background-color: #28a745; }
 #sharepoint-upload-button { background-color: #0078D4; }
 #msat-overview-button { background-color: #6c757d; }
+#print-pdf-button { background-color: #6f42c1; } /* NY LINJE: Lilla farge */
 #clear-form-button { background-color: #dc3545; }
 #load-csv-button { background-color: #ffc107; color: #212529; }
 .svg-icon { height: 1.2em; width: 1.2em; margin-right: 0.5em; fill: currentColor; }
@@ -384,20 +385,18 @@ body {
 
 /* --- UPDATED POPUP STYLES --- */
 
-/* Endret fra spesifikk strong.popup-opener til generell klasse */
 .popup-opener {
     cursor: help;
     transition: color 0.2s;
 }
 
 .popup-opener:hover {
-    color: #03477F; /* Samme blåfarge som header for å indikere interaktivitet */
+    color: #03477F; 
     text-decoration: underline;
 }
 
-/* Stil for hjelpe-ikonet i kommentarfeltet */
 .comment-help-icon {
-    color: #6A8E7F; /* Dempet Grønn fra fargeprofilen */
+    color: #6A8E7F; 
     margin-left: 8px;
     cursor: pointer;
     font-size: 1.1em;
@@ -420,22 +419,21 @@ body {
     position: absolute;
     top: 15px;
     left: 15px;
-    font-size: 1.8em; /* Juster størrelsen etter behov */
-    color: #03477F; /* Bruker mørkeblå farge fra profilen */
+    font-size: 1.8em; 
+    color: #03477F; 
     text-decoration: none;
-    z-index: 1001; /* Sikrer at den ligger over annet innhold */
+    z-index: 1001; 
 }
 .home-button:hover {
-    color: #023663; /* Litt mørkere ved hover */
+    color: #023663; 
 }
-/* Juster body padding for å unngå overlapp med knappen om nødvendig */
+
 body {
-    padding-top: 50px; /* Eksempel, juster verdien etter behov */
-    position: relative; /* Nødvendig for absolutt posisjonering av barn */
+    padding-top: 50px; 
+    position: relative; 
 }
-/* Noen sider kan trenge spesifikk justering */
 .header-container, .header {
-    margin-top: 10px; /* Litt ekstra margin for header på noen sider */
+    margin-top: 10px; 
 }
 
 @media print {
@@ -452,12 +450,10 @@ body {
         width: 100%;
         max-width: none;
     }
-    /* Sørger for at bakgrunnsfarger (f.eks. i gauges og tabeller) blir med på utskrift */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
-    /* Unngå at seksjoner deles midt i på tvers av sider */
     .section, .form-row {
         break-inside: avoid;
     }
