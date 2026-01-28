@@ -437,3 +437,28 @@ body {
 .header-container, .header {
     margin-top: 10px; /* Litt ekstra margin for header på noen sider */
 }
+
+@media print {
+    .action-buttons, .home-button, .footer-links, .help-icon, .comment-help-icon, #popup-close-button {
+        display: none !important;
+    }
+    body {
+        background-color: white;
+        margin: 0;
+    }
+    .container, .header, .total-summary, .section, .multi-comments-section {
+        box-shadow: none;
+        margin-top: 0;
+        width: 100%;
+        max-width: none;
+    }
+    /* Sørger for at bakgrunnsfarger (f.eks. i gauges og tabeller) blir med på utskrift */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    /* Unngå at seksjoner deles midt i på tvers av sider */
+    .section, .form-row {
+        break-inside: avoid;
+    }
+}

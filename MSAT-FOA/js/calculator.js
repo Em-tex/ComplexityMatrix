@@ -337,6 +337,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    function printPDF() {
+        window.print();
+    }
+
     function getSelectedText(selectId) {
         const selectElement = document.getElementById(selectId);
         if (selectElement && selectElement.selectedIndex >= 0) {
@@ -452,6 +456,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const lines = e.target.result.split(/\r?\n/);
                 if (lines.length < 2) throw new Error("CSV file is empty or invalid.");
 
+                // FIX: Håndter BOM (Byte Order Mark) hvis det finnes
+                if (lines[0].charCodeAt(0) === 0xFEFF) {
+                    lines[0] = lines[0].slice(1);
+                }
+
                 const parseCsvField = (field) => {
                     field = field ? field.trim() : '';
                     if (field.startsWith('"') && field.endsWith('"')) {
@@ -460,8 +469,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     return field;
                 };
 
-                const headers = lines[0].split(';').map(h => parseCsvField(h));
-                const data = lines[1].split(';').map(d => parseCsvField(d));
+                // FIX: Bedre splitting av CSV for å håndtere semikolon i siterte felt
+                const splitCSV = (str) => str.split(/;(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+
+                const headers = splitCSV(lines[0]).map(h => parseCsvField(h));
+                const data = splitCSV(lines[1]).map(d => parseCsvField(d));
 
                 const headerMap = Object.fromEntries(headers.map((h, i) => [h, i]));
                 const getData = (headerName) => data[headerMap[headerName]] || '';
@@ -595,6 +607,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         document.getElementById('clear-form-button').addEventListener('click', clearForm);
         document.getElementById('download-csv-button').addEventListener('click', downloadCSV);
+        document.getElementById('print-pdf-button').addEventListener('click', printPDF);
 
         const loadCsvButton = document.getElementById('load-csv-button');
         const csvFileInput = document.getElementById('csv-file-input');
