@@ -11,9 +11,9 @@ Verktøyene er designet for å kartlegge en operatørs profil basert på ressurs
 Systemet er bygget opp rundt følgende dataflyt:
 
 1.  **Utfylling:** Inspektøren fyller ut skjemaet i nettleseren for den aktuelle organisasjonen.
-2.  **CSV-generering:** Ved ferdigstillelse lastes det ned en standardisert CSV-fil lokalt.
-3.  **SharePoint:** CSV-filen lastes opp til et spesifisert område i SharePoint (lenke finnes i verktøyene).
-4.  **Power Automate & Microsoft Lists:** En Power Automate-flyt trigger på opplastingen, parser CSV-filen, og oppdaterer en sentral Microsoft Liste. Dette gir en helhetsoversikt over risikobildet og kompleksiteten på tvers av alle operatører.
+2.  **CSV-generering:** Ved ferdigstillelse lastes det ned en fil med filendelse **.dat**. Denne inneholder data i CSV-format (kommaseparerte verdier). Dette gjøres for å sikre korrekt håndtering av tegnsett og import i etterfølgende systemer (Power Automate).
+3.  **SharePoint:** Filen (.dat) lastes opp til et spesifisert område i SharePoint (lenke finnes i verktøyene).
+4.  **Power Automate & Microsoft Lists:** En Power Automate-flyt trigger på opplastingen, parser innholdet (som er CSV), og oppdaterer en sentral Microsoft Liste. Dette gir en helhetsoversikt over risikobildet og kompleksiteten på tvers av alle operatører.
 
 ## Mappestruktur og Moduler
 

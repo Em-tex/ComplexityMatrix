@@ -2,14 +2,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const STORAGE_KEY = 'fixedWingComplexityData';
     let scoringRules = {};
 
+    // OPPDATERT: Justert MAX_SCORES siden HR SPO (maks 3 poeng) er fjernet
+    // Operations: 59 - 3 = 56
+    // Total: 119 - 3 = 116
     const MAX_SCORES = {
         resources: 22,
         fleet: 20,
-        operations: 59,
+        operations: 56,
         approvals: 18,
-        total: 119
+        total: 116
     };
 
+    // OPPDATERT: Fjernet HR SPO fra listen
     const fieldData = [
         { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
@@ -27,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
         { id: 'acmi', label: 'ACMI', section: 'operations' },
         { id: 'certificate', label: 'Certificate', section: 'operations' },
-        { id: 'hr-spo', label: 'HR SPO', section: 'operations' },
+        // { id: 'hr-spo', label: 'HR SPO', section: 'operations' },  <-- FJERNET
         { id: 'rnp-ar-apch', label: 'RNP AR APCH', section: 'approvals' },
         { id: 'mnps-nat-hla', label: 'MNPS/ NAT-HLA', section: 'approvals' },
         { id: 'rvsm', label: 'RVSM', section: 'approvals' },
@@ -183,14 +187,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         return "";
     }
 
-    
+    // OPPDATERT: Lagrer som .dat fil med application/octet-stream
     function downloadCSV() {
         if (!validateForm()) { return; }
         const operatorNavn = document.getElementById('operator-navn').value || "UkjentOperatør";
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
         
-        // ENDRING: Bruker .dat for å tvinge Power Automate til å tro det er binærfil
-        // (Da virker den gamle base64ToString-formelen din, og Excel holder seg unna)
         const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.dat`;
 
         const primaryHeaders = ['Operatørnavn', 'Fylt ut av', 'Dato', 'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum', 'Kommentarer'];
@@ -218,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const allData = primaryData.concat(detailData);
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         
-        // Vi bruker 'application/octet-stream' for å sikre at det behandles som binærdata
+        // Tvinger binær tolkning for Power Automate ved bruk av application/octet-stream og .dat
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'application/octet-stream' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
@@ -246,7 +248,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.onload = function(e) {
             const lines = e.target.result.split(/\r?\n/);
             if (lines.length < 2) {
-                alert("CSV-filen er tom eller ugyldig.");
+                alert("Filen er tom eller ugyldig.");
                 return;
             }
 
@@ -277,7 +279,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             updateCalculations();
-            alert("CSV-fil lastet inn!");
+            alert("Data lastet inn!");
         };
         reader.readAsText(file, "UTF-8"); // Leser som UTF-8
     }
@@ -333,24 +335,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // --- START Dra-og-slipp funksjonalitet ---
-        const dropZone = document.body; // Slipp hvor som helst på siden
+        const dropZone = document.body;
 
-        // Forhindre standardoppførsel for å tillate slipp
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults, false);
         });
 
-        // Visuell feedback når fil dras over
         ['dragenter', 'dragover'].forEach(eventName => {
             dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover-active'), false);
         });
 
-        // Fjern visuell feedback
         ['dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover-active'), false);
         });
 
-        // Håndter slipp av fil
         dropZone.addEventListener('drop', handleDrop, false);
 
         function preventDefaults(e) {
@@ -358,14 +356,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.stopPropagation();
         }
 
-        // Erstatt den eksisterende handleDrop-funksjonen med denne:
+        // OPPDATERT: Godtar .dat og .csv ved drag-and-drop
         function handleDrop(e) {
             let dt = e.dataTransfer;
             let files = dt.files;
     
             if (files.length > 0) {
                 const fileName = files[0].name.toLowerCase();
-                // Godta både .csv, .txt og .dat
                 const isValidFile = fileName.endsWith('.csv') || fileName.endsWith('.txt') || fileName.endsWith('.dat');
     
                 if (isValidFile) {
@@ -376,11 +373,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     };
                     loadCsvFile(simulatedEvent); 
                 } else {
-                    alert("Vennligst slipp kun .dat (eller .csv/.txt) filer.");
+                    alert("Vennligst slipp kun .dat eller .csv filer.");
                 }
             }
         }
-
 
         loadData();
         if (!document.getElementById('date').value) {
