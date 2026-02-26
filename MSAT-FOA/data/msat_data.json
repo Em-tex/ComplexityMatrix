@@ -1,0 +1,566 @@
+{
+    "sections": [
+      {
+        "id": "policy",
+        "number": "1",
+        "title": "SAFETY POLICY AND OBJECTIVES",
+        "icon": "fa-file-signature",
+        "subsections": [
+          {
+            "number": "1.1",
+            "title": "MANAGEMENT COMMITMENT",
+            "items": [
+              {
+                "id": "1.1.1",
+                "text": "Safety policy, sign off and periodical review",
+                "details": {
+                  "Present": "There is a safety policy, signed by the Accountable Manager, which includes a commitment to continuous improvement; observes all applicable legal requirements and standards; and considers best practices.",
+                  "Suitable": "The safety policy is easy to read. The content is customised to the organisation.",
+                  "Operating": "The safety policy is reviewed periodically to ensure it remains relevant to the organisation.",
+                  "Effective": "The Accountable Manager has a clear understanding of the safety policy and is fully engaged in implementing it.",
+                  "whatToLookFor": [
+                    "Interview the Accountable Manager to assess his/her knowledge and understanding of the safety policy.",
+                    "Check evidence that the Accountable Manager takes informed decisions in accordance with the safety policy.",
+                    "Confirm the safety policy is relevant and meets applicable EU Regulations.",
+                    "Check that ‘safety’ is key to the policy and remains a highest priority."
+                  ]
+                }
+              },
+              {
+                "id": "1.1.2",
+                "text": "Safety policy and resources",
+                "details": {
+                  "Present": "The safety policy includes a statement to provide appropriate resources. There is a process for assessing resources and addressing any shortfalls; needs are discussed at the right level of management.",
+                  "Suitable": "Volume and significance of the contracted activities (to and from) are properly factored for the determination of the resources to deliver safe operations. Appropriate resources are allocated in the case of multiple approvals, factoring the complexity of the operations.",
+                  "Operating": "The organisation is assessing the resources being provided to deliver a safe service and taking action to address any shortfalls.",
+                  "Effective": "The organisation is reviewing and taking action to address any forecasted shortfalls in resources. Needs are anticipated and forecasted, notably using the principles of the ‘management of changes’.",
+                  "whatToLookFor": [
+                    "Review available, appropriate resources including staff, equipment, and finance.",
+                    "How does the organisation manage resources by anticipating and addressing any shortfalls?",
+                    "Are there sufficient and competent personnel? How does the organisation assess it?",
+                    "Check whether the resources are discussed with the Accountable Manager or during SRB meeting (or equivalent), as appropriate."
+                  ]
+                }
+              },
+              {
+                "id": "1.1.3",
+                "text": "Communication of the safety policy",
+                "details": {
+                  "Present": "There is a means in place for the communication of the safety policy and its associated objectives. The management commitment to safety is documented within the safety policy.",
+                  "Suitable": "The safety policy and its associated objectives are clearly visible (or reachable) to all staff (e.g. consider multiple sites, countries). The safety policy is understandable (consider multiple languages).",
+                  "Operating": "The safety policy and its associated objectives are communicated to all personnel (including relevant contracted staff and organisations). The Accountable Executive and the senior management team are promoting their commitment to the safety policy through active and visible participation in the safety management system.",
+                  "Effective": "People across the organisation are familiar with the safety policy and its associated objectives and can describe their obligations in respect of the safety policy and the internal safety reporting scheme.",
+                  "whatToLookFor": [
+                    "Review how the safety policy is communicated.",
+                    "Question managers and staff regarding knowledge of the safety policy and its associated objectives.",
+                    "Evidence that senior management involved in safety activities participate to safety meetings, training, conferences, etc."
+                  ]
+                }
+              },
+              {
+                "id": "1.1.4",
+                "text": "Safety policy, commitment, and positive safety culture",
+                "details": {
+                  "Present": "The safety policy is documented including the promotion of a positive safety culture. The safety policy highlights the primary responsibility for safety of all employees to proactively manage risks. The safety policy contains the main attributes of a positive safety culture, including a commitment to safety leadership and to a Just Culture across the organisation.",
+                  "Suitable": "The safety policy describes the commitment of all relevant staff involved in safety activities. A standard code of ethics or behaviour is documented and appropriate to the type of safety activities.",
+                  "Operating": "The safety policy and associated positive safety culture are operationally implemented and promoted at working level by the Accountable Manager and the key managers involved in safety activities.",
+                  "Effective": "The safety policy, its implementation and commitment are reviewed with the Accountable Manager and senior management on a regular basis. The organisational commitment to safety addresses interactions with key external stakeholders. The internal safety reporting scheme is known and used without fears of reprisal.",
+                  "whatToLookFor": [
+                    "Senior management involved in safety activities are effectively involved in the (safety) management system and proactively managing safety policy, positive safety culture and objective processes set forth by the organisation to proactively manage risks.",
+                    "Evidence of senior management participation in safety meetings, training, conferences etc. where positive safety culture is promoted.",
+                    "Evidence of proactive behaviours by the managers involved in safety activities, demonstrating continuous leadership and continuous improvement."
+                  ]
+                }
+              },
+              {
+                "id": "1.1.5",
+                "text": "Safety policy and just culture",
+                "details": {
+                  "Present": "A just culture policy and principles have been defined.",
+                  "Suitable": "The just culture policy (or in any other related document) clearly identifies acceptable and unacceptable behaviours. The principles ensure that the policy can be applied consistently across the whole organisation. The just culture policy and principles are understandable and clearly visible (or reachable). Decision-making process related to the implementation of the just culture is designed according to the size of the organisation (e.g. involvement of staff representatives, staff Committee, Unions etc.)",
+                  "Operating": "There is evidence of the Just Culture policy and supporting principles being applied and promoted to staff.",
+                  "Effective": "The Just Culture policy is applied in a fair and consistent manner and people trust the policy. There is evidence that the line between acceptable and unacceptable behaviour has been determined in consultation with staff representatives.",
+                  "whatToLookFor": [
+                    "Check that guidance and governance are developed on how to apply the just culture policy.",
+                    "Evidence of when the just culture principles have been applied following an event.",
+                    "Evidence of interventions from safety investigations addressing organisational issues rather than focusing only on the individual.",
+                    "Review how the organisation is monitoring voluntary reporting rates and review the number of aviation safety reports appropriate to the activities."
+                  ]
+                }
+              },
+              {
+                "id": "1.1.6",
+                "text": "Safety objectives",
+                "details": {
+                  "Present": "Safety objectives have been established that are consistent with the safety policy and communicated throughout the organisation.",
+                  "Suitable": "Safety objectives are relevant to the organisation and its activities. They are monitored by the right level of (senior) managers. Safety objectives are understandable and clearly visible. Safety objectives are aligned with the SSP and/or SPAS, when appropriate.",
+                  "Operating": "Safety objectives are being measured and regularly reviewed, are relevant and are communicated throughout the organisation. They are monitored through the Safety Review Board (or equivalent) and adjusted, when needed.",
+                  "Effective": "Achievement of the safety objectives is being monitored by senior management and action taken to ensure they are being met. Associated qualitative and quantitative measures are in place. Safety objectives are not only aligned with the SSP and/or SPAS, but they are also compared with those of the risk profile sector. They are updated based on the latest relevant safety information available. The organisation is sometimes involved in the elaboration of the SSP and/or SPAS. Continuous improvement of safety is effectively measured.",
+                  "whatToLookFor": [
+                    "Assess whether the safety objectives are appropriate and relevant.",
+                    "Through the safety performance measurement and monitoring, check whether the Safety objectives are being measured to monitor achievement through qualitative and quantitative means, such as SMART SPIs and SPTs.",
+                    "Check whether the safety objectives, as a minimum, target ‘continuous improvement’."
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "1.2",
+            "title": "SAFETY ACCOUNTABILITY AND RESPONSIBILITIES",
+            "items": [
+              {
+                "id": "1.2.1",
+                "text": "Identification of the Accountable manager",
+                "details": {
+                  "Present": "An Accountable Manager has been appointed with full responsibility and ultimate accountability for the SMS.",
+                  "Suitable": "The Accountable Manager has control of resources. In case of several approvals, the designation of the ‘Accountable Manager’ will reflect the governance structure, such as different SMS in each domain (with interfaces) or corporate SMS.",
+                  "Operating": "The Accountable Manager ensures that the SMS is properly resourced, implemented and maintained and has the authority to stop the operation if there is an unacceptable level of safety risk. The Accountable Manager is fully aware of his/her SMS roles and responsibilities. The Accountable Manager is accessible to the staff in the organisation.",
+                  "Effective": "The Accountable Manager ensures that the performance of the SMS is being monitored, reviewed and improved. Beyond his/her SMS roles and responsibilities, the Accountable Manager continuously promotes the safety policy, safety standards, and safety culture of the organisation.",
+                  "whatToLookFor": [
+                    "Evidence that the Accountable Manager has the authority to provide sufficient resources for relevant safety improvements.",
+                    "Evidence that the Accountable Manager is fully aware of their SMS roles and responsibilities.",
+                    "Evidence of decision making on risk acceptability."
+                  ]
+                }
+              },
+              {
+                "id": "1.2.2",
+                "text": "Accountabilities and responsibilities",
+                "details": {
+                  "Present": "The safety accountability, authorities and responsibilities are clearly defined and documented.",
+                  "Suitable": "Key safety roles have been identified for safety accountability, authorities, and responsibilities (for example, through job descriptions, job family descriptions, or organisational charts).",
+                  "Operating": "Individuals have been identified to fill key safety roles and are aware of and fulfil their safety responsibilities, authorities and accountabilities and encouraged to contribute to the SMS.",
+                  "Effective": "The accountable manager and the senior management team are aware of the substantive / significant risks faced by the organisation, and safety management system principles exist throughout the organisation so that safety is part of the highest priority in the organisation.",
+                  "whatToLookFor": [
+                    "Question managers and staff regarding their roles and responsibilities.",
+                    "Confirm senior managers are aware of the organisation’s safety performance, its most significant risks and its safety objectives.",
+                    "Evidence of managers having safety related performance targets."
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "1.3",
+            "title": "Appointment of key personnel",
+            "items": [
+              {
+                "id": "1.3.1",
+                "text": "Appointment of key personnel",
+                "details": {
+                  "Present": "A safety manager who is responsible for the implementation and maintenance of the SMS has been appointed with a direct reporting line with the Accountable Manager.",
+                  "Suitable": "The safety manager is competent. Sufficient time and resources are allocated to maintain the SMS, but not limited to, competent staff for safety investigation, analysis, auditing, and promotion. See Annex 19 note: Depending on the size of the service provider and the complexity of its aviation products or services, the responsibilities for the implementation and maintenance of the SMS may be assigned to one or more persons, fulfilling the role of safety manager, as their sole function or combined with other duties, provided these do not result in any conflicts of interest. For complex organisation, see next section.",
+                  "Operating": "The safety manager has implemented and is maintaining the SMS. The safety manager is in regular communication with the Accountable Manager and escalates safety issues when appropriate. The safety manager is accessible to staff in the organisation.",
+                  "Effective": "The safety manager is competent to manage the SMS and identifying improvements in a timely manner. There is an established reporting scheme between the Accountable Manager and the safety manager to timely and regularly report on the safety issues.",
+                  "whatToLookFor": [
+                    "Consider whether the responsibilities for the implementation and maintenance of the SMS should be given to a full-time person or to a safety manager supported by a team, enough empowered to advocate safety in case of conflict of interest.",
+                    "Check for any conflicts of interest and that they have been identified and managed.",
+                    "Review safety manager role including credibility, competence, and status."
+                  ]
+                }
+              },
+              {
+                "id": "1.3.2",
+                "text": "Appointment of key personnel for complex organisation(s)",
+                "details": {
+                  "Present": "The organisation has established appropriate safety committees(s).",
+                  "Suitable": "Safety committee(s)’ structure and frequency support the SMS functions across the organisation. The scope of the safety committee(s) includes safety risks and compliance issues. The attendance of the highest-level safety committee includes at least the Accountable Manager and the heads of functional areas.",
+                  "Operating": "There is evidence of meetings taking place detailing the attendance, discussions, and actions. The safety committee(s) monitor the effectiveness of the SMS and compliance monitoring function by reviewing there are sufficient resources. Actions are being monitored. Qualitative/quantitative means have been established to measure and monitor the established safety objectives.",
+                  "Effective": "Safety committees include key stakeholders. The outcomes of the meetings are documented and communicated, and all actions are agreed, taken and followed up in a timely manner. The safety performance and safety objectives are reviewed and actioned as appropriate.",
+                  "whatToLookFor": [
+                    "Review safety committee and meeting structure and Terms of Reference for each committee / meeting.",
+                    "Review meeting attendance levels.",
+                    "Review meeting records and actions.",
+                    "outcomes are communicated to the rest or the organisation."
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "1.4",
+            "title": "Co-ordination of emergency response planning (ERP)",
+            "items": [
+              {
+                "id": "1.4.0",
+                "text": "Co-ordination of emergency response planning (ERP)",
+                "details": {
+                  "Present": "An appropriate, coordinated ERP has been developed and distributed that defines the procedures, roles, responsibilities and actions of the various organisations and key personnel.",
+                  "Suitable": "Key personnel have easy access to the relevant parts of the ERP at all times. The ERP defines the procedures, roles, responsibilities, and actions of the various organisations and key personnel. The frequency and methods for testing the ERP are defined. The coordination with other organisations (including non-aviation organisations) is defined with appropriate means.",
+                  "Operating": "The ERP is reviewed and tested to make sure it remains up to date. Different scenarios with variations test the robustness of the ERP. Actions are taken to improve the ERP effectiveness.",
+                  "Effective": "There is evidence of coordination with other organisations through regular drills or crisis exercises, which are analysed for further improvement.",
+                  "whatToLookFor": [
+                    "Verify whether the service provider is required to have an ERP or to coordinate with the organisation’s ERP, according to the domain.",
+                    "Review the emergency response plan and how the procedures, roles, responsibilities, and actions of the various organisations are defined.",
+                    "Interview key personnel and check they have access to the relevant parts of the ERP."
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "1.5",
+            "title": "SMS Documentation",
+            "items": [
+              {
+                "id": "1.5.1",
+                "text": "SMS documentation",
+                "details": {
+                  "Present": "The SMS documentation includes the policies and processes that describe the organisation’s SMS and processes.",
+                  "Suitable": "The scope of the activities under the SMS is clearly defined. SMS documentation is comprehensible. SMS documentation is consistent with other internal management systems and is representative of the actual processes in place. The manner and format of the SMS documentation is appropriate to the organisation and readily available to all relevant personnel.",
+                  "Operating": "Changes to the SMS documentation are managed. Key personnel involved in SMS implementation is familiar with and follows the relevant parts of the SMS documentation, whereas employees are familiar with the content of the SMS documentation relevant to their activities.",
+                  "Effective": "SMS documentation is proactively reviewed for continuous improvement.",
+                  "whatToLookFor": [
+                    "Review the SMS documentation and amendment procedures.",
+                    "Check the manner and format of the SMS documentation, depending on the size, structure of the organisation, its business model, such as volume and significance of the contracted activities (to and from).",
+                    "Check for cross references to other documents and procedures."
+                  ]
+                }
+              },
+              {
+                "id": "1.5.2",
+                "text": "SMS records",
+                "details": {
+                  "Present": "The SMS documentation defines the SMS outputs and which records of SMS activities will be stored. Records to be stored, storage period, and location are identified.",
+                  "Suitable": "Data protection and confidentiality rules have been defined.",
+                  "Operating": "SMS activities are appropriately stored and found to be complete and consistent with appropriate data protection and confidentiality control rules.",
+                  "Effective": "SMS records are routinely used as inputs for safety management related tasks and continuous improvement of the SMS. SMS documentation, including SMS related records, are regularly reviewed and updated with appropriate version control in place.",
+                  "whatToLookFor": [
+                    "Check how safety records are stored and version controlled.",
+                    "Data protection and confidentiality rules have been defined and are consistently applied.",
+                    "Check if appropriate staff is aware of the records control processes and procedures."
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "risk",
+        "number": "2",
+        "title": "SAFETY RISK ASSESSMENT",
+        "icon": "fa-triangle-exclamation",
+        "subsections": [
+          {
+            "number": "2.1",
+            "title": "Hazard Identification",
+            "items": [
+              {
+                "id": "2.1.1",
+                "text": "Hazard identification",
+                "details": {
+                  "Present": "There is a process that defines how hazards are identified through reactive and proactive methods, using multiples sources. The methodology to define the criteria for safety investigations is documented. The process includes the management of organisational change when it impacts safety (see 3.2).",
+                  "Suitable": "Multiple sources of hazards (internal and external) are considered and reviewed, as appropriate in the domain. The interfaces are properly addressed. The data analysis process enables gaining useable safety information. Hazards are documented in an easy-to-understand format. The level of sign-off for safety investigations is defined and adequate to the level of risk. The safety hazards at organisation’s level are consistent with the ones identified at authority’s level, where relevant.",
+                  "Operating": "The hazards are identified and documented. Technical, human, and organisational factors related hazards are being considered. The criteria for safety investigations are identified and applied. Safety investigations are carried out and recorded.",
+                  "Effective": "The organisation has processes and means that capture hazards (technical, environmental, human, and organisational factors related), which are maintained and reviewed to ensure they remain up to date. The organisation is continuously and proactively identifying hazards (technical, environmental, human, and organisational factors related) related to its activities and operational environment and involves all key personnel and relevant stakeholders. Hazards are assessed in a systematic and timely manner. Personnel express confidence and trust in the organisation's reporting policy and processes. The criteria for safety investigations are continuously updated to include internal and external sources as required.",
+                  "whatToLookFor": [
+                    "Review how hazards are identified, analysed, addressed, and recorded.",
+                    "Review structure and layout of hazard log.",
+                    "Consider hazards related to: Possible accident or serious incident scenarios, Technical factors as well as Human and organisational factors, Business decisions and processes, Third party organisations."
+                  ]
+                }
+              },
+              {
+                "id": "2.1.2",
+                "text": "Occurrences reporting iaw. Regulation (EU) 376/2014",
+                "details": {
+                  "Present": "There is a confidential reporting system to capture mandatory occurrences and voluntary reports that includes a feedback system and stored on a database. Responsibilities have been defined as required by Reg. (EU) 376/2014. The process identifies how reports are actioned and timescales specified.",
+                  "Suitable": "The reporting system is accessible and easy to use for the personnel involved in the safety activities of the organisation. There is an appropriate means to capture issues from third parties (partners, suppliers, contractors).",
+                  "Operating": "The reporting system is simple to use, being used and accessible to all personnel. There is feedback to the reporter of any actions taken (or not taken), where appropriate, and to the rest of the organisation. Reports are evaluated, processed, analysed, and stored. Safety investigations are carried out by appropriately trained personnel to identify root causes (why it happened, not just what happened). People are aware and fulfil their responsibilities in respect of the reporting system. Reports are processed within the defined timescales. Coherence with the topics discussed during the SRB or safety committees’ meetings is ensured.",
+                  "Effective": "Personnel express confidence and trust in the organisation's reporting policy and process. The reporting system is being used to influence management decisions and continuous improvement. There is a healthy reporting system based on the pertinence of reports received. Safety reports are acted on in a timely manner. The reporting system contributes to the continuous improvement of the organisation performance.",
+                  "whatToLookFor": [
+                    "Verify that the responsibilities as required by Regulation (EU) 376/2014 have been defined and described in the job descriptions.",
+                    "Review the reporting system for access and ease of use.",
+                    "Check if staff trusts the reporting system, are familiar with it and know what should be reported."
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "2.2",
+            "title": "Safety risk assessment and mitigation",
+            "items": [
+              {
+                "id": "2.2.1",
+                "text": "Safety risk analysis and assessment",
+                "details": {
+                  "Present": "There is a process for the analysis and assessment of safety risks.",
+                  "Suitable": "The risk assessment methodology, including ‘severity’ and ‘likelihood’ usable criteria are defined and fit the service provider’s actual environment, including consideration to the expert judgement when data are not available. The used definitions are sufficiently explicit or detailed. For the acceptance of the risk’s level, the right level of organisation’s authority within the organisation (responsibilities) in cooperation with the stakeholders is clearly defined.",
+                  "Operating": "Risk analysis and assessments are carried out in a consistent manner based on the defined process. Appropriate risks controls are being applied to reduce safety risks to an acceptable level, including timelines and allocation of responsibilities agreed with the stakeholders. Operational, technical, human and organisational factors are considered as part of the development of risks controls. Senior management is actively involved in medium and high risks and their mitigation and controls. Understanding of external inputs and outputs of safety risk management that should be addressed.",
+                  "Effective": "Risk analysis and assessments are reviewed for consistency and to identify improvements in the processes. Risk assessments are regularly reviewed to ensure they remain current. Risk acceptability criteria are used routinely, consistently applied in management decision making processes, and are regularly reviewed.",
+                  "whatToLookFor": [
+                    "Review risk classification scheme and procedures.",
+                    "Check the methodology used to assess the risks; how this is documented, accurately defined, and used; check how the staff using that methodology is trained.",
+                    "Check that the process defines who can accept what level of risk."
+                  ]
+                }
+              },
+              {
+                  "id": "2.2.2",
+                  "text": "Safety risk control",
+                  "details": {
+                    "Present": "The organisation has a process in place to decide and apply the risk controls.",
+                    "Suitable": "Responsibilities and timelines for determining and accepting the risk controls are defined. Appropriate risk mitigation strategies and perspectives are considered.",
+                    "Operating": "Appropriate risk controls are being applied to reduce the risk to an acceptable level including timelines and allocation of responsibilities. The organisation follows the process in place to make decisions and apply appropriate and effective risk controls. Human Performance are considered as part of the development of risk controls.",
+                    "Effective": "Risk controls are practical and sustainable, applied in a timely manner and do not create additional risks. The effectiveness of the risks controls is monitored through safety performance, using qualitative and/or quantitative means. Risk Controls take Human Performance into consideration.",
+                    "whatToLookFor": [
+                      "Risk controls clearly identified. Evidence of risk controls being actioned and follow up.",
+                      "Quantitative and/or qualitative means are used to monitor the effectiveness of the risk controls, such as to SMART SPIs, SPTs, alert levels.",
+                      "Check how the policy considers ALARP – verify the implementation of it."
+                    ]
+                  }
+                }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "assurance",
+        "number": "3",
+        "title": "SAFETY ASSURANCE",
+        "icon": "fa-shield-halved",
+        "subsections": [
+          {
+            "number": "3.1",
+            "title": "Safety performance monitoring and measurement",
+            "items": [
+              {
+                "id": "3.1.1",
+                "text": "Verify safety performance and validate risk controls",
+                "details": {
+                  "Present": "The organisation has a documented internal audit programme with a link to a management review process. There is a documented process to assess whether the appropriate risk controls are applied and effective with respect to SMS key processes. A person or group of persons with responsibilities for the monitoring function have been identified and they have direct access to the Accountable Executive.",
+                  "Suitable": "Responsibilities, methods, and timelines for assessing risk controls are appropriately defined. Safety performance measurement targets the effectiveness of the mitigation measures addressing the key risks, and by extension, the safety objectives. Safety performance measurement is focused on what is important rather than what is easy to measure. The contribution of contracted organisations should be considered in the safety performance process, considering the potential effect it may have on the safety performance of the organisation.",
+                  "Operating": "Information from the reporting system(s), safety assurance, compliance monitoring activities or any other relevant source feeds back into the safety risk management process. Appropriate risk controls are being verified to assess whether they are applied and effective. Follow-up of the corrective/preventive actions plan is evidenced and reviewed by the relevant SMS governance body (i.e. Adequate authority level based on the size of the organisation and the complexity of its operations). The interface between compliance-based audits and the safety risk management processes is described and operating.",
+                  "Effective": "Appropriate risk controls are assessed, and actions taken to ensure they are effective and delivering a safe service. The reasons for ineffectiveness of risk controls are investigated. Human performance is taken into consideration. There is comprehensive integration of external and internal interfaces, as appropriate, into organisation's Safety Risk Management and Safety Assurance processes. The outcome of the organisation' safety performance considers and provides feedback to the SMS governance body, as relevant, for review and ultimately to the Competent Authority. The effectiveness of the SMS processes are reviewed on a regular basis.",
+                  "whatToLookFor": [
+                    "Check if there is a mechanism in place to ensure that the organisation utilises all relevant data feeding sources.",
+                    "Evidence of responsibilities, methods, and timelines to assess whether the risk controls are applied and effective.",
+                    "Information from safety assurance and compliance monitoring activities feeds back into the safety risk management process."
+                  ]
+                }
+              },
+              {
+                "id": "3.1.2",
+                "text": "Verify performance against indicators and targets",
+                "details": {
+                  "Present": "There is a documented process in place to measure the safety performance of the organisation, covering all the appropriate areas, including qualitative and quantitative means linked to the organisation’s safety objectives and to measure the effectiveness of safety risk controls.",
+                  "Suitable": "The quantitative means are focused on what is important rather than what is easy to measure. Reliability of data sources is considered in the design of qualitative means and/or quantitative means such as SPIs and SPTs. The qualitative and quantitative means are linked to the identified risks, the effectiveness of the safety barriers and the safety objectives. Frequency of and responsibility for the trend monitoring of qualitative means are defined. Realistic targets have been set, wherever appropriate. Qualitative and quantitative means related to the State safety objectives from the SSP/SPAS are taken into consideration, as applicable. The qualitative and quantitative means consider key internal and external interfaces (or risks at the interfaces), when meaningful.",
+                  "Operating": "The safety performance of the organisation is being measured through qualitative and quantitative means, which are being continuously monitored and analysed for trends, wherever appropriate. The effectiveness of safety risk controls is being measured and supports actionable decisions. Frequency and responsibility for the trend monitoring of qualitative/quantitative means are appropriate and reliable.",
+                  "Effective": "The qualitative and quantitative means are demonstrating the safety performance of the organisation and the effectiveness of risk controls based on reliable data. The qualitative and quantitative means are reviewed; regularly updated to ensure they remain relevant, then reviewed with the relevant SMS governance body and allow the maturation of the organisation’s SMS. Where the qualitative and quantitative means indicate a risk control not being effective, appropriate action is taken. The State’s safety objectives on the SSP/SPAS are appropriately considered, when relevant, and continuous discussion with the State drives the continuous improvement of the process.",
+                  "whatToLookFor": [
+                    "How is safety performance monitored and measured? Check that the defined SPIs, SPTs, alert levels and targets are appropriate.",
+                    "Verify that the interfaces having an impact on the performance of the SMS are appropriately considered.",
+                    "How does the occurrence reporting scheme enable the measurement and evaluation of the organisation's safety performance?"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "3.2",
+            "title": "Management of Change",
+            "items": [
+              {
+                "id": "3.2.1",
+                "text": "Management of Change",
+                "details": {
+                  "Present": "The organisation has established a change management process to identify whether changes have an impact on safety activities and to manage significant, identified risks in accordance with existing safety risk management processes (see 2.2). Methods, responsibilities, and timelines are defined in the process.",
+                  "Suitable": "Triggers for the change management process are defined. The process also considers business related changes and interfaces with other organisations/departments, having an impact on safety.",
+                  "Operating": "The organisation is using a defined change management process to identify whether substantive changes have an impact on safety. Any identified risks are managed in accordance with existing safety risk management processes and are monitored through safety assurance. Internal and external factors such as Technical, Environmental, Human and Organisational related hazards are being considered, as appropriate.",
+                  "Effective": "The Management of change process considers the accumulation or impact of multiple changes, and the change and impact to safety-related functions are communicated with other organisations, including internal and external stakeholders. There is a means to share information with respect to management of change impact with external stakeholders (partners, suppliers, contractors, etc.). Safety risks are being managed consistent with the scope and time scale associated with the change. Risk mitigation actions resulting from management of change are part of the SMS performance monitoring.",
+                  "whatToLookFor": [
+                    "Key stakeholders are involved in the process.",
+                    "Review what triggers the ‘management of changes’ process.",
+                    "Review recent changes that have been through the risk assessment process."
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "3.3",
+            "title": "Continuous improvement of the SMS",
+            "items": [
+              {
+                "id": "3.3.1",
+                "text": "Continuous improvement of the SMS",
+                "details": {
+                  "Present": "There is a documented process in place to monitor and review the effectiveness of the SMS using the available data and information.",
+                  "Suitable": "The overall system, including the Safety assurance activities, is producing SMS data / information that is being periodically reviewed by the safety management organisation to improve SMS implementation. External information is considered in addition to internal information. Appropriate senior managers are notably involved when it affects different departments. The decision making is data informed.",
+                  "Operating": "There is evidence of the SMS being periodically reviewed to support the assessment of its effectiveness and appropriate action being taken. The SMS is being periodically reviewed by the senior management team to support the assessment of its effectiveness and that appropriate actions are being taken. The organisation is using SMS and safety data to develop and assess effectiveness of the SPIs to enhance safety and continuous improvement of SMS processes.",
+                  "Effective": "The assessment of SMS effectiveness uses multiple sources of information including the safety data analysis that supports decisions for continuous improvements. The measurement of the organisation’s safety performance addresses the continuous improvement of the SMS in a proactive manner, as well as the safety objectives, which are regularly updated. The contribution of SMS and safety data from key external interface organisations is taken into consideration. A robust and comprehensive set of SMS and safety data is developed [SMS Database with data governance] that supports the use of predictive data analysis. The organisation shares best practices and lessons learned as a global leader in SMS.",
+                  "whatToLookFor": [
+                    "What type of information and sources support the continuous improvement of the SMS?",
+                    "Review the information and safety data used for management decision making for continuous improvement.",
+                    "How does the measurement of the service provider’s safety performance liaise with the safety objectives? How are such processes updated?"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "promotion",
+        "number": "4",
+        "title": "SAFETY PROMOTION",
+        "icon": "fa-bullhorn",
+        "subsections": [
+          {
+            "number": "4.1",
+            "title": "Training and education",
+            "items": [
+              {
+                "id": "4.1.1",
+                "text": "Training and education",
+                "details": {
+                  "Present": "There is a training programme for SMS in place that includes initial and recurrent training.",
+                  "Suitable": "The training covers individual safety duties (including roles, responsibilities, and accountabilities) and how the organisation’s SMS operates. Training material and methodology are adapted to the audience and include Human Performance when relevant. All staff requiring training are identified.",
+                  "Operating": "The SMS training programme is delivering appropriate training to the different staff in the organisation and is being delivered by competent personnel.",
+                  "Effective": "SMS Training is evaluated for all aspects (learning objectives, content, teaching methods and styles, tests) and is linked to the competency assessment. Training is routinely reviewed to take into consideration feedback from different sources.",
+                  "whatToLookFor": [
+                    "Review the SMS training programme including course content and delivery method.",
+                    "Check that the training covers individual safety duties and how the organisation’s SMS operates.",
+                    "Check that the training includes human and organisational factors, just culture and non-technical skills."
+                  ]
+                }
+              },
+              {
+                "id": "4.1.2",
+                "text": "Competence",
+                "details": {
+                  "Present": "A competency framework is defined for the staff having an impact on Safety, including trainers.",
+                  "Suitable": "There is a process in place to periodically assess the actual safety competency of personnel against the framework.",
+                  "Operating": "There is evidence of the competency assessment process being used and being recorded.",
+                  "Effective": "The competence assessment programme and process are routinely reviewed and improved. The competence assessment takes appropriate remedial action when necessary and feeds into the training programme.",
+                  "whatToLookFor": [
+                    "Review how is competence assessment carried out on initial recruitment and recurrently.",
+                    "Is there a process that evaluates the individual’s competence and takes appropriate remedial action when necessary?",
+                    "Is the competence of trainers defined and assessed?"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "4.2",
+            "title": "Safety communication",
+            "items": [
+              {
+                "id": "4.2.1",
+                "text": "Safety communication",
+                "details": {
+                  "Present": "There is a process to communicate safety critical information.",
+                  "Suitable": "The process determined what, when, and how safety information needs to be communicated. The process includes contracted organisations and personnel, where appropriate. The means of communication are adapted to the size and complexity of the organisation; the audience and the significance of what is being communicated.",
+                  "Operating": "Safety critical information is being identified and communicated throughout the organisation to all personnel, as relevant, including contracted organisations and personnel where appropriate.",
+                  "Effective": "The organisation analyses and communicates safety critical information effectively through a variety of blended methods, as appropriate, to maximise it being understood. Safety communication is assessed to determine how it is being used and understood, and to improve it where appropriate. The promotion of the safety policy and its positive safety culture is visible. Decision making, actions, and communication reflect a positive safety culture and safety leadership demonstrating commitment to the safety policy.",
+                  "whatToLookFor": [
+                    "Review the sources of information used for safety communication.",
+                    "Review the methods used to communicate safety information.",
+                    "Is the means for safety communication being reviewed for effectiveness and material used to update relevant training?"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "additional",
+        "number": "5",
+        "title": "ADDITIONAL ITEMS TO BE CONSIDERED",
+        "icon": "fa-puzzle-piece",
+        "subsections": [
+          {
+            "number": "5.1",
+            "title": "Interface management",
+            "items": [
+              {
+                "id": "5.1.1",
+                "text": "Interface management",
+                "details": {
+                  "Present": "The organisation has identified and documented the relevant internal and external interfaces and the critical nature of such interfaces.",
+                  "Suitable": "The way the interfaces are managed is appropriate to the criticality in terms of safety. The means for communicating safety information is defined. The contracts adequately addressed the safety critical nature of the interfaces and the need to appropriately feed the Hazard Identification and Risk Assessment (HIRA), including the risk mitigations.",
+                  "Operating": "The organisation is managing the interfaces through hazard identification and risk management. There is assurance activity to assess risk mitigations being delivered by external organisations.",
+                  "Effective": "The organisation has a good understanding of interface management and there is evidence that the safety critical nature of the interface risks is being identified and acted upon. Interfacing organisations are sharing safety information, management of changes and take actions when needed. Evidence shows that a positive safety culture is promoted with interfacing organisations.",
+                  "whatToLookFor": [
+                    "Review how interfaces internally and externally have been identified and documented.",
+                    "Evidence that: safety critical issues are identified; safety occurrences are reported and addressed; risk controls are applied and reviewed; interfaces are reviewed periodically."
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "number": "5.2",
+            "title": "Responsibilities for compliance and compliance monitoring function",
+            "items": [
+              {
+                "id": "5.2.1",
+                "text": "Responsibilities and accountability for ensuring compliance",
+                "details": {
+                  "Present": "Applicable requirements are clearly identified and properly transcribed into organisation manuals and procedures. Responsibilities and accountabilities for compliance are defined for all staff involved in Safety activities.",
+                  "Suitable": "The contracts with (or requirements cascaded to) the external organisation(s), having a significant contribution to safety, also addresses the need for ensuring compliance to Safety requirements; responsibilities and accountability are defined.",
+                  "Operating": "Organisation manuals and procedures are regularly reviewed in light of changes in applicable requirements. All staff are aware of their responsibilities and accountabilities for compliance and to follow processes and procedures.",
+                  "Effective": "Enhancements to processes and procedures are suggested from the workforce and management. Individuals are proactively identifying and reporting potential non-compliances.",
+                  "whatToLookFor": [
+                    "Review how senior management ensure the organisation remains in compliance.",
+                    "Review that job descriptions clearly include responsibilities for compliance.",
+                    "Evidence that senior management act on internal and external audit results."
+                  ]
+                }
+              },
+              {
+                "id": "5.2.2",
+                "text": "Responsibilities and accountability for compliance monitoring",
+                "details": {
+                  "Present": "It has been documented that there is a person or group of persons with the responsibilities for compliance monitoring including the person acting as compliance monitoring manager with direct access to the accountable manager. The accountable manager’s accountability and responsibilities for compliance monitoring is documented.",
+                  "Suitable": "Independence of the compliance monitoring audit function is achieved.",
+                  "Operating": "The compliance monitoring manager has implemented and is maintaining a compliance monitoring programme. The accountable manager is ensuring that there are sufficient compliance monitoring resources and independence of the audit function is being maintained.",
+                  "Effective": "The organisation has established a method to assess the efficiency and effectiveness of the compliance monitoring activities with feedback to the accountable manager. The accountable manager and senior management actively seek feedback on the status of compliance monitoring activities.",
+                  "whatToLookFor": [
+                    "How does the compliance monitoring manager interact with senior management, line managers, the safety management staff, etc.?",
+                    "Evidence that senior management act on compliance monitoring results.",
+                    "Check for evidence of direct reporting lines to the accountable manager."
+                  ]
+                }
+              },
+              {
+                "id": "5.2.3",
+                "text": "Compliance monitoring programme",
+                "details": {
+                  "Present": "The organisation has a compliance monitoring programme including details of the schedule of monitoring activities and procedures for audits and inspections, reporting, follow up and records. The way independence of compliance monitoring is achieved is documented.",
+                  "Suitable": "The compliance monitoring audit programme covers all applicable regulations and includes details of the schedule of audits. The compliance monitoring programme adequately covers the external organisations supporting the delivery of services, having a significant contribution to the safety.",
+                  "Operating": "The compliance monitoring programme is being followed and regularly reviewed. This includes the modification of the programme to address identified risks or organisational and operational changes. Compliance monitoring is independent from operational activities and includes contracted activities.",
+                  "Effective": "The organisation regularly reviews its compliance monitoring programme and procedures to identify the need for changes and to ensure they remain effective. The effectiveness of the SMS processes is reviewed on a regular basis.",
+                  "whatToLookFor": [
+                    "Assess the contents of the programme against any regulatory requirements.",
+                    "Review how risk and performance is used to determine the depth and frequency of monitoring activities.",
+                    "Review how independence is achieved."
+                  ]
+                }
+              },
+              {
+                "id": "5.2.4",
+                "text": "Compliance monitoring outcomes",
+                "details": {
+                  "Present": "The organisation has documented procedures for the identification and follow-up of corrective actions and preventive actions. There is a process for how audit results are communicated to the accountable manager and senior management. The interface between compliance monitoring and the safety risk management processes is described.",
+                  "Suitable": "Responsibilities and timelines for determining, accepting, and following-up the corrective/preventive action are defined. Compliance monitoring includes contracted activities. The tools for the follow-up of corrective and preventive actions are adapted to the compliance monitoring outcomes and appropriately liaise with the SMS tools, when necessary. The methods used for causal analysis are appropriate to the size of the organisation and the complexity of its aviation products and services.",
+                  "Operating": "The identifying and follow-up of corrective and preventive actions is carried out in accordance with the procedures including causal analysis to address root causes. The status of corrective and preventive actions is regularly communicated to relevant senior management and staff.",
+                  "Effective": "The organisation regularly reviews the status of corrective and preventive actions, as well as its effectiveness. The organisation investigates the systemic causes and contributing factors of findings, which further liaise with the hazard identification and risk assessment (HIRA) as well as the safety objectives. Significant findings are used in internal safety training & safety promotion sessions. The audit results and root causes, causal and contributing factors are analysed and considered when reviewing internal policies and procedures. There is regular communication between compliance monitoring staff and staff involved in other SMS activities.",
+                  "whatToLookFor": [
+                    "Review the methods used for causal analysis.",
+                    "Is the method used consistently, and adapted to the size of the organisation and its complexity of activities?",
+                    "Review any repeat findings or where actions have not been implemented or overdue."
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

@@ -247,14 +247,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     // OPPDATERT FUNKSJON
     function downloadCSV() {
         const orgName = document.getElementById('organisation-name').value || "UnknownOrganisation";
-        const orgType = document.getElementById('organisation-type').value || "UnknownType"; // Hent org type
+        const orgType = document.getElementById('organisation-type').value || "UnknownType"; 
         const dateValue = document.getElementById('assessment-date').value;
         
         let formattedDate = "";
         try {
             const today = new Date();
             const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const month = String(today.getMonth() + 1).padStart(2, '0'); 
             const year = today.getFullYear();
             formattedDate = `${day}-${month}-${year}`;
             
@@ -267,13 +267,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (e) {
              const today = new Date();
-             formattedDate = today.toLocaleDateString('no-NO'); // Fallback to local format
+             formattedDate = today.toLocaleDateString('no-NO'); 
         }
 
-        // OPPDATERT FILNAVN
-        const fileName = `${orgName} - ${orgType} - MSAT - ${formattedDate}.csv`;
+        // ENDRING: .dat filendelse
+        const fileName = `${orgName} - ${orgType} - MSAT - ${formattedDate}.dat`;
 
-        // OPPDATERT HEADERS
         const primaryHeaders = [
             'Organisation Name', 'Organisation type', 'Assessed By', 'Date', 'Empic ID',
             'Policy Avg', 'Risk Avg', 'Assurance Avg', 'Promotion Avg', 'Additional Avg',
@@ -284,7 +283,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const comments = `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
         
-        // OPPDATERT DATA
         const primaryData = [
             `"${orgName.replace(/"/g, '""')}"`,
             `"${orgType.replace(/"/g, '""')}"`,
@@ -308,7 +306,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const allData = primaryData.concat(detailData);
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
-        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+        
+        // ENDRING: application/octet-stream
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'application/octet-stream' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
