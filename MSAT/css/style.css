@@ -4,6 +4,8 @@ body {
     font-family: 'Overpass', sans-serif;
     margin: 0 20px 20px 20px;
     background-color: #f8f9fa;
+    padding-top: 50px; /* Eksempel, juster verdien etter behov */
+    position: relative; /* Nødvendig for absolutt posisjonering av barn */
 }
 .header, .total-summary, .container, .comments-section, .action-buttons, .footer-links {
     max-width: 1400px;
@@ -270,14 +272,35 @@ body {
 #load-csv-button { background-color: #ffc107; color: #212529; }
 .svg-icon { height: 1.2em; width: 1.2em; margin-right: 0.5em; fill: currentColor; }
 
+/* OPPDATERT FOOTER STIL */
 .footer-links {
     display: flex;
-    justify-content: flex-end;
-    padding-top: 10px;
+    justify-content: center;
+    gap: 15px;
+    padding-top: 20px;
     border-top: 1px solid #eee;
+    margin-top: 20px;
+    flex-wrap: wrap;
 }
-.footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
-.footer-links a:hover { text-decoration: underline; }
+.footer-links a.sharepoint-btn {
+    background-color: #03477F;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    transition: opacity 0.2s;
+}
+.footer-links a.sharepoint-btn i {
+    margin-right: 8px;
+}
+.footer-links a.sharepoint-btn:hover {
+    opacity: 0.9;
+    text-decoration: none;
+}
 
 /* --- UPDATED POPUP STYLES --- */
 .form-cell strong.popup-opener {
@@ -318,7 +341,6 @@ body {
     color: #212529;
 }
 
-
 #details-popup h4 {
     margin-top: 0;
     padding-right: 30px; /* Space for close button */
@@ -347,11 +369,7 @@ body {
 .home-button:hover {
     color: #023663; /* Litt mørkere ved hover */
 }
-/* Juster body padding for å unngå overlapp med knappen om nødvendig */
-body {
-    padding-top: 50px; /* Eksempel, juster verdien etter behov */
-    position: relative; /* Nødvendig for absolutt posisjonering av barn */
-}
+
 /* Noen sider kan trenge spesifikk justering */
 .header-container, .header {
     margin-top: 10px; /* Litt ekstra margin for header på noen sider */
