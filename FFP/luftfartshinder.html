@@ -6,7 +6,9 @@
     <title>Risikovurdering Luftfartshinder</title>
     <link rel="icon" href="../smallLogo.png" type="image/png">
     
+    <link rel="stylesheet" href="../css/stilark.css">
     <link rel="stylesheet" href="css/stil.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
     
@@ -84,22 +86,13 @@
         <textarea id="main-comment" rows="3" placeholder="Skriv en oppsummering..."></textarea>
     </div>
 
-    <div class="action-buttons">
-        <button id="download-dat-button"><i class="fa-solid fa-file-export"></i> 1. Last ned fil (.dat)</button>
-        
-        <a href="https://caano.sharepoint.com/:f:/r/teams/CAA-MSAT/Delte%20dokumenter/Organisation%20Assessment/FFP/Luftfarthinder%20data?csf=1&web=1&e=Nr3PPx" target="_blank" class="button-link">
-            <i class="fa-brands fa-microsoft"></i> 2. Last opp til SharePoint
-        </a>
-        
-        <a href="https://caano.sharepoint.com/:l:/r/teams/CAA-MSAT/Lists/Luftfartshinder?e=vfuE9E" target="_blank" class="button-link">
-            <i class="fa-solid fa-list"></i> 3. Oversikt
-        </a>
-
-        <button id="load-dat-button" class="load-button"><i class="fa-solid fa-upload"></i> Last inn fil</button>
-        <button id="clear-form-button"><i class="fa-solid fa-trash"></i> Tøm skjema</button>
-        <input type="file" id="dat-file-input" accept=".dat,.csv,.txt" style="display: none;">
+    <div id="action-buttons-container"></div>
+    <div id="footer-links-container" 
+         data-sharepoint-url="https://caano.sharepoint.com/:f:/r/teams/CAA-MSAT/Delte%20dokumenter/Organisation%20Assessment/FFP/Luftfarthinder%20data?csf=1&web=1&e=Nr3PPx"
+         data-list-url="https://caano.sharepoint.com/:l:/r/teams/CAA-MSAT/Lists/Luftfartshinder?e=vfuE9E">
     </div>
 
+    <script src="../js/felles_knapper.js"></script>
     <script src="js/kalkulator.js"></script>
 </body>
 </html>

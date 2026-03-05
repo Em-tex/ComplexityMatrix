@@ -2,7 +2,7 @@ body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background-color: #f8f9fa;
     text-align: center;
-    padding: 3em 2em; /* Justert padding for å kontrollere avstand fra toppen */
+    padding: 3em 2em;
     color: #333;
 }
 
@@ -10,31 +10,28 @@ h1 {
     font-size: 2.8em;
     color: #000000;
     font-weight: 600;
-    margin-bottom: 2em; /* Litt mer margin for å gi luft til boksene */
+    margin-bottom: 2em;
 }
 
-/* Hoved-wrapper for å lage en fleksibel grid */
 .main-content-wrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 2em; /* Mellomrom mellom boksene */
+    gap: 2em;
     width: 100%;
-    max-width: 1600px; /* Maksimal bredde for innholdet */
-    margin: 0 auto; /* Sentrerer wrapperen horisontalt */
+    max-width: 1600px;
+    margin: 0 auto;
 }
 
 .section-container {
-    background-color: #EEFAFF; /* Veldig Lys Blå fra fargeprofil */
+    background-color: #EEFAFF;
     border: 1px solid #d4eaf1;
     border-radius: 8px;
     padding: 2em;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    
-    /* Fleksibel bredde-kontroll */
     flex-grow: 1;
-    flex-basis: 300px; /* Minimums-"ønske" for bredde før wrapping */
-    max-width: 450px; /* Maks bredde per boks */
+    flex-basis: 300px;
+    max-width: 450px;
 }
 
 h2 {
@@ -77,4 +74,55 @@ h2 {
     margin-right: 0.8em;
     font-size: 1.3em;
     vertical-align: middle;
+}
+/* ====================================================
+   FELLES STILER FOR KNAPPER I BUNNEN AV VERKTØYENE
+   ==================================================== */
+
+   .action-buttons { 
+    display: flex !important; 
+    justify-content: center !important; 
+    gap: 15px !important; 
+    flex-wrap: wrap !important; 
+    margin-top: 20px !important;
+}
+
+/* Sørger for at alle knapper og lenker i linjen ser helt like ut */
+.action-buttons button, 
+.action-buttons a.sharepoint-btn { 
+    padding: 10px 20px !important; 
+    font-size: 1em !important; 
+    color: white !important; 
+    border: none !important; 
+    border-radius: 5px !important; 
+    cursor: pointer !important; 
+    transition: opacity 0.2s !important; 
+    display: inline-flex !important; 
+    align-items: center !important;
+    text-decoration: none !important;
+    font-family: 'Overpass', sans-serif !important;
+    font-weight: normal !important;
+}
+
+.action-buttons button:hover, 
+.action-buttons a.sharepoint-btn:hover { 
+    opacity: 0.9 !important; 
+    color: white !important;
+}
+
+/* Unike farger til hver knapp */
+#download-csv-button { background-color: #28a745 !important; }
+.action-buttons a.sharepoint-btn { background-color: #03477F !important; font-weight: bold !important; }
+#print-pdf-button { background-color: #6f42c1 !important; }
+#load-csv-button { background-color: #ffc107 !important; color: #212529 !important; }
+#clear-form-button { background-color: #dc3545 !important; }
+
+.svg-icon { height: 1.2em !important; width: 1.2em !important; margin-right: 0.5em !important; fill: currentColor !important; }
+
+/* Enkel styling for lenker som "Oversikt over poengberegning" i bunnen */
+.footer-links {
+    text-align: center !important;
+    margin-top: 20px !important;
+    padding-top: 15px !important;
+    border-top: 1px solid #eee !important;
 }
