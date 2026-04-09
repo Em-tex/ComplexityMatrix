@@ -68,3 +68,37 @@ Prosjektet bruker en definert fargepalett for å sikre et konsistent visuelt utt
 | Dempet Grønn   | `#6A8E7F` | Assurance (MSAT), Fleet Specific                 |
 | Grå/Mørk       | `#343a40` | Extension (MSAT), generelle overskrifter         |
 | Veldig Lys Blå | `#EEFAFF` | Bakgrunnsfarge for seksjonsbokser                |
+
+## Mulig arbeidsflyt:
+1. Forberedelse av innhold
+Lag et utkast til innhold, spørsmål og scoringsverdier for skjemaet i Excel eller som et tekstdokument.
+
+2. AI-assistert koding (Gemini)
+Åpne Gemini og last opp/importer eksisterende repository som kontekst. Kopier inn teksten fra utkastet ditt og forklar nøyaktig hva du skal ha. Husk å spesifisere at den nye koden skal bruke samme standardiserte layout og CSS-stilark som de andre skjemaene.
+
+3. Implementering i editor
+Kopier koden generert av Gemini og lim den inn i de riktige filene (HTML, JS, JSON) i Visual Studio Code (VS Code).
+
+4a. Lokal testing av koden
+Test koden lokalt i nettleseren.
+
+Hvordan teste lokalt: Siden systemet deres laster inn data fra JSON-filer, vil du få en såkalt "CORS-feil" hvis du bare dobbeltklikker på HTML-filen. Løsningen er å installere utvidelsen "Live Server" i VS Code. Når den er installert, trykker du bare på "Go Live" nederst i høyre hjørne av VS Code. Dette starter en lokal server og åpner prosjektet i nettleseren. Endringer du gjør i koden vil oppdateres automatisk.
+
+Feilretting: Hvis noe ikke fungerer eller ser feil ut, gå tilbake til steg 2/3 (be Gemini om hjelp til å feilsøke eller tilpass koden selv).
+
+4b. Parallelt: Oppsett av Microsoft 365-infrastruktur
+Mens koden ferdigstilles, sett opp datamottaket:
+
+Tilpass Sharepoint-mappestruktur for filopplasting under Luftfartstilsynet-Organisation Assessment (Team: Luftfartstilsynet, Privat kanal: Organisation Assessment).
+
+Opprett en oversiktsliste i Microsoft Lists (inkludert formatering av kolonner).
+
+Sett opp en Power Automate-flyt for automatisert overføring av data fra opplastede filer (.dat-filer som er strukturert som .csv) til Microsoft Lists.
+
+Test flyten. Tips: Gemini kan assistere med å skrive uttrykk eller feilsøke i Power Automate hvis den feiler.
+
+5. Versjonskontroll
+Når koden fungerer lokalt og testene er vellykkede, push koden til Luftfartstilsynet sitt GitHub-repository.
+
+6. Produksjon
+IT-avdelingen henter den nyeste koden fra GitHub og laster den opp til produksjonsserveren (tools.caa.no).
