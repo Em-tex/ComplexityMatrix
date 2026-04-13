@@ -3,183 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kompleksitetsmatrise - ATM</title>
+    <title>ATM Complexity Matrix</title>
+    <link rel="icon" href="../smallLogo.png" type="image/png">
+    <link rel="stylesheet" href="css/stil.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="css/stil.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Tilbake</a>
-                <h1>ATM Kompleksitetsmatrise</h1>
+    <a href="../index.html" class="home-button" aria-label="Gå til hovedsiden">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="header">
+        <h1>ATM Complexity Matrix</h1>
+        <div class="header-info">
+            <div class="info-field">
+                <label for="operator-navn">Tjenesteyter / Enhet:</label>
+                <input type="text" id="operator-navn" list="operator-list" placeholder="Velg eller skriv navn" autocomplete="off">
+                <datalist id="operator-list"></datalist>
             </div>
-            
-            <div class="score-container">
-                <div class="score-circle">
-                    <svg>
-                        <circle cx="70" cy="70" r="60"></circle>
-                        <circle id="score-progress" cx="70" cy="70" r="60"></circle>
-                    </svg>
-                    <div class="score-text">
-                        <span id="total-score">0</span>
-                        <small>Poeng</small>
+            <div class="info-field">
+                <label for="filled-by">Fylt ut av:</label>
+                <input type="text" id="filled-by" placeholder="Skriv inn navn">
+            </div>
+            <div class="info-field">
+                <label for="date">Dato:</label>
+                <input type="date" id="date">
+            </div>
+        </div>
+    </div>
+
+    <div class="total-summary" id="total-summary-block">
+        <div class="all-gauges-container">
+            <div class="small-gauges-grid">
+                <div class="gauge-block" id="gauge-block-groupA">
+                    <div class="gauge-block-title"><i class="fa-solid fa-globe gauge-icon"></i> Scope & Env</div>
+                    <div class="gauge-block-summary"><span id="groupA-sum">0</span> / <span id="groupA-max-sum">46</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="groupA-needle"></div>
                     </div>
                 </div>
-                <div class="complexity-label">Kompleksitet: <span id="complexity-level">-</span></div>
+                <div class="gauge-block" id="gauge-block-groupB">
+                    <div class="gauge-block-title"><i class="fa-solid fa-sitemap gauge-icon"></i> Organization</div>
+                    <div class="gauge-block-summary"><span id="groupB-sum">0</span> / <span id="groupB-max-sum">32</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="groupB-needle"></div>
+                    </div>
+                </div>
+                <div class="gauge-block" id="gauge-block-groupC">
+                    <div class="gauge-block-title"><i class="fa-solid fa-microchip gauge-icon"></i> Tech & Infra</div>
+                    <div class="gauge-block-summary"><span id="groupC-sum">0</span> / <span id="groupC-max-sum">29</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="groupC-needle"></div>
+                    </div>
+                </div>
+                <div class="gauge-block" id="gauge-block-groupD">
+                    <div class="gauge-block-title"><i class="fa-solid fa-triangle-exclamation gauge-icon"></i> Contingency</div>
+                    <div class="gauge-block-summary"><span id="groupD-sum">0</span> / <span id="groupD-max-sum">18</span></div>
+                    <div class="gauge">
+                        <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                        <div class="gauge-needle" id="groupD-needle"></div>
+                    </div>
+                </div>
             </div>
-        </header>
+            <div class="gauge-block" id="gauge-block-total">
+                <div class="gauge-block-title">Total Score</div>
+                <div class="gauge-block-summary"><span id="total-gauge-sum-text">0</span> / <span id="total-gauge-max-text">125</span></div>
+                <div class="gauge">
+                    <div class="gauge-bg"><div class="gauge-cover"></div></div>
+                    <div class="gauge-needle" id="total-needle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <form id="complexity-form">
-            <section class="form-section">
-                <h2><i class="fa-solid fa-Layer-group"></i> Group A: Scope & Operational Environment</h2>
-                <div class="question-grid">
-                    <div class="question">
-                        <label>A1. Types of Services Provided</label>
-                        <select name="A1">
+    <div class="container" id="main-container">
+        <div class="section" id="section-groupA">
+            <div class="section-header"><i class="fa-solid fa-globe gauge-icon"></i><span>Group A: Scope & Operational Environment</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row">
+                    <div class="form-cell">A1. Types of Services Provided</div>
+                    <div class="form-cell">
+                        <select id="A1">
+                            <option value="">Velg...</option>
                             <option value="1">Kun én tjeneste (f.eks. MET/AFIS) (1)</option>
                             <option value="4">2-3 tjenester (ATS, CNS) (4)</option>
                             <option value="8">Omfattende (ATS, CNS, AIS, MET, DAT) (8)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>A2. ATS Provision Level</label>
-                        <select name="A2">
+                    <div class="form-cell calculated-value" id="A1-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">A2. ATS Provision Level</div>
+                    <div class="form-cell">
+                        <select id="A2">
+                            <option value="">Velg...</option>
                             <option value="1">Ingen ATS (1)</option>
                             <option value="3">Kun AFIS (3)</option>
                             <option value="6">TWR og/eller APP (6)</option>
                             <option value="10">ACC / Area Control (10)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>A3. Traffic Volume (Movements)</label>
-                        <select name="A3">
+                    <div class="form-cell calculated-value" id="A2-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">A3. Traffic Volume (Movements)</div>
+                    <div class="form-cell">
+                        <select id="A3">
+                            <option value="">Velg...</option>
                             <option value="1">Under 10 000 (1)</option>
                             <option value="3">10 000 - 50 000 (3)</option>
                             <option value="5">50 000 - 150 000 (5)</option>
                             <option value="8">Over 150 000 (8)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>A4. Traffic Mix & Airspace</label>
-                        <select name="A4">
+                    <div class="form-cell calculated-value" id="A3-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">A4. Traffic Mix & Airspace</div>
+                    <div class="form-cell">
+                        <select id="A4">
+                            <option value="">Velg...</option>
                             <option value="1">Hovedsakelig ukontrollert/VFR (1)</option>
                             <option value="4">Standard IFR/VFR mix (4)</option>
                             <option value="7">Kompleks TMA eller mye offshore helikopter (7)</option>
                             <option value="10">Kompleks cross-border / sivil-militær integrasjon (10)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>A5. Geographic Spread</label>
-                        <select name="A5">
+                    <div class="form-cell calculated-value" id="A4-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">A5. Geographic Spread</div>
+                    <div class="form-cell">
+                        <select id="A5">
+                            <option value="">Velg...</option>
                             <option value="1">1 lokasjon (1)</option>
                             <option value="3">2-5 lokasjoner (3)</option>
                             <option value="5">6-15 lokasjoner (5)</option>
                             <option value="10">Landsdekkende / >15 lokasjoner (10)</option>
                         </select>
                     </div>
+                    <div class="form-cell calculated-value" id="A5-value">0</div>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <section class="form-section">
-                <h2><i class="fa-solid fa-users-gear"></i> Group B: Organizational Complexity</h2>
-                <div class="question-grid">
-                    <div class="question">
-                        <label>B1. Personnel (ATCO/ATSEP/MET)</label>
-                        <select name="B1">
+        <div class="section" id="section-groupB">
+            <div class="section-header"><i class="fa-solid fa-sitemap gauge-icon"></i><span>Group B: Organizational Complexity</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row">
+                    <div class="form-cell">B1. Personnel (ATCO/ATSEP/MET)</div>
+                    <div class="form-cell">
+                        <select id="B1">
+                            <option value="">Velg...</option>
                             <option value="1">Under 20 ansatte (1)</option>
                             <option value="3">20 - 100 ansatte (3)</option>
                             <option value="5">100 - 300 ansatte (5)</option>
                             <option value="8">Over 300 ansatte (8)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>B2. Subcontracting & Dependencies</label>
-                        <select name="B2">
+                    <div class="form-cell calculated-value" id="B1-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">B2. Subcontracting & Dependencies</div>
+                    <div class="form-cell">
+                        <select id="B2">
+                            <option value="">Velg...</option>
                             <option value="1">Alt drives internt (1)</option>
                             <option value="3">Kjøper kun støttetjenester (3)</option>
                             <option value="8">Kritiske ATM-systemer/data utkontraktert (8)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>B3. Interfaces & Coordination (LoAs)</label>
-                        <select name="B3">
+                    <div class="form-cell calculated-value" id="B2-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">B3. Interfaces & Coordination (LoAs)</div>
+                    <div class="form-cell">
+                        <select id="B3">
+                            <option value="">Velg...</option>
                             <option value="1">Få lokale avtaler (1)</option>
                             <option value="4">Nasjonal samhandling (4)</option>
                             <option value="8">Omfattende internasjonale/grensekryssende avtaler (8)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>B4. Rostering & Fatigue Management</label>
-                        <select name="B4">
+                    <div class="form-cell calculated-value" id="B3-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">B4. Rostering & Fatigue Management</div>
+                    <div class="form-cell">
+                        <select id="B4">
+                            <option value="">Velg...</option>
                             <option value="1">Kun dagtid (1)</option>
                             <option value="4">24/7 drift men lav natt-trafikk (4)</option>
                             <option value="8">Kompleks 24/7 med hyppig sektor-kombinering (8)</option>
                         </select>
                     </div>
+                    <div class="form-cell calculated-value" id="B4-value">0</div>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <section class="form-section">
-                <h2><i class="fa-solid fa-microchip"></i> Group C: Technology & Infrastructure</h2>
-                <div class="question-grid">
-                    <div class="question">
-                        <label>C1. CNS System Automation</label>
-                        <select name="C1">
+        <div class="section" id="section-groupC">
+            <div class="section-header"><i class="fa-solid fa-microchip gauge-icon"></i><span>Group C: Technology & Infrastructure</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row">
+                    <div class="form-cell">C1. CNS System Automation</div>
+                    <div class="form-cell">
+                        <select id="C1">
+                            <option value="">Velg...</option>
                             <option value="2">Konvensjonell radio/radar (papirstrips) (2)</option>
                             <option value="5">Delvis automasjon (elektroniske strips, STCA) (5)</option>
                             <option value="10">Høyt automatisert (iTEC, AMAN/DMAN) (10)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>C2. Network & Cybersecurity (Part-IS)</label>
-                        <select name="C2">
+                    <div class="form-cell calculated-value" id="C1-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">C2. Network & Cybersecurity (Part-IS)</div>
+                    <div class="form-cell">
+                        <select id="C2">
+                            <option value="">Velg...</option>
                             <option value="2">Lukkede/isolerte systemer (2)</option>
                             <option value="5">Nasjonalt ATM-intranett (5)</option>
                             <option value="9">SWIM-integrasjon og eksponerte IP-nettverk (9)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>C3. Remote Tower Operations</label>
-                        <select name="C3">
+                    <div class="form-cell calculated-value" id="C2-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">C3. Remote Tower Operations</div>
+                    <div class="form-cell">
+                        <select id="C3">
+                            <option value="">Velg...</option>
                             <option value="1">Ingen (1)</option>
                             <option value="3">Enkeltstående RTC (3)</option>
                             <option value="6">RTC med inntil 5 lufthavner (6)</option>
                             <option value="10">Storskala RTC med multi-mode (10)</option>
                         </select>
                     </div>
+                    <div class="form-cell calculated-value" id="C3-value">0</div>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <section class="form-section">
-                <h2><i class="fa-solid fa-triangle-exclamation"></i> Group D: Management of Change & Contingency</h2>
-                <div class="question-grid">
-                    <div class="question">
-                        <label>D1. Management of Change (MoC)</label>
-                        <select name="D1">
+        <div class="section" id="section-groupD">
+            <div class="section-header"><i class="fa-solid fa-triangle-exclamation gauge-icon"></i><span>Group D: Management of Change & Contingency</span></div>
+            <div class="section-content">
+                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Value</div></div>
+                <div class="form-row">
+                    <div class="form-cell">D1. Management of Change (MoC)</div>
+                    <div class="form-cell">
+                        <select id="D1">
+                            <option value="">Velg...</option>
                             <option value="1">Ingen eller kun rutinemessige endringer (1)</option>
-                            <option value="4">Flere pågående, isolerte funksjonelle endringer (4)</option>
-                            <option value="9">Omfattende systembytte eller omorganisering (9)</option>
+                            <option value="4">Flere pågående, isolerte endringer (4)</option>
+                            <option value="9">Omfattende systembytte / omorganisering (9)</option>
                         </select>
                     </div>
-                    <div class="question">
-                        <label>D2. Contingency & Resilience</label>
-                        <select name="D2">
+                    <div class="form-cell calculated-value" id="D1-value">0</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-cell">D2. Contingency & Resilience</div>
+                    <div class="form-cell">
+                        <select id="D2">
+                            <option value="">Velg...</option>
                             <option value="2">Enkle lokale beredskapsplaner (2)</option>
                             <option value="5">Full maskinvare-redundans lokalt (5)</option>
                             <option value="9">Geografisk separert C-ACC (9)</option>
                         </select>
                     </div>
+                    <div class="form-cell calculated-value" id="D2-value">0</div>
                 </div>
-            </section>
-
-            <div class="action-buttons">
-                <button type="button" id="download-csv-button"><i class="fa-solid fa-file-csv"></i> Last ned CSV</button>
-                <button type="button" id="print-pdf-button"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-                <button type="button" id="clear-form-button"><i class="fa-solid fa-rotate-left"></i> Nullstill</button>
             </div>
-        </form>
+        </div>
     </div>
+
+    <div class="comments-section">
+        <label for="comments">Kommentarer:</label>
+        <textarea id="comments" placeholder="Legg til eventuelle kommentarer her..." rows="4"></textarea>
+    </div>
+
+    <div id="action-buttons-container"></div>
+    
+    <div id="footer-links-container" 
+         data-sharepoint-url="https://caano.sharepoint.com/:f:/r/teams/CAA-MSAT/Delte%20dokumenter/Organisation%20Assessment/FFS/ATM%20complexity?csf=1&web=1&e=X91KKC"
+         data-list-url="https://caano.sharepoint.com/:l:/r/teams/CAA-MSAT/Lists/ATM%20complexity%20list?e=qKaRVL">
+         </div>
+
+    <script src="../js/felles_knapper.js"></script>
     <script src="js/kalkulator.js"></script>
 </body>
 </html>
