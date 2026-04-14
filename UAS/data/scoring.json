@@ -8,6 +8,8 @@
     "omrade": { "Presist": 0, "Generisk": 5 },
     "sail": { "I": 1, "II": 2, "III": 4, "IV": 7, "V": 11, "VI": 16 },
     "annen-risiko": { "Nei": 0, "Noe": 1, "Betydelig": 5 },
+    "state-operations": { "N/A": 0, "Ja": 0 },
+    "state-exemptions": { "Nei": 0, "Noe": 3, "Middels": 5, "Betydelig": 7 },
     "antall-baser": { "kun-hovedbase": 0, "3-eller-mindre": 1, "4-eller-mer": 3 },
     "antall-piloter": { "10-eller-mindre": 0, "10-20": 1, "20-eller-flere": 3 },
     "pilot-employment": { "ansatt-hos-operator": 0, "annet-selskap": 5 },
@@ -31,9 +33,9 @@
     "veiledningsbehov": { "Lite": 0, "Middels": 3, "Stort": 8 },
     "mangler-oat-empic": { "Nei": 0, "Ja": 3 },
     "tid-siste-tilsyn": { "under-1ar": 0, "1-2ar": 1, "2-3ar": 3, "over-3ar": 7 },
-    "tid-forstegangsgodkjenning": { "under-1ar": 0, "1-2ar": 3, "over-2ar": 7 },
-    "niva1-avvik": { "Nei": 0, "Ja": 5 },
-    "niva2-avvik": { "0-3": 0, "4-7": 1, "8-11": 3, "over-11": 5 },
+    "tid-forstegangsgodkjenning": { "under-1ar": 0, "1-2ar": 3, "2-3ar": 5, "over-3ar": 7 },
+    "niva1-avvik": { "Nei": 0, "Ja": 10 },
+    "niva2-avvik": { "0-3": 0, "4-7": 3, "8-11": 5, "12-eller-mer": 10 },
     "frist-lukking": { "Overholdt": 0, "Overskredet": 5 },
     "sms-tilsyn": { "N/A": 0, "Present": -1, "Suitable": -2, "Operating": -4, "Effective": -7 }
 }

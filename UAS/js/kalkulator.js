@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const STORAGE_KEY = 'uasComplexityData_v11'; 
+    const STORAGE_KEY = 'uasComplexityData_v12'; 
     let scoringRules = {};
     let VALID_OPERATION_TYPES = [];
 
@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
     
     const BASE_MAX_SCORES = {
-        resources: 25,
+        resources: 26, 
         fleet: 32,
-        operations: 52,
-        performance: 38,
-        total: 147
+        operations: 59, 
+        performance: 48,
+        total: 165
     };
     
-    const AUDIT_FIELDS_MAX_SCORE = 22; 
+    const AUDIT_FIELDS_MAX_SCORE = 32; 
     const INITIAL_APPROVAL_MAX_SCORE = 7;
 
     const fieldData = [
@@ -54,16 +54,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'antall-oats-luc', label: 'Number of OATs', section: 'operations' },
         { id: 'flytimer', label: 'Annual flight hours', section: 'operations' },
         { id: 'annen-risiko', label: 'Other increased risk', section: 'operations', needsComment: true },
+        { id: 'state-operations', label: 'State operations', section: 'operations' },
+        { id: 'state-exemptions', label: 'Exemptions from 947', section: 'operations' },
         // Performance
         { id: 'bekymringsmeldinger', label: 'Reports of concern', section: 'performance', needsComment: true },
         { id: 'veiledningsbehov', label: 'Need for guidance', section: 'performance' },
         { id: 'mangler-oat-empic', label: 'Missing data in EMPIC', section: 'performance' },
-        { id: 'tid-siste-tilsyn', label: 'Time since last audit', section: 'performance', group: 'tilsyn' },
+        { id: 'dato-siste-tilsyn', label: 'Date of last audit', section: 'performance', group: 'tilsyn' },
         { id: 'niva1-avvik', label: 'Level 1 finding', section: 'performance', group: 'tilsyn' },
         { id: 'niva2-avvik', label: 'Number of level 2 findings', section: 'performance', group: 'tilsyn' },
         { id: 'frist-lukking', label: 'Deadline for closure', section: 'performance', group: 'tilsyn' },
         { id: 'sms-tilsyn', label: 'SMS', section: 'performance', group: 'tilsyn' },
-        { id: 'tid-forstegangsgodkjenning', label: 'Time since initial approval', section: 'performance', group: 'forstegang' }
+        { id: 'dato-forstegangsgodkjenning', label: 'Date of initial approval', section: 'performance', group: 'forstegang' }
     ];
 
     function createCustomDropdown(originalSelect) {
@@ -84,8 +86,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const updateSelectedDisplay = () => {
             const selectedOption = originalSelect.options[originalSelect.selectedIndex];
-            const text = selectedOption.textContent;
-            if (selectedOption.value) {
+            const text = selectedOption ? selectedOption.textContent : '';
+            if (selectedOption && selectedOption.value) {
                 selectedDisplay.innerHTML = `${createIconHtml(selectedOption.value)}<span>${text}</span>`;
                 selectedDisplay.classList.remove('placeholder');
             } else {
@@ -188,8 +190,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         fieldData.forEach(field => {
             const el = document.getElementById(field.id);
             if (!el) return;
-            if (field.group === 'tilsyn') el.disabled = !hasHadTilsyn;
-            if (field.group === 'forstegang') el.disabled = hasHadTilsyn;
+            if (field.group === 'tilsyn') {
+                el.disabled = !hasHadTilsyn;
+                if(!hasHadTilsyn) el.classList.remove('invalid');
+            }
+            if (field.group === 'forstegang') {
+                el.disabled = hasHadTilsyn;
+                if(hasHadTilsyn) el.classList.remove('invalid');
+            }
         });
         updateCalculations();
     }
@@ -207,11 +215,78 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    function getAuditAgeCategory(dateString) {
+        if (!dateString) return null;
+        const auditDate = new Date(dateString);
+        const today = new Date();
+        const diffTime = Math.abs(today - auditDate);
+        const diffYears = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) / 365.25;
+
+        if (diffYears < 1) return 'under-1ar';
+        if (diffYears < 2) return '1-2ar';
+        if (diffYears < 3) return '2-3ar';
+        return 'over-3ar';
+    }
+
+    function updateFlags() {
+        const flagsContainer = document.getElementById('flags-container');
+        if(!flagsContainer) return [];
+        flagsContainer.innerHTML = '';
+        
+        const activeFlagsForExport = [];
+
+        function addFlag(text) {
+            activeFlagsForExport.push(text);
+            const flagEl = document.createElement('div');
+            flagEl.className = 'flag-item';
+            flagEl.innerHTML = `<i class="fa-solid fa-flag"></i> ${text}`;
+            flagsContainer.appendChild(flagEl);
+        }
+
+        // 1. Audit / Approval Time Flag
+        const aldriHattTilsyn = document.getElementById('aldri-hatt-tilsyn').checked;
+        
+        if (aldriHattTilsyn) {
+            const forstegang = document.getElementById('dato-forstegangsgodkjenning').value;
+            if (forstegang) {
+                const cat = getAuditAgeCategory(forstegang);
+                if (cat === 'over-3ar') {
+                    addFlag("Over 3 years since initial approval");
+                }
+            }
+        } else {
+            const datoSiste = document.getElementById('dato-siste-tilsyn').value;
+            if (datoSiste) {
+                const cat = getAuditAgeCategory(datoSiste);
+                if (cat === 'over-3ar') {
+                    addFlag("Over 3 years since last audit");
+                }
+            }
+        }
+
+        // 2. Level 1 Finding
+        if (!aldriHattTilsyn) {
+            const niva1 = document.getElementById('niva1-avvik').value;
+            if (niva1 === 'Ja') {
+                addFlag("Level 1 finding on last audit");
+            }
+        }
+
+        // 3. SAIL IV and up
+        const sail = document.getElementById('sail').value;
+        if (['IV', 'V', 'VI'].includes(sail)) {
+            addFlag(`SAIL ${sail}`);
+        }
+
+        return activeFlagsForExport;
+    }
+
     function updateCalculations() {
         let totals = { resources: 0, fleet: 0, operations: 0, performance: 0 };
         let currentScores = {};
         let currentMaxScores = { ...BASE_MAX_SCORES };
 
+        // Juster maks performance hvis operatøren aldri har hatt tilsyn
         if (document.getElementById('aldri-hatt-tilsyn').checked) {
             currentMaxScores.performance = BASE_MAX_SCORES.performance - AUDIT_FIELDS_MAX_SCORE + INITIAL_APPROVAL_MAX_SCORE;
             currentMaxScores.total = BASE_MAX_SCORES.total - AUDIT_FIELDS_MAX_SCORE + INITIAL_APPROVAL_MAX_SCORE;
@@ -227,15 +302,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         
         fieldData.forEach(field => {
-            const select = document.getElementById(field.id);
+            const el = document.getElementById(field.id);
             const valueCell = document.getElementById(field.id + '-value');
-            if (select && valueCell) {
+            if (el && valueCell) {
                 let score = 0;
-                if (!select.disabled) {
-                    score = calculateFieldScore(field.id, select.value, currentScores);
+                const isHidden = el.closest('.form-row') && el.closest('.form-row').classList.contains('hidden');
+
+                if (!el.disabled && !isHidden) {
+                    if (field.id === 'dato-siste-tilsyn') {
+                        const cat = getAuditAgeCategory(el.value);
+                        score = calculateFieldScore('tid-siste-tilsyn', cat, currentScores);
+                    } else if (field.id === 'dato-forstegangsgodkjenning') {
+                        const cat = getAuditAgeCategory(el.value);
+                        score = calculateFieldScore('tid-forstegangsgodkjenning', cat, currentScores);
+                    } else {
+                        score = calculateFieldScore(field.id, el.value, currentScores);
+                    }
                 } else {
-                    select.value = "";
+                    if (el.tagName === 'SELECT' || el.type === 'date') el.value = "";
                 }
+                
                 valueCell.textContent = score;
                 applyValueCellStyle(valueCell, score);
                 if (totals[field.section] !== undefined) {
@@ -256,15 +342,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('total-gauge-max-text').textContent = currentMaxScores.total;
         updateGauge('total', grandTotal, currentMaxScores.total);
         updateGaugeLabel('total', grandTotal, currentMaxScores.total);
+        
+        updateFlags();
         saveData();
     }
     
-    // OPPDATERT FUNKSJON: Omskrevet for garantert rekkefølge og robusthet.
     function downloadCSV() {
         const operatorInput = document.getElementById('operator-navn');
         const filledByInput = document.getElementById('filled-by');
         
-        // Validering
         if (!operatorInput.value.trim() || !filledByInput.value.trim()) {
             alert("'Operator' and 'Filled out by' must be completed before downloading.");
             if (!operatorInput.value.trim()) operatorInput.classList.add('invalid');
@@ -273,7 +359,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (!validateForm() || !validateOperationTypes()) return;
 
-        // Data-innsamling
         const operatorName = operatorInput.value;
         const dateValue = document.getElementById('date').value;
         const hasNeverBeenAudited = document.getElementById('aldri-hatt-tilsyn').checked;
@@ -292,46 +377,52 @@ document.addEventListener('DOMContentLoaded', async () => {
             performance: document.getElementById('performance-max-sum').textContent,
             total: document.getElementById('total-gauge-max-text').textContent
         };
+        
+        // Formatterer med prosenttegn for eksport til f.eks Excel
         const percent = {
-            resources: ((parseFloat(sums.resources) / parseFloat(maxSums.resources)) * 100).toFixed(1),
-            fleet: ((parseFloat(sums.fleet) / parseFloat(maxSums.fleet)) * 100).toFixed(1),
-            operations: ((parseFloat(sums.operations) / parseFloat(maxSums.operations)) * 100).toFixed(1),
-            performance: ((parseFloat(sums.performance) / parseFloat(maxSums.performance)) * 100).toFixed(1),
-            total: ((parseFloat(sums.total) / parseFloat(maxSums.total)) * 100).toFixed(1)
+            resources: `${((parseFloat(sums.resources) / parseFloat(maxSums.resources)) * 100).toFixed(1)}%`,
+            fleet: `${((parseFloat(sums.fleet) / parseFloat(maxSums.fleet)) * 100).toFixed(1)}%`,
+            operations: `${((parseFloat(sums.operations) / parseFloat(maxSums.operations)) * 100).toFixed(1)}%`,
+            performance: `${((parseFloat(sums.performance) / parseFloat(maxSums.performance)) * 100).toFixed(1)}%`,
+            total: `${((parseFloat(sums.total) / parseFloat(maxSums.total)) * 100).toFixed(1)}%`
         };
         
-        let auditFlag = 0;
-        if (hasNeverBeenAudited) {
-            if (document.getElementById('tid-forstegangsgodkjenning').value === 'over-2ar') auditFlag = 1;
-        } else {
-            if (document.getElementById('tid-siste-tilsyn').value === 'over-3ar') auditFlag = 1;
-        }
+        const activeFlags = updateFlags();
+        const flagsString = activeFlags.length > 0 ? `"${activeFlags.join(' | ')}"` : `""`;
         const comments = `"${document.getElementById('comments').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
+        const stateComments = `"${document.getElementById('state-comment').value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
 
-        // Bygg headers og data-rader med garantert rekkefølge
         const headers = [];
         const data = [];
 
-        // Primær-seksjon
-        headers.push('Operator', 'Filled out by', 'Date', 'Main Approval Type', 'Main Operation Type 1', 'Main Operation Type 2', 'Main Operation Type 3', 'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Performance Sum', 'Total Sum', 'Resources Percent', 'Fleet Percent', 'Operations Percent', 'Performance Percent', 'Total Percent', 'Comments', 'Audit flag', 'Never Been Audited');
-        data.push(`"${operatorName.replace(/"/g, '""')}"`, `"${filledByInput.value.replace(/"/g, '""')}"`, `"${dateValue}"`, `"${document.getElementById('main-approval-type').value}"`, `"${document.getElementById('operation-select-1').value}"`, `"${document.getElementById('operation-select-2').value}"`, `"${document.getElementById('operation-select-3').value}"`, sums.resources, sums.fleet, sums.operations, sums.performance, sums.total, percent.resources, percent.fleet, percent.operations, percent.performance, percent.total, comments, auditFlag, hasNeverBeenAudited);
+        headers.push('Operator', 'Filled out by', 'Date', 'Main Approval Type', 'Main Operation Type 1', 'Main Operation Type 2', 'Main Operation Type 3', 'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Performance Sum', 'Total Sum', 'Resources Percent', 'Fleet Percent', 'Operations Percent', 'Performance Percent', 'Total Percent', 'Comments', 'Never Been Audited', 'Flags', 'State Ops Comments');
+        data.push(`"${operatorName.replace(/"/g, '""')}"`, `"${filledByInput.value.replace(/"/g, '""')}"`, `"${dateValue}"`, `"${document.getElementById('main-approval-type').value}"`, `"${document.getElementById('operation-select-1').value}"`, `"${document.getElementById('operation-select-2').value}"`, `"${document.getElementById('operation-select-3').value}"`, sums.resources, sums.fleet, sums.operations, sums.performance, sums.total, percent.resources, percent.fleet, percent.operations, percent.performance, percent.total, comments, hasNeverBeenAudited, flagsString, stateComments);
 
-        // Detalj-seksjon
         fieldData.forEach(field => {
-            const select = document.getElementById(field.id);
+            const el = document.getElementById(field.id);
             const valueCell = document.getElementById(field.id + '-value');
             let label = field.label;
             if (field.id === 'antall-oats-luc') {
                 label = document.getElementById('oat-luc-label-text').textContent;
             }
-            const selectionText = select.disabled ? "N/A" : (getSelectedText(field.id) || "");
-            const score = valueCell.textContent;
+            
+            const isHidden = el.closest('.form-row') && el.closest('.form-row').classList.contains('hidden');
+            let selectionText = "N/A";
+            
+            if (!el.disabled && !isHidden) {
+                if (field.id === 'dato-siste-tilsyn' || field.id === 'dato-forstegangsgodkjenning') {
+                    selectionText = el.value;
+                } else {
+                    selectionText = getSelectedText(field.id) || "";
+                }
+            }
+            
+            const score = valueCell ? valueCell.textContent : 0;
 
             headers.push(`${label} (Selection)`, `${label} (Value)`);
             data.push(`"${selectionText.replace(/"/g, '""')}"`, score);
         });
 
-        // Generer og last ned fil
         const fileName = `${operatorName.replace(/ /g, "_")}_${dateValue}.csv`;
         const csvContent = headers.join(';') + '\r\n' + data.join(';');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -374,33 +465,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     function validateForm() {
         let isValid = true;
-        document.querySelectorAll('select.invalid, .select-selected.invalid').forEach(el => el.classList.remove('invalid'));
+        document.querySelectorAll('select.invalid, .select-selected.invalid, input[type="date"].invalid, textarea.invalid').forEach(el => el.classList.remove('invalid'));
+        
         fieldData.forEach(field => {
-            const select = document.getElementById(field.id);
-            if (select && !select.disabled && select.value === "") {
-                select.classList.add('invalid');
-                isValid = false;
+            const el = document.getElementById(field.id);
+            const isHidden = el && el.closest('.form-row') && el.closest('.form-row').classList.contains('hidden');
+            
+            if (el && !el.disabled && !isHidden) {
+                if (el.value === "") {
+                    el.classList.add('invalid');
+                    if (el.tagName === 'SELECT') {
+                        const customSelect = el.previousElementSibling?.querySelector('.select-selected');
+                        if (customSelect) customSelect.classList.add('invalid');
+                    }
+                    isValid = false;
+                }
             }
         });
+
+        const stateExemptions = document.getElementById('state-exemptions');
+        if (stateExemptions && !stateExemptions.disabled && !stateExemptions.closest('.form-row').classList.contains('hidden')) {
+            if (['Noe', 'Middels', 'Betydelig'].includes(stateExemptions.value)) {
+                const commentBox = document.getElementById('state-comment');
+                if (commentBox.value.trim() === '') {
+                    commentBox.classList.add('invalid');
+                    isValid = false;
+                }
+            }
+        }
+
         if (!isValid) alert("The form is not completely filled out. Missing fields have been marked.");
         return isValid;
     }
 
-    // OPPDATERT FUNKSJON: Fikset feil i hvordan den fant de egendefinerte select-boksene.
     function validateOperationTypes() {
         const opSelect1 = document.getElementById('operation-select-1');
         const opSelect2 = document.getElementById('operation-select-2');
         const opSelect3 = document.getElementById('operation-select-3');
         const selects = [opSelect1, opSelect2, opSelect3];
         
-        // Fikset måten den finner det visuelle elementet på.
-        const customSelects = selects.map(s => s.previousElementSibling.querySelector('.select-selected'));
-
+        const customSelects = selects.map(s => s.previousElementSibling?.querySelector('.select-selected')).filter(Boolean);
         customSelects.forEach(cs => cs.classList.remove('invalid'));
     
         if (opSelect1.value === "") {
             alert("Main operation type 1 is required.");
-            customSelects[0].classList.add('invalid');
+            if(customSelects[0]) customSelects[0].classList.add('invalid');
             return false;
         }
     
@@ -412,7 +521,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const counts = filledValues.reduce((acc, val) => ({...acc, [val]: (acc[val] || 0) + 1}), {});
             const duplicates = Object.keys(counts).filter(key => counts[key] > 1);
             selects.forEach((select, index) => {
-                if (duplicates.includes(select.value)) {
+                if (duplicates.includes(select.value) && customSelects[index]) {
                     customSelects[index].classList.add('invalid');
                 }
             });
@@ -482,11 +591,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setValue('operation-select-2', 'Main Operation Type 2');
                 setValue('operation-select-3', 'Main Operation Type 3');
                 setValue('comments', 'Comments');
+                setValue('state-comment', 'State Ops Comments');
                 setValue('aldri-hatt-tilsyn', 'Never Been Audited');
 
+                const stateOpEl = document.getElementById('state-operations');
+                if (stateOpEl) stateOpEl.dispatchEvent(new Event('change'));
+
                 fieldData.forEach(field => {
-                    const select = document.getElementById(field.id);
-                    if (select) {
+                    const el = document.getElementById(field.id);
+                    if (el) {
                         let headerName = `${field.label} (Selection)`;
                         if (field.id === 'antall-oats-luc') {
                            const lucLabel = 'LUC privileges (Selection)';
@@ -496,9 +609,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                         
                         const index = headerMap[headerName];
                         if (index !== undefined && data[index] !== undefined) {
-                            const valueToFind = data[index];
-                            const option = Array.from(select.options).find(opt => opt.text === valueToFind);
-                            select.value = option ? option.value : "";
+                            if (field.id === 'dato-siste-tilsyn' || field.id === 'dato-forstegangsgodkjenning') {
+                                if(data[index] !== "N/A" && data[index] !== "") el.value = data[index];
+                            } else {
+                                const valueToFind = data[index];
+                                const option = Array.from(el.options).find(opt => opt.text === valueToFind);
+                                el.value = option ? option.value : "";
+                            }
                         }
                     }
                 });
@@ -516,6 +633,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         reader.readAsText(file, "UTF-8");
     }
+
+    document.getElementById('state-operations').addEventListener('change', function() {
+        const isYes = this.value === 'Ja';
+        document.getElementById('state-exemptions-row').classList.toggle('hidden', !isYes);
+        if(!isYes) {
+            document.getElementById('state-exemptions').value = '';
+            document.getElementById('state-comment-row').classList.add('hidden');
+        }
+        updateCalculations();
+    });
+
+    document.getElementById('state-exemptions').addEventListener('change', function() {
+        const val = this.value;
+        const needsComment = val === 'Noe' || val === 'Middels' || val === 'Betydelig';
+        document.getElementById('state-comment-row').classList.toggle('hidden', !needsComment);
+        updateCalculations();
+    });
     
     async function init() {
         try {
@@ -536,6 +670,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const select = document.getElementById(id);
                 if(select) {
                     VALID_OPERATION_TYPES.forEach(opType => {
+                        if (id === 'operation-select-1' && opType === 'SAR') return;
                         select.innerHTML += `<option value="${opType}">${opType}</option>`;
                     });
                     createCustomDropdown(select);
@@ -551,7 +686,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('input, select, textarea').forEach(el => {
             el.addEventListener('change', updateCalculations);
             if (el.matches('input[type="text"], textarea')) el.addEventListener('keyup', saveData);
-            if (el.tagName === 'SELECT' || el.matches('input[type="text"]')) {
+            if (el.tagName === 'SELECT' || el.matches('input[type="text"], input[type="date"]')) {
                 el.addEventListener('input', () => {
                     el.classList.remove('invalid');
                     const customSelectDisplay = el.previousElementSibling?.querySelector('.select-selected');
@@ -563,7 +698,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         fieldData.filter(f => f.needsComment).forEach(field => {
-            document.getElementById(field.id).addEventListener('change', handleCommentAlert);
+            document.getElementById(field.id)?.addEventListener('change', handleCommentAlert);
         });
 
         document.getElementById('main-approval-type').addEventListener('change', updateOatLucLabel);
@@ -579,7 +714,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         loadData();
         
-        document.getElementById('date').valueAsDate = new Date();
+        const stateOpEl = document.getElementById('state-operations');
+        if (stateOpEl) stateOpEl.dispatchEvent(new Event('change'));
+        const stateExEl = document.getElementById('state-exemptions');
+        if (stateExEl) stateExEl.dispatchEvent(new Event('change'));
+
+        if (!document.getElementById('date').value) {
+            document.getElementById('date').valueAsDate = new Date();
+        }
         
         updateOatLucLabel();
         toggleTilsynFields();
