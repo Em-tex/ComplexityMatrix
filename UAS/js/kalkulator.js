@@ -378,13 +378,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             total: document.getElementById('total-gauge-max-text').textContent
         };
         
-        // Formatterer med prosenttegn for eksport til f.eks Excel
+        // EKSPORT AV RENE TALL: %-tegnet er fjernet slik at Power Automate float() fungerer.
         const percent = {
-            resources: `${((parseFloat(sums.resources) / parseFloat(maxSums.resources)) * 100).toFixed(1)}%`,
-            fleet: `${((parseFloat(sums.fleet) / parseFloat(maxSums.fleet)) * 100).toFixed(1)}%`,
-            operations: `${((parseFloat(sums.operations) / parseFloat(maxSums.operations)) * 100).toFixed(1)}%`,
-            performance: `${((parseFloat(sums.performance) / parseFloat(maxSums.performance)) * 100).toFixed(1)}%`,
-            total: `${((parseFloat(sums.total) / parseFloat(maxSums.total)) * 100).toFixed(1)}%`
+            resources: ((parseFloat(sums.resources) / parseFloat(maxSums.resources)) * 100).toFixed(1),
+            fleet: ((parseFloat(sums.fleet) / parseFloat(maxSums.fleet)) * 100).toFixed(1),
+            operations: ((parseFloat(sums.operations) / parseFloat(maxSums.operations)) * 100).toFixed(1),
+            performance: ((parseFloat(sums.performance) / parseFloat(maxSums.performance)) * 100).toFixed(1),
+            total: ((parseFloat(sums.total) / parseFloat(maxSums.total)) * 100).toFixed(1)
         };
         
         const activeFlags = updateFlags();
@@ -423,7 +423,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             data.push(`"${selectionText.replace(/"/g, '""')}"`, score);
         });
 
-        const fileName = `${operatorName.replace(/ /g, "_")}_${dateValue}.csv`;
+        // Lagrer som .dat for å unngå forvirring, format er fremdeles CSV internt
+        const fileName = `${operatorName.replace(/ /g, "_")}_${dateValue}.dat`;
         const csvContent = headers.join(';') + '\r\n' + data.join(';');
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
@@ -565,7 +566,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.onload = function(e) {
             try {
                 const lines = e.target.result.split(/\r?\n/);
-                if (lines.length < 2) throw new Error("CSV file is empty or invalid.");
+                if (lines.length < 2) throw new Error("File is empty or invalid.");
 
                 const headers = lines[0].split(';').map(h => parseCsvField(h));
                 const data = lines[1].split(';').map(d => parseCsvField(d));
@@ -624,11 +625,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 updateOatLucLabel();
                 toggleTilsynFields();
                 
-                alert("CSV file loaded successfully!");
+                alert("Data file loaded successfully!");
 
             } catch (error) {
-                console.error("Error loading CSV:", error);
-                alert("Failed to load CSV file. Please check the file format and content.");
+                console.error("Error loading data file:", error);
+                alert("Failed to load file. Please check the file format and content.");
             }
         };
         reader.readAsText(file, "UTF-8");

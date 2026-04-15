@@ -33,7 +33,7 @@
     "veiledningsbehov": { "Lite": 0, "Middels": 3, "Stort": 8 },
     "mangler-oat-empic": { "Nei": 0, "Ja": 3 },
     "tid-siste-tilsyn": { "under-1ar": 0, "1-2ar": 1, "2-3ar": 3, "over-3ar": 7 },
-    "tid-forstegangsgodkjenning": { "under-1ar": 0, "1-2ar": 3, "2-3ar": 5, "over-3ar": 7 },
+    "tid-forstegangsgodkjenning": { "under-1ar": 0, "1-2ar": 1, "2-3ar": 3, "over-3ar": 7 },
     "niva1-avvik": { "Nei": 0, "Ja": 10 },
     "niva2-avvik": { "0-3": 0, "4-7": 3, "8-11": 5, "12-eller-mer": 10 },
     "frist-lukking": { "Overholdt": 0, "Overskredet": 5 },
