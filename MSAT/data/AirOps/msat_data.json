@@ -1,0 +1,37 @@
+{
+  "sections": [
+    {
+      "id": "additional",
+      "number": "5",
+      "title": "Additional Items & Oversight Cycle Criteria",
+      "icon": "fa-puzzle-piece",
+      "subsections": [
+        {
+          "id": "additional-5.1",
+          "items": [
+            {
+              "id": "5.1.2",
+              "text": "Oversight Cycle Extension - Operator financial health & stability.",
+              "details": {
+                "Present": "Financial monitoring is conducted according to basic regulation.",
+                "Suitable": "Financial processes ensure resources for stable flight operations exist.",
+                "Operating": "No financial risk indicators detected during the past oversight period.",
+                "Effective": "Robust financial cushion with clear separation of safety budgets and accountability."
+              }
+            },
+            {
+              "id": "5.1.3",
+              "text": "Oversight Cycle Extension - Continuous compliance history.",
+              "details": {
+                "Present": "The operator resolves level 1 and level 2 findings within deadlines.",
+                "Suitable": "The operator shows low volume of systemic findings over consecutive audits.",
+                "Operating": "No significant or level 1 findings recorded in the past 24 months.",
+                "Effective": "Demonstrated record of zero major findings and proactive self-reporting of non-compliances."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

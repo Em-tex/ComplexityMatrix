@@ -5,18 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management System Assessment Tool (MSAT)</title>
     <link rel="icon" href="../smallLogo.png" type="image/png">
-    
+    <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="css/style.css">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <a href="../index.html" class="home-button" aria-label="Gå til hovedsiden">
-        <i class="fa-solid fa-house"></i>
-    </a>
+    <div id="navbar-container"></div>
+
     <div class="header">
         <h1>Management System Assessment Tool (MSAT)</h1>
         <div class="header-info">
@@ -87,8 +85,7 @@
         </div>
     </div>
 
-    <div class="container" id="main-container">
-    </div>
+    <div class="container" id="main-container"></div>
 
     <div class="comments-section">
         <label for="comments">Comments:</label>
@@ -107,5 +104,6 @@
 
     <script src="../js/felles_knapper.js"></script>
     <script src="js/calculator.js"></script>
+    <script src="../js/navbar.js" data-root="../"></script>
 </body>
 </html>

@@ -2,13 +2,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const STORAGE_KEY = 'msatData';
     let scoringRules = {};
     let msatData = {};
-    let fieldData = []; // This will be populated from msat_data.json
+    let fieldData = []; 
 
-    const GAUGE_MAX_VALUE = 7; // Max possible score for any item
+    const GAUGE_MAX_VALUE = 7; 
 
     function buildForm(data) {
         const container = document.getElementById('main-container');
         container.innerHTML = ''; 
+        fieldData = []; // Nullstill feltoversikten før oppbygging
 
         const column1 = document.createElement('div');
         column1.className = 'column';
@@ -60,9 +61,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         container.appendChild(column1);
         container.appendChild(column2);
+
+        // Bind opp event-listeners til de nyopprettede select-boksene
+        document.querySelectorAll('select').forEach(el => {
+            el.addEventListener('change', updateCalculations);
+        });
     }
 
-    // NY FUNKSJON for å fylle ut organisasjonstyper
     function populateOrgTypes(types) {
         const datalist = document.getElementById('org-types-list');
         if (datalist) {
@@ -244,7 +249,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return "";
     }
     
-    // OPPDATERT FUNKSJON
     function downloadCSV() {
         const orgName = document.getElementById('organisation-name').value || "UnknownOrganisation";
         const orgType = document.getElementById('organisation-type').value || "UnknownType"; 
@@ -270,7 +274,6 @@ document.addEventListener('DOMContentLoaded', async () => {
              formattedDate = today.toLocaleDateString('no-NO'); 
         }
 
-        // ENDRING: .dat filendelse
         const fileName = `${orgName} - ${orgType} - MSAT - ${formattedDate}.dat`;
 
         const primaryHeaders = [
@@ -307,7 +310,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const allData = primaryData.concat(detailData);
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         
-        // ENDRING: application/octet-stream
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'application/octet-stream' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
@@ -327,7 +329,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return field;
     }
 
-    // OPPDATERT FUNKSJON
     function loadCsvFile(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -345,7 +346,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const headerMap = Object.fromEntries(headers.map((h, i) => [h, i]));
 
             document.getElementById('organisation-name').value = data[headerMap['Organisation Name']] || '';
-            document.getElementById('organisation-type').value = data[headerMap['Organisation type']] || ''; // Last inn org type
+            document.getElementById('organisation-type').value = data[headerMap['Organisation type']] || ''; 
             document.getElementById('assessed-by').value = data[headerMap['Assessed By']] || '';
             document.getElementById('assessment-date').value = data[headerMap['Date']] || '';
             document.getElementById('empic-id').value = data[headerMap['Empic ID']] || '';
@@ -374,33 +375,70 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.readAsText(file, "UTF-8");
     }
 
-    // OPPDATERT FUNKSJON
-    async function init() {
+    // NY DYNAMISK FUNKSJON: Henter konfigurasjonsfiler basert på gjeldende profil
+    // Henter fellesfiler fra rot, og fletter AirOps-data dynamisk hvis valgt
+    async function fetchConfigForProfile(profile) {
         try {
-            const [scoringRes, msatRes, orgTypesRes] = await Promise.all([
+            // 1. Hent fellesfiler fra hovedmappen
+            const [scoringRes, baseMsatRes, orgTypesRes] = await Promise.all([
                 fetch('data/scoring.json'),
                 fetch('data/msat_data.json'),
-                fetch('data/organisation_types.json') // Hent den nye filen
+                fetch('data/organisation_types.json')
             ]);
-            scoringRules = await scoringRes.json();
-            msatData = await msatRes.json();
-            const orgTypes = await orgTypesRes.json(); // Hent ut data
             
-            populateOrgTypes(orgTypes); // Kall den nye funksjonen
-        } catch (error) {
-            console.error('Failed to load data files:', error);
-            alert('ERROR: Could not load essential data files. The page cannot function.');
-            return;
-        }
+            scoringRules = await scoringRes.json();
+            msatData = await baseMsatRes.json();
+            const orgTypes = await orgTypesRes.json();
+            populateOrgTypes(orgTypes);
 
-        buildForm(msatData);
+            // 2. Hvis AirOps er valgt, flett inn de ekstra oversight cycle-punktene
+            if (profile === 'AirOps') {
+                try {
+                    const extensionRes = await fetch('data/AirOps/msat_data.json');
+                    if (extensionRes.ok) {
+                        const extensionData = await extensionRes.json();
+                        
+                        const additionalSection = msatData.sections.find(s => s.id === 'additional');
+                        const extAdditional = extensionData.sections.find(s => s.id === 'additional');
+                        
+                        if (additionalSection && extAdditional) {
+                            extAdditional.subsections.forEach(extSub => {
+                                const baseSub = additionalSection.subsections.find(b => b.id === extSub.id);
+                                if (baseSub) {
+                                    baseSub.items = baseSub.items.concat(extSub.items);
+                                } else {
+                                    additionalSection.subsections.push(extSub);
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Kunne ikke flette inn AirOps-kriterier.", e);
+                }
+            }
+            
+            // 3. Bygg grensesnittet
+            buildForm(msatData);
+            loadData();
+            updateCalculations();
+            
+        } catch (error) {
+            console.error(`Feil ved lasting av profil: ${profile}`, error);
+            document.getElementById('main-container').innerHTML = `
+                <div style="color:red; padding:20px; font-weight:bold;">
+                    ERROR: Could not load essential JSON data files.
+                </div>`;
+        }
+    }
+
+    async function init() {
+        const currentProfile = localStorage.getItem("msat_profile") || "Standard";
+        await fetchConfigForProfile(currentProfile);
         
-        document.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(el => {
+        // Bind statiske elementer én gang
+        document.querySelectorAll('.header-info input, .comments-section textarea').forEach(el => {
              el.addEventListener('change', saveData);
              el.addEventListener('keyup', saveData);
-        });
-        document.querySelectorAll('select').forEach(el => {
-            el.addEventListener('change', updateCalculations);
         });
         
         document.addEventListener('click', (e) => {
@@ -421,15 +459,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const loadCsvButton = document.getElementById('load-csv-button');
         const csvFileInput = document.getElementById('csv-file-input');
-        loadCsvButton.addEventListener('click', () => csvFileInput.click());
-        csvFileInput.addEventListener('change', loadCsvFile);
+        if(loadCsvButton && csvFileInput) {
+            loadCsvButton.addEventListener('click', () => csvFileInput.click());
+            csvFileInput.addEventListener('change', loadCsvFile);
+        }
 
-        loadData();
         if (!document.getElementById('assessment-date').value) {
             document.getElementById('assessment-date').valueAsDate = new Date();
         }
-        updateCalculations();
     }
+
+    // Lytt etter endringer sendt fra det øverste innstillingsbåndet (navbar.js)
+    window.addEventListener('msatProfileChanged', () => {
+        const newProfile = localStorage.getItem("msat_profile") || "Standard";
+        fetchConfigForProfile(newProfile);
+    });
 
     init();
 });
