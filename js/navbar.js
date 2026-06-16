@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Finner riktig rot-sti fra script-taggen (f.eks. "./" på forsiden, "../" i undermapper)
     const scriptTag = document.currentScript || document.querySelector('script[src*="navbar.js"]');
     const rootPath = scriptTag.getAttribute('data-root') || './';
 
@@ -14,12 +13,11 @@ document.addEventListener("DOMContentLoaded", function() {
             </a>
         </div>
         
-        <!-- Holdes skjult som standard -->
-        <div class="nav-options" id="msat-options" style="display: none;">
-            <label for="msat-profile-selector">MSAT Profile:</label>
+        <div class="nav-options" id="msat-options" style="display: none; justify-content: center; flex-grow: 1;">
+            <label for="msat-profile-selector" style="margin-right: 10px;">MSAT Profile:</label>
             <select id="msat-profile-selector">
-                <option value="Standard">Standard</option>
                 <option value="AirOps">Air Operations / Aircrew</option>
+                <option value="Standard">Other</option>
             </select>
         </div>
     </nav>
@@ -30,23 +28,20 @@ document.addEventListener("DOMContentLoaded", function() {
         navContainer.innerHTML = navbarHTML;
     }
 
-    const currentPage = window.location.pathname;
-
-    // Tvinger profilvelgeren til KUN å vises hvis filnavnet slutter på eller inneholder msat.html
-    if (currentPage.toLowerCase().includes("msat.html")) {
+    const currentPage = window.location.pathname.toLowerCase();
+    if (currentPage.includes("msat.html")) {
         const optionsDiv = document.getElementById("msat-options");
-        if (optionsDiv) {
-            optionsDiv.style.display = "flex"; // Viser den kun her
-            
-            const selector = document.getElementById("msat-profile-selector");
-            const currentProfile = localStorage.getItem("msat_profile") || "Standard";
-            selector.value = currentProfile;
-            
-            selector.addEventListener("change", (e) => {
-                localStorage.setItem("msat_profile", e.target.value);
-                // Fyrer av eventet til kalkulatoren
-                window.dispatchEvent(new Event('msatProfileChanged'));
-            });
-        }
+        optionsDiv.style.display = "flex";
+        
+        const selector = document.getElementById("msat-profile-selector");
+        
+        // Hent lagret valg, eller default til AirOps
+        const savedProfile = localStorage.getItem("msat_profile") || "AirOps";
+        selector.value = savedProfile;
+        
+        selector.addEventListener("change", (e) => {
+            localStorage.setItem("msat_profile", e.target.value);
+            window.dispatchEvent(new Event('msatProfileChanged'));
+        });
     }
 });

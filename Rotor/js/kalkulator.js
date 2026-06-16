@@ -1,68 +1,128 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // --- Globale konstanter og variabler ---
-    const STORAGE_KEY = 'rotaryComplexityData';
+    const STORAGE_KEY = 'rotorComplexityData';
     let scoringRules = {};
 
     const MAX_SCORES = {
         resources: 16,
-        fleet: 41,
-        operations: 60,
-        approvals: 19,
-        total: 136
+        fleet: 17,
+        operations: 56,
+        approvals: 14,
+        total: 103
     };
 
     const fieldData = [
-        // Resources
-        { id: 'staff-employed', label: 'Number of staff employed for the operation', section: 'resources' },
+        { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
-        { id: 'technical-crew', label: 'Technical Crew Carried', section: 'resources' },
-        { id: 'leading-personnel-roles', label: 'Leading personnel has several roles', section: 'resources' },
-        // Fleet
+        { id: 'leading-personnel-roles', label: 'Leading personel has several roles', section: 'resources' },
         { id: 'types-operated', label: 'Number of types operated', section: 'fleet' },
-        { id: 'multi-engine-offshore', label: 'Number of Multi-engined helicopters operating offshore', section: 'fleet' },
-        { id: 'multi-engine-onshore', label: 'Number of Multi-engined helicopters operating onshore', section: 'fleet' },
-        { id: 'single-engine-helicopters', label: 'Number of single engine helicopters operated', section: 'fleet' },
-        { id: 'ac-leasing', label: 'A/C Leasing', section: 'fleet' },
-        { id: 'special-modification', label: 'Helicopters with special modification', section: 'fleet' },
-        // Operations
-        { id: 'number-operation-types', label: 'Number of Operation types', section: 'operations' },
+        { id: 'aircraft-mops-over-9', label: 'Number of aircraft with MOPSC of MORE than 9 seats', section: 'fleet' },
+        { id: 'aircraft-mops-under-9', label: 'Number of aircraft with MOPSC of 9 seats or LESS', section: 'fleet' },
+        { id: 'special-modification', label: 'Aircraft with Special Modification', section: 'fleet' },
+        { id: 'operation-types', label: 'Number of Operation types', section: 'operations' },
         { id: 'operation-complexity', label: 'Operation Complexity', section: 'operations' },
-        { id: 'bases-permanently', label: 'Number of bases where aircraft and/or crews are permanently based', section: 'operations' },
-        { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
-        { id: 'ifr-imc-operation', label: 'IFR/VFR operation', section: 'operations' },
-        { id: 'single-pilot', label: 'Singlepilot operation', section: 'operations' },
-        { id: 'certificate', label: 'Certificate', section: 'operations' },
-        { id: 'hr-spo', label: 'HR SPO', section: 'operations' },
-        { id: 'group-airline', label: 'Group Airline', section: 'operations' },
+        { id: 'special-operation', label: 'Number of special Operation (NOT SPA)', section: 'operations' },
         { id: 'derogations', label: 'Number of derogations', section: 'operations' },
-        // Approvals
-        { id: 'rnp-03', label: 'RNP 0.3', section: 'approvals' },
-        { id: 'lv-takeoff', label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
-        { id: 'lv-landing', label: 'Low Visibility Operations (LANDING)', section: 'approvals' },
-        { id: 'dangerous-goods', label: 'Dangerous Goods', section: 'approvals' },
-        { id: 'cat-pol-h-305', label: 'CAT.POL.H.305', section: 'approvals' },
+        { id: 'airports-based', label: 'Number of airports where aircraft and/or crews are permanently based', section: 'operations' },
+        { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
+        { id: 'acmi', label: 'ACMI', section: 'operations' },
+        { id: 'certificate', label: 'Certificate', section: 'operations' },
         { id: 'nvis', label: 'NVIS', section: 'approvals' },
         { id: 'hho', label: 'HHO', section: 'approvals' },
         { id: 'hems', label: 'HEMS', section: 'approvals' },
-        { id: 'hofo', label: 'HOFO', section: 'approvals' },
-        { id: 'sar', label: 'SAR', section: 'approvals' },
-        { id: 'police-operations', label: 'Police operations', section: 'approvals' },
-        { id: 'efb-approval', label: 'EFB Approval', section: 'approvals' },
+        { id: 'lv-takeoff', label: 'Low Visibility operations (TAKEOFF)', section: 'approvals' },
+        { id: 'dangerous-goods', label: 'Dangerous Goods', section: 'approvals' },
+        { id: 'efb', label: 'Electronic Flight Bag', section: 'approvals' },
         { id: 'frms', label: 'FRMS', section: 'approvals' },
-        { id: 'ato', label: 'ATO', section: 'approvals' }
+        { id: 'crew-training', label: 'Crew Training', section: 'approvals' }
     ];
 
-    // --- Kjernefunksjoner ---
+    // --- START: SIKRET OPERATØR-LOGIKK ---
+    async function initOperatorField() {
+        try {
+            const response = await fetch('data/operators.json');
+            const data = await response.json();
+            const select = document.getElementById('operator-select');
+            if (select) {
+                select.innerHTML = '<option value="">Velg operatør...</option>'; 
+                data.forEach(op => {
+                    const option = document.createElement('option');
+                    option.value = op;
+                    option.textContent = op;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading operators:', error);
+        }
+
+        const opSelect = document.getElementById('operator-select');
+        const opInput = document.getElementById('operator-navn');
+        const toggleBtn = document.getElementById('toggle-manual-btn');
+
+        if (!opSelect || !opInput || !toggleBtn) return;
+
+        opSelect.addEventListener('change', (e) => {
+            opInput.value = e.target.value;
+            opInput.dispatchEvent(new Event('change'));
+            saveData();
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            if (opSelect.style.display !== 'none') {
+                const confirmManual = confirm("Vennligst sjekk listen nøye først.\n\nEr du sikker på at operatøren ikke finnes? Manuell inntasting skal KUN brukes hvis operatøren mangler i listen.");
+                if (confirmManual) {
+                    opSelect.style.display = 'none';
+                    opSelect.value = ''; 
+                    opInput.style.display = 'block';
+                    opInput.value = ''; 
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-list"></i>';
+                    toggleBtn.title = "Tilbake til liste";
+                    toggleBtn.style.backgroundColor = '#03477F';
+                    opInput.focus();
+                }
+            } else {
+                opInput.style.display = 'none';
+                opSelect.style.display = 'block';
+                opInput.value = opSelect.value;
+                toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+                toggleBtn.title = "Skriv inn manuelt";
+                toggleBtn.style.backgroundColor = '#6c757d';
+                saveData();
+            }
+        });
+    }
+
+    window.syncOperatorUI = function() {
+        const opSelect = document.getElementById('operator-select');
+        const opInput = document.getElementById('operator-navn');
+        const toggleBtn = document.getElementById('toggle-manual-btn');
+
+        if (opSelect && opInput && opInput.value) {
+            const optionExists = Array.from(opSelect.options).some(opt => opt.value === opInput.value);
+            if (optionExists) {
+                opSelect.value = opInput.value;
+                opSelect.style.display = 'block';
+                opInput.style.display = 'none';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+                toggleBtn.style.backgroundColor = '#6c757d';
+            } else {
+                opSelect.style.display = 'none';
+                opInput.style.display = 'block';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-list"></i>';
+                toggleBtn.style.backgroundColor = '#03477F';
+            }
+        }
+    };
+    // --- SLUTT: SIKRET OPERATØR-LOGIKK ---
+
     function calculateFieldScore(fieldId, selectValue, pilotsValue) {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
         if (!fieldInfo) return 0;
 
-        // Handle approvals with specific scores
-        if (fieldId === 'hems' || fieldId === 'hofo' || fieldId === 'ato' || fieldId === 'single-pilot') {
-            return scoringRules[fieldId]?.[selectValue] ?? 0;
+        if (fieldId === 'crew-training' || fieldId === 'frms') {
+            return scoringRules[fieldId]?.[selectValue] ?? scoringRules['generic-approval']?.[selectValue] ?? 0;
         }
 
-        // Handle generic approvals
         if (fieldInfo.section === 'approvals') {
             return scoringRules['generic-approval']?.[selectValue] ?? 0;
         }
@@ -120,11 +180,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         saveData();
     }
 
-    // --- Funksjoner for lagring, lasting, knapper etc. ---
     function saveData() {
         const dataToSave = {};
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
-            if (el.id) dataToSave[el.id] = el.value;
+            if (el.id && el.id !== 'operator-select') dataToSave[el.id] = el.value;
         });
         localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     }
@@ -135,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = JSON.parse(savedData);
             for (const id in data) {
                 const el = document.getElementById(id);
-                if (el) el.value = data[id];
+                if (el && id !== 'operator-select') el.value = data[id];
             }
         }
     }
@@ -200,7 +259,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const operatorNavn = document.getElementById('operator-navn').value || "UkjentOperatør";
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
         
-        // ENDRING: Bruker .dat
         const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.dat`;
 
         const primaryHeaders = ['Operatørnavn', 'Fylt ut av', 'Dato', 'Resources Sum', 'Fleet Specific Sum', 'Operations Sum', 'Approvals Sum', 'Totalsum', 'Kommentarer'];
@@ -228,7 +286,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const allData = primaryData.concat(detailData);
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         
-        // ENDRING: application/octet-stream
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'application/octet-stream' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
@@ -256,7 +313,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.onload = function(e) {
             const lines = e.target.result.split(/\r?\n/);
             if (lines.length < 2) {
-                alert("CSV-filen er tom eller ugyldig.");
+                alert("Filen er tom eller ugyldig.");
                 return;
             }
 
@@ -286,32 +343,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('comments').value = data[commentsIndex] || '';
             }
 
+            window.syncOperatorUI();
             updateCalculations();
-            alert("CSV-fil lastet inn!");
+            alert("Data lastet inn!");
         };
-        reader.readAsText(file, "UTF-8"); // Leser som UTF-8
+        reader.readAsText(file, "UTF-8");
     }
 
-    // --- Initialisering ---
     async function init() {
+        await initOperatorField();
+
         try {
-            const [scoringRes, operatorsRes] = await Promise.all([
-                fetch('data/scoring.json'),
-                fetch('data/operators.json')
-            ]);
+            const scoringRes = await fetch('data/scoring.json');
             scoringRules = await scoringRes.json();
-            const operators = await operatorsRes.json();
-
-            const datalist = document.getElementById('operator-list');
-            operators.forEach(op => {
-                const option = document.createElement('option');
-                option.value = op;
-                datalist.appendChild(option);
-            });
-
         } catch (error) {
             console.error('Klarte ikke å laste inn nødvendige datafiler:', error);
-            alert('FEIL: Kunne ikke laste inn datafiler (scoring/operators). Siden kan ikke fungere.');
+            alert('FEIL: Kunne ikke laste inn datafiler. Siden kan ikke fungere.');
             return;
         }
 
@@ -343,56 +390,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             el.addEventListener('change', () => el.classList.remove('invalid'));
         });
 
-        // --- START Dra-og-slipp funksjonalitet ---
-        const dropZone = document.body; // Slipp hvor som helst på siden
-
-        // Forhindre standardoppførsel for å tillate slipp
+        const dropZone = document.body;
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults, false);
         });
-
-        // Visuell feedback når fil dras over
         ['dragenter', 'dragover'].forEach(eventName => {
             dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover-active'), false);
         });
-
-        // Fjern visuell feedback
         ['dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover-active'), false);
         });
 
-        // Håndter slipp av fil
         dropZone.addEventListener('drop', handleDrop, false);
 
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
 
         function handleDrop(e) {
             let dt = e.dataTransfer;
             let files = dt.files;
-    
             if (files.length > 0) {
                 const fileName = files[0].name.toLowerCase();
-                // ENDRING: Godtar .dat, .csv og .txt
-                const isValidFile = fileName.endsWith('.csv') || fileName.endsWith('.txt') || fileName.endsWith('.dat');
-    
-                if (isValidFile) {
-                    const simulatedEvent = {
-                        target: {
-                            files: files
-                        }
-                    };
+                if (fileName.endsWith('.csv') || fileName.endsWith('.txt') || fileName.endsWith('.dat')) {
+                    const simulatedEvent = { target: { files: files } };
                     loadCsvFile(simulatedEvent); 
                 } else {
-                    alert("Vennligst slipp kun .dat (eller .csv) filer.");
+                    alert("Vennligst slipp kun .dat eller .csv filer.");
                 }
             }
         }
-        // --- SLUTT Dra-og-slipp funksjonalitet ---
 
         loadData();
+        window.syncOperatorUI();
+        
         if (!document.getElementById('date').value) {
             document.getElementById('date').valueAsDate = new Date();
         }

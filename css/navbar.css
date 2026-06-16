@@ -55,7 +55,7 @@ body {
 }
 
 .nav-options {
-    display: flex !important;
+    /* display: flex !important; ER FJERNET HERFRA */
     align-items: center !important;
     gap: 10px !important;
 }

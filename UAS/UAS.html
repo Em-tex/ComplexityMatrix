@@ -5,51 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UAS Risk Profile</title>
     <link rel="icon" href="../smallLogo.png" type="image/png">
-    <link rel="stylesheet" href="css/stil.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="css/stil.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        .flags-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
+        /* Tvinger Overpass-fonten på alle input-felter (spesielt date) */
+        input[type="date"], input[type="text"], select, textarea {
+            font-family: 'Overpass', sans-serif !important;
         }
-        .flag-item {
-            padding: 12px;
-            font-weight: bold;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            background-color: #ffebee;
-            color: #c62828;
-            border-left: 5px solid #c62828;
-            transition: all 0.3s ease;
-        }
-        .flag-item i {
-            margin-right: 12px;
-            font-size: 1.3em;
-        }
-        input.invalid, textarea.invalid {
-            border: 2px solid red !important;
-            background-color: #ffe6e6 !important;
-        }
-        .full-width-date {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
+        .flags-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .flag-item { padding: 12px; font-weight: bold; border-radius: 4px; display: flex; align-items: center; background-color: #ffebee; color: #c62828; border-left: 5px solid #c62828; transition: all 0.3s ease; }
+        .flag-item i { margin-right: 12px; font-size: 1.3em; }
+        input.invalid, textarea.invalid { border: 2px solid red !important; background-color: #ffe6e6 !important; }
+        .full-width-date { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     </style>
 </head>
 <body>
-    <a href="../index.html" class="home-button" aria-label="Gå til hovedsiden">
-        <i class="fa-solid fa-house"></i>
-    </a>
+    <div id="navbar-container"></div>
 
     <div class="header-container">
         <h1>UAS Complexity Matrix</h1>
@@ -67,10 +44,20 @@
     <div class="operator-info-container">
         <h2>Operator Information</h2>
         <div class="info-grid">
+            
             <div class="info-item">
                 <label for="operator-navn">Operator:</label>
-                <input type="text" id="operator-navn" list="operator-list" placeholder="Select or enter name" autocomplete="off">
-                <datalist id="operator-list"></datalist>
+                <div style="display: flex; gap: 8px; width: 100%;">
+                    <select id="operator-select" style="flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="">Select operator...</option>
+                    </select>
+                    
+                    <input type="text" id="operator-navn" placeholder="Enter manually (only if missing)" style="display: none; flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" autocomplete="off">
+                    
+                    <button type="button" id="toggle-manual-btn" style="padding: 8px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.2s;" title="Enter manually">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                </div>
             </div>
             <div class="info-item">
                 <label for="main-approval-type">Main approval type:</label>
@@ -84,15 +71,9 @@
             <div class="info-item wide">
                 <label>Main operation types:</label>
                 <div class="operation-selects">
-                    <select id="operation-select-1">
-                        <option value="">Select type 1 (required)</option>
-                    </select>
-                    <select id="operation-select-2">
-                        <option value="">Select type 2 (optional)</option>
-                    </select>
-                    <select id="operation-select-3">
-                        <option value="">Select type 3 (optional)</option>
-                    </select>
+                    <select id="operation-select-1"><option value="">Select type 1 (required)</option></select>
+                    <select id="operation-select-2"><option value="">Select type 2 (optional)</option></select>
+                    <select id="operation-select-3"><option value="">Select type 3 (optional)</option></select>
                 </div>
             </div>
         </div>
@@ -177,7 +158,6 @@
                         <textarea id="state-comment" rows="3" style="width: 100%; padding: 8px; box-sizing: border-box; font-family: 'Overpass', sans-serif; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;" placeholder="Please specify the exemptions..."></textarea>
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="section" id="section-performance">
@@ -219,5 +199,6 @@
 
     <script src="../js/felles_knapper.js"></script>
     <script src="js/kalkulator.js"></script>
+    <script src="../js/navbar.js" data-root="../"></script>
 </body>
 </html>

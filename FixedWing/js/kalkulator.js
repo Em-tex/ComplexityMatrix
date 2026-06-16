@@ -2,9 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const STORAGE_KEY = 'fixedWingComplexityData';
     let scoringRules = {};
 
-    // OPPDATERT: Justert MAX_SCORES siden HR SPO (maks 3 poeng) er fjernet
-    // Operations: 59 - 3 = 56
-    // Total: 119 - 3 = 116
     const MAX_SCORES = {
         resources: 22,
         fleet: 20,
@@ -13,7 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         total: 116
     };
 
-    // OPPDATERT: Fjernet HR SPO fra listen
     const fieldData = [
         { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
         { id: 'pilots-employed', label: 'Number of pilots employed', section: 'resources' },
@@ -31,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'subcontractors', label: 'Number of Subcontractors', section: 'operations' },
         { id: 'acmi', label: 'ACMI', section: 'operations' },
         { id: 'certificate', label: 'Certificate', section: 'operations' },
-        // { id: 'hr-spo', label: 'HR SPO', section: 'operations' },  <-- FJERNET
         { id: 'rnp-ar-apch', label: 'RNP AR APCH', section: 'approvals' },
         { id: 'mnps-nat-hla', label: 'MNPS/ NAT-HLA', section: 'approvals' },
         { id: 'rvsm', label: 'RVSM', section: 'approvals' },
@@ -47,6 +42,85 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'crew-training', label: 'Crew Training', section: 'approvals' },
         { id: 'cca-training', label: 'CCA training', section: 'approvals' }
     ];
+
+    // --- START: SIKRET OPERATØR-LOGIKK ---
+    async function initOperatorField() {
+        try {
+            const response = await fetch('data/operators.json');
+            const data = await response.json();
+            const select = document.getElementById('operator-select');
+            if (select) {
+                select.innerHTML = '<option value="">Velg operatør...</option>'; 
+                data.forEach(op => {
+                    const option = document.createElement('option');
+                    option.value = op;
+                    option.textContent = op;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading operators:', error);
+        }
+
+        const opSelect = document.getElementById('operator-select');
+        const opInput = document.getElementById('operator-navn');
+        const toggleBtn = document.getElementById('toggle-manual-btn');
+
+        if (!opSelect || !opInput || !toggleBtn) return;
+
+        opSelect.addEventListener('change', (e) => {
+            opInput.value = e.target.value;
+            opInput.dispatchEvent(new Event('change'));
+            saveData();
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            if (opSelect.style.display !== 'none') {
+                const confirmManual = confirm("Vennligst sjekk listen nøye først.\n\nEr du sikker på at operatøren ikke finnes? Manuell inntasting skal KUN brukes hvis operatøren mangler i listen.");
+                if (confirmManual) {
+                    opSelect.style.display = 'none';
+                    opSelect.value = ''; 
+                    opInput.style.display = 'block';
+                    opInput.value = ''; 
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-list"></i>';
+                    toggleBtn.title = "Tilbake til liste";
+                    toggleBtn.style.backgroundColor = '#03477F';
+                    opInput.focus();
+                }
+            } else {
+                opInput.style.display = 'none';
+                opSelect.style.display = 'block';
+                opInput.value = opSelect.value;
+                toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+                toggleBtn.title = "Skriv inn manuelt";
+                toggleBtn.style.backgroundColor = '#6c757d';
+                saveData();
+            }
+        });
+    }
+
+    window.syncOperatorUI = function() {
+        const opSelect = document.getElementById('operator-select');
+        const opInput = document.getElementById('operator-navn');
+        const toggleBtn = document.getElementById('toggle-manual-btn');
+
+        if (opSelect && opInput && opInput.value) {
+            const optionExists = Array.from(opSelect.options).some(opt => opt.value === opInput.value);
+            if (optionExists) {
+                opSelect.value = opInput.value;
+                opSelect.style.display = 'block';
+                opInput.style.display = 'none';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+                toggleBtn.style.backgroundColor = '#6c757d';
+            } else {
+                opSelect.style.display = 'none';
+                opInput.style.display = 'block';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-list"></i>';
+                toggleBtn.style.backgroundColor = '#03477F';
+            }
+        }
+    };
+    // --- SLUTT: SIKRET OPERATØR-LOGIKK ---
 
     function calculateFieldScore(fieldId, selectValue, pilotsValue) {
         const fieldInfo = fieldData.find(f => f.id === fieldId);
@@ -116,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function saveData() {
         const dataToSave = {};
         document.querySelectorAll('input[type="text"], input[type="date"], select, textarea').forEach(el => {
-            if (el.id) dataToSave[el.id] = el.value;
+            if (el.id && el.id !== 'operator-select') dataToSave[el.id] = el.value;
         });
         localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     }
@@ -127,7 +201,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = JSON.parse(savedData);
             for (const id in data) {
                 const el = document.getElementById(id);
-                if (el) el.value = data[id];
+                if (el && id !== 'operator-select') el.value = data[id];
             }
         }
     }
@@ -187,7 +261,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return "";
     }
 
-    // OPPDATERT: Lagrer som .dat fil med application/octet-stream
     function downloadCSV() {
         if (!validateForm()) { return; }
         const operatorNavn = document.getElementById('operator-navn').value || "UkjentOperatør";
@@ -220,7 +293,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const allData = primaryData.concat(detailData);
         const csvContent = allHeaders.join(';') + '\r\n' + allData.join(';');
         
-        // Tvinger binær tolkning for Power Automate ved bruk av application/octet-stream og .dat
         const blob = new Blob(["\uFEFF" + csvContent], { type: 'application/octet-stream' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
@@ -278,28 +350,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('comments').value = data[commentsIndex] || '';
             }
 
+            window.syncOperatorUI();
             updateCalculations();
             alert("Data lastet inn!");
         };
-        reader.readAsText(file, "UTF-8"); // Leser som UTF-8
+        reader.readAsText(file, "UTF-8"); 
     }
 
     async function init() {
+        await initOperatorField();
+
         try {
-            const [scoringRes, operatorsRes] = await Promise.all([
-                fetch('data/scoring.json'),
-                fetch('data/operators.json')
-            ]);
+            const scoringRes = await fetch('data/scoring.json');
             scoringRules = await scoringRes.json();
-            const operators = await operatorsRes.json();
-
-            const datalist = document.getElementById('operator-list');
-            operators.forEach(op => {
-                const option = document.createElement('option');
-                option.value = op;
-                datalist.appendChild(option);
-            });
-
         } catch (error) {
             console.error('Klarte ikke å laste inn nødvendige datafiler:', error);
             alert('FEIL: Kunne ikke laste inn datafiler (scoring/operators). Siden kan ikke fungere.');
@@ -334,43 +397,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             el.addEventListener('change', () => el.classList.remove('invalid'));
         });
 
-        // --- START Dra-og-slipp funksjonalitet ---
         const dropZone = document.body;
-
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults, false);
         });
-
         ['dragenter', 'dragover'].forEach(eventName => {
             dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover-active'), false);
         });
-
         ['dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover-active'), false);
         });
 
         dropZone.addEventListener('drop', handleDrop, false);
 
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
 
-        // OPPDATERT: Godtar .dat og .csv ved drag-and-drop
         function handleDrop(e) {
             let dt = e.dataTransfer;
             let files = dt.files;
-    
             if (files.length > 0) {
                 const fileName = files[0].name.toLowerCase();
-                const isValidFile = fileName.endsWith('.csv') || fileName.endsWith('.txt') || fileName.endsWith('.dat');
-    
-                if (isValidFile) {
-                    const simulatedEvent = {
-                        target: {
-                            files: files
-                        }
-                    };
+                if (fileName.endsWith('.csv') || fileName.endsWith('.txt') || fileName.endsWith('.dat')) {
+                    const simulatedEvent = { target: { files: files } };
                     loadCsvFile(simulatedEvent); 
                 } else {
                     alert("Vennligst slipp kun .dat eller .csv filer.");
@@ -379,6 +427,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         loadData();
+        window.syncOperatorUI();
+        
         if (!document.getElementById('date').value) {
             document.getElementById('date').valueAsDate = new Date();
         }
