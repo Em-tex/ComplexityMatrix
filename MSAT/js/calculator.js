@@ -8,10 +8,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const criticalItemsIds = ['2.1.1', '2.2.1', '2.2.2', '3.2.1', '5.2.1', '5.2.2', '5.2.3', '5.2.4'];
 
     function isAirOpsProfile() {
-        return (localStorage.getItem("msat_profile") || "Standard") === 'AirOps';
+        return (localStorage.getItem("msat_profile") || "AirOps") === 'AirOps';
     }
 
-    // Toggler visning av grensesnittet
     function toggleProfileViews() {
         const isAirOps = isAirOpsProfile();
         const extensionContainer = document.getElementById('extension-block-container');
@@ -28,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (airopsComments) airopsComments.style.display = isAirOps ? 'block' : 'none';
         if (standardComments) standardComments.style.display = isAirOps ? 'none' : 'block';
 
-        // Styrer om operatørfeltet skal være nedtrekk eller tekstfelt
         if (isAirOps) {
             if(opInput) opInput.placeholder = "Enter manually (only if missing)";
             window.syncOperatorUI(); 
@@ -42,10 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- START: OPERATØR HENTING OG FLETTE LOGIKK ---
     async function fetchAirOpsOperators() {
         try {
-            // Henter lister fra både FixedWing og Rotor, slår dem sammen, og fjerner duplikater
             const [fwRes, rotorRes] = await Promise.all([
                 fetch('../FixedWing/data/operators.json').then(r => r.ok ? r.json() : []),
                 fetch('../Rotor/data/operators.json').then(r => r.ok ? r.json() : [])
@@ -140,7 +136,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             toggleBtn.style.backgroundColor = '#6c757d';
         }
     };
-    // --- SLUTT: OPERATØR HENTING OG LOGIKK ---
 
     async function safeFetchJson(url) {
         try {
@@ -166,31 +161,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             populateOrgTypes(orgTypes || []);
-
-            // Fletter inn AirOps
-            if (profile === 'AirOps') {
-                const extensionData = await safeFetchJson('data/AirOps/extension.json');
-                if (extensionData) {
-                    extensionData.sections.forEach(extSection => {
-                        let baseSection = currentMsatData.sections.find(s => 
-                            (s.id && s.id === extSection.id) || 
-                            (s.number && s.number === extSection.number)
-                        );
-                        if (baseSection) {
-                            extSection.subsections.forEach(extSub => {
-                                let baseSub = baseSection.subsections.find(s => 
-                                    s.id && (s.id === extSub.id || s.id.includes("5.1"))
-                                );
-                                if (baseSub) {
-                                    baseSub.items = baseSub.items.concat(extSub.items);
-                                } else {
-                                    baseSection.subsections.push(extSub);
-                                }
-                            });
-                        }
-                    });
-                }
-            }
             
             msatData = currentMsatData;
             
@@ -206,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     window.addEventListener('msatProfileChanged', () => {
-        const newProfile = localStorage.getItem("msat_profile") || "Standard";
+        const newProfile = localStorage.getItem("msat_profile") || "AirOps";
         fetchConfigForProfile(newProfile);
     });
 
@@ -697,7 +667,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await fetchAirOpsOperators();
         initOperatorLogic();
 
-        const currentProfile = localStorage.getItem("msat_profile") || "Standard";
+        const currentProfile = localStorage.getItem("msat_profile") || "AirOps";
         await fetchConfigForProfile(currentProfile);
 
         document.querySelectorAll('input, textarea').forEach(el => {

@@ -11,7 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Tvinger Overpass-fonten på alle input-felter (spesielt date) */
         input[type="date"], input[type="text"], select, textarea {
             font-family: 'Overpass', sans-serif !important;
         }
@@ -25,20 +24,21 @@
         <h1>Rotor Wing Complexity Matrix</h1>
         <div class="header-info">
             
-            <div class="info-field">
+            <div class="info-field" style="min-width: 0;">
                 <label for="operator-navn">Operatør:</label>
-                <div style="display: flex; gap: 8px; width: 100%;">
-                    <select id="operator-select" style="flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Overpass', sans-serif;">
+                <div style="display: flex; gap: 8px; width: 100%; min-width: 0;">
+                    <select id="operator-select" style="flex-grow: 1; min-width: 0; text-overflow: ellipsis; overflow: hidden; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                         <option value="">Velg operatør...</option>
                     </select>
                     
-                    <input type="text" id="operator-navn" placeholder="Skriv inn manuelt (kun hvis mangler)" style="display: none; flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Overpass', sans-serif;" autocomplete="off">
+                    <input type="text" id="operator-navn" placeholder="Skriv inn manuelt (kun hvis mangler)" style="display: none; flex-grow: 1; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" autocomplete="off">
                     
-                    <button type="button" id="toggle-manual-btn" style="padding: 8px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.2s;" title="Skriv inn manuelt">
+                    <button type="button" id="toggle-manual-btn" style="flex-shrink: 0; padding: 8px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.2s;" title="Skriv inn manuelt">
                         <i class="fa-solid fa-pen"></i>
                     </button>
                 </div>
             </div>
+
             <div class="info-field">
                 <label for="filled-by">Fylt ut av:</label>
                 <input type="text" id="filled-by" placeholder="Skriv inn navn">
