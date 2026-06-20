@@ -22,10 +22,9 @@ I18n.register("en", {
         gApprovals: "Approvals",
         gTotal: "Total Score",
 
-        // Oversight-package badge (above the gauges)
+        // Oversight-package legend (above the gauges)
         supervisionPackage: "Oversight package",
         group: "Group",
-        noPackage: "No oversight package (score < 10)",
 
         thCriteria: "Criteria",
         thSelection: "Selection",

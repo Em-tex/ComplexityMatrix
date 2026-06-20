@@ -164,47 +164,53 @@ body {
 
 .total-summary { text-align: center; }
 
-/* Tilsynspakke-merke: viser hvilken gruppe totalscoren faller i, med direktelenke til PDF. */
+/* Tilsynspakke-legende: viser poengterskelen for alle gruppene, med direktelenke
+ * til hver PDF. Gruppen som totalscoren faller i, fremheves. */
 .tilsynspakke-badge {
-    display: inline-flex;
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     margin: 0 auto 20px auto;
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 1.05em;
-    border: 1px solid transparent;
 }
 .tilsynspakke-badge .tilsynspakke-label {
     font-weight: 700;
     color: #495057;
 }
-.tilsynspakke-badge a {
+.tilsynspakke-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+.tp-chip {
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    font-weight: 700;
-    text-decoration: none;
-    color: inherit;
-}
-.tilsynspakke-badge.has-package a:hover { text-decoration: underline; }
-.tilsynspakke-badge .tilsynspakke-ext-icon { font-size: 0.8em; }
-
-/* Ingen gruppe (score < 10): nøytralt og uten lenke. */
-.tilsynspakke-badge.no-package {
-    background-color: #e9ecef;
+    line-height: 1.25;
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    background: #f8f9fa;
     color: #6c757d;
+    text-decoration: none;
+    font-size: 0.85em;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
-.tilsynspakke-badge.no-package .tilsynspakke-ext-icon { display: none; }
-.tilsynspakke-badge.no-package a { cursor: default; }
+.tp-chip:hover { box-shadow: 0 1px 5px rgba(0,0,0,0.18); }
+.tp-chip .tp-group { font-weight: 700; }
+.tp-chip .tp-range { font-size: 0.9em; opacity: 0.85; }
 
-/* Fargekoding etter kompleksitet: Gruppe 1 = høyest, Gruppe 5 = lavest. */
-.tilsynspakke-badge.has-package { background-color: #fff; }
-.tilsynspakke-badge.group-1 { border-color: #dc3545; background-color: #f8d7da; color: #842029; }
-.tilsynspakke-badge.group-2 { border-color: #fd7e14; background-color: #ffe5d0; color: #8a4b00; }
-.tilsynspakke-badge.group-3 { border-color: #ffc107; background-color: #fff3cd; color: #664d03; }
-.tilsynspakke-badge.group-4 { border-color: #6CB04A; background-color: #e2f0d9; color: #2f5e1a; }
-.tilsynspakke-badge.group-5 { border-color: #28a745; background-color: #d4edda; color: #0f5132; }
+/* Aktiv gruppe (totalscoren faller her) fremheves med fargekode:
+ * Gruppe 1 = høyest kompleksitet, Gruppe 5 = lavest. */
+.tp-chip.active { color: #fff; transform: scale(1.06); }
+.tp-chip.active .tp-range { opacity: 0.95; }
+.tp-chip.active.group-1 { background: #dc3545; border-color: #dc3545; }
+.tp-chip.active.group-2 { background: #fd7e14; border-color: #fd7e14; }
+.tp-chip.active.group-3 { background: #ffc107; border-color: #ffc107; color: #3a2e00; }
+.tp-chip.active.group-4 { background: #6CB04A; border-color: #6CB04A; }
+.tp-chip.active.group-5 { background: #28a745; border-color: #28a745; }
 .all-gauges-container {
     display: grid;
     grid-template-columns: 1fr;

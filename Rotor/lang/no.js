@@ -23,10 +23,9 @@ I18n.register("no", {
         gApprovals: "Godkjenninger",
         gTotal: "Totalscore",
 
-        // Tilsynspakke-merke (over gaugene)
+        // Tilsynspakke-legende (over gaugene)
         supervisionPackage: "Tilsynspakke",
         group: "Gruppe",
-        noPackage: "Ingen tilsynspakke (score < 10)",
 
         thCriteria: "Kriterium",
         thSelection: "Valg",

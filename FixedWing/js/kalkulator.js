@@ -11,48 +11,62 @@ document.addEventListener('DOMContentLoaded', async () => {
         total: 116
     };
 
-    // Tilsynspakke-grupper bestemmes av totalscoren. Terskler = FASIT:
-    //   Total >= 60 -> Gruppe 1 (høyest), >= 50 -> 2, >= 41 -> 3,
-    //   >= 20 -> 4, >= 10 -> 5, ellers ingen pakke.
-    // Hver gruppe lenker direkte til sin PDF i SharePoint.
-    const TILSYNSPAKKE_URLS = {
-        1: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%201.pdf?csf=1&web=1&e=j5Fgh1',
-        2: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%202.pdf?csf=1&web=1&e=XqeuO1',
-        3: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%203.pdf?csf=1&web=1&e=kx9GvT',
-        4: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%204.pdf?csf=1&web=1&e=wx48jA',
-        5: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%205.pdf?csf=1&web=1&e=DgZMUW'
-    };
+    // Tilsynspakke-grupper bestemmes av totalscoren. Terskler (min-poeng) = FASIT,
+    // sortert fra høyest til lavest: Gruppe 1 (>=60) er mest kompleks, Gruppe 5
+    // (>=10) minst. Under 10 poeng gir ingen pakke. Hver gruppe lenker til sin PDF.
+    const TILSYNSPAKKE = [
+        { group: 1, min: 60, url: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%201.pdf?csf=1&web=1&e=j5Fgh1' },
+        { group: 2, min: 50, url: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%202.pdf?csf=1&web=1&e=XqeuO1' },
+        { group: 3, min: 41, url: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%203.pdf?csf=1&web=1&e=kx9GvT' },
+        { group: 4, min: 20, url: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%204.pdf?csf=1&web=1&e=wx48jA' },
+        { group: 5, min: 10, url: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%205.pdf?csf=1&web=1&e=DgZMUW' }
+    ];
 
     function groupForTotal(total) {
-        if (total >= 60) return 1;
-        if (total >= 50) return 2;
-        if (total >= 41) return 3;
-        if (total >= 20) return 4;
-        if (total >= 10) return 5;
-        return null;
+        const match = TILSYNSPAKKE.find(item => total >= item.min);
+        return match ? match.group : null;
+    }
+
+    // Poengintervall for en gruppe: nedre = min, øvre = (forrige gruppes min - 1),
+    // eller totalmaks for den øverste gruppen.
+    function rangeText(idx) {
+        const item = TILSYNSPAKKE[idx];
+        const upper = idx === 0 ? MAX_SCORES.total : TILSYNSPAKKE[idx - 1].min - 1;
+        return `${item.min}–${upper}`;
+    }
+
+    function buildTilsynspakkeLegend() {
+        const container = document.getElementById('tilsynspakke-groups');
+        if (!container) return;
+        container.innerHTML = '';
+        // Vises med økende poeng: Gruppe 5 (lavest) først, Gruppe 1 (høyest) sist.
+        [...TILSYNSPAKKE].reverse().forEach((item) => {
+            const idx = TILSYNSPAKKE.indexOf(item);
+            const chip = document.createElement('a');
+            chip.className = 'tp-chip group-' + item.group;
+            chip.id = 'tp-chip-' + item.group;
+            chip.href = item.url;
+            chip.target = '_blank';
+            chip.rel = 'noopener';
+            chip.innerHTML =
+                `<span class="tp-group">${t('fw.group')} ${item.group}</span>` +
+                `<span class="tp-range">${rangeText(idx)}</span>`;
+            container.appendChild(chip);
+        });
     }
 
     let lastTotal = 0;
 
     function updateTilsynspakke(total) {
         lastTotal = total;
-        const badge = document.getElementById('tilsynspakke-badge');
-        const link = document.getElementById('tilsynspakke-link');
-        const textEl = document.getElementById('tilsynspakke-text');
-        if (!badge || !link || !textEl) return;
-
+        const container = document.getElementById('tilsynspakke-groups');
+        if (!container) return;
+        if (!container.children.length) buildTilsynspakkeLegend();
         const group = groupForTotal(total);
-        if (group) {
-            badge.className = 'tilsynspakke-badge has-package group-' + group;
-            link.href = TILSYNSPAKKE_URLS[group];
-            link.removeAttribute('aria-disabled');
-            textEl.textContent = `${t('fw.group')} ${group}`;
-        } else {
-            badge.className = 'tilsynspakke-badge no-package';
-            link.removeAttribute('href');
-            link.setAttribute('aria-disabled', 'true');
-            textEl.textContent = t('fw.noPackage');
-        }
+        TILSYNSPAKKE.forEach(item => {
+            const chip = document.getElementById('tp-chip-' + item.group);
+            if (chip) chip.classList.toggle('active', item.group === group);
+        });
     }
 
     const fieldData = [
@@ -495,8 +509,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // Hold tilsynspakke-teksten oppdatert ved språkbytte.
-        window.addEventListener('languageChanged', () => updateTilsynspakke(lastTotal));
+        // Bygg tilsynspakke-legenden på nytt ved språkbytte (gruppe-etiketten oversettes).
+        window.addEventListener('languageChanged', () => {
+            buildTilsynspakkeLegend();
+            updateTilsynspakke(lastTotal);
+        });
 
         loadData();
         window.syncOperatorUI();
