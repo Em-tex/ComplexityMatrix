@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function() {
             </a>
         </div>
 
+        <div class="nav-actions" id="nav-actions"></div>
+
         <div class="nav-options" id="msat-options" style="display: none; justify-content: center; flex-grow: 1;">
             <label for="msat-profile-selector" style="margin-right: 10px;" data-i18n="navbar.msatProfile">MSAT Profile:</label>
             <select id="msat-profile-selector">
@@ -24,6 +26,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 <option value="Standard" data-i18n="navbar.profileStandard">Standard</option>
             </select>
         </div>
+
+        <div class="nav-help" id="nav-help"></div>
 
         <div class="nav-lang" id="nav-lang" role="group" aria-label="Language">
             <button type="button" class="lang-btn" data-lang="en" title="English">${flagEN}<span>EN</span></button>
@@ -39,6 +43,124 @@ document.addEventListener("DOMContentLoaded", function() {
         // Oversett navbarens egne strenger (den settes inn etter i18n sin første apply).
         if (window.I18n) window.I18n.apply(navContainer);
     }
+
+    // Speil knapperaden nederst (#action-buttons-container) opp i verktøylinjen som
+    // kompakte omriss-knapper. Knappene proxy-klikker bunnknappene, slik at all
+    // logikk i hvert verktøys kalkulator gjenbrukes uendret. Lenker (Sharepoint/
+    // Profiloversikt) bygges fra de samme data-attributtene som felles_knapper.js.
+    function buildNavActions() {
+        const host = document.getElementById("nav-actions");
+        if (!host) return;
+
+        const footer = document.getElementById("footer-links-container") ||
+                       document.getElementById("action-buttons-container");
+        const spUrl = footer && footer.getAttribute("data-sharepoint-url");
+        const listUrl = footer && footer.getAttribute("data-list-url");
+        const isMsat = footer && footer.getAttribute("data-is-msat") === "true";
+
+        const proxy = (id) => () => {
+            const btn = document.getElementById(id);
+            if (btn) btn.click();
+        };
+
+        const actions = [];
+        if (document.getElementById("download-csv-button"))
+            actions.push({ icon: "fa-download", i18n: "buttons.downloadData", text: "Last ned data", onClick: proxy("download-csv-button") });
+        if (spUrl)
+            actions.push({ icon: "fa-folder", i18n: "buttons.sharepointFolder", text: "Sharepoint mappe", href: spUrl });
+        if (listUrl)
+            actions.push({ icon: "fa-list", i18n: isMsat ? "buttons.profileListMsat" : "buttons.profileList", text: isMsat ? "MSAT Profiloversikt" : "Profiloversikt", href: listUrl });
+        if (document.getElementById("print-pdf-button"))
+            actions.push({ icon: "fa-print", i18n: "buttons.printPdf", text: "Print til PDF", onClick: proxy("print-pdf-button") });
+        if (document.getElementById("load-csv-button"))
+            actions.push({ icon: "fa-upload", i18n: "buttons.loadData", text: "Last inn data", onClick: proxy("load-csv-button") });
+        if (document.getElementById("clear-form-button"))
+            actions.push({ icon: "fa-trash", i18n: "buttons.resetForm", text: "Reset skjema", danger: true, onClick: proxy("clear-form-button") });
+
+        if (!actions.length) return;
+
+        // Hjelp-knapp høyrestilt, rett til venstre for språkvelgeren (egen beholder).
+        const navHelp = document.getElementById("nav-help");
+        if (navHelp) {
+            const helpBtn = document.createElement("button");
+            helpBtn.type = "button";
+            helpBtn.className = "nav-action-btn nav-help-btn";
+            helpBtn.setAttribute("data-i18n-title", "help.button");
+            helpBtn.innerHTML =
+                `<i class="fa-solid fa-circle-question"></i>` +
+                `<span class="nav-action-label" data-i18n="help.button">Hjelp</span>`;
+            helpBtn.addEventListener("click", openHelp);
+            navHelp.appendChild(helpBtn);
+            buildHelpModal();
+            if (window.I18n) window.I18n.apply(navHelp);
+        }
+
+        actions.forEach((a) => {
+            const el = document.createElement(a.href ? "a" : "button");
+            el.className = "nav-action-btn" + (a.danger ? " danger" : "");
+            el.setAttribute("data-i18n-title", a.i18n);
+            if (a.href) {
+                el.href = a.href;
+                el.target = "_blank";
+                el.rel = "noopener";
+            } else {
+                el.type = "button";
+                el.addEventListener("click", a.onClick);
+            }
+            el.innerHTML =
+                `<i class="fa-solid ${a.icon}"></i>` +
+                `<span class="nav-action-label" data-i18n="${a.i18n}">${a.text}</span>`;
+            host.appendChild(el);
+        });
+
+        if (window.I18n) window.I18n.apply(host);
+    }
+
+    // Hjelp-dialog med enkle instruksjoner. Bygges én gang og gjenbrukes.
+    function buildHelpModal() {
+        if (document.getElementById("help-modal-overlay")) return;
+        const overlay = document.createElement("div");
+        overlay.id = "help-modal-overlay";
+        overlay.className = "help-modal-overlay";
+        overlay.innerHTML = `
+            <div class="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+                <button type="button" class="help-modal-close" id="help-modal-close" aria-label="Lukk" data-i18n-title="help.close">&times;</button>
+                <h2 id="help-modal-title" data-i18n="help.title">Hvordan bruke skjemaet</h2>
+                <h3 data-i18n="help.newTitle">Lage ny profil</h3>
+                <ol>
+                    <li data-i18n="help.new1"></li>
+                    <li data-i18n="help.new2"></li>
+                    <li data-i18n="help.new3"></li>
+                    <li data-i18n="help.new4"></li>
+                </ol>
+                <h3 data-i18n="help.loadTitle">Laste inn en tidligere profil</h3>
+                <ol>
+                    <li data-i18n="help.load1"></li>
+                    <li data-i18n="help.load2"></li>
+                </ol>
+            </div>`;
+        document.body.appendChild(overlay);
+        overlay.addEventListener("click", function (e) {
+            if (e.target === overlay) closeHelp();
+        });
+        document.getElementById("help-modal-close").addEventListener("click", closeHelp);
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeHelp();
+        });
+        if (window.I18n) window.I18n.apply(overlay);
+    }
+
+    function openHelp() {
+        const o = document.getElementById("help-modal-overlay");
+        if (o) o.classList.add("open");
+    }
+
+    function closeHelp() {
+        const o = document.getElementById("help-modal-overlay");
+        if (o) o.classList.remove("open");
+    }
+
+    buildNavActions();
 
     // Språkvelger (NO | EN). Krever at i18n.js er lastet før dette skriptet.
     const langGroup = document.getElementById("nav-lang");

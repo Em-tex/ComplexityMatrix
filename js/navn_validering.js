@@ -74,7 +74,44 @@
         });
     }
 
+    // Sjekk alle navnefelt. showError=true lyser feltet rødt, viser varsel og
+    // setter fokus på det første ugyldige. Tomt felt regnes her som ugyldig
+    // (navn KREVES for nedlasting). Returnerer true når alle er fullstendige.
+    function validateAllNameFields(showError) {
+        let firstInvalid = null;
+        document.querySelectorAll("#filled-by, #assessed-by").forEach((input) => {
+            const value = input.value.trim();
+            const valid = value !== "" && isFullName(value);
+            if (!valid) {
+                if (!firstInvalid) firstInvalid = input;
+                if (showError) {
+                    input.classList.add("input-error");
+                    const warning = document.getElementById(input.id + "-warning");
+                    if (warning) {
+                        warning.textContent = t("warning", FALLBACK.warning);
+                        warning.style.display = "block";
+                    }
+                }
+            }
+        });
+        if (firstInvalid && showError) firstInvalid.focus();
+        return !firstInvalid;
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll("#filled-by, #assessed-by").forEach(setupField);
     });
+
+    // Blokker nedlasting av skjemaet hvis navnefeltet ikke er fullstendig utfylt
+    // (krever for- og etternavn). Fanges i capture-fasen FØR kalkulatorens egen
+    // download-handler, slik at nedlastingen stoppes. Dekker både knappen nederst
+    // og proxy-knappen i verktøylinjen (begge klikker #download-csv-button).
+    document.addEventListener("click", (e) => {
+        const trigger = e.target.closest ? e.target.closest("#download-csv-button") : null;
+        if (!trigger) return;
+        if (!validateAllNameFields(true)) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+        }
+    }, true);
 })();

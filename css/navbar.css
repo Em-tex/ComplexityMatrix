@@ -91,7 +91,7 @@ body {
     gap: 6px !important;
     background: none !important;
     border: none !important;
-    padding: 4px 6px !important;
+    padding: 9px 8px !important;
     border-radius: 4px !important;
     cursor: pointer !important;
     color: #ffffff !important;
@@ -122,6 +122,144 @@ body {
 .lang-sep {
     color: rgba(255,255,255,0.5) !important;
     font-weight: bold !important;
+}
+
+/* Handlingsknapper i verktøylinjen – speiler knapperaden nederst i skjemaet.
+   Samme stil som linja: gjennomsiktige med hvitt omriss og hvit ikon/tekst,
+   fylles ut ved hover. Reset har rød tone fordi den er destruktiv. */
+/* Venstrestilt: rett etter hjem-ikonet. */
+.nav-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-left: 14px !important;
+}
+
+/* Hjelp-knappen høyrestilles: auto-margen skyver den + språkvelgeren mot høyre,
+   slik at Hjelp havner rett til venstre for EN/NO. */
+.nav-help {
+    display: flex !important;
+    align-items: center !important;
+    margin-left: auto !important;
+}
+.nav-help + .nav-lang { margin-left: 12px !important; }
+
+/* Scopet under .top-navbar slik at de slår den generiske «.top-navbar a»-regelen
+   (lenke-knappene Sharepoint/Profiloversikt er <a>). */
+.top-navbar .nav-action-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,0.4) !important;
+    color: #ffffff !important;
+    padding: 6px 10px !important;
+    border-radius: 4px !important;
+    font-family: inherit !important;
+    font-size: 0.8rem !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    transition: background-color 0.2s, border-color 0.2s !important;
+}
+.top-navbar .nav-action-btn:hover {
+    background-color: #2B6CB0 !important;
+    border-color: #2B6CB0 !important;
+    color: #ffffff !important;
+}
+.top-navbar .nav-action-btn.danger {
+    border-color: rgba(229,62,62,0.75) !important;
+    color: #feb2b2 !important;
+}
+.top-navbar .nav-action-btn.danger:hover {
+    background-color: #c53030 !important;
+    border-color: #c53030 !important;
+    color: #ffffff !important;
+}
+
+/* Smal skjerm: vis kun ikonene i linja (full tekst finnes på bunnraden). */
+@media (max-width: 900px) {
+    .nav-action-label { display: none !important; }
+    .top-navbar .nav-action-btn { padding: 7px 9px !important; }
+}
+
+/* Hjelp-dialog (enkle instruksjoner for bruk av skjemaet). */
+.help-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 80px 16px 16px;
+    box-sizing: border-box;
+}
+.help-modal-overlay.open { display: flex; }
+.help-modal {
+    background: #ffffff;
+    color: #1a202c;
+    width: 100%;
+    max-width: 560px;
+    border-radius: 8px;
+    padding: 24px 28px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    font-family: Arial, sans-serif;
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+}
+.help-modal h2 { margin: 0 0 14px; color: #1A365D; font-size: 1.3rem; }
+.help-modal h3 { margin: 18px 0 6px; color: #2B6CB0; font-size: 1.05rem; }
+.help-modal ol { margin: 0; padding-left: 22px; line-height: 1.5; }
+.help-modal li { margin-bottom: 6px; }
+.help-modal-close {
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.9rem;
+    line-height: 1;
+    color: #718096;
+    cursor: pointer;
+}
+.help-modal-close:hover { color: #1a202c; }
+
+/* Utskrift / «Print til PDF»: vis kun selve skjemaet med gauges og verdier.
+   Skjul verktøylinje, knapper, hjelp og fotnoter, og tving fram bakgrunnsfarger
+   (gauge-gradienter og fargede verdiceller) som ellers droppes ved utskrift. */
+@media print {
+    /* Margen 0 fjerner nettleserens egen topptekst/bunntekst (tittel, URL, dato).
+       Indre luft legges på body i stedet så innholdet ikke klistrer seg til kanten. */
+    @page { margin: 0; }
+    body { padding: 12mm 10mm !important; margin: 0 !important; }
+    .top-navbar,
+    #navbar-container,
+    .nav-actions,
+    .nav-help-btn,
+    .home-button,
+    #action-buttons-container,
+    .action-buttons,
+    #footer-links-container,
+    .footer-links,
+    .form-version,
+    .help-modal-overlay,
+    #toggle-manual-btn,
+    .tooltip-icon {
+        display: none !important;
+    }
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .section,
+    .gauge-block,
+    .form-row {
+        break-inside: avoid;
+    }
 }
 
 /* "TEST"-merke for skjemaer som ennå er under testing */
