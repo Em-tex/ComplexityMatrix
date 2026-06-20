@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     let scoringRules = {};
     let msatData = {};
     let fieldData = [];
-    let commentHelpData = {};
+    let commentHelpData = {};       // Norske hjelpetekster (original)
+    let commentHelpDataEn = {};      // Engelske hjelpetekster (oversettelse)
     let msatDataNo = null;          // Norske oversettelser (samme struktur/ids som msat_data.json)
     let noSectionTitleById = {};    // seksjon-id -> norsk tittel
     let noItemById = {};            // punkt-id -> { text, details }
@@ -175,6 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             let currentMsatData = await safeFetchJson('data/msat_data.json');
             const orgTypes = await safeFetchJson('data/organisation_types.json');
             commentHelpData = await safeFetchJson('data/comment_help.json') || {};
+            commentHelpDataEn = await safeFetchJson('data/comment_help.en.json') || {};
             msatDataNo = await safeFetchJson('data/msat_data.no.json');
             buildNoIndex();
 
@@ -516,7 +518,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function showCommentPopup(targetElement, fieldKey) {
         const popup = document.getElementById('details-popup');
-        const text = commentHelpData[fieldKey] || "Ingen informasjon tilgjengelig.";
+        const lang = (window.I18n && window.I18n.getLang) ? window.I18n.getLang() : 'en';
+        const helpSource = (lang === 'no') ? commentHelpData : commentHelpDataEn;
+        const fallbackText = (lang === 'no') ? "Ingen informasjon tilgjengelig." : "No information available.";
+        // Engelsk fallback per felt dersom oversettelse mangler
+        const text = helpSource[fieldKey] || commentHelpDataEn[fieldKey] || commentHelpData[fieldKey] || fallbackText;
         popup.innerHTML = `
             <button id="popup-close-button" aria-label="Close">&times;</button>
             <div class="popup-section">${text}</div>

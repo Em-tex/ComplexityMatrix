@@ -1,6 +1,7 @@
 ==========================================================================
  OVERSETTELSE / SPRÅK (NO/EN) – INSTRUKSJONER FOR VIDERE ARBEID
- Sist oppdatert: 2026-06-20
+ Sist oppdatert: 2026-06-20 (MSAT comment_help + CAMO + FixedWing + Rotor + ATO
+                            ferdig; Ja/Nei oversettes nå i nedtrekkene – se ENDRING)
 ==========================================================================
 
 OPPSUMMERING
@@ -44,8 +45,18 @@ I JS: window.I18n.t("nøkkel"). Bygg gjerne en lokal hjelper:
 ------------------------------------------
 1. POENG/SCORE ENDRES ALDRI. Tallene 1/2/4/7 og score-nedtrekkene
    (Present (1), Suitable (2), Operating (4), Effective (7), Not Applicable,
-   Good (7), Acceptable (4), Poor/Concern (1), No (7), Yes (1), Select...)
-   skal stå HELT uendret på begge språk. De brukes som DATA.
+   Good (7), Acceptable (4), Poor/Concern (1)) skal stå HELT uendret på begge
+   språk. De brukes som DATA.
+
+   *** ENDRING 2026-06-20 (bruker): Enkle Ja/Nei-nedtrekk SKAL nå vises oversatt
+   (Nei/Ja) i de "ekte" FFO-skjemaene. For å holde DATA/CSV stabilt:
+     - <option>-VERDIEN (value="No"/"Yes" eller 0/1/...) er uendret -> scoring OK.
+     - Legg data-en="No"/"Yes" + data-i18n="<ns>.optNo/optYes" på option-en.
+     - CSV leser KANONISK engelsk via (opt.dataset.en || opt.text) ved
+       eksport OG import-matching (se FixedWing/Rotor kalkulator.js, CAMO
+       getElementText). Slik blir CSV alltid engelsk uansett valgt språk.
+   Dette gjelder Ja/Nei. P/S/O/E og MSAT sine scorede nedtrekk ("No (7)" osv.)
+   forblir uendret. ***
 
 2. DATA-/CSV-LAGET RØRES IKKE. MSAT sin CSV-import matcher på engelsk
    valg-tekst (opt.text === choiceValue) og engelske kolonneoverskrifter.
@@ -95,23 +106,130 @@ FERDIG:
     forlengelses-sjekkliste, dialoger, gauge-etiketter (inkl. Total Average
     Score), OG alt skjemainnhold (29 punkter + overskrifter) via
     MSAT/data/msat_data.no.json.
+    + comment_help (de 7 avdelings-popupene): originalfila er NORSK; engelsk
+      oversettelse lagt i MSAT/data/comment_help.en.json. calculator.js velger
+      datasett ut fra språk ved klikk (norsk = comment_help.json beholdt uendret).
+  - CAMO KOMPLETT: hele camo.html merket med data-i18n via CAMO/lang/{en,no}.js
+    (67 nøkler, en/no-paritet). Veksleknapp + clear-dialog oversatt i JS.
+    CSV-etiketter holdes ALLTID engelske via ny I18n.tIn('en', key) (se under).
+    IKKE oversatt (DATA): score-nedtrekk, matrise-celleverdier (critical/normal/
+    basic ...) og nivånavn (Present/Suitable/Operational/Effective, Non-complex/
+    Low/Medium/High) – styrer beregning/CSV.
 
-TEST-SKJEMAER (nedprioriter – merket med oransje "Test"-badge ved tittelen):
-  - ATM (ATM/atm.html)
-  - FFP (FFP/luftfartshinder.html)
+  NB nytt verktøy i rammeverket: window.I18n.tIn(lang, key[, fallback]) henter
+  en streng for ET BESTEMT språk uavhengig av valgt språk. Brukes til CSV-
+  etiketter som alltid skal være engelske (les data-i18n-nøkkelen på .input-
+  label og slå opp 'en'). Gjenbruk dette mønsteret for de andre verktøyene.
+
+  - FixedWing KOMPLETT (BLANDET original: kriterier var engelske, "chrome" norsk):
+    FixedWing/lang/{en,no}.js (69 nøkler, paritet). fixed-wing.html OG oversikt.html
+    merket med data-i18n. kalkulator.js: t()-hjelper + labelKeys-map; alle dialoger/
+    alerts/validering oversatt. CSV ufarlig her: kalkulatoren bygger CSV fra JS-
+    fieldData.label (engelsk) + select-alternativenes opt.text (data), IKKE fra DOM-
+    teksten – så oversetting av DOM-etiketter rører ikke CSV. CSV-kolonneheadere
+    ('Operatørnavn','Fylt ut av','Dato','Kommentarer', '<label> (Valg)/(Verdi)') er
+    skjema og BEHOLDES uendret (import matcher på dem). oversikt_bygger.js bygger
+    tabellen på nytt ved 'languageChanged'. IKKE oversatt: select-alternativene
+    (No/Yes, tall, AOC/SPO/NCC, Legacy/ATQP/EBT ...) = DATA.
+
+  - Rotor KOMPLETT + SKJEMA GJENOPPRETTET (viktig): rotor.html var ved en feil
+    overskrevet med FixedWing-skjemaet (i commit d9d7ec2) og passet ikke med
+    poenglogikken. Bruker bekreftet at POENGLOGIKKEN (scoring.json) er FASIT.
+    Det rotor-spesifikke skjemaet ble derfor hentet tilbake fra git (031fa7b) og
+    flettet inn i dagens rotor.html (beholdt dagens navbar/knapper/språk-oppsett).
+    Rotor/js/kalkulator.js: MAX_SCORES (16/41/60/19/136), fieldData (34 felt) og
+    calculateFieldScore (hems/hofo/ato/single-pilot har egne scores; resten av
+    approvals = generic-approval; leading-personnel-roles = dependent på piloter)
+    satt tilbake til original. Rotor/lang/{en,no}.js skrevet om til de rotor-
+    spesifikke feltene (75 nøkler, paritet). data-en for Ja/Nei beholdt.
+
+  - POENGOVERSIKTEN (oversikt.html) for FixedWing OG Rotor speiler nå NØYAKTIG
+    hovedskjemaets fieldData (samme id-er, rekkefølge, engelske CSV-label),
+    kriterietekst oversatt via labelKeys, bygges om ved 'languageChanged'.
+    FixedWing: fjernet ekstra 'hr-spo'. Bygger har en noScoringRule-fallback
+    ("—" + tekst) for evt. felt uten regel.
+    VERIFISERT: FixedWing 30/30 og Rotor 34/34 – skjema == oversikt == HTML-
+    selects, og ALLE felt har scoring-regel (ingen 0-poeng-felt). Rotor sin
+    spec/scoring.json/skjema er nå 100 % i samsvar (0 avvik).
+
+  - ATO KOMPLETT (samme mønster som FixedWing): ATO/lang/{en,no}.js (61 nøkler,
+    paritet). ato.html + oversikt.html merket. ato_kalkulator.js med t()/labelKeys
+    + data-en for Ja/Nei; alle dialoger/alerts/validering oversatt. ato_oversikt_
+    bygger.js: labelKeys + oversatte fraser. NB: ATO scorer ALLE felt via egne
+    ato_scoring.json-regler (ingen generic-approval). Verifisert: 26/26 felt har
+    regel, skjema == oversikt == HTML-selects. ATO/oversikt.html hadde ikke navbar/
+    i18n – la til i18n+lang-skript (ingen språkbryter der, men leser valgt språk
+    fra localStorage). "Performance"-seksjonen i oversikten er tom (ingen felt).
+
+  - Part145 KOMPLETT (CAMO-klon): Part145/lang/{en,no}.js (namespace p145, 77
+    nøkler, paritet). part145.html merket + lang/{en,no}.js-skript lagt til før
+    navbar.js. part145_kalkulator.js: t()-hjelper, veksleknapp via t('p145.matrix
+    Show/Hide') + 'languageChanged'-lytter, clearForm-confirm via t(). CSV er DOM-
+    tekst (som CAMO): getElementText bruker nå (opt.dataset.en || opt.text);
+    downloadCSV leser hver .input-label sin data-i18n-nøkkel og slår opp engelsk
+    via I18n.tIn('en', key) (egendefinerte tekstfelt som B2a-iv legges fortsatt
+    til). data-en Ja/Nei på A3-choice + B4a/B8b/B10-comp. IKKE oversatt (DATA):
+    score-nedtrekk, B7-volum (Low/Medium/High), matrise-celler/nivåer, tilsynsplan-
+    tabellen. Ingen oversikt.html; scoring er hardkodet i JS (ingen scoring.json-
+    fetch) → ingen Rotor-type avvik. Verifisert: HTML 75 + JS 3 nøkler dekket,
+    0 ubrukte, 77/77 paritet.
+
+  - Ja/Nei (Nei/Ja) er nå oversatt i nedtrekkene i CAMO, FixedWing, Rotor, ATO OG
+    Part145 via data-en-mønsteret (se ENDRING under regel 1). MSAT er IKKE rørt
+    (scorede nedtrekk).
+
+  - "FYLT UT AV"-VALIDERING (felles, ny funksjon 2026-06-20): feltet id="filled-by"
+    krever nå fullt navn (minst for- OG etternavn, dvs. to+ ord). Skriver brukeren
+    bare ett ord og forlater feltet, lyser feltet rødt (.input-error) og det vises
+    et varsel under feltet. Implementert som FELLES skript js/navn_validering.js
+    (lastes på alle 8 sider med feltet: CAMO, FixedWing, Rotor, ATO, Part145, UAS,
+    ATM, FFP – rett før js/navbar.js). Hjelpetekst (tooltip) + varsel hentes fra
+    nye felles i18n-nøkler nameValidation.{help,warning} i js/lang/{en,no}.js (begge
+    språk, paritet). Stil (.input-error rød ramme + .name-warning rød tekst) lagt i
+    css/navbar.css. UX: feil vises ved blur; mens man skriver fjernes feilen straks
+    navnet blir gyldig (ingen rød-blinking på første tastetrykk). Tomt felt = ingen
+    feil. Oppdateres ved 'languageChanged'.
+
+  - UAS KOMPLETT (gauge/seksjon-verktøy, MEN den vanskeligste CSV-en): både
+    etiketter OG valg-tekst kom fra DOM, og import matchet på dem. UAS/lang/{en,no}.js
+    (namespace uas, 127 nøkler, paritet). UAS.html merket: label-celler får data-i18n
+    (tekst pakket i <span data-i18n> der cellen har tooltip-barn, så apply() ikke
+    sletter tooltipen); hver oversettbar <option> får data-i18n + data-en. IKKE
+    oversatt (DATA): option-VERDIER (= scoring.json-nøkler: Nei/Ja/kun-hovedbase/
+    Presist/Generisk ...), tall, enheter, koder (OAT/LUC/STS/SAIL/VLOS/GSM/SATCOM),
+    vektklasser og det scorede SMS-nedtrekket. CSV koblet fra DOM (FixedWing-stil):
+    fast engelsk csvLabels-map i kalkulator.js brukes av både eksport og import
+    (leser ikke lenger DOM-tekst – fikset også en gammel bug der tooltip-tekst lekket
+    inn i CSV-headere); getSelectedText/setChoice bruker (data-en || text) → CSV alltid
+    engelsk og round-trip-stabil uansett språk. Alle JS-strenger (confirm/alerts/flagg/
+    dynamisk OAT↔LUC-etikett) via t(); languageChanged kjører toggleApprovalTypes()+
+    updateFlags(). Fikset Generisk→vist Generic. oversikt.html + oversikt_bygger.js:
+    labelKeys + valueToKey oversetter kriterier/valg (engelsk fallback for tall/koder),
+    bygges om ved languageChanged. Verifisert 127/127 paritet, alle HTML/JS-nøkler
+    dekket, alle option-verdier matcher scoring.json. ALLE EKTE VERKTØY ER NÅ FERDIGE.
+
+  - <html lang>-konsistens: js/i18n.js setter document.documentElement.lang = getLang()
+    ved DOMContentLoaded og ved setLang, så det statiske attributtet er bare pre-JS-
+    verdien. Justerte de 6 ferdig-oversatte sidene som fortsatt sa lang="no" (ATO
+    ato/oversikt, FixedWing fixed-wing/oversikt, Rotor rotor/oversikt) til lang="en"
+    (= DEFAULT_LANG, som de andre). ATM/FFP står igjen som lang="no" (uoversatte test/
+    utkast, innhold fortsatt norsk). NB: ATO/oversikt.html har i18n men IKKE navbar.js
+    (ingen språkbryter – leser lagret språk); de andre oversikt-sidene har navbar.
+    CAMOtest/ er en ulenket backup (ingen i18n).
+
+  - FORSIDEN (index.html): FFP- og FFS-seksjonene er nå merket med <span class=
+    "test-badge">Test</span> ved <h2> (test-verktøyene Luftfartshinder og ATM).
+
+TEST-SKJEMAER (nedprioriter – merket med oransje "Test"-badge):
+  - ATM (ATM/atm.html)  – badge ved tittel + FFS-seksjon på forsiden
+  - FFP (FFP/luftfartshinder.html) – badge ved tittel + FFP-seksjon på forsiden
 
 GJENSTÅR:
-  A) comment_help.json i MSAT (de 7 avdelings-hjelpepopupene) er kun engelsk.
-  B) Øvrige ekte verktøy – kun felles knapper er oversatt så langt:
-       ATO        (ATO/ato.html,            ATO/js/ato_kalkulator.js)
-       CAMO       (CAMO/camo.html,          CAMO/js/camo_kalkulator.js)
-       Part145    (Part145/part145.html,    Part145/js/part145_kalkulator.js)
-       UAS        (UAS/UAS.html,            UAS/js/kalkulator.js)
-       FixedWing  (FixedWing/fixed-wing.html, FixedWing/js/kalkulator.js)
-       Rotor      (Rotor/rotor.html,        Rotor/js/kalkulator.js)
-     (Sjekk om disse er engelske eller norske i utgangspunktet – flere FFO-
-      skjemaer er allerede på norsk; da er "originalteksten" norsk og engelsk
-      blir oversettelsen. Behold da norsk som "no"-verdi uendret.)
+  A) (FERDIG) comment_help i MSAT – se FERDIG over.
+  B) (FERDIG) Alle ekte verktøy er oversatt: MSAT, CAMO, FixedWing, Rotor, ATO,
+     Part145 og UAS. Kun ATM og FFP gjenstår, men de er test/utkast (nedprioritert –
+     se TEST-SKJEMAER under). Oversett dem evt. senere med samme mønster (data-en for
+     valg, tIn('en') / fast csvLabels for CSV-etiketter, sjekk skjema == scoring.json).
 
 
 SLIK OVERSETTER DU ET NYTT VERKTØY (kopier MSAT-mønsteret)
@@ -155,11 +273,15 @@ inn på det andre – skal fungere uendret.
 
 NESTE STEG (forslag når arbeidet gjenopptas)
 --------------------------------------------
-1. Bekreft terminologien i MSAT (særlig "samsvarsovervåking",
-   "vedkommende myndighet", funn vs avvik) – juster ordlisten ved behov.
-2. Oversett comment_help.json (parallell .no-fil eller nøkler i MSAT/lang).
-3. Velg neste verktøy (forslag: CAMO eller FixedWing) og kjør mønsteret over.
-4. Vurder om ATM/FFP skal oversettes når de går fra "test" til produksjon.
+1. Bekreft terminologien (særlig "samsvarsovervåking", "vedkommende myndighet",
+   funn vs avvik). I CAMO ble non-compliance => avvik, ratings => rettigheter,
+   Permit to fly => flygetillatelse, Airworthiness review => luftdyktighets-
+   gjennomgang – juster ordlisten ved behov.
+2. Velg neste verktøy (gjenstår: ATO, Part145, UAS). Bruk FixedWing/Rotor/CAMO
+   som ferskeste mønster. Sjekk ALLTID først om CSV bygges fra JS-fieldData
+   (som FixedWing/Rotor → trygt å oversette DOM) eller fra DOM-tekst (som CAMO →
+   bruk tIn('en', key) for CSV-etiketter). Oversett Ja/Nei med data-en-mønsteret.
+3. Vurder om ATM/FFP skal oversettes når de går fra "test" til produksjon.
 
 Relevante minnenotater: memory/i18n-setup.md
 ==========================================================================

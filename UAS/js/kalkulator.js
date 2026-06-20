@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
     let scoringData = null;
     let operationTypes = null;
     const STORAGE_KEY = 'uasComplexityData';
@@ -19,6 +20,43 @@ document.addEventListener('DOMContentLoaded', async () => {
         performance: ['bekymringsmeldinger', 'veiledningsbehov', 'mangler-oat-empic', 'niva1-avvik', 'niva2-avvik', 'frist-lukking', 'sms-tilsyn']
     };
 
+    // CSV-etiketter er ALLTID engelske (uavhengig av visningsspråk) slik at
+    // eksport/import er stabilt. Bygges fra denne faste engelske mappen, ikke
+    // fra DOM-teksten (som oversettes).
+    const csvLabels = {
+        'antall-baser': 'Number of bases',
+        'antall-piloter': 'Number of pilots',
+        'pilot-employment': 'Pilot employment',
+        'ledende-personell-roller': 'Leading personnel has multiple roles',
+        'krav-eksamen': 'Exam requirements',
+        'manualverk': 'Manuals',
+        'tyngste-fartoy': 'Heaviest aircraft',
+        'antall-fartoy': 'Number of aircraft',
+        'antall-typer': 'Number of aircraft types',
+        'c2link': 'C2 link',
+        'modifiserte-fartoy': 'Modified aircraft',
+        'test-development': 'Test and Development',
+        'sail': 'Highest SAIL',
+        'omrade': 'Area of approval',
+        'synsvidde': 'Line of sight',
+        'flyhoyde': 'Flight altitude',
+        'operasjonsmiljo': 'Operational environment',
+        'redusert-grc': 'Reduced GRC',
+        'antall-oats-luc': 'Number of OATs / LUC privileges',
+        'flytimer': 'Expected annual flight hours',
+        'annen-risiko': 'Other increased complexity',
+        'state-operations': 'State operations',
+        'state-exemptions': 'Exemptions from 947 that could increase risk?',
+        'bekymringsmeldinger': 'Reports of concern',
+        'veiledningsbehov': 'Need for guidance',
+        'mangler-oat-empic': 'Missing data in EMPIC',
+        'niva1-avvik': 'Level 1 finding',
+        'niva2-avvik': 'Number of level 2 findings',
+        'frist-lukking': 'Deadline for closure',
+        'sms-tilsyn': 'SMS'
+    };
+    const csvLabelFor = (fieldId) => csvLabels[fieldId] || fieldId;
+
     // Laster inn den nye operatørlisten
     async function initOperatorField() {
         try {
@@ -26,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = await response.json();
             const select = document.getElementById('operator-select');
             if (select) {
-                select.innerHTML = '<option value="">Select operator...</option>'; 
+                select.innerHTML = `<option value="" data-i18n="uas.selectOperator">${t('uas.selectOperator')}</option>`;
                 data.forEach(op => {
                     const option = document.createElement('option');
                     option.value = op;
@@ -52,14 +90,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         toggleBtn.addEventListener('click', () => {
             if (opSelect.style.display !== 'none') {
-                const confirmManual = confirm("Vennligst sjekk listen nøye først.\n\nEr du sikker på at operatøren ikke finnes? Manuell inntasting skal KUN brukes hvis operatøren mangler i listen.");
+                const confirmManual = confirm(t('uas.confirmManual'));
                 if (confirmManual) {
                     opSelect.style.display = 'none';
-                    opSelect.value = ''; 
+                    opSelect.value = '';
                     opInput.style.display = 'block';
-                    opInput.value = ''; 
+                    opInput.value = '';
                     toggleBtn.innerHTML = '<i class="fa-solid fa-list"></i>';
-                    toggleBtn.title = "Back to list";
+                    toggleBtn.title = t('uas.backToList');
                     toggleBtn.style.backgroundColor = '#03477F';
                     opInput.focus();
                 }
@@ -68,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opSelect.style.display = 'block';
                 opInput.value = opSelect.value;
                 toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
-                toggleBtn.title = "Enter manually";
+                toggleBtn.title = t('uas.enterManually');
                 toggleBtn.style.backgroundColor = '#6c757d';
                 saveData();
             }
@@ -109,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             initOperationTypes();
         } catch (error) {
             console.error("Error loading JSON configs:", error);
-            alert("Feil under innlasting av datafiler. Sørg for at 'scoring.json', 'operation_types.json' og 'operators.json' ligger i data-mappen.");
+            alert(t('uas.loadConfigError'));
         }
     }
 
@@ -201,12 +239,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const stateOps = document.getElementById('state-operations').value;
         if (stateOps === 'Ja') {
-            container.innerHTML += `<div class="flag-item"><i class="fa-solid fa-flag"></i> State Operations (Forskrift om statsluftfart)</div>`;
+            container.innerHTML += `<div class="flag-item"><i class="fa-solid fa-flag"></i> ${t('uas.flagState')}</div>`;
         }
 
         const neverAudited = document.getElementById('aldri-hatt-tilsyn').checked;
         if (neverAudited) {
-            container.innerHTML += `<div class="flag-item"><i class="fa-solid fa-flag"></i> Operator has never been audited</div>`;
+            container.innerHTML += `<div class="flag-item"><i class="fa-solid fa-flag"></i> ${t('uas.flagNeverAudited')}</div>`;
         }
     }
 
@@ -257,10 +295,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const lucTooltip = document.getElementById('luc-privileges-tooltip');
         
         if (mainApproval === 'LUC') {
-            lucLabelText.textContent = "Number of LUC privileges";
+            lucLabelText.textContent = t('uas.lucNumber');
             lucTooltip.style.display = "inline-block";
         } else {
-            lucLabelText.textContent = "Number of OATs";
+            lucLabelText.textContent = t('uas.oatNumber');
             lucTooltip.style.display = "none";
         }
     }
@@ -290,7 +328,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function getSelectedText(selectId) {
         const select = document.getElementById(selectId);
-        return select && select.selectedIndex >= 0 ? select.options[select.selectedIndex].text : '';
+        if (!select || select.selectedIndex < 0) return '';
+        const opt = select.options[select.selectedIndex];
+        // CSV skal alltid være engelsk: bruk data-en hvis satt, ellers vist tekst.
+        return opt.dataset.en || opt.text;
     }
 
     function downloadCSV() {
@@ -308,7 +349,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         for (const [category, fields] of Object.entries(categories)) {
             fields.forEach(fieldId => {
-                const label = document.querySelector(`label[for="${fieldId}"]`)?.textContent.replace(/:/g, '') || document.getElementById(fieldId)?.parentElement.previousElementSibling.textContent.trim();
+                const label = csvLabelFor(fieldId);
                 headers.push(`"${label} (Choice)"`, `"${label} (Score)"`);
                 rowData.push(`"${getSelectedText(fieldId)}"`, document.getElementById(`${fieldId}-value`)?.textContent || "0");
             });
@@ -362,7 +403,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const setChoice = (id, headerName) => {
                     const sel = document.getElementById(id);
                     if (sel && headerMap[headerName] !== undefined) {
-                        const opt = Array.from(sel.options).find(o => o.text === data[headerMap[headerName]]);
+                        const wanted = data[headerMap[headerName]];
+                        // Matcher mot engelsk (data-en) først, så vist tekst – CSV er engelsk.
+                        const opt = Array.from(sel.options).find(o => (o.dataset.en || o.text) === wanted);
                         if(opt) sel.value = opt.value;
                     }
                 };
@@ -378,8 +421,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 for (const fields of Object.values(categories)) {
                     fields.forEach(fieldId => {
-                        const label = document.querySelector(`label[for="${fieldId}"]`)?.textContent.replace(/:/g, '') || document.getElementById(fieldId)?.parentElement.previousElementSibling.textContent.trim();
-                        setChoice(fieldId, `${label} (Choice)`);
+                        setChoice(fieldId, `${csvLabelFor(fieldId)} (Choice)`);
                     });
                 }
 
@@ -396,9 +438,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 toggleStateExemptions();
                 toggleAuditFields();
                 calculateScore();
-                alert("Data lastet inn!");
+                alert(t('uas.dataLoaded'));
             } catch (err) {
-                alert("Feil ved lasting av fil.");
+                alert(t('uas.loadFileError'));
             }
         };
         reader.readAsText(file, "UTF-8");
@@ -421,7 +463,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('aldri-hatt-tilsyn').addEventListener('change', toggleAuditFields);
 
         document.getElementById('clear-form-button')?.addEventListener('click', () => {
-            if(confirm("Tøm skjema?")) { localStorage.removeItem(STORAGE_KEY); window.location.reload(); }
+            if(confirm(t('uas.clearForm'))) { localStorage.removeItem(STORAGE_KEY); window.location.reload(); }
+        });
+
+        // Ved språkbytte: oppdater dynamisk OAT/LUC-etikett og flagg/tekster.
+        window.addEventListener('languageChanged', () => {
+            toggleApprovalTypes();
+            updateFlags();
         });
         document.getElementById('download-csv-button')?.addEventListener('click', downloadCSV);
         document.getElementById('print-pdf-button')?.addEventListener('click', () => window.print());

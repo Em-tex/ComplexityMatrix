@@ -15,5 +15,10 @@ I18n.register("en", {
         printPdf: "Print to PDF",
         loadData: "Load data",
         resetForm: "Reset form"
+    },
+    nameValidation: {
+        placeholder: "First and last name",
+        help: "Enter full name (first and last name)",
+        warning: "Both first and last name must be entered."
     }
 });

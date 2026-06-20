@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const STORAGE_KEY = 'fixedWingComplexityData';
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
     let scoringRules = {};
 
     const MAX_SCORES = {
@@ -9,6 +10,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         approvals: 18,
         total: 116
     };
+
+    // Tilsynspakke-grupper bestemmes av totalscoren. Terskler = FASIT:
+    //   Total >= 60 -> Gruppe 1 (høyest), >= 50 -> 2, >= 41 -> 3,
+    //   >= 20 -> 4, >= 10 -> 5, ellers ingen pakke.
+    // Hver gruppe lenker direkte til sin PDF i SharePoint.
+    const TILSYNSPAKKE_URLS = {
+        1: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%201.pdf?csf=1&web=1&e=j5Fgh1',
+        2: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%202.pdf?csf=1&web=1&e=XqeuO1',
+        3: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%203.pdf?csf=1&web=1&e=kx9GvT',
+        4: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%204.pdf?csf=1&web=1&e=wx48jA',
+        5: 'https://caano.sharepoint.com/:b:/r/teams/Oversightproduction/Delte%20dokumenter/General/Nytt%20tilsynssystem%202025/Tilsynsgrunnpakker/FW%20Tilsynspakker/FW%20Tilsynspakke%20Gruppe%205.pdf?csf=1&web=1&e=DgZMUW'
+    };
+
+    function groupForTotal(total) {
+        if (total >= 60) return 1;
+        if (total >= 50) return 2;
+        if (total >= 41) return 3;
+        if (total >= 20) return 4;
+        if (total >= 10) return 5;
+        return null;
+    }
+
+    let lastTotal = 0;
+
+    function updateTilsynspakke(total) {
+        lastTotal = total;
+        const badge = document.getElementById('tilsynspakke-badge');
+        const link = document.getElementById('tilsynspakke-link');
+        const textEl = document.getElementById('tilsynspakke-text');
+        if (!badge || !link || !textEl) return;
+
+        const group = groupForTotal(total);
+        if (group) {
+            badge.className = 'tilsynspakke-badge has-package group-' + group;
+            link.href = TILSYNSPAKKE_URLS[group];
+            link.removeAttribute('aria-disabled');
+            textEl.textContent = `${t('fw.group')} ${group}`;
+        } else {
+            badge.className = 'tilsynspakke-badge no-package';
+            link.removeAttribute('href');
+            link.setAttribute('aria-disabled', 'true');
+            textEl.textContent = t('fw.noPackage');
+        }
+    }
 
     const fieldData = [
         { id: 'staff-employed', label: 'Total Number of staff employed for the operation', section: 'resources' },
@@ -43,6 +88,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'cca-training', label: 'CCA training', section: 'approvals' }
     ];
 
+    // id -> i18n-nøkkel for kriterieteksten. fieldData.label holdes ALLTID
+    // engelsk (CSV-kolonner); denne brukes kun til oversatte brukermeldinger.
+    const labelKeys = {
+        'staff-employed': 'fw.staffEmployed', 'pilots-employed': 'fw.pilotsEmployed',
+        'cabin-crew': 'fw.cabinCrew', 'leading-personnel-roles': 'fw.leadingRoles',
+        'types-operated': 'fw.typesOperated', 'aircraft-mops-over-19': 'fw.mopsOver19',
+        'aircraft-mops-under-19': 'fw.mopsUnder19', 'special-modification': 'fw.specialMod',
+        'operation-types': 'fw.operationTypes', 'operation-complexity': 'fw.operationComplexity',
+        'special-operation': 'fw.specialOperation', 'derogations': 'fw.derogations',
+        'airports-based': 'fw.airportsBased', 'subcontractors': 'fw.subcontractors',
+        'acmi': 'fw.acmi', 'certificate': 'fw.certificate', 'rnp-ar-apch': 'fw.rnpArApch',
+        'mnps-nat-hla': 'fw.mnpsNatHla', 'rvsm': 'fw.rvsm', 'lv-takeoff': 'fw.lvTakeoff',
+        'lv-landing': 'fw.lvLanding', 'etops': 'fw.etops', 'dangerous-goods': 'fw.dangerousGoods',
+        'single-engine-imc': 'fw.singleEngineImc', 'efb': 'fw.efb',
+        'isolated-aerodromes': 'fw.isolatedAerodromes', 'steep-approach': 'fw.steepApproach',
+        'frms': 'fw.frms', 'crew-training': 'fw.crewTraining', 'cca-training': 'fw.ccaTraining'
+    };
+    const labelFor = (field) => (labelKeys[field.id] ? t(labelKeys[field.id]) : field.label);
+
     // --- START: SIKRET OPERATØR-LOGIKK ---
     async function initOperatorField() {
         try {
@@ -50,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = await response.json();
             const select = document.getElementById('operator-select');
             if (select) {
-                select.innerHTML = '<option value="">Velg operatør...</option>'; 
+                select.innerHTML = '<option value="" data-i18n="fw.selectOperator">' + t('fw.selectOperator') + '</option>';
                 data.forEach(op => {
                     const option = document.createElement('option');
                     option.value = op;
@@ -76,14 +140,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         toggleBtn.addEventListener('click', () => {
             if (opSelect.style.display !== 'none') {
-                const confirmManual = confirm("Vennligst sjekk listen nøye først.\n\nEr du sikker på at operatøren ikke finnes? Manuell inntasting skal KUN brukes hvis operatøren mangler i listen.");
+                const confirmManual = confirm(t('fw.confirmManual'));
                 if (confirmManual) {
                     opSelect.style.display = 'none';
                     opSelect.value = ''; 
                     opInput.style.display = 'block';
                     opInput.value = ''; 
                     toggleBtn.innerHTML = '<i class="fa-solid fa-list"></i>';
-                    toggleBtn.title = "Tilbake til liste";
+                    toggleBtn.title = t('fw.backToListTitle');
                     toggleBtn.style.backgroundColor = '#03477F';
                     opInput.focus();
                 }
@@ -92,7 +156,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opSelect.style.display = 'block';
                 opInput.value = opSelect.value;
                 toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
-                toggleBtn.title = "Skriv inn manuelt";
+                toggleBtn.title = t('fw.manualTitle');
                 toggleBtn.style.backgroundColor = '#6c757d';
                 saveData();
             }
@@ -183,6 +247,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         document.getElementById('total-gauge-sum-text').textContent = grandTotal;
         updateGauge('total', grandTotal, MAX_SCORES.total);
+        updateTilsynspakke(grandTotal);
 
         saveData();
     }
@@ -207,7 +272,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function clearForm() {
-        if (confirm("Er du sikker på at du vil tømme skjemaet? All lagret data vil bli slettet.")) {
+        if (confirm(t('fw.confirmClear'))) {
             localStorage.removeItem(STORAGE_KEY);
             window.location.reload();
         }
@@ -222,12 +287,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const filledByInput = document.getElementById('filled-by');
 
         if (!operatorNavnInput.value.trim()) {
-            errors.push("Operatørnavn må fylles ut.");
+            errors.push(t('fw.errOperatorRequired'));
             operatorNavnInput.classList.add('invalid');
             isValid = false;
         }
         if (!filledByInput.value.trim()) {
-            errors.push("Fylt ut av må fylles ut.");
+            errors.push(t('fw.errFilledByRequired'));
             filledByInput.classList.add('invalid');
             isValid = false;
         }
@@ -235,14 +300,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         fieldData.forEach(field => {
             const select = document.getElementById(field.id);
             if (select && select.value === "") {
-                errors.push(`Vennligst gjør et valg for "${field.label}".`);
+                errors.push(t('fw.errChoiceRequired').replace('{label}', labelFor(field)));
                 select.classList.add('invalid');
                 isValid = false;
             }
         });
 
         if (!isValid) {
-            alert("Skjemaet er ikke fullstendig utfylt:\n\n" + errors.join('\n'));
+            alert(t('fw.formIncomplete') + "\n\n" + errors.join('\n'));
         }
         return isValid;
     }
@@ -256,14 +321,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     function getSelectedText(selectId) {
         const selectElement = document.getElementById(selectId);
         if (selectElement && selectElement.selectedIndex >= 0 && selectElement.options[selectElement.selectedIndex]) {
-            return selectElement.options[selectElement.selectedIndex].text;
+            const opt = selectElement.options[selectElement.selectedIndex];
+            // CSV holdes språkuavhengig: bruk kanonisk data-en når den finnes
+            // (f.eks. oversatte Ja/Nei), ellers selve teksten (tall/range er like).
+            return opt.dataset.en || opt.text;
         }
         return "";
     }
 
     function downloadCSV() {
         if (!validateForm()) { return; }
-        const operatorNavn = document.getElementById('operator-navn').value || "UkjentOperatør";
+        const operatorNavn = document.getElementById('operator-navn').value || t('fw.unknownOperator');
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
         
         const fileName = `${operatorNavn.replace(/ /g, "_")}_${dateValue}.dat`;
@@ -320,7 +388,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.onload = function(e) {
             const lines = e.target.result.split(/\r?\n/);
             if (lines.length < 2) {
-                alert("Filen er tom eller ugyldig.");
+                alert(t('fw.fileEmpty'));
                 return;
             }
 
@@ -339,7 +407,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const choiceIndex = headerMap[choiceHeader];
                     if (choiceIndex !== undefined && data[choiceIndex] !== undefined) {
                         const valueToFind = data[choiceIndex];
-                        const option = Array.from(select.options).find(opt => opt.text === valueToFind);
+                        // Matcher mot kanonisk data-en (eller tekst) – uavhengig av språk
+                        const option = Array.from(select.options).find(opt => (opt.dataset.en || opt.text) === valueToFind);
                         select.value = option ? option.value : "";
                     }
                 }
@@ -352,7 +421,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             window.syncOperatorUI();
             updateCalculations();
-            alert("Data lastet inn!");
+            alert(t('fw.dataLoaded'));
         };
         reader.readAsText(file, "UTF-8"); 
     }
@@ -365,7 +434,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             scoringRules = await scoringRes.json();
         } catch (error) {
             console.error('Klarte ikke å laste inn nødvendige datafiler:', error);
-            alert('FEIL: Kunne ikke laste inn datafiler (scoring/operators). Siden kan ikke fungere.');
+            alert(t('fw.loadError'));
             return;
         }
 
@@ -421,10 +490,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const simulatedEvent = { target: { files: files } };
                     loadCsvFile(simulatedEvent); 
                 } else {
-                    alert("Vennligst slipp kun .dat eller .csv filer.");
+                    alert(t('fw.dropOnlyDat'));
                 }
             }
         }
+
+        // Hold tilsynspakke-teksten oppdatert ved språkbytte.
+        window.addEventListener('languageChanged', () => updateTilsynspakke(lastTotal));
 
         loadData();
         window.syncOperatorUI();

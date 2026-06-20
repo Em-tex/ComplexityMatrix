@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
 
         <div class="nav-lang" id="nav-lang" role="group" aria-label="Language">
-            <button type="button" class="lang-btn" data-lang="no" title="Norsk">${flagNO}<span>NO</span></button>
+            <button type="button" class="lang-btn" data-lang="en" title="English">${flagEN}<span>EN</span></button>
             <span class="lang-sep">|</span>
-            <button type="button" class="lang-btn" data-lang="en" title="English"><span>EN</span>${flagEN}</button>
+            <button type="button" class="lang-btn" data-lang="no" title="Norsk"><span>NO</span>${flagNO}</button>
         </div>
     </nav>
     `;

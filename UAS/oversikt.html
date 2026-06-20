@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="../css/navbar.css">
     <meta charset="UTF-8">
-    <title>Scoring for UAS</title>
+    <title data-i18n="uas.ovTitle">Scoring for UAS</title>
     <link rel="icon" href="../smallLogo.png" type="image/png">
     <link rel="stylesheet" href="css/oversikt_stil.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,31 +12,33 @@
 </head>
 <body>
     <div id="navbar-container"></div>
-    <h1>Scoring for UAS</h1>
-    <h2>Resources</h2>
+    <h1 data-i18n="uas.ovTitle">Scoring for UAS</h1>
+    <h2 data-i18n="uas.secResources">Resources</h2>
     <table>
-        <thead><tr><th>Criteria</th><th>Selection</th><th>Value</th></tr></thead>
+        <thead><tr><th data-i18n="uas.thCriteria">Criteria</th><th data-i18n="uas.thSelection">Selection</th><th data-i18n="uas.thValue">Value</th></tr></thead>
         <tbody id="resources-body"></tbody>
     </table>
-    <h2>Fleet Specific</h2>
+    <h2 data-i18n="uas.secFleet">Fleet Specific</h2>
     <table>
-       <thead><tr><th>Criteria</th><th>Selection</th><th>Value</th></tr></thead>
+       <thead><tr><th data-i18n="uas.thCriteria">Criteria</th><th data-i18n="uas.thSelection">Selection</th><th data-i18n="uas.thValue">Value</th></tr></thead>
         <tbody id="fleet-body"></tbody>
     </table>
-    <h2>Operations</h2>
+    <h2 data-i18n="uas.secOperations">Operations</h2>
     <table>
-        <thead><tr><th>Criteria</th><th>Selection</th><th>Value</th></tr></thead>
+        <thead><tr><th data-i18n="uas.thCriteria">Criteria</th><th data-i18n="uas.thSelection">Selection</th><th data-i18n="uas.thValue">Value</th></tr></thead>
         <tbody id="operations-body"></tbody>
     </table>
-    <h2>Performance</h2>
+    <h2 data-i18n="uas.secPerformance">Performance</h2>
     <table>
-        <thead><tr><th>Criteria</th><th>Selection</th><th>Value</th></tr></thead>
+        <thead><tr><th data-i18n="uas.thCriteria">Criteria</th><th data-i18n="uas.thSelection">Selection</th><th data-i18n="uas.thValue">Value</th></tr></thead>
         <tbody id="performance-body"></tbody>
     </table>
-    <script src="js/oversikt_bygger.js" defer></script>
     <script src="../js/i18n.js"></script>
     <script src="../js/lang/en.js"></script>
     <script src="../js/lang/no.js"></script>
+    <script src="lang/en.js"></script>
+    <script src="lang/no.js"></script>
+    <script src="js/oversikt_bygger.js" defer></script>
     <script src="../js/navbar.js" data-root="../"></script>
 </body>
 </html>

@@ -16,5 +16,10 @@ I18n.register("no", {
         printPdf: "Print til PDF",
         loadData: "Last inn data",
         resetForm: "Reset skjema"
+    },
+    nameValidation: {
+        placeholder: "For- og etternavn",
+        help: "Skriv inn fullt navn (for- og etternavn)",
+        warning: "Både for- og etternavn må fylles inn."
     }
 });

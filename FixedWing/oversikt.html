@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="en">
 <head>
     <link rel="stylesheet" href="../css/navbar.css">
     <meta charset="UTF-8">
-    <title>Poengberegning for Fixed Wing</title>
+    <title data-i18n="fw.oversiktTitle">Poengberegning for Fixed Wing</title>
     <link rel="icon" href="../smallLogo.png" type="image/png">
     <link rel="stylesheet" href="css/oversikt_stil.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,14 +12,14 @@
 </head>
 <body>
     <div id="navbar-container"></div>
-    <h1>Poengberegning for Fixed Wing</h1>
+    <h1 data-i18n="fw.oversiktTitle">Poengberegning for Fixed Wing</h1>
 
     <table>
         <thead>
             <tr>
-                <th>Criteria</th>
-                <th>Selection</th>
-                <th>Value</th>
+                <th data-i18n="fw.thCriteria">Criteria</th>
+                <th data-i18n="fw.thSelection">Selection</th>
+                <th data-i18n="fw.thValue">Value</th>
             </tr>
         </thead>
         <tbody id="resources-body"></tbody>
@@ -28,9 +28,9 @@
     <table>
        <thead>
             <tr>
-                <th>Criteria</th>
-                <th>Selection</th>
-                <th>Value</th>
+                <th data-i18n="fw.thCriteria">Criteria</th>
+                <th data-i18n="fw.thSelection">Selection</th>
+                <th data-i18n="fw.thValue">Value</th>
             </tr>
         </thead>
         <tbody id="fleet-body"></tbody>
@@ -39,9 +39,9 @@
     <table>
         <thead>
             <tr>
-                <th>Criteria</th>
-                <th>Selection</th>
-                <th>Value</th>
+                <th data-i18n="fw.thCriteria">Criteria</th>
+                <th data-i18n="fw.thSelection">Selection</th>
+                <th data-i18n="fw.thValue">Value</th>
             </tr>
         </thead>
         <tbody id="operations-body"></tbody>
@@ -50,18 +50,20 @@
     <table>
         <thead>
             <tr>
-                <th>Criteria</th>
-                <th>Selection</th>
-                <th>Value</th>
+                <th data-i18n="fw.thCriteria">Criteria</th>
+                <th data-i18n="fw.thSelection">Selection</th>
+                <th data-i18n="fw.thValue">Value</th>
             </tr>
         </thead>
         <tbody id="approvals-body"></tbody>
     </table>
 
-    <script src="js/oversikt_bygger.js" defer></script>
     <script src="../js/i18n.js"></script>
     <script src="../js/lang/en.js"></script>
     <script src="../js/lang/no.js"></script>
+    <script src="lang/en.js"></script>
+    <script src="lang/no.js"></script>
+    <script src="js/oversikt_bygger.js" defer></script>
     <script src="../js/navbar.js" data-root="../"></script>
 </body>
 </html>

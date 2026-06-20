@@ -74,6 +74,15 @@
         return val;
     }
 
+    // Hent en streng for ET BESTEMT språk (uavhengig av gjeldende valg).
+    // Brukes f.eks. til CSV-etiketter som alltid skal være engelske.
+    function tIn(lang, key, fallback) {
+        let val = lookup(dictionaries[lang], key);
+        if (val == null) val = lookup(dictionaries.en, key);
+        if (val == null) val = fallback != null ? fallback : key;
+        return val;
+    }
+
     // Bytt ut tekst i DOM-en for elementer som er merket opp med data-i18n*.
     function apply(root) {
         root = root || document;
@@ -98,6 +107,7 @@
 
     window.I18n = {
         t: t,
+        tIn: tIn,
         getLang: getLang,
         setLang: setLang,
         register: register,

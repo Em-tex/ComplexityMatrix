@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const STORAGE_KEY = 'atoComplexityData_v2';
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
     let scoringRules = {};
 
     const MAX_SCORES = {
@@ -42,6 +43,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'bases-outside-norway', label: 'Secondary base(s) outside Norway', section: 'approvals' },
         { id: 'part-is', label: 'Part-IS', section: 'approvals' }
     ];
+
+    // id -> i18n-nøkkel for kriterieteksten. fieldData.label holdes ALLTID
+    // engelsk (CSV-kolonner); denne brukes kun til oversatte brukermeldinger.
+    const labelKeys = {
+        'staff-fte': 'ato.staffFte', 'employed-instructors': 'ato.employedInstructors',
+        'contract-instructors': 'ato.contractInstructors', 'complex-organisation': 'ato.complexOrganisation',
+        'leading-personnel-roles': 'ato.leadingRoles', 'ifr-operation': 'ato.ifrOperation',
+        'nco-operation': 'ato.nco', 'ncc-operation': 'ato.ncc', 'spa-spo-operation': 'ato.spaSpo',
+        'holds-aoc': 'ato.holdsAoc', 'own-camo': 'ato.ownCamo', 'has-fstd-org': 'ato.hasFstdOrg',
+        'subcontractors': 'ato.subcontractors', 'number-of-types': 'ato.numberOfTypes',
+        'me-aircraft': 'ato.meAircraft', 'se-aircraft': 'ato.seAircraft',
+        'leased-from-aoc': 'ato.leasedFromAoc', 'privately-leased': 'ato.privatelyLeased',
+        'number-of-fstds': 'ato.numberOfFstds', 'integrated-courses': 'ato.integratedCourses',
+        'fcl-courses': 'ato.fclCourses', 'theory-lapl-ppl': 'ato.theoryLaplPpl',
+        'theory-cpl-atpl-ir': 'ato.theoryCplAtplIr', 'number-of-bases': 'ato.numberOfBases',
+        'bases-outside-norway': 'ato.basesOutsideNorway', 'part-is': 'ato.partIs'
+    };
+    const labelFor = (field) => (labelKeys[field.id] ? t(labelKeys[field.id]) : field.label);
 
     function calculateFieldScore(fieldId, selectValue, dependencyValue) {
         if (!scoringRules[fieldId] || !selectValue) return 0;
@@ -139,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     function clearForm() {
-        if (confirm("Er du sikker på at du vil tømme skjemaet? All lagret data vil bli slettet.")) {
+        if (confirm(t('ato.confirmClear'))) {
             localStorage.removeItem(STORAGE_KEY);
             window.location.reload();
         }
@@ -154,27 +173,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         const filledByInput = document.getElementById('filled-by');
 
         if (!operatorNavnInput.value.trim()) {
-            errors.push("Operatørnavn må fylles ut.");
+            errors.push(t('ato.errOperatorRequired'));
             operatorNavnInput.classList.add('invalid');
             isValid = false;
         }
         if (!filledByInput.value.trim()) {
-            errors.push("Fylt ut av må fylles ut.");
+            errors.push(t('ato.errFilledByRequired'));
             filledByInput.classList.add('invalid');
             isValid = false;
         }
-        
+
         fieldData.forEach(field => {
             const select = document.getElementById(field.id);
             if (select && select.value === "") {
-                errors.push(`Vennligst gjør et valg for "${field.label}".`);
+                errors.push(t('ato.errChoiceRequired').replace('{label}', labelFor(field)));
                 select.classList.add('invalid');
                 isValid = false;
             }
         });
 
         if (!isValid) {
-            alert("Skjemaet er ikke fullstendig utfylt:\n\n" + errors.join('\n'));
+            alert(t('ato.formIncomplete') + "\n\n" + errors.join('\n'));
         }
         return isValid;
     }
@@ -188,14 +207,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     function getSelectedText(selectId) {
         const selectElement = document.getElementById(selectId);
         if (selectElement && selectElement.selectedIndex >= 0 && selectElement.options[selectElement.selectedIndex]) {
-            return selectElement.options[selectElement.selectedIndex].text;
+            const opt = selectElement.options[selectElement.selectedIndex];
+            // CSV holdes språkuavhengig: kanonisk data-en når den finnes (Ja/Nei)
+            return opt.dataset.en || opt.text;
         }
         return "";
     }
 
     function downloadCSV() {
         if (!validateForm()) { return; }
-        const operatorNavn = document.getElementById('operator-navn').value || "UnknownOperator";
+        const operatorNavn = document.getElementById('operator-navn').value || t('ato.unknownOperator');
         const dateValue = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
         
         // ENDRING: Bruker .dat for å sikre at Power Automate leser den som binærfil
@@ -277,7 +298,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.onload = function(e) {
             const lines = e.target.result.split(/\r?\n/);
             if (lines.length < 2) {
-                alert("CSV-filen er tom eller ugyldig.");
+                alert(t('ato.fileEmpty'));
                 return;
             }
 
@@ -296,7 +317,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const choiceIndex = headerMap[choiceHeader];
                     if (choiceIndex !== undefined && data[choiceIndex] !== undefined) {
                         const valueToFind = data[choiceIndex];
-                        const option = Array.from(select.options).find(opt => opt.text === valueToFind);
+                        const option = Array.from(select.options).find(opt => (opt.dataset.en || opt.text) === valueToFind);
                         select.value = option ? option.value : "";
                     }
                 }
@@ -308,7 +329,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             
             updateCalculations();
-            alert("CSV-fil lastet inn!");
+            alert(t('ato.dataLoaded'));
         };
         reader.readAsText(file, 'UTF-8');
     }
@@ -335,7 +356,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } catch (error) {
             console.error('Failed to load necessary data files:', error);
-            alert(`ERROR: Could not load data files (scoring/operators). The page cannot function.\n\nDetails: ${error.message}`);
+            alert(t('ato.loadError') + `\n\nDetails: ${error.message}`);
             return;
         }
 

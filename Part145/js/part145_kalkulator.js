@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const STORAGE_KEY = 'part145Assessment_v2';
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
 
     // Denne variabelen vil holde listen over organisasjoner
     let organizationsList = [];
@@ -162,7 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getElementText(el) {
         if (!el) return '';
-        return (el.tagName === 'SELECT') ? el.options[el.selectedIndex]?.text.split('(')[0].trim() || '' : el.value;
+        if (el.tagName === 'SELECT') {
+            const opt = el.options[el.selectedIndex];
+            if (!opt) return '';
+            // CSV skal alltid være engelsk: bruk data-en hvis satt, ellers vist tekst.
+            return (opt.dataset.en || opt.text).split('(')[0].trim();
+        }
+        return el.value;
     }
     
     function calculate() {
@@ -278,9 +285,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const labelEl = row.querySelector('.input-label');
             let labelText = '';
             if (labelEl) {
-                const labelClone = labelEl.cloneNode(true);
-                labelClone.querySelectorAll('input').forEach(inp => inp.remove());
-                labelText = labelClone.textContent.trim();
+                // CSV-etiketter skal alltid være engelske: slå opp data-i18n-nøkkelen
+                // mot engelsk ordbok, ellers fall tilbake til synlig tekst.
+                const key = labelEl.getAttribute('data-i18n');
+                if (key && window.I18n) {
+                    labelText = window.I18n.tIn('en', key);
+                } else {
+                    const labelClone = labelEl.cloneNode(true);
+                    labelClone.querySelectorAll('input').forEach(inp => inp.remove());
+                    labelText = labelClone.textContent.trim();
+                }
                 const customLabelInput = labelEl.querySelector('input[type="text"]');
                 if (customLabelInput && customLabelInput.value) {
                     labelText += ` (${customLabelInput.value})`;
@@ -339,7 +353,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const content = document.getElementById('matrix-content');
             const isVisible = content.style.display === 'block';
             content.style.display = isVisible ? 'none' : 'block';
-            e.target.textContent = isVisible ? '► Show Detailed Matrices & Oversight Plan' : '▼ Hide Detailed Matrices & Oversight Plan';
+            e.target.textContent = isVisible ? t('p145.matrixShow') : t('p145.matrixHide');
+        });
+
+        // Hold veksleknappens tekst riktig (vis/skjul) ved språkbytte.
+        window.addEventListener('languageChanged', () => {
+            const toggler = document.getElementById('matrix-toggler');
+            const content = document.getElementById('matrix-content');
+            if (toggler) {
+                const isVisible = content && content.style.display === 'block';
+                toggler.textContent = isVisible ? t('p145.matrixHide') : t('p145.matrixShow');
+            }
         });
     }
     
@@ -372,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function clearForm() {
-        if (confirm("Are you sure you want to clear the form? All entered data will be lost.")) {
+        if (confirm(t('p145.confirmClear'))) {
             localStorage.removeItem(STORAGE_KEY);
             window.location.reload();
         }

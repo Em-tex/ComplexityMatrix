@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
+    // Feltlisten SKAL speile hovedskjemaet (rotor.html / kalkulator.js fieldData)
+    // – hovedskjemaet er fasit for innhold og poengberegning. Samme id-er, samme
+    // rekkefølge, samme engelske label (CSV-fasit). Score-radene hentes fra
+    // data/scoring.json. Felter uten regel i scoring.json får ingen rad (de gir
+    // også 0 i skjemaet – se README/handover om scoring.json-avvik).
     const fieldIdToDetails = {
         // Resources
         'staff-employed': { label: 'Number of staff employed for the operation', section: 'resources' },
@@ -40,6 +46,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         'ato': { label: 'ATO', section: 'approvals' }
     };
 
+    // id -> i18n-nøkkel (samme som hovedskjemaet). Engelsk label beholdes som
+    // fallback/CSV-fasit; visningen oversettes.
+    const labelKeys = {
+        'staff-employed': 'rotor.staffEmployed', 'pilots-employed': 'rotor.pilotsEmployed',
+        'technical-crew': 'rotor.technicalCrew', 'leading-personnel-roles': 'rotor.leadingRoles',
+        'types-operated': 'rotor.typesOperated', 'multi-engine-offshore': 'rotor.multiOffshore',
+        'multi-engine-onshore': 'rotor.multiOnshore', 'single-engine-helicopters': 'rotor.singleEngine',
+        'ac-leasing': 'rotor.acLeasing', 'special-modification': 'rotor.specialMod',
+        'number-operation-types': 'rotor.numberOperationTypes', 'operation-complexity': 'rotor.operationComplexity',
+        'bases-permanently': 'rotor.basesPermanently', 'subcontractors': 'rotor.subcontractors',
+        'ifr-imc-operation': 'rotor.ifrVfr', 'single-pilot': 'rotor.singlePilot',
+        'certificate': 'rotor.certificate', 'hr-spo': 'rotor.hrSpo', 'group-airline': 'rotor.groupAirline',
+        'derogations': 'rotor.derogations', 'rnp-03': 'rotor.rnp03', 'lv-takeoff': 'rotor.lvTakeoff',
+        'lv-landing': 'rotor.lvLanding', 'dangerous-goods': 'rotor.dangerousGoods',
+        'cat-pol-h-305': 'rotor.catPolH305', 'nvis': 'rotor.nvis', 'hho': 'rotor.hho', 'hems': 'rotor.hems',
+        'hofo': 'rotor.hofo', 'sar': 'rotor.sar', 'police-operations': 'rotor.policeOperations',
+        'efb-approval': 'rotor.efbApproval', 'frms': 'rotor.frms', 'ato': 'rotor.ato'
+    };
+    const labelFor = (id, fallback) => (labelKeys[id] ? t(labelKeys[id]) : fallback);
+
     const valueToDisplayTextMap = {
         "<20": "< 20", "21-50": "21-50", "51-200": "51-200", "200-500": "200-500", ">500": "> 500",
         "<10": "< 10", "11-30": "11-30", "31-100": "31-100", "101-200": "101-200", ">201": "> 201",
@@ -51,23 +77,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         ">3": "> 3"
     };
 
-    try {
-        const response = await fetch('data/scoring.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const scoringRules = await response.json();
+    let scoringRules = null;
+
+    function buildTables() {
+        if (!scoringRules) return;
+        ['resources', 'fleet', 'operations', 'approvals'].forEach(sec => {
+            const body = document.getElementById(`${sec}-body`);
+            if (body) body.innerHTML = '';
+        });
 
         for (const [id, details] of Object.entries(fieldIdToDetails)) {
-            let rule = scoringRules[id]; 
+            const tableBody = document.getElementById(`${details.section}-body`);
+            if (!tableBody) continue;
+
+            let rule = scoringRules[id];
             if (!rule && details.section === 'approvals') {
                 rule = scoringRules['generic-approval'];
             }
-            if (!rule) continue;
+            // Vis ALLE hovedskjema-felter. Mangler regel i scoring.json -> tydelig
+            // markering i stedet for å droppe raden (holder oversikten i samsvar
+            // med hovedskjemaet). 6 Rotor-felter mangler regel – se handover.
+            if (!rule) {
+                tableBody.innerHTML += `<tr><td>${labelFor(id, details.label)}</td><td>—</td><td>${t('rotor.noScoringRule')}</td></tr>`;
+                continue;
+            }
 
-            const tableBody = document.getElementById(`${details.section}-body`);
-            if (!tableBody) continue;
-            
             let html = '';
             const options = Object.entries(rule);
             const rowCount = options.length;
@@ -75,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             options.forEach(([optionValue, score], index) => {
                 html += '<tr>';
                 if (index === 0) {
-                    html += `<td rowspan="${rowCount}">${details.label}</td>`;
+                    html += `<td rowspan="${rowCount}">${labelFor(id, details.label)}</td>`;
                 }
                 const displayText = valueToDisplayTextMap[optionValue] || optionValue;
                 let scoreDisplay = '';
@@ -84,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const dependentScores = Object.entries(score.scores)
                         .map(([val, pts]) => `${valueToDisplayTextMap[val] || val} (${pts}p)`)
                         .join('<br>');
-                    scoreDisplay = `Avhengig av piloter:<br>${dependentScores}<br>Standard: ${score.default}p`;
+                    scoreDisplay = `${t('rotor.dependentOnPilots')}<br>${dependentScores}<br>${t('rotor.standardLabel')}: ${score.default}p`;
                 } else {
                     scoreDisplay = score;
                 }
@@ -94,9 +128,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             tableBody.innerHTML += html;
         }
+    }
 
+    try {
+        const response = await fetch('data/scoring.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        scoringRules = await response.json();
+        buildTables();
+        window.addEventListener('languageChanged', buildTables);
     } catch (error) {
         console.error('Kunne ikke laste eller bygge oversiktstabell:', error);
-        document.body.innerHTML = `<h1>Feil ved lasting</h1><p>Klarte ikke å laste poengoversikten. Sjekk at filen 'data/scoring.json' eksisterer og at stien er riktig. Detaljer: ${error.message}</p>`;
+        document.body.innerHTML = `<h1>${t('rotor.loadErrorTitle')}</h1><p>${t('rotor.loadErrorBody').replace('{msg}', error.message)}</p>`;
     }
 });

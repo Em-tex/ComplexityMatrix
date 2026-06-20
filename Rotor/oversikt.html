@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="en">
 <head>
     <link rel="stylesheet" href="../css/navbar.css">
     <meta charset="UTF-8">
-    <title>Poengberegning for Rotor Wing</title>
+    <title data-i18n="rotor.oversiktTitle">Poengberegning for Rotor Wing</title>
     <link rel="icon" href="../smallLogo.png" type="image/png">
     <link rel="stylesheet" href="css/oversikt_stil.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,60 +21,62 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 
-    <h1>Poengberegning for Rotor Wing</h1>
+    <h1 data-i18n="rotor.oversiktTitle">Poengberegning for Rotor Wing</h1>
 
-    <h2>Resources</h2>
+    <h2 data-i18n="rotor.gResources">Resources</h2>
     <table>
         <thead>
             <tr>
-                <th>Criteria</th>
-                <th>Selection</th>
-                <th>Value</th>
+                <th data-i18n="rotor.thCriteria">Criteria</th>
+                <th data-i18n="rotor.thSelection">Selection</th>
+                <th data-i18n="rotor.thValue">Value</th>
             </tr>
         </thead>
         <tbody id="resources-body"></tbody>
     </table>
 
-    <h2>Fleet Specific</h2>
+    <h2 data-i18n="rotor.gFleet">Fleet Specific</h2>
     <table>
        <thead>
             <tr>
-                <th>Criteria</th>
-                <th>Selection</th>
-                <th>Value</th>
+                <th data-i18n="rotor.thCriteria">Criteria</th>
+                <th data-i18n="rotor.thSelection">Selection</th>
+                <th data-i18n="rotor.thValue">Value</th>
             </tr>
         </thead>
          <tbody id="fleet-body"></tbody>
     </table>
 
-    <h2>Operations</h2>
+    <h2 data-i18n="rotor.gOperations">Operations</h2>
     <table>
         <thead>
             <tr>
-                <th>Criteria</th>
-                <th>Selection</th>
-                <th>Value</th>
+                <th data-i18n="rotor.thCriteria">Criteria</th>
+                <th data-i18n="rotor.thSelection">Selection</th>
+                <th data-i18n="rotor.thValue">Value</th>
             </tr>
         </thead>
          <tbody id="operations-body"></tbody>
     </table>
 
-    <h2>Approvals</h2>
+    <h2 data-i18n="rotor.gApprovals">Approvals</h2>
     <table>
         <thead>
             <tr>
-                <th>Criteria</th>
-                <th>Selection</th>
-                <th>Value</th>
+                <th data-i18n="rotor.thCriteria">Criteria</th>
+                <th data-i18n="rotor.thSelection">Selection</th>
+                <th data-i18n="rotor.thValue">Value</th>
             </tr>
         </thead>
          <tbody id="approvals-body"></tbody>
     </table>
 
-    <script src="js/oversikt_bygger.js" defer></script>
     <script src="../js/i18n.js"></script>
     <script src="../js/lang/en.js"></script>
     <script src="../js/lang/no.js"></script>
+    <script src="lang/en.js"></script>
+    <script src="lang/no.js"></script>
+    <script src="js/oversikt_bygger.js" defer></script>
     <script src="../js/navbar.js" data-root="../"></script>
 </body>
 </html>

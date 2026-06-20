@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
+
     const fieldIdToDetails = {
         // Resources
         'staff-employed': { label: 'Total Number of staff employed for the operation', section: 'resources' },
@@ -19,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         'subcontractors': { label: 'Number of Subcontractors', section: 'operations' },
         'acmi': { label: 'ACMI', section: 'operations' },
         'certificate': { label: 'Certificate', section: 'operations' },
-        'hr-spo': { label: 'HR SPO', section: 'operations' },
         // Approvals
         'rnp-ar-apch': { label: 'RNP AR APCH', section: 'approvals' },
         'mnps-nat-hla': { label: 'MNPS/ NAT-HLA', section: 'approvals' },
@@ -37,6 +38,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         'cca-training': { label: 'CCA training', section: 'approvals' }
     };
 
+    // id -> i18n-nøkkel for kriterieteksten (oversatt visning). Data-verdier
+    // (valg/score) oversettes ikke.
+    const labelKeys = {
+        'staff-employed': 'fw.staffEmployed', 'pilots-employed': 'fw.pilotsEmployed',
+        'cabin-crew': 'fw.cabinCrew', 'leading-personnel-roles': 'fw.leadingRoles',
+        'types-operated': 'fw.typesOperated', 'aircraft-mops-over-19': 'fw.mopsOver19',
+        'aircraft-mops-under-19': 'fw.mopsUnder19', 'special-modification': 'fw.specialMod',
+        'operation-types': 'fw.operationTypes', 'operation-complexity': 'fw.operationComplexity',
+        'special-operation': 'fw.specialOperation', 'derogations': 'fw.derogations',
+        'airports-based': 'fw.airportsBased', 'subcontractors': 'fw.subcontractors',
+        'acmi': 'fw.acmi', 'certificate': 'fw.certificate',
+        'rnp-ar-apch': 'fw.rnpArApch', 'mnps-nat-hla': 'fw.mnpsNatHla', 'rvsm': 'fw.rvsm',
+        'lv-takeoff': 'fw.lvTakeoff', 'lv-landing': 'fw.lvLanding', 'etops': 'fw.etops',
+        'dangerous-goods': 'fw.dangerousGoods', 'single-engine-imc': 'fw.singleEngineImc',
+        'efb': 'fw.efb', 'isolated-aerodromes': 'fw.isolatedAerodromes',
+        'steep-approach': 'fw.steepApproach', 'frms': 'fw.frms',
+        'crew-training': 'fw.crewTraining', 'cca-training': 'fw.ccaTraining'
+    };
+    const labelFor = (id, fallback) => (labelKeys[id] ? t(labelKeys[id]) : fallback);
+
     const valueToDisplayTextMap = {
         "<20": "< 20", "21-50": "21-50", "51-200": "51-200", "200-500": "200-500", ">500": "> 500",
         "<50": "< 50", "51-100": "51-100", "101-300": "101-300", "301-500": "301-500", "501-1000": "501 - 1000", ">1000": "> 1000",
@@ -48,23 +69,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         "High risk SPO": "High risk SPO"
     };
 
-    try {
-        const response = await fetch('data/scoring.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const scoringRules = await response.json();
+    let scoringRules = null;
+
+    function buildTables() {
+        if (!scoringRules) return;
+        // Tøm alle tabellkropper før (gjen)bygging (f.eks. ved språkbytte).
+        ['resources', 'fleet', 'operations', 'approvals'].forEach(sec => {
+            const body = document.getElementById(`${sec}-body`);
+            if (body) body.innerHTML = '';
+        });
 
         for (const [id, details] of Object.entries(fieldIdToDetails)) {
-            let rule = scoringRules[id]; 
+            const tableBody = document.getElementById(`${details.section}-body`);
+            if (!tableBody) continue;
+
+            let rule = scoringRules[id];
             if (!rule && details.section === 'approvals') {
                 rule = scoringRules['generic-approval'];
             }
-            if (!rule) continue;
+            // Vis ALLE hovedskjema-felter. Mangler regel i scoring.json -> tydelig
+            // markering i stedet for å droppe raden (holder oversikten i samsvar
+            // med hovedskjemaet).
+            if (!rule) {
+                tableBody.innerHTML += `<tr><td>${labelFor(id, details.label)}</td><td>—</td><td>${t('fw.noScoringRule')}</td></tr>`;
+                continue;
+            }
 
-            const tableBody = document.getElementById(`${details.section}-body`);
-            if (!tableBody) continue;
-            
             let html = '';
             const options = Object.entries(rule);
             const rowCount = options.length;
@@ -72,7 +102,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             options.forEach(([optionValue, score], index) => {
                 html += '<tr>';
                 if (index === 0) {
-                    html += `<td rowspan="${rowCount}">${details.label}</td>`;
+                    html += `<td rowspan="${rowCount}">${labelFor(id, details.label)}</td>`;
                 }
                 const displayText = valueToDisplayTextMap[optionValue] || optionValue;
                 let scoreDisplay = '';
@@ -81,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const dependentScores = Object.entries(score.scores)
                         .map(([val, pts]) => `${valueToDisplayTextMap[val] || val} (${pts}p)`)
                         .join('<br>');
-                    scoreDisplay = `Avhengig av piloter:<br>${dependentScores}<br>Standard: ${score.default}p`;
+                    scoreDisplay = `${t('fw.dependentOnPilots')}<br>${dependentScores}<br>${t('fw.standardLabel')}: ${score.default}p`;
                 } else {
                     scoreDisplay = score;
                 }
@@ -91,9 +121,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             tableBody.innerHTML += html;
         }
+    }
 
+    try {
+        const response = await fetch('data/scoring.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        scoringRules = await response.json();
+        buildTables();
+        // Bygg tabellene på nytt ved språkbytte (oversatte kriterietekster).
+        window.addEventListener('languageChanged', buildTables);
     } catch (error) {
         console.error('Kunne ikke laste eller bygge oversiktstabell:', error);
-        document.body.innerHTML = `<h1>Feil ved lasting</h1><p>Klarte ikke å laste poengoversikten. Sjekk at filen 'data/scoring.json' eksisterer og at stien er riktig. Detaljer: ${error.message}</p>`;
+        document.body.innerHTML = `<h1>${t('fw.loadErrorTitle')}</h1><p>${t('fw.loadErrorBody').replace('{msg}', error.message)}</p>`;
     }
 });

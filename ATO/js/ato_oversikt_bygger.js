@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
     const fieldIdToDetails = {
         // Resources
         'staff-fte': { label: 'Number of staff for the operation (FTE)', section: 'resources' },
@@ -31,7 +32,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         'bases-outside-norway': { label: 'Secondary base(s) outside Norway', section: 'approvals' },
         'part-is': { label: 'Part-IS', section: 'approvals' }
     };
-    
+
+    // Samme id -> i18n-nøkkel som hovedskjemaet. Engelsk label = CSV-fasit/fallback.
+    const labelKeys = {
+        'staff-fte': 'ato.staffFte', 'employed-instructors': 'ato.employedInstructors',
+        'contract-instructors': 'ato.contractInstructors', 'complex-organisation': 'ato.complexOrganisation',
+        'leading-personnel-roles': 'ato.leadingRoles', 'ifr-operation': 'ato.ifrOperation',
+        'nco-operation': 'ato.nco', 'ncc-operation': 'ato.ncc', 'spa-spo-operation': 'ato.spaSpo',
+        'holds-aoc': 'ato.holdsAoc', 'own-camo': 'ato.ownCamo', 'has-fstd-org': 'ato.hasFstdOrg',
+        'subcontractors': 'ato.subcontractors', 'number-of-types': 'ato.numberOfTypes',
+        'me-aircraft': 'ato.meAircraft', 'se-aircraft': 'ato.seAircraft',
+        'leased-from-aoc': 'ato.leasedFromAoc', 'privately-leased': 'ato.privatelyLeased',
+        'number-of-fstds': 'ato.numberOfFstds', 'integrated-courses': 'ato.integratedCourses',
+        'fcl-courses': 'ato.fclCourses', 'theory-lapl-ppl': 'ato.theoryLaplPpl',
+        'theory-cpl-atpl-ir': 'ato.theoryCplAtplIr', 'number-of-bases': 'ato.numberOfBases',
+        'bases-outside-norway': 'ato.basesOutsideNorway', 'part-is': 'ato.partIs'
+    };
+    const labelFor = (id, fallback) => (labelKeys[id] ? t(labelKeys[id]) : fallback);
+
     const valueToDisplayTextMap = {
         "< 5": "< 5", "5-19": "5 - 19", "> 20": "> 20",
         "6-19": "6 - 19", "6-10": "6 - 10", "> 11": "> 11",
@@ -64,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             options.forEach(([optionValue, score], index) => {
                 html += '<tr>';
                 if (index === 0) {
-                    html += `<td rowspan="${rowCount}">${details.label}</td>`;
+                    html += `<td rowspan="${rowCount}">${labelFor(id, details.label)}</td>`;
                 }
                 const displayText = valueToDisplayTextMap[optionValue] || optionValue;
                 let scoreDisplay = score;
@@ -73,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                      const dependentScores = Object.entries(score.scores)
                         .map(([val, pts]) => `${valueToDisplayTextMap[val] || val} (${pts}p)`)
                         .join('<br>');
-                    scoreDisplay = `Avhengig av 'Number of employed instructors':<br>${dependentScores}<br>Standard: ${score.default}p`;
+                    scoreDisplay = `${t('ato.dependentOnInstructors')}<br>${dependentScores}<br>${t('ato.standardLabel')}: ${score.default}p`;
                 }
 
                 html += `<td>${displayText}</td>`;
@@ -85,6 +103,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error('Could not load or build the overview table:', error);
-        document.body.innerHTML = `<h1>Error Loading Data</h1><p>Could not load the scoring overview. Check that 'data/ato_scoring.json' exists. Details: ${error.message}</p>`;
+        document.body.innerHTML = `<h1>${t('ato.loadErrorTitle')}</h1><p>${t('ato.loadErrorBody').replace('{msg}', error.message)}</p>`;
     }
 });

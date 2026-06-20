@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const STORAGE_KEY = 'camoAssessment_v17_final';
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
     const allInputIds = [
         'org-name', 'org-ref', 'filled-by', 'date', 'comments', 
         'A1a-perf', 'A1b-perf', 'A2a-perf', 'A2b-perf', 'A2c-perf', 'A3-choice', 'A3-number', 'A4-perf', 'A5-perf', 'A5-date', 'A6-perf', 
@@ -46,7 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function getElementText(element) {
         if (!element) return '';
         if (element.tagName === 'SELECT') {
-            return element.options[element.selectedIndex]?.text.split('(')[0].trim() || '';
+            const opt = element.options[element.selectedIndex];
+            if (!opt) return '';
+            // CSV holdes engelsk: bruk kanonisk data-en der den finnes (oversatte
+            // Ja/Nei), ellers selve teksten (score-nedtrekkene er allerede engelske).
+            return (opt.dataset.en || opt.text).split('(')[0].trim();
         }
         return element.value;
     }
@@ -169,10 +174,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const labelEl = row.querySelector('.input-label');
             let labelText = '';
             if (labelEl) {
-                const labelClone = labelEl.cloneNode(true);
-                labelClone.querySelectorAll('input').forEach(inp => inp.remove());
-                labelText = labelClone.textContent.trim();
-                
+                const i18nKey = labelEl.getAttribute('data-i18n');
+                if (i18nKey && window.I18n && window.I18n.tIn) {
+                    // CSV-etiketter holdes ALLTID engelske (uavhengig av valgt språk)
+                    labelText = window.I18n.tIn('en', i18nKey);
+                } else {
+                    const labelClone = labelEl.cloneNode(true);
+                    labelClone.querySelectorAll('input').forEach(inp => inp.remove());
+                    labelText = labelClone.textContent.trim();
+                }
+
                 const customLabelInput = labelEl.querySelector('input[type="text"]');
                 if (customLabelInput && customLabelInput.value) {
                     labelText += ` (${customLabelInput.value})`;
@@ -226,7 +237,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const content = document.getElementById('matrix-content');
             const isVisible = content.style.display === 'block';
             content.style.display = isVisible ? 'none' : 'block';
-            e.target.textContent = isVisible ? '► Show Detailed Matrices & Oversight Plan' : '▼ Hide Detailed Matrices & Oversight Plan';
+            e.target.textContent = isVisible ? t('camo.matrixShow') : t('camo.matrixHide');
+        });
+
+        // Hold veksleknappens tekst riktig ved språkbytte (apply() ville ellers
+        // alltid satt "Vis ..."-varianten selv om matrisene er åpne).
+        window.addEventListener('languageChanged', () => {
+            const toggler = document.getElementById('matrix-toggler');
+            const content = document.getElementById('matrix-content');
+            if (toggler && content) {
+                const isVisible = content.style.display === 'block';
+                toggler.textContent = isVisible ? t('camo.matrixHide') : t('camo.matrixShow');
+            }
         });
     }
     
@@ -250,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function clearForm() {
-        if (confirm("Are you sure you want to clear the form?")) {
+        if (confirm(t('camo.confirmClear'))) {
             localStorage.removeItem(STORAGE_KEY);
             window.location.reload();
         }
