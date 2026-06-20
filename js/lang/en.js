@@ -21,6 +21,9 @@ I18n.register("en", {
         help: "Enter full name (first and last name)",
         warning: "Both first and last name must be entered."
     },
+    home: {
+        common: "Common"
+    },
     common: {
         version: "Version",
         dropHint: "Drop the file to load it",

@@ -22,6 +22,9 @@ I18n.register("no", {
         help: "Skriv inn fullt navn (for- og etternavn)",
         warning: "Både for- og etternavn må fylles inn."
     },
+    home: {
+        common: "Felles"
+    },
     common: {
         version: "Versjon",
         dropHint: "Slipp filen for å laste inn",
