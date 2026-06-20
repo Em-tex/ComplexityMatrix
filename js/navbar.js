@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <div class="nav-actions" id="nav-actions"></div>
 
-        <div class="nav-options" id="msat-options" style="display: none; justify-content: center; flex-grow: 1;">
+        <div class="nav-options" id="msat-options" style="display: none; margin-left: 14px;">
             <label for="msat-profile-selector" style="margin-right: 10px;" data-i18n="navbar.msatProfile">MSAT Profile:</label>
             <select id="msat-profile-selector">
                 <option value="AirOps" data-i18n="navbar.profileExtension">Extension consideration</option>
