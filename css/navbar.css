@@ -171,7 +171,7 @@ body {
 }
 .top-navbar .nav-action-btn.danger {
     border-color: rgba(229,62,62,0.75) !important;
-    color: #feb2b2 !important;
+    color: #ffffff !important;
 }
 .top-navbar .nav-action-btn.danger:hover {
     background-color: #c53030 !important;
@@ -260,6 +260,13 @@ body {
     .form-row {
         break-inside: avoid;
     }
+}
+
+/* Hovedikon foran skjemaoverskriften (arver overskriftens farge og størrelse). */
+.heading-icon {
+    margin-right: 10px;
+    color: inherit;
+    vertical-align: baseline;
 }
 
 /* "TEST"-merke for skjemaer som ennå er under testing */
