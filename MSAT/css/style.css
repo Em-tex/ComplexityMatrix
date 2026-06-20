@@ -116,7 +116,13 @@ body {
 }
 .header-cell { padding: 8px 12px; }
 .header-cell:last-child, .header-cell:nth-child(2) { text-align: center; }
-.form-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; border-bottom: 1px solid #eee; align-items: center; }
+.form-row { 
+    display: grid; 
+    grid-template-columns: 2fr 1.2fr 0.8fr; 
+    border-bottom: 1px solid #eee; 
+    align-items: center; 
+    transition: background-color 1.5s ease-out; /* Fader rolig UT over 1.5 sekunder */
+}
 .form-row:last-child { border-bottom: none; }
 .form-cell { padding: 8px 12px; position: relative; }
 .form-cell select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
@@ -302,10 +308,47 @@ body {
 #details-popup h4 { margin-top: 0; padding-right: 30px; color: #03477F; border-bottom: 2px solid #e9ecef; padding-bottom: 10px;}
 #details-popup .popup-section { margin-bottom: 8px; }
 
+/* Kompakt visning av "Critical Items for Extension" med tilhørende tekst */
+#details-popup .critical-items-list { font-size: 0.85em; }
+#details-popup .critical-items-list ul { margin: 8px 0 0; padding-left: 22px; }
+#details-popup .critical-items-list li { margin-bottom: 5px; line-height: 1.35; }
+
 @media print {
     .action-buttons, .footer-links, .help-icon, .comment-help-icon, #popup-close-button { display: none !important; }
     body { background-color: white; margin: 0; padding-top: 0; }
     .container, .header, .total-summary, .section, .multi-comments-section, .comments-section { box-shadow: none; margin-top: 0; width: 100%; max-width: none; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     .section, .form-row { break-inside: avoid; }
+}
+/* Highlight-klasser for critical items */
+.highlight-green {
+    background-color: rgba(40, 167, 69, 0.3) !important;
+    transition: background-color 0.2s ease-in !important; /* Fader raskt INN på 0.2 sekunder */
+}
+.highlight-red {
+    background-color: rgba(220, 53, 69, 0.3) !important;
+    transition: background-color 0.2s ease-in !important; /* Fader raskt INN på 0.2 sekunder */
+}/* Versjonsnummer nederst på siden */
+.form-version {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #b0b8c0; /* Svakt grått */
+    margin-top: 50px;
+    padding-bottom: 20px;
+    width: 100%;
+    clear: both;
+    user-select: none; /* Hindrer at man merker det ved uhell */
+}
+
+/* Sørger for at det låses helt til bunnen av arket ved utskrift/PDF */
+@media print {
+    .form-version {
+        position: fixed;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        margin-top: 0;
+        padding-bottom: 0;
+    }
 }

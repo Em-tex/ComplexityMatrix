@@ -24,18 +24,18 @@
     <div id="navbar-container"></div>
     
     <div class="header">
-        <h1>Management System Assessment Tool (MSAT)</h1>
+        <h1 data-i18n="msat.title">Management System Assessment Tool (MSAT)</h1>
         <div class="header-info">
             
             <div class="info-field" style="min-width: 0;">
-                <label for="organisation-name">Name of Organisation:</label>
+                <label for="organisation-name" data-i18n="msat.orgName">Name of Organisation:</label>
                 <div style="display: flex; gap: 8px; width: 100%; min-width: 0;">
-                    
+
                     <select id="operator-select" style="display: none; flex-grow: 1; min-width: 0; text-overflow: ellipsis; overflow: hidden; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                        <option value="">Select operator...</option>
+                        <option value="" data-i18n="msat.selectOperator">Select operator...</option>
                     </select>
-                    
-                    <input type="text" id="organisation-name" placeholder="Enter organisation name" style="flex-grow: 1; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" autocomplete="off">
+
+                    <input type="text" id="organisation-name" placeholder="Enter organisation name" data-i18n-placeholder="msat.orgNamePlaceholder" style="flex-grow: 1; min-width: 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" autocomplete="off">
                     
                     <button type="button" id="toggle-manual-btn" style="display: none; flex-shrink: 0; padding: 8px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.2s;" title="Enter manually">
                         <i class="fa-solid fa-pen"></i>
@@ -44,21 +44,21 @@
             </div>
 
             <div class="info-field">
-                <label for="organisation-type">Organisation type:</label>
-                <input type="text" id="organisation-type" placeholder="Select or type" list="org-types-list">
+                <label for="organisation-type" data-i18n="msat.orgType">Organisation type:</label>
+                <input type="text" id="organisation-type" placeholder="Select or type" data-i18n-placeholder="msat.orgTypePlaceholder" list="org-types-list">
                 <datalist id="org-types-list"></datalist>
             </div>
             <div class="info-field">
-                <label for="assessed-by">Assessed by:</label>
-                <input type="text" id="assessed-by" placeholder="Enter name">
+                <label for="assessed-by" data-i18n="msat.assessedBy">Assessed by:</label>
+                <input type="text" id="assessed-by" placeholder="Enter name" data-i18n-placeholder="msat.assessedByPlaceholder">
             </div>
             <div class="info-field">
-                <label for="assessment-date">Date of assessment:</label>
+                <label for="assessment-date" data-i18n="msat.assessmentDate">Date of assessment:</label>
                 <input type="date" id="assessment-date">
             </div>
              <div class="info-field">
-                <label for="empic-id">Empic ID:</label>
-                <input type="text" id="empic-id" placeholder="Enter ID">
+                <label for="empic-id" data-i18n="msat.empicId">Empic ID:</label>
+                <input type="text" id="empic-id" placeholder="Enter ID" data-i18n-placeholder="msat.empicIdPlaceholder">
             </div>
         </div>
     </div>
@@ -67,20 +67,20 @@
         <div class="all-gauges-container">
             <div class="small-gauges-wrapper">
                 <div class="four-gauges-grid">
-                    <div class="gauge-block" id="gauge-block-policy"><div class="gauge-block-title"><i class="fa-solid fa-file-signature gauge-icon"></i> Safety Policy</div><div class="gauge-block-summary">Avg score: <span id="policy-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="policy-needle"></div></div></div>
-                    <div class="gauge-block" id="gauge-block-risk"><div class="gauge-block-title"><i class="fa-solid fa-triangle-exclamation gauge-icon"></i> Risk Assessment</div><div class="gauge-block-summary">Avg score: <span id="risk-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="risk-needle"></div></div></div>
-                    <div class="gauge-block" id="gauge-block-assurance"><div class="gauge-block-title"><i class="fa-solid fa-shield-halved gauge-icon"></i> Safety Assurance</div><div class="gauge-block-summary">Avg score: <span id="assurance-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="assurance-needle"></div></div></div>
-                    <div class="gauge-block" id="gauge-block-promotion"><div class="gauge-block-title"><i class="fa-solid fa-bullhorn gauge-icon"></i> Safety Promotion</div><div class="gauge-block-summary">Avg score: <span id="promotion-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="promotion-needle"></div></div></div>
+                    <div class="gauge-block" id="gauge-block-policy"><div class="gauge-block-title"><i class="fa-solid fa-file-signature gauge-icon"></i> <span data-i18n="msat.gauges.policy">Safety Policy</span></div><div class="gauge-block-summary"><span data-i18n="msat.gauges.avgScore">Avg score:</span> <span id="policy-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="policy-needle"></div></div></div>
+                    <div class="gauge-block" id="gauge-block-risk"><div class="gauge-block-title"><i class="fa-solid fa-triangle-exclamation gauge-icon"></i> <span data-i18n="msat.gauges.risk">Risk Assessment</span></div><div class="gauge-block-summary"><span data-i18n="msat.gauges.avgScore">Avg score:</span> <span id="risk-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="risk-needle"></div></div></div>
+                    <div class="gauge-block" id="gauge-block-assurance"><div class="gauge-block-title"><i class="fa-solid fa-shield-halved gauge-icon"></i> Safety Assurance</div><div class="gauge-block-summary"><span data-i18n="msat.gauges.avgScore">Avg score:</span> <span id="assurance-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="assurance-needle"></div></div></div>
+                    <div class="gauge-block" id="gauge-block-promotion"><div class="gauge-block-title"><i class="fa-solid fa-bullhorn gauge-icon"></i> Safety Promotion</div><div class="gauge-block-summary"><span data-i18n="msat.gauges.avgScore">Avg score:</span> <span id="promotion-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="promotion-needle"></div></div></div>
                 </div>
                 <div class="side-gauge-container">
-                     <div class="gauge-block" id="gauge-block-additional"><div class="gauge-block-title"><i class="fa-solid fa-puzzle-piece gauge-icon"></i> Additional Items</div><div class="gauge-block-summary">Avg score: <span id="additional-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="additional-needle"></div></div></div>
+                     <div class="gauge-block" id="gauge-block-additional"><div class="gauge-block-title"><i class="fa-solid fa-puzzle-piece gauge-icon"></i> <span data-i18n="msat.gauges.additional">Additional Items</span></div><div class="gauge-block-summary"><span data-i18n="msat.gauges.avgScore">Avg score:</span> <span id="additional-avg">0.0</span></div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="additional-needle"></div></div></div>
                 </div>
             </div>
             
-            <div class="gauge-block large-gauge" id="gauge-block-total"><div class="gauge-block-title">Total Average Score</div><div class="gauge-block-summary"><span id="total-gauge-avg-text">0.0</span> / 7.0</div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="total-needle"></div></div></div>
+            <div class="gauge-block large-gauge" id="gauge-block-total"><div class="gauge-block-title" data-i18n="msat.gauges.total">Total Average Score</div><div class="gauge-block-summary"><span id="total-gauge-avg-text">0.0</span> / 7.0</div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="total-needle"></div></div></div>
             
             <div class="extension-block" id="extension-block-container" style="display: none;">
-                <div class="extension-block-title">Oversight Cycle Extension</div>
+                <div class="extension-block-title" data-i18n="msat.gauges.extension">Oversight Cycle Extension</div>
                 <div id="extension-checklist"></div>
                 <div class="extension-block-comment" id="extension-final-comment"></div>
             </div>
@@ -90,39 +90,39 @@
     <div class="container" id="main-container"></div>
 
     <div class="comments-section" id="standard-comments-section">
-        <label for="comments">Comments:</label>
-        <textarea id="comments" placeholder="Add any comments here..." rows="4"></textarea>
+        <label for="comments" data-i18n="msat.comments">Comments:</label>
+        <textarea id="comments" placeholder="Add any comments here..." data-i18n-placeholder="msat.commentsPlaceholder" rows="4"></textarea>
     </div>
 
     <div class="multi-comments-section" id="airops-comments-section" style="display: none;">
-        <h2>Comments</h2>
+        <h2 data-i18n="msat.commentsHeading">Comments</h2>
         <div class="comments-grid">
             <div class="comment-field">
-                <label for="comments-compliance">Compliance <i class="fa-solid fa-circle-info comment-help-icon" data-field="compliance"></i></label>
+                <label for="comments-compliance"><span data-i18n="msat.cCompliance">Compliance</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="compliance"></i></label>
                 <textarea id="comments-compliance" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-flightops">Flight Operations <i class="fa-solid fa-circle-info comment-help-icon" data-field="flightops"></i></label>
+                <label for="comments-flightops"><span data-i18n="msat.cFlightOps">Flight Operations</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="flightops"></i></label>
                 <textarea id="comments-flightops" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-safety">Safety Department <i class="fa-solid fa-circle-info comment-help-icon" data-field="safety"></i></label>
+                <label for="comments-safety"><span data-i18n="msat.cSafety">Safety Department</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="safety"></i></label>
                 <textarea id="comments-safety" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-training">Training <i class="fa-solid fa-circle-info comment-help-icon" data-field="training"></i></label>
+                <label for="comments-training"><span data-i18n="msat.cTraining">Training</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="training"></i></label>
                 <textarea id="comments-training" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-planning">Planning & FTL <i class="fa-solid fa-circle-info comment-help-icon" data-field="planning"></i></label>
+                <label for="comments-planning"><span data-i18n="msat.cPlanning">Planning & FTL</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="planning"></i></label>
                 <textarea id="comments-planning" rows="4"></textarea>
             </div>
             <div class="comment-field">
-                <label for="comments-reporting">Reporting <i class="fa-solid fa-circle-info comment-help-icon" data-field="reporting"></i></label>
+                <label for="comments-reporting"><span data-i18n="msat.cReporting">Reporting</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="reporting"></i></label>
                 <textarea id="comments-reporting" rows="4"></textarea>
             </div>
             <div class="comment-field comment-field-full">
-                <label for="comments-other">Other <i class="fa-solid fa-circle-info comment-help-icon" data-field="other"></i></label>
+                <label for="comments-other"><span data-i18n="msat.cOther">Other</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="other"></i></label>
                 <textarea id="comments-other" rows="4"></textarea>
             </div>
         </div>
@@ -138,8 +138,15 @@
     
     <div id="details-popup"></div>
 
+    <div class="form-version">Versjon 1.0.0</div>
+
     <script src="../js/felles_knapper.js"></script>
     <script src="js/calculator.js"></script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/lang/en.js"></script>
+    <script src="../js/lang/no.js"></script>
+    <script src="lang/en.js"></script>
+    <script src="lang/no.js"></script>
     <script src="../js/navbar.js" data-root="../"></script>
 </body>
 </html>

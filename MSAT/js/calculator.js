@@ -4,8 +4,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     let msatData = {};
     let fieldData = [];
     let commentHelpData = {};
+    let msatDataNo = null;          // Norske oversettelser (samme struktur/ids som msat_data.json)
+    let noSectionTitleById = {};    // seksjon-id -> norsk tittel
+    let noItemById = {};            // punkt-id -> { text, details }
     const GAUGE_MAX_VALUE = 7;
     const criticalItemsIds = ['2.1.1', '2.2.1', '2.2.2', '3.2.1', '5.2.1', '5.2.2', '5.2.3', '5.2.4'];
+
+    // Oversettelses-hjelper. window.I18n finnes ved kjøretid (i18n.js lastes før navbar.js).
+    const t = (key) => (window.I18n ? window.I18n.t(key) : key);
+    const isNo = () => (window.I18n ? window.I18n.getLang() : 'en') === 'no';
+
+    // Bygg oppslagsindeks fra den norske datafila (kalles etter at den er lastet).
+    function buildNoIndex() {
+        noSectionTitleById = {};
+        noItemById = {};
+        if (!msatDataNo || !Array.isArray(msatDataNo.sections)) return;
+        msatDataNo.sections.forEach(s => {
+            if (s.id) noSectionTitleById[s.id] = s.title;
+            (s.subsections || []).forEach(ss => (ss.items || []).forEach(it => {
+                if (it.id) noItemById[it.id] = it;
+            }));
+        });
+    }
 
     function isAirOpsProfile() {
         return (localStorage.getItem("msat_profile") || "AirOps") === 'AirOps';
@@ -22,20 +42,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         const opInput = document.getElementById('organisation-name');
         const toggleBtn = document.getElementById('toggle-manual-btn');
 
-        if (profileLabel) profileLabel.textContent = isAirOps ? 'Air Operations / Aircrew' : 'Standard';
+        if (profileLabel) profileLabel.textContent = isAirOps ? t('msat.profileLabelAirOps') : t('msat.profileLabelStandard');
         if (extensionContainer) extensionContainer.style.display = isAirOps ? 'block' : 'none';
         if (airopsComments) airopsComments.style.display = isAirOps ? 'block' : 'none';
         if (standardComments) standardComments.style.display = isAirOps ? 'none' : 'block';
 
         if (isAirOps) {
-            if(opInput) opInput.placeholder = "Enter manually (only if missing)";
-            window.syncOperatorUI(); 
+            if(opInput) opInput.placeholder = t('msat.orgNameManualPlaceholder');
+            window.syncOperatorUI();
         } else {
             if(opSelect) opSelect.style.display = 'none';
             if(toggleBtn) toggleBtn.style.display = 'none';
             if(opInput) {
                 opInput.style.display = 'block';
-                opInput.placeholder = "Enter organisation name";
+                opInput.placeholder = t('msat.orgNamePlaceholder');
             }
         }
     }
@@ -84,14 +104,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!isAirOpsProfile()) return;
 
             if (opSelect.style.display !== 'none') {
-                const confirmManual = confirm("Please check the list carefully first.\n\nAre you sure the operator is not there? Manual entry should ONLY be used if missing.");
+                const confirmManual = confirm(t('msat.dialog.manualConfirm'));
                 if (confirmManual) {
                     opSelect.style.display = 'none';
-                    opSelect.value = ''; 
+                    opSelect.value = '';
                     opInput.style.display = 'block';
-                    opInput.value = ''; 
+                    opInput.value = '';
                     toggleBtn.innerHTML = '<i class="fa-solid fa-list"></i>';
-                    toggleBtn.title = "Back to list";
+                    toggleBtn.title = t('msat.tooltipBackToList');
                     toggleBtn.style.backgroundColor = '#03477F';
                     opInput.focus();
                 }
@@ -100,7 +120,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opSelect.style.display = 'block';
                 opInput.value = opSelect.value;
                 toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
-                toggleBtn.title = "Enter manually";
+                toggleBtn.title = t('msat.tooltipEnterManually');
                 toggleBtn.style.backgroundColor = '#6c757d';
                 saveData();
             }
@@ -155,6 +175,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             let currentMsatData = await safeFetchJson('data/msat_data.json');
             const orgTypes = await safeFetchJson('data/organisation_types.json');
             commentHelpData = await safeFetchJson('data/comment_help.json') || {};
+            msatDataNo = await safeFetchJson('data/msat_data.no.json');
+            buildNoIndex();
 
             if (!scoringRules || !currentMsatData) {
                 throw new Error("Mangler scoring.json eller msat_data.json");
@@ -180,6 +202,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         fetchConfigForProfile(newProfile);
     });
 
+    // Ved språkbytte: re-oversett statisk tekst og bygg HELE skjemaet på nytt
+    // (samme trygge vei som ved profilbytte). Svar beholdes via localStorage (loadData).
+    window.addEventListener('languageChanged', () => {
+        if (window.I18n) window.I18n.apply();
+        const profile = localStorage.getItem("msat_profile") || "AirOps";
+        fetchConfigForProfile(profile);
+    });
+
     function buildExtensionSection() {
         const container = document.getElementById('main-container');
         const column2 = container.querySelector('.column:last-child');
@@ -191,18 +221,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         sectionEl.innerHTML = `
             <div class="section-header">
                 <i class="fa-solid fa-calendar-check"></i>
-                <span>6. ITEMS FOR CONSIDERATION OF EXTENSION</span>
+                <span>6. ${t('msat.ext.sectionTitle')}</span>
                 <i class="fa-solid fa-circle-question help-icon" id="extension-help-icon"></i>
             </div>
             <div class="section-content">
-                <div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Score</div></div>
+                <div class="header-row"><div class="header-cell">${t('msat.form.criteria')}</div><div class="header-cell">${t('msat.form.selection')}</div><div class="header-cell">${t('msat.form.score')}</div></div>
                 <div class="form-row">
-                    <div class="form-cell"><strong>6.1</strong> Financial management</div>
+                    <div class="form-cell"><strong>6.1</strong> ${t('msat.ext.financialLabel')}</div>
                     <div class="form-cell"><select id="q-financial-management"><option value="">Select...</option><option value="7">Good (7)</option><option value="4">Acceptable (4)</option><option value="1">Poor/Concern (1)</option></select></div>
                     <div class="form-cell calculated-value" id="q-financial-management-value">0</div>
                 </div>
                 <div class="form-row">
-                    <div class="form-cell"><strong>6.2</strong> Level 1 findings in the last 24 months</div>
+                    <div class="form-cell"><strong>6.2</strong> ${t('msat.ext.level1Label')}</div>
                     <div class="form-cell"><select id="q-level1-findings"><option value="">Select...</option><option value="7">No (7)</option><option value="1">Yes (1)</option></select></div>
                     <div class="form-cell calculated-value" id="q-level1-findings-value">0</div>
                 </div>
@@ -222,21 +252,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             const sectionEl = document.createElement('div');
             sectionEl.className = 'section';
             sectionEl.id = `section-${section.id}`;
-            let sectionContentHtml = `<div class="section-header"><i class="fa-solid ${section.icon}"></i><span>${section.number}. ${section.title}</span></div><div class="section-content"><div class="header-row"><div class="header-cell">Criteria</div><div class="header-cell">Selection</div><div class="header-cell">Score</div></div>`;
-            
+            // Vis oversatt tittel når NO er valgt; fall tilbake til engelsk.
+            const sectionTitle = (isNo() && noSectionTitleById[section.id]) || section.title;
+            let sectionContentHtml = `<div class="section-header"><i class="fa-solid ${section.icon}"></i><span>${section.number}. ${sectionTitle}</span></div><div class="section-content"><div class="header-row"><div class="header-cell">${t('msat.form.criteria')}</div><div class="header-cell">${t('msat.form.selection')}</div><div class="header-cell">${t('msat.form.score')}</div></div>`;
+
             section.subsections.forEach(subsection => {
                 subsection.items.forEach(item => {
                     const selectId = `q${item.id.replace(/\./g, '-')}`;
+                    // VIKTIG: label holdes på engelsk – den styrer CSV-kolonnene og -innlasting.
                     fieldData.push({ id: selectId, label: `${item.id} ${item.text}`, section: section.id, itemId: item.id });
-                    
+
+                    const noItem = isNo() ? noItemById[item.id] : null;
+                    const itemText = (noItem && noItem.text) || item.text;
+
                     const isCritical = criticalItemsIds.includes(item.id);
                     const starHtml = isCritical ? ' <span class="critical-marker">*</span>' : '';
-                    
+
                     sectionContentHtml += `
                         <div class="form-row">
                             <div class="form-cell">
                                 <span data-item-id="${item.id}" class="popup-opener">
-                                    <strong>${item.id}</strong> ${item.text}
+                                    <strong>${item.id}</strong> ${itemText}
                                 </span>
                                 ${starHtml}
                             </div>
@@ -321,22 +357,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                 applyValueCellStyle(document.getElementById('q-financial-management-value'), financialScore);
                 applyValueCellStyle(document.getElementById('q-level1-findings-value'), level1Score);
 
-                const criticalItemsMet = criticalItemsIds.every(id => {
+                // Tell opp antall critical items med score 7
+                let criticalItemsWith7 = 0;
+                criticalItemsIds.forEach(id => {
                     const cell = document.getElementById(`q${id.replace(/\./g, '-')}-value`);
-                    return cell && parseInt(cell.textContent) === 7;
+                    if (cell && parseInt(cell.textContent) === 7) {
+                        criticalItemsWith7++;
+                    }
                 });
+                
+                const criticalItemsMet = (criticalItemsWith7 === criticalItemsIds.length);
                 const financialMet = financialScore !== null && financialScore >= 4;
                 const level1Met = level1Score !== null && level1Score === 7;
 
                 const allConditionsMet = criticalItemsMet && financialMet && level1Met && allMinimumScoreMet;
-                updateExtensionChecklist(criticalItemsMet, financialMet, level1Met, allMinimumScoreMet, allConditionsMet);
+                // Send med antallet (criticalItemsWith7) til neste funksjon
+                updateExtensionChecklist(criticalItemsMet, financialMet, level1Met, allMinimumScoreMet, allConditionsMet, criticalItemsWith7);
             }
         }
         
         saveData();
     }
 
-    function updateExtensionChecklist(criticalMet, financialMet, level1Met, allMinimumMet, allConditionsMetUpdated) {
+    function updateExtensionChecklist(criticalMet, financialMet, level1Met, allMinimumMet, allConditionsMetUpdated, criticalItemsCount = 0) {
         const checklistContainer = document.getElementById('extension-checklist');
         const finalCommentEl = document.getElementById('extension-final-comment');
         if(!checklistContainer || !finalCommentEl) return;
@@ -345,16 +388,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const getIcon = (met) => met ? 'fa-circle-check' : 'fa-circle-xmark';
 
         checklistContainer.innerHTML = `
-            <div class="${getClass(criticalMet)}"><i class="fa-solid ${getIcon(criticalMet)}"></i><span>All 8 <a href="#" id="critical-items-link" class="critical-items-link">critical items</a><span class="critical-marker">*</span> have a score of 7</span></div>
-            <div class="${getClass(financialMet)}"><i class="fa-solid ${getIcon(financialMet)}"></i><span>Financial management score is 4 or higher</span></div>
-            <div class="${getClass(level1Met)}"><i class="fa-solid ${getIcon(level1Met)}"></i><span>No level 1 findings in the last 24 months</span></div>
-            <div class="${getClass(allMinimumMet)}"><i class="fa-solid ${getIcon(allMinimumMet)}"></i><span>All other items have a minimum score of 4</span></div>`;
+            <div class="${getClass(criticalMet)}"><i class="fa-solid ${getIcon(criticalMet)}"></i><span>${criticalItemsCount} ${t('msat.checklist.critOf')} ${criticalItemsIds.length} <a href="#" id="critical-items-link" class="critical-items-link">${t('msat.checklist.critLink')}</a><span class="critical-marker">*</span> ${t('msat.checklist.critSuffix')}</span></div>
+            <div class="${getClass(financialMet)}"><i class="fa-solid ${getIcon(financialMet)}"></i><span>${t('msat.checklist.financial')}</span></div>
+            <div class="${getClass(level1Met)}"><i class="fa-solid ${getIcon(level1Met)}"></i><span>${t('msat.checklist.level1')}</span></div>
+            <div class="${getClass(allMinimumMet)}"><i class="fa-solid ${getIcon(allMinimumMet)}"></i><span>${t('msat.checklist.allOther')}</span></div>`;
 
         if (allConditionsMetUpdated) {
-            finalCommentEl.textContent = "Extension of oversight cycle may be considered (36 months).";
+            finalCommentEl.textContent = t('msat.checklist.finalPass');
             finalCommentEl.className = "extension-block-comment final-pass";
         } else {
-            finalCommentEl.textContent = "Standard oversight cycle (24 months).";
+            finalCommentEl.textContent = t('msat.checklist.finalNeutral');
             finalCommentEl.className = "extension-block-comment final-neutral";
         }
     }
@@ -404,39 +447,51 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (itemData) {
+            // Scoringsbegrepene Present/Suitable/Operating/Effective er etiketter og holdes
+            // uendret. Selve hjelpeteksten/innholdet vises oversatt når NO er valgt, med
+            // engelsk fallback per felt.
+            const notSpecified = t('msat.popup.notSpecified');
+            const noItem = isNo() ? noItemById[itemId] : null;
+            const enD = itemData.details || {};
+            const noD = (noItem && noItem.details) || {};
+            const detail = (k) => (isNo() ? (noD[k] || enD[k]) : enD[k]) || notSpecified;
+            const itemText = (noItem && noItem.text) || itemData.text;
+
+            const wtl = (isNo() && noD.whatToLookFor) ? noD.whatToLookFor : enD.whatToLookFor;
             let whatToLookForHtml = '';
-            if (Array.isArray(itemData.details.whatToLookFor)) {
-                whatToLookForHtml = '• ' + itemData.details.whatToLookFor.join('<br>• ');
+            if (Array.isArray(wtl)) {
+                whatToLookForHtml = '• ' + wtl.join('<br>• ');
             } else {
-                whatToLookForHtml = itemData.details.whatToLookFor || 'Not specified.';
+                whatToLookForHtml = wtl || notSpecified;
             }
 
             popup.innerHTML = `
                 <button id="popup-close-button" aria-label="Close">&times;</button>
-                <h4>${itemData.id} ${itemData.text}</h4>
-                <div class="popup-section"><strong>Present:</strong> ${itemData.details.Present || 'Not specified.'}</div>
-                <div class="popup-section"><strong>Suitable:</strong> ${itemData.details.Suitable || 'Not specified.'}</div>
-                <div class="popup-section"><strong>Operating:</strong> ${itemData.details.Operating || 'Not specified.'}</div>
-                <div class="popup-section"><strong>Effective:</strong> ${itemData.details.Effective || 'Not specified.'}</div>
+                <h4>${itemData.id} ${itemText}</h4>
+                <div class="popup-section"><strong>Present:</strong> ${detail('Present')}</div>
+                <div class="popup-section"><strong>Suitable:</strong> ${detail('Suitable')}</div>
+                <div class="popup-section"><strong>Operating:</strong> ${detail('Operating')}</div>
+                <div class="popup-section"><strong>Effective:</strong> ${detail('Effective')}</div>
                 <hr>
-                <div class="popup-section"><strong>What to look for:</strong><br>${whatToLookForHtml}</div>`;
+                <div class="popup-section"><strong>${t('msat.popup.whatToLookFor')}</strong><br>${whatToLookForHtml}</div>`;
             displayPopup(popup, targetElement);
         }
     }
 
     function showExtensionHelpPopup(targetElement) {
         const popup = document.getElementById('details-popup');
+        const t = window.I18n ? window.I18n.t : (k => k);
         popup.innerHTML = `
             <button id="popup-close-button" aria-label="Close">&times;</button>
-            <h4>Criteria for Extension Consideration</h4>
-            <div class="popup-section">To consider an extension of the oversight cycle, the following conditions must be met:
+            <h4>${t('msat.ext.title')}</h4>
+            <div class="popup-section">${t('msat.ext.intro')}
                 <ul>
-                    <li><strong>Score of 7 (Effective)</strong> is required for items:
+                    <li>${t('msat.ext.scoreItems')}
                         <ul><li>2.1.1, 2.2.1, 2.2.2</li><li>3.2.1</li><li>5.2.1, 5.2.2, 5.2.3, 5.2.4</li></ul>
                     </li>
-                    <li><strong>Financial Management</strong> score must be at least <strong>4 (Acceptable)</strong>.</li>
-                    <li><strong>Level 1 Findings</strong> score must be <strong>7 (No findings)</strong>.</li>
-                    <li><strong>All other items</strong> must have a minimum score of <strong>4 (Operating)</strong>. N/A is acceptable.</li>
+                    <li>${t('msat.ext.financial')}</li>
+                    <li>${t('msat.ext.level1')}</li>
+                    <li>${t('msat.ext.allOther')}</li>
                 </ul>
             </div>`;
         displayPopup(popup, targetElement);
@@ -444,11 +499,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function showCriticalItemsPopup(targetElement) {
         const popup = document.getElementById('details-popup');
-        let listHtml = criticalItemsIds.map(id => `<li>${id}</li>`).join('');
+        let listHtml = criticalItemsIds.map(id => {
+            const field = fieldData.find(f => f.itemId === id);
+            const text = field ? field.label.replace(/^\S+\s*/, '') : '';
+            return `<li><strong>${id}</strong> ${text}</li>`;
+        }).join('');
+        const t = window.I18n ? window.I18n.t : (k => k);
         popup.innerHTML = `
             <button id="popup-close-button" aria-label="Close">&times;</button>
-            <h4>Critical Items for Extension</h4>
-            <div class="popup-section">The following items must have a score of 7 (Effective):
+            <h4>${t('msat.crit.title')}</h4>
+            <div class="popup-section critical-items-list">${t('msat.crit.intro')}
                 <ul>${listHtml}</ul>
             </div>`;
         displayPopup(popup, targetElement);
@@ -509,7 +569,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function clearForm() {
-        if (confirm("Are you sure you want to clear the form? All saved data will be deleted.")) {
+        if (confirm(t('msat.dialog.clearConfirm'))) {
             localStorage.removeItem(STORAGE_KEY);
             window.location.reload();
         }
@@ -604,7 +664,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reader.onload = function(e) {
             try {
                 const lines = e.target.result.split(/\r?\n/);
-                if (lines.length < 2) throw new Error("CSV file is empty or invalid.");
+                if (lines.length < 2) throw new Error(t('msat.dialog.csvEmpty'));
                 if (lines[0].charCodeAt(0) === 0xFEFF) lines[0] = lines[0].slice(1);
 
                 const parseCsvField = (field) => {
@@ -653,9 +713,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 window.syncOperatorUI();
                 updateCalculations();
-                alert("CSV file loaded successfully!");
+                alert(t('msat.dialog.csvLoaded'));
             } catch (error) {
-                 alert(`Failed to load CSV file. Error: ${error.message}`);
+                 alert(t('msat.dialog.csvFailedPrefix') + error.message);
             } finally {
                  event.target.value = null;
             }
@@ -685,7 +745,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             else if (e.target.id === 'critical-items-link') {
                 e.preventDefault(); 
-                showCriticalItemsPopup(e.target);
+                showCriticalItemsPopup(e.target); // Beholder infoboksen i tillegg
+                
+                // Kjør gjennom alle de kritiske punktene og lys dem opp
+                criticalItemsIds.forEach(id => {
+                    const selectId = `q${id.replace(/\./g, '-')}`;
+                    const selectElement = document.getElementById(selectId);
+                    const valueCell = document.getElementById(`${selectId}-value`);
+                    
+                    if (selectElement && valueCell) {
+                        // Finn raden (.form-row) elementet ligger i
+                        const row = selectElement.closest('.form-row');
+                        if (row) {
+                            const isSeven = parseInt(valueCell.textContent) === 7;
+                            
+                            // Finn ut om den skal lyse grønt eller rødt
+                            const highlightClass = isSeven ? 'highlight-green' : 'highlight-red';
+                            
+                            // Legg til class
+                            row.classList.add(highlightClass);
+                            
+                            // Fjern class etter 2 sekunder (2000 ms)
+                            setTimeout(() => {
+                                row.classList.remove('highlight-green', 'highlight-red');
+                            }, 2000);
+                        }
+                    }
+                });
             } else if (e.target.closest('.popup-opener')) {
                 showPopup(e.target.closest('.popup-opener'));
             } else if (e.target.id === 'extension-help-icon') {

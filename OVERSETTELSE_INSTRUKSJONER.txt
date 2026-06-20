@@ -1,0 +1,165 @@
+==========================================================================
+ OVERSETTELSE / SPRÅK (NO/EN) – INSTRUKSJONER FOR VIDERE ARBEID
+ Sist oppdatert: 2026-06-20
+==========================================================================
+
+OPPSUMMERING
+------------
+Prosjektet har fått en NO|EN-språkbryter (med flagg) i den felles
+verktøylinjen, og et lite i18n-rammeverk. Standardspråk er ENGELSK; valget
+huskes i localStorage (nøkkel "app_lang"). MSAT er nå FULLT oversatt. De
+øvrige ekte verktøyene har foreløpig bare de felles knappene oversatt.
+
+
+ARKITEKTUR (hvordan det henger sammen)
+--------------------------------------
+- js/i18n.js .......... Rammeverket. Gir window.I18n med:
+                          t(key)      -> henter streng for gjeldende språk
+                                         (fallback: engelsk -> selve nøkkelen)
+                          getLang()   -> "en" | "no"
+                          setLang(l)  -> bytter språk, lagrer, kjører apply()
+                          apply(root) -> oversetter DOM merket med data-i18n*
+                          register(lang, dict) -> språkfilene fyller ordbøker
+- js/navbar.js ........ Bygger verktøylinja + NO|EN-knappen (inline SVG-flagg).
+- css/navbar.css ...... Stil for språkknapp (.lang-*) og TEST-merke (.test-badge).
+- js/lang/en.js, no.js  FELLES strenger (navbar + knapper som deles av alle).
+- <VERKTØY>/lang/en.js, no.js  PER-VERKTØY strenger (samme mønster som MSAT).
+
+Innlastingsrekkefølge på HVER side (viktig!):
+    i18n.js  ->  js/lang/en.js, js/lang/no.js  ->  <verktøy>/lang/en.js, no.js
+    ->  navbar.js
+(felles_knapper.js og kalkulator-JS kan lastes før i18n.js; de bruker bare
+ I18n inne i funksjoner som kjøres senere / ved klikk.)
+
+Merking i HTML:
+    data-i18n="nøkkel"              -> setter textContent
+    data-i18n-html="nøkkel"        -> setter innerHTML (når strengen har <tagger>)
+    data-i18n-placeholder="nøkkel" -> setter placeholder
+    data-i18n-title="nøkkel"       -> setter title
+I JS: window.I18n.t("nøkkel"). Bygg gjerne en lokal hjelper:
+    const t = (k) => (window.I18n ? window.I18n.t(k) : k);
+
+
+!!! ABSOLUTTE REGLER – IKKE BRYT DISSE !!!
+------------------------------------------
+1. POENG/SCORE ENDRES ALDRI. Tallene 1/2/4/7 og score-nedtrekkene
+   (Present (1), Suitable (2), Operating (4), Effective (7), Not Applicable,
+   Good (7), Acceptable (4), Poor/Concern (1), No (7), Yes (1), Select...)
+   skal stå HELT uendret på begge språk. De brukes som DATA.
+
+2. DATA-/CSV-LAGET RØRES IKKE. MSAT sin CSV-import matcher på engelsk
+   valg-tekst (opt.text === choiceValue) og engelske kolonneoverskrifter.
+   Derfor:
+     - Engelsk msat_data.json er FASIT og skal IKKE endres.
+     - fieldData.label bygges ALLTID fra engelsk tekst (styrer CSV).
+   Oversettelser legges i en PARALLELL fil (msat_data.no.json), aldri i den
+   engelske.
+
+3. FORKORTELSER BEHOLDES: SMS, ERP, SSP, SPAS, SPI, SPT, SRB, HIRA, ALARP,
+   EU, ID, FTL, N/A, MSAT, ATM, ATO, CAMO osv.
+
+4. ETABLERTE ENGELSKE TERMER OVERSETTES IKKE (skrives likt på begge språk):
+   Accountable Manager, Accountable Executive, Just Culture,
+   Safety Assurance, Safety Promotion, safety manager
+   (norsk bestemt form skrives "safety manageren").
+
+5. Oversettelsene skal gi MENING og være GOD, NATURLIG NORSK – ikke
+   ord-for-ord. Vær konsistent med ordlisten under.
+
+
+ORDLISTE (avtalt terminologi)
+-----------------------------
+finding(s) ................ funn        (Level 1 findings -> Nivå 1-funn)
+Financial management ...... Økonomistyring
+evidence .................. dokumentasjon
+compliance ................ samsvar
+compliance monitoring ..... samsvarsovervåking
+Management of Change ...... endringshåndtering
+hazard identification ..... fareidentifisering
+risk control(s) ........... risikokontroll(er)
+mitigation ................ risikoreduserende tiltak
+oversight ................. tilsyn
+Competent Authority ....... vedkommende myndighet
+Human Performance ......... menneskelig ytelse
+occurrence (376/2014) ..... tilfelle
+Score (kolonneoverskrift) . Poeng
+Total Average Score ....... Gjennomsnittlig totalscore
+
+
+STATUS
+------
+FERDIG:
+  - Språkbryter + rammeverk på alle 13 sider.
+  - Felles knapper (js/felles_knapper.js via buttons.*) – gjelder ALLE skjemaer.
+  - MSAT KOMPLETT: header/etiketter, kommentarer, knapper, hjelpetekst/popup,
+    forlengelses-sjekkliste, dialoger, gauge-etiketter (inkl. Total Average
+    Score), OG alt skjemainnhold (29 punkter + overskrifter) via
+    MSAT/data/msat_data.no.json.
+
+TEST-SKJEMAER (nedprioriter – merket med oransje "Test"-badge ved tittelen):
+  - ATM (ATM/atm.html)
+  - FFP (FFP/luftfartshinder.html)
+
+GJENSTÅR:
+  A) comment_help.json i MSAT (de 7 avdelings-hjelpepopupene) er kun engelsk.
+  B) Øvrige ekte verktøy – kun felles knapper er oversatt så langt:
+       ATO        (ATO/ato.html,            ATO/js/ato_kalkulator.js)
+       CAMO       (CAMO/camo.html,          CAMO/js/camo_kalkulator.js)
+       Part145    (Part145/part145.html,    Part145/js/part145_kalkulator.js)
+       UAS        (UAS/UAS.html,            UAS/js/kalkulator.js)
+       FixedWing  (FixedWing/fixed-wing.html, FixedWing/js/kalkulator.js)
+       Rotor      (Rotor/rotor.html,        Rotor/js/kalkulator.js)
+     (Sjekk om disse er engelske eller norske i utgangspunktet – flere FFO-
+      skjemaer er allerede på norsk; da er "originalteksten" norsk og engelsk
+      blir oversettelsen. Behold da norsk som "no"-verdi uendret.)
+
+
+SLIK OVERSETTER DU ET NYTT VERKTØY (kopier MSAT-mønsteret)
+----------------------------------------------------------
+1. Opprett <VERKTØY>/lang/en.js og no.js:
+       I18n.register("en", { <verktøy>: { ... } });
+       I18n.register("no", { <verktøy>: { ... } });
+2. Last dem inn på siden, RETT ETTER de felles js/lang/*-skriptene og FØR
+   navbar.js (se rekkefølgen øverst). Eksempel i <VERKTØY>/*.html:
+       <script src="../js/i18n.js"></script>
+       <script src="../js/lang/en.js"></script>
+       <script src="../js/lang/no.js"></script>
+       <script src="lang/en.js"></script>
+       <script src="lang/no.js"></script>
+       <script src="../js/navbar.js" data-root="../"></script>
+3. Statisk HTML: merk synlig tekst med data-i18n / data-i18n-placeholder /
+   data-i18n-title. IKKE merk score-nedtrekk eller annet som er DATA.
+4. JS-genererte strenger: bruk I18n.t("...") der teksten lages.
+   - Strenger som bygges ved klikk (popup) leser automatisk gjeldende språk.
+   - Strenger som bygges ved last/utregning må bygges om ved språkbytte:
+       window.addEventListener('languageChanged', () => { ...bygg om... });
+     (I MSAT kalles fetchConfigForProfile() på nytt – hele skjemaet bygges
+      trygt om, og svar beholdes via localStorage.)
+5. JSON-drevet innhold (som MSAT): IKKE endre den engelske datafila. Lag en
+   parallell <navn>.no.json med samme ids, og la JS vise oversatt tekst med
+   ENGELSK FALLBACK per felt. Hold alltid CSV-etiketten på engelsk.
+
+
+SLIK VERIFISERER DU (uten nettleser)
+------------------------------------
+- Syntaks:        node --check <fil.js>
+- JSON gyldig:    node -e "JSON.parse(require('fs').readFileSync('<fil>','utf8'))"
+- ID-paritet en/no for JSON-data: sammenlign item-ids i begge filer (skal være
+  identiske; manglende -> faller tilbake til engelsk).
+- Oppslag: last i18n.js + lang-filene i Node (se tidligere sjekk i historikken)
+  og kjør I18n.t("nøkkel") for "en" og "no".
+I nettleser: åpne skjemaet, klikk NO/EN i verktøylinja, kontroller at tekst
+bytter og at score/verdier står uendret. Test CSV: lagre på ett språk, last
+inn på det andre – skal fungere uendret.
+
+
+NESTE STEG (forslag når arbeidet gjenopptas)
+--------------------------------------------
+1. Bekreft terminologien i MSAT (særlig "samsvarsovervåking",
+   "vedkommende myndighet", funn vs avvik) – juster ordlisten ved behov.
+2. Oversett comment_help.json (parallell .no-fil eller nøkler i MSAT/lang).
+3. Velg neste verktøy (forslag: CAMO eller FixedWing) og kjør mønsteret over.
+4. Vurder om ATM/FFP skal oversettes når de går fra "test" til produksjon.
+
+Relevante minnenotater: memory/i18n-setup.md
+==========================================================================

@@ -276,4 +276,27 @@ body.dragover-active {
   outline-offset: -10px;
   background-color: #e9ecef;
   transition: background-color 0.2s ease, outline 0.2s ease;
+}/* Versjonsnummer nederst på siden */
+.form-version {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #b0b8c0; /* Svakt grått */
+    margin-top: 50px;
+    padding-bottom: 20px;
+    width: 100%;
+    clear: both;
+    user-select: none; /* Hindrer at man merker det ved uhell */
+}
+
+/* Sørger for at det låses helt til bunnen av arket ved utskrift/PDF */
+@media print {
+    .form-version {
+        position: fixed;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        margin-top: 0;
+        padding-bottom: 0;
+    }
 }

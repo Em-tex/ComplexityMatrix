@@ -1,0 +1,562 @@
+{
+  "_kommentar": "Norske oversettelser av msat_data.json. Samme ids. Manglende felt/punkter faller tilbake til engelsk. Forkortelser (SMS, ERP, SSP, SPAS, SPI, SPT, SRB, EU) og etablerte termer (Accountable Manager, Just Culture) beholdes. Poeng/score endres ikke.",
+  "sections": [
+    {
+      "id": "policy",
+      "number": "1",
+      "title": "SIKKERHETSPOLICY OG -MÅL",
+      "subsections": [
+        {
+          "number": "1.1",
+          "title": "LEDELSENS FORPLIKTELSE",
+          "items": [
+            {
+              "id": "1.1.1",
+              "text": "Sikkerhetspolicy, signering og periodisk gjennomgang",
+              "details": {
+                "Present": "Det finnes en sikkerhetspolicy, signert av Accountable Manager, som inkluderer en forpliktelse til kontinuerlig forbedring, overholder alle gjeldende lovkrav og standarder, og tar hensyn til beste praksis.",
+                "Suitable": "Sikkerhetspolicyen er lett å lese. Innholdet er tilpasset organisasjonen.",
+                "Operating": "Sikkerhetspolicyen gjennomgås periodisk for å sikre at den forblir relevant for organisasjonen.",
+                "Effective": "Accountable Manager har en klar forståelse av sikkerhetspolicyen og er fullt engasjert i å gjennomføre den.",
+                "whatToLookFor": [
+                  "Intervju Accountable Manager for å vurdere vedkommendes kunnskap om og forståelse av sikkerhetspolicyen.",
+                  "Sjekk dokumentasjon på at Accountable Manager tar informerte beslutninger i samsvar med sikkerhetspolicyen.",
+                  "Bekreft at sikkerhetspolicyen er relevant og oppfyller gjeldende EU-forordninger.",
+                  "Sjekk at «sikkerhet» er sentralt i policyen og forblir høyeste prioritet."
+                ]
+              }
+            },
+            {
+              "id": "1.1.2",
+              "text": "Sikkerhetspolicy og ressurser",
+              "details": {
+                "Present": "Sikkerhetspolicyen inneholder en erklæring om å stille hensiktsmessige ressurser til rådighet. Det finnes en prosess for å vurdere ressurser og håndtere eventuelle mangler; behov diskuteres på riktig ledelsesnivå.",
+                "Suitable": "Omfanget og betydningen av de kontrakterte aktivitetene (til og fra) er riktig hensyntatt ved fastsettelse av ressursene som trengs for å levere sikker drift. Hensiktsmessige ressurser tildeles ved flere godkjenninger, hensyntatt kompleksiteten i driften.",
+                "Operating": "Organisasjonen vurderer ressursene som stilles til rådighet for å levere en sikker tjeneste, og iverksetter tiltak for å håndtere eventuelle mangler.",
+                "Effective": "Organisasjonen gjennomgår og iverksetter tiltak for å håndtere eventuelle forventede ressursmangler. Behov forutses og prognostiseres, særlig ved bruk av prinsippene for «endringshåndtering».",
+                "whatToLookFor": [
+                  "Gjennomgå tilgjengelige, hensiktsmessige ressurser, inkludert personell, utstyr og økonomi.",
+                  "Hvordan håndterer organisasjonen ressurser ved å forutse og håndtere eventuelle mangler?",
+                  "Finnes det tilstrekkelig og kompetent personell? Hvordan vurderer organisasjonen dette?",
+                  "Sjekk om ressursene diskuteres med Accountable Manager eller under SRB-møte (eller tilsvarende), der det er hensiktsmessig."
+                ]
+              }
+            },
+            {
+              "id": "1.1.3",
+              "text": "Kommunikasjon av sikkerhetspolicyen",
+              "details": {
+                "Present": "Det finnes en metode for å kommunisere sikkerhetspolicyen og tilhørende mål. Ledelsens forpliktelse til sikkerhet er dokumentert i sikkerhetspolicyen.",
+                "Suitable": "Sikkerhetspolicyen og tilhørende mål er tydelig synlige (eller tilgjengelige) for alt personell (vurder f.eks. flere lokasjoner, land). Sikkerhetspolicyen er forståelig (vurder flere språk).",
+                "Operating": "Sikkerhetspolicyen og tilhørende mål kommuniseres til alt personell (inkludert relevant kontraktert personell og organisasjoner). Accountable Executive og toppledergruppen fremmer sin forpliktelse til sikkerhetspolicyen gjennom aktiv og synlig deltakelse i sikkerhetsstyringssystemet.",
+                "Effective": "Personer på tvers av organisasjonen er kjent med sikkerhetspolicyen og tilhørende mål, og kan beskrive sine forpliktelser med hensyn til sikkerhetspolicyen og den interne ordningen for sikkerhetsrapportering.",
+                "whatToLookFor": [
+                  "Gjennomgå hvordan sikkerhetspolicyen kommuniseres.",
+                  "Spør ledere og personell om kunnskap om sikkerhetspolicyen og tilhørende mål.",
+                  "Dokumentasjon på at toppledelse involvert i sikkerhetsaktiviteter deltar på sikkerhetsmøter, opplæring, konferanser osv."
+                ]
+              }
+            },
+            {
+              "id": "1.1.4",
+              "text": "Sikkerhetspolicy, forpliktelse og positiv sikkerhetskultur",
+              "details": {
+                "Present": "Sikkerhetspolicyen er dokumentert, inkludert fremming av en positiv sikkerhetskultur. Sikkerhetspolicyen fremhever alle ansattes primæransvar for sikkerhet ved proaktivt å håndtere risiko. Sikkerhetspolicyen inneholder hovedtrekkene ved en positiv sikkerhetskultur, inkludert en forpliktelse til sikkerhetslederskap og til en Just Culture på tvers av organisasjonen.",
+                "Suitable": "Sikkerhetspolicyen beskriver forpliktelsen til alt relevant personell som er involvert i sikkerhetsaktiviteter. En standard etikk- eller atferdskodeks er dokumentert og tilpasset typen sikkerhetsaktiviteter.",
+                "Operating": "Sikkerhetspolicyen og den tilhørende positive sikkerhetskulturen er operasjonelt implementert og fremmes på arbeidsnivå av Accountable Manager og nøkkellederne involvert i sikkerhetsaktiviteter.",
+                "Effective": "Sikkerhetspolicyen, gjennomføringen og forpliktelsen gjennomgås jevnlig med Accountable Manager og toppledelsen. Organisasjonens forpliktelse til sikkerhet omfatter samhandling med viktige eksterne interessenter. Den interne ordningen for sikkerhetsrapportering er kjent og brukes uten frykt for represalier.",
+                "whatToLookFor": [
+                  "Toppledelse involvert i sikkerhetsaktiviteter er effektivt involvert i (sikkerhets)styringssystemet og håndterer proaktivt sikkerhetspolicy, positiv sikkerhetskultur og objektive prosesser som organisasjonen har fastsatt for proaktivt å håndtere risiko.",
+                  "Dokumentasjon på toppledelsens deltakelse på sikkerhetsmøter, opplæring, konferanser osv. der positiv sikkerhetskultur fremmes.",
+                  "Dokumentasjon på proaktiv atferd hos lederne involvert i sikkerhetsaktiviteter, som viser kontinuerlig lederskap og kontinuerlig forbedring."
+                ]
+              }
+            },
+            {
+              "id": "1.1.5",
+              "text": "Sikkerhetspolicy og Just Culture",
+              "details": {
+                "Present": "En Just Culture-policy og tilhørende prinsipper er definert.",
+                "Suitable": "Just Culture-policyen (eller et annet relatert dokument) identifiserer tydelig akseptabel og uakseptabel atferd. Prinsippene sikrer at policyen kan anvendes konsistent på tvers av hele organisasjonen. Just Culture-policyen og prinsippene er forståelige og tydelig synlige (eller tilgjengelige). Beslutningsprosessen knyttet til gjennomføringen av Just Culture er utformet etter organisasjonens størrelse (f.eks. involvering av ansattes representanter, ansattutvalg, fagforeninger osv.).",
+                "Operating": "Det finnes dokumentasjon på at Just Culture-policyen og de støttende prinsippene anvendes og fremmes overfor personellet.",
+                "Effective": "Just Culture-policyen anvendes på en rettferdig og konsistent måte, og personellet har tillit til policyen. Det finnes dokumentasjon på at grensen mellom akseptabel og uakseptabel atferd er fastsatt i samråd med ansattes representanter.",
+                "whatToLookFor": [
+                  "Sjekk at det er utarbeidet veiledning og styring for hvordan Just Culture-policyen skal anvendes.",
+                  "Dokumentasjon på når Just Culture-prinsippene er anvendt etter en hendelse.",
+                  "Dokumentasjon på tiltak fra sikkerhetsundersøkelser som adresserer organisatoriske forhold heller enn å fokusere kun på enkeltindividet.",
+                  "Gjennomgå hvordan organisasjonen overvåker frivillig rapporteringsfrekvens, og vurder antall flysikkerhetsrapporter i forhold til aktivitetene."
+                ]
+              }
+            },
+            {
+              "id": "1.1.6",
+              "text": "Sikkerhetsmål",
+              "details": {
+                "Present": "Sikkerhetsmål er etablert i samsvar med sikkerhetspolicyen og kommunisert i hele organisasjonen.",
+                "Suitable": "Sikkerhetsmålene er relevante for organisasjonen og dens aktiviteter. De overvåkes på riktig nivå av (topp)ledere. Sikkerhetsmålene er forståelige og tydelig synlige. Sikkerhetsmålene er samordnet med SSP og/eller SPAS, der det er hensiktsmessig.",
+                "Operating": "Sikkerhetsmålene måles og gjennomgås jevnlig, er relevante og kommuniseres i hele organisasjonen. De overvåkes gjennom Safety Review Board (eller tilsvarende) og justeres ved behov.",
+                "Effective": "Oppnåelse av sikkerhetsmålene overvåkes av toppledelsen, og det iverksettes tiltak for å sikre at de nås. Tilhørende kvalitative og kvantitative mål er på plass. Sikkerhetsmålene er ikke bare samordnet med SSP og/eller SPAS, men sammenlignes også med tilsvarende i risikoprofilsektoren. De oppdateres basert på den nyeste relevante sikkerhetsinformasjonen som er tilgjengelig. Organisasjonen er noen ganger involvert i utarbeidelsen av SSP og/eller SPAS. Kontinuerlig forbedring av sikkerheten måles effektivt.",
+                "whatToLookFor": [
+                  "Vurder om sikkerhetsmålene er hensiktsmessige og relevante.",
+                  "Gjennom måling og overvåking av sikkerhetsytelse, sjekk om sikkerhetsmålene måles for å overvåke oppnåelse ved kvalitative og kvantitative midler, som SMART SPI-er og SPT-er.",
+                  "Sjekk om sikkerhetsmålene som et minimum sikter mot «kontinuerlig forbedring»."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "1.2",
+          "title": "SIKKERHETSANSVAR OG ANSVARSOMRÅDER",
+          "items": [
+            {
+              "id": "1.2.1",
+              "text": "Identifisering av Accountable Manager",
+              "details": {
+                "Present": "En Accountable Manager er utpekt med fullt ansvar og det øverste ansvaret (ultimate accountability) for SMS-et.",
+                "Suitable": "Accountable Manager har kontroll over ressurser. Ved flere godkjenninger vil utpekingen av «Accountable Manager» gjenspeile styringsstrukturen, som ulike SMS innenfor hvert domene (med grensesnitt) eller et felles (corporate) SMS.",
+                "Operating": "Accountable Manager sikrer at SMS-et har tilstrekkelige ressurser, er implementert og vedlikeholdt, og har myndighet til å stoppe driften dersom det foreligger et uakseptabelt nivå av sikkerhetsrisiko. Accountable Manager er fullt klar over sine SMS-roller og -ansvar. Accountable Manager er tilgjengelig for personellet i organisasjonen.",
+                "Effective": "Accountable Manager sikrer at SMS-ets ytelse overvåkes, gjennomgås og forbedres. Utover sine SMS-roller og -ansvar fremmer Accountable Manager kontinuerlig organisasjonens sikkerhetspolicy, sikkerhetsstandarder og sikkerhetskultur.",
+                "whatToLookFor": [
+                  "Dokumentasjon på at Accountable Manager har myndighet til å stille tilstrekkelige ressurser til rådighet for relevante sikkerhetsforbedringer.",
+                  "Dokumentasjon på at Accountable Manager er fullt klar over sine SMS-roller og -ansvar.",
+                  "Dokumentasjon på beslutningstaking om risikoaksept."
+                ]
+              }
+            },
+            {
+              "id": "1.2.2",
+              "text": "Ansvar og ansvarsområder",
+              "details": {
+                "Present": "Sikkerhetsansvar, myndighet og ansvarsområder er klart definert og dokumentert.",
+                "Suitable": "Sentrale sikkerhetsroller er identifisert for sikkerhetsansvar, myndighet og ansvarsområder (for eksempel gjennom stillingsbeskrivelser, beskrivelser av stillingsfamilier eller organisasjonskart).",
+                "Operating": "Personer er utpekt til å fylle sentrale sikkerhetsroller, er klar over og oppfyller sine sikkerhetsansvar, myndighet og ansvarsområder, og oppmuntres til å bidra til SMS-et.",
+                "Effective": "Accountable Manager og toppledergruppen er klar over de vesentlige/betydelige risikoene organisasjonen står overfor, og prinsippene for sikkerhetsstyringssystemet finnes i hele organisasjonen slik at sikkerhet er blant de høyeste prioriteringene i organisasjonen.",
+                "whatToLookFor": [
+                  "Spør ledere og personell om deres roller og ansvar.",
+                  "Bekreft at toppledere er klar over organisasjonens sikkerhetsytelse, dens mest betydelige risikoer og dens sikkerhetsmål.",
+                  "Dokumentasjon på at ledere har sikkerhetsrelaterte ytelsesmål."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "1.3",
+          "title": "Utnevnelse av nøkkelpersonell",
+          "items": [
+            {
+              "id": "1.3.1",
+              "text": "Utnevnelse av nøkkelpersonell",
+              "details": {
+                "Present": "En safety manager som er ansvarlig for implementering og vedlikehold av SMS-et er utpekt, med en direkte rapporteringslinje til Accountable Manager.",
+                "Suitable": "Safety manageren er kompetent. Tilstrekkelig tid og ressurser er avsatt for å vedlikeholde SMS-et, herunder, men ikke begrenset til, kompetent personell for sikkerhetsundersøkelse, analyse, revisjon og fremming. Se Annex 19-merknad: Avhengig av tjenesteyterens størrelse og kompleksiteten i dens luftfartsprodukter eller -tjenester, kan ansvaret for implementering og vedlikehold av SMS-et tildeles én eller flere personer som fyller rollen som safety manager, enten som eneste funksjon eller kombinert med andre oppgaver, forutsatt at dette ikke medfører interessekonflikter. For komplekse organisasjoner, se neste avsnitt.",
+                "Operating": "Safety manageren har implementert og vedlikeholder SMS-et. Safety manageren er i jevnlig kommunikasjon med Accountable Manager og eskalerer sikkerhetssaker når det er hensiktsmessig. Safety manageren er tilgjengelig for personellet i organisasjonen.",
+                "Effective": "Safety manageren er kompetent til å forvalte SMS-et og identifisere forbedringer i tide. Det finnes en etablert rapporteringsordning mellom Accountable Manager og safety manageren for å rapportere om sikkerhetssaker i tide og jevnlig.",
+                "whatToLookFor": [
+                  "Vurder om ansvaret for implementering og vedlikehold av SMS-et bør gis til en fulltidsperson eller til en safety manager støttet av et team, tilstrekkelig bemyndiget til å tale sikkerhetens sak ved interessekonflikt.",
+                  "Sjekk for eventuelle interessekonflikter, og at de er identifisert og håndtert.",
+                  "Gjennomgå safety manager-rollen, inkludert troverdighet, kompetanse og status."
+                ]
+              }
+            },
+            {
+              "id": "1.3.2",
+              "text": "Utnevnelse av nøkkelpersonell for komplekse organisasjoner",
+              "details": {
+                "Present": "Organisasjonen har etablert hensiktsmessige sikkerhetskomité(er).",
+                "Suitable": "Sikkerhetskomiteens(es) struktur og møtefrekvens støtter SMS-funksjonene på tvers av organisasjonen. Sikkerhetskomiteens(es) omfang inkluderer sikkerhetsrisikoer og samsvarssaker. Deltakelsen i den øverste sikkerhetskomiteen omfatter minst Accountable Manager og lederne for de funksjonelle områdene.",
+                "Operating": "Det finnes dokumentasjon på at møter avholdes, med detaljer om deltakelse, diskusjoner og tiltak. Sikkerhetskomiteen(e) overvåker effektiviteten til SMS-et og samsvarsovervåkingsfunksjonen ved å kontrollere at det finnes tilstrekkelige ressurser. Tiltak følges opp. Kvalitative/kvantitative midler er etablert for å måle og overvåke de fastsatte sikkerhetsmålene.",
+                "Effective": "Sikkerhetskomiteene inkluderer sentrale interessenter. Resultatene av møtene dokumenteres og kommuniseres, og alle tiltak avtales, gjennomføres og følges opp i tide. Sikkerhetsytelsen og sikkerhetsmålene gjennomgås og følges opp etter behov.",
+                "whatToLookFor": [
+                  "Gjennomgå sikkerhetskomité- og møtestruktur samt mandat (Terms of Reference) for hver komité/møte.",
+                  "Gjennomgå deltakelsesnivået på møtene.",
+                  "Gjennomgå møtereferater og tiltak.",
+                  "Resultatene kommuniseres til resten av organisasjonen."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "1.4",
+          "title": "Koordinering av beredskapsplanlegging (ERP)",
+          "items": [
+            {
+              "id": "1.4.0",
+              "text": "Koordinering av beredskapsplanlegging (ERP)",
+              "details": {
+                "Present": "En hensiktsmessig, koordinert ERP er utarbeidet og distribuert, som definerer prosedyrene, rollene, ansvarsområdene og handlingene til de ulike organisasjonene og nøkkelpersonellet.",
+                "Suitable": "Nøkkelpersonell har til enhver tid enkel tilgang til de relevante delene av ERP-en. ERP-en definerer prosedyrene, rollene, ansvarsområdene og handlingene til de ulike organisasjonene og nøkkelpersonellet. Frekvensen og metodene for testing av ERP-en er definert. Koordineringen med andre organisasjoner (inkludert ikke-luftfartsorganisasjoner) er definert med hensiktsmessige midler.",
+                "Operating": "ERP-en gjennomgås og testes for å sikre at den holdes oppdatert. Ulike scenarioer med variasjoner tester ERP-ens robusthet. Det iverksettes tiltak for å forbedre ERP-ens effektivitet.",
+                "Effective": "Det finnes dokumentasjon på koordinering med andre organisasjoner gjennom jevnlige øvelser eller kriseøvelser, som analyseres for videre forbedring.",
+                "whatToLookFor": [
+                  "Bekreft om tjenesteyteren er pålagt å ha en ERP eller å koordinere med organisasjonens ERP, avhengig av domenet.",
+                  "Gjennomgå beredskapsplanen og hvordan prosedyrene, rollene, ansvarsområdene og handlingene til de ulike organisasjonene er definert.",
+                  "Intervju nøkkelpersonell og sjekk at de har tilgang til de relevante delene av ERP-en."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "1.5",
+          "title": "SMS-dokumentasjon",
+          "items": [
+            {
+              "id": "1.5.1",
+              "text": "SMS-dokumentasjon",
+              "details": {
+                "Present": "SMS-dokumentasjonen inkluderer policyene og prosessene som beskriver organisasjonens SMS og prosesser.",
+                "Suitable": "Omfanget av aktivitetene under SMS-et er klart definert. SMS-dokumentasjonen er forståelig. SMS-dokumentasjonen er konsistent med andre interne styringssystemer og representerer de faktiske prosessene som er på plass. Måten og formatet på SMS-dokumentasjonen er hensiktsmessig for organisasjonen og lett tilgjengelig for alt relevant personell.",
+                "Operating": "Endringer i SMS-dokumentasjonen håndteres. Nøkkelpersonell involvert i SMS-implementering er kjent med og følger de relevante delene av SMS-dokumentasjonen, mens ansatte er kjent med innholdet i SMS-dokumentasjonen som er relevant for deres aktiviteter.",
+                "Effective": "SMS-dokumentasjonen gjennomgås proaktivt for kontinuerlig forbedring.",
+                "whatToLookFor": [
+                  "Gjennomgå SMS-dokumentasjonen og prosedyrene for endringer.",
+                  "Sjekk måten og formatet på SMS-dokumentasjonen, avhengig av organisasjonens størrelse og struktur, dens forretningsmodell, som omfang og betydning av de kontrakterte aktivitetene (til og fra).",
+                  "Sjekk for kryssreferanser til andre dokumenter og prosedyrer."
+                ]
+              }
+            },
+            {
+              "id": "1.5.2",
+              "text": "SMS-registreringer",
+              "details": {
+                "Present": "SMS-dokumentasjonen definerer SMS-resultatene og hvilke registreringer av SMS-aktiviteter som skal lagres. Registreringer som skal lagres, lagringsperiode og lagringssted er identifisert.",
+                "Suitable": "Regler for personvern og konfidensialitet er definert.",
+                "Operating": "SMS-aktiviteter lagres på hensiktsmessig måte og er funnet komplette og konsistente med hensiktsmessige kontrollregler for personvern og konfidensialitet.",
+                "Effective": "SMS-registreringer brukes rutinemessig som innspill til sikkerhetsstyringsrelaterte oppgaver og kontinuerlig forbedring av SMS-et. SMS-dokumentasjon, inkludert SMS-relaterte registreringer, gjennomgås og oppdateres jevnlig med hensiktsmessig versjonskontroll på plass.",
+                "whatToLookFor": [
+                  "Sjekk hvordan sikkerhetsregistreringer lagres og versjonskontrolleres.",
+                  "Regler for personvern og konfidensialitet er definert og anvendes konsistent.",
+                  "Sjekk om relevant personell er kjent med prosessene og prosedyrene for registreringskontroll."
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "number": "2",
+      "title": "VURDERING AV SIKKERHETSRISIKO",
+      "subsections": [
+        {
+          "number": "2.1",
+          "title": "Fareidentifisering",
+          "items": [
+            {
+              "id": "2.1.1",
+              "text": "Fareidentifisering",
+              "details": {
+                "Present": "Det finnes en prosess som definerer hvordan farer identifiseres gjennom reaktive og proaktive metoder, ved bruk av flere kilder. Metodikken for å fastsette kriteriene for sikkerhetsundersøkelser er dokumentert. Prosessen omfatter håndtering av organisatoriske endringer når de påvirker sikkerheten (se 3.2).",
+                "Suitable": "Flere farekilder (interne og eksterne) vurderes og gjennomgås, slik det er hensiktsmessig for domenet. Grensesnittene håndteres på en god måte. Dataanalyseprosessen gjør det mulig å få brukbar sikkerhetsinformasjon. Farer dokumenteres i et lettforståelig format. Nivået for godkjenning (sign-off) av sikkerhetsundersøkelser er definert og tilpasset risikonivået. Sikkerhetsfarene på organisasjonsnivå er konsistente med dem som er identifisert på myndighetsnivå, der det er relevant.",
+                "Operating": "Farene identifiseres og dokumenteres. Farer knyttet til tekniske, menneskelige og organisatoriske faktorer vurderes. Kriteriene for sikkerhetsundersøkelser er identifisert og anvendes. Sikkerhetsundersøkelser gjennomføres og registreres.",
+                "Effective": "Organisasjonen har prosesser og midler som fanger opp farer (knyttet til tekniske, miljømessige, menneskelige og organisatoriske faktorer), som vedlikeholdes og gjennomgås for å sikre at de holdes oppdatert. Organisasjonen identifiserer kontinuerlig og proaktivt farer (knyttet til tekniske, miljømessige, menneskelige og organisatoriske faktorer) knyttet til sine aktiviteter og sitt operasjonelle miljø, og involverer alt nøkkelpersonell og relevante interessenter. Farer vurderes på en systematisk måte og i tide. Personellet uttrykker tillit til organisasjonens rapporteringspolicy og -prosesser. Kriteriene for sikkerhetsundersøkelser oppdateres kontinuerlig for å inkludere interne og eksterne kilder etter behov.",
+                "whatToLookFor": [
+                  "Gjennomgå hvordan farer identifiseres, analyseres, håndteres og registreres.",
+                  "Gjennomgå strukturen og oppsettet til fareloggen.",
+                  "Vurder farer knyttet til: mulige scenarioer for ulykke eller alvorlig hendelse, tekniske faktorer samt menneskelige og organisatoriske faktorer, forretningsbeslutninger og -prosesser, tredjepartsorganisasjoner."
+                ]
+              }
+            },
+            {
+              "id": "2.1.2",
+              "text": "Rapportering av tilfeller iht. forordning (EU) 376/2014",
+              "details": {
+                "Present": "Det finnes et konfidensielt rapporteringssystem for å fange opp obligatoriske tilfeller og frivillige rapporter, som inkluderer et tilbakemeldingssystem og lagres i en database. Ansvar er definert slik forordning (EU) 376/2014 krever. Prosessen angir hvordan rapporter følges opp, og fastsatte tidsfrister.",
+                "Suitable": "Rapporteringssystemet er tilgjengelig og enkelt å bruke for personellet som er involvert i organisasjonens sikkerhetsaktiviteter. Det finnes et hensiktsmessig middel for å fange opp forhold fra tredjeparter (partnere, leverandører, underleverandører).",
+                "Operating": "Rapporteringssystemet er enkelt å bruke, er i bruk og tilgjengelig for alt personell. Det gis tilbakemelding til rapportøren om eventuelle tiltak som er iverksatt (eller ikke iverksatt), der det er hensiktsmessig, og til resten av organisasjonen. Rapporter evalueres, behandles, analyseres og lagres. Sikkerhetsundersøkelser utføres av hensiktsmessig opplært personell for å identifisere de bakenforliggende årsakene (hvorfor det skjedde, ikke bare hva som skjedde). Personellet er klar over og oppfyller sitt ansvar med hensyn til rapporteringssystemet. Rapporter behandles innenfor de definerte tidsfristene. Det sikres samsvar med temaene som diskuteres under SRB- eller sikkerhetskomitémøtene.",
+                "Effective": "Personellet uttrykker tillit til organisasjonens rapporteringspolicy og -prosess. Rapporteringssystemet brukes til å påvirke ledelsesbeslutninger og kontinuerlig forbedring. Det er et sunt rapporteringssystem basert på relevansen av rapportene som mottas. Sikkerhetsrapporter følges opp i tide. Rapporteringssystemet bidrar til kontinuerlig forbedring av organisasjonens ytelse.",
+                "whatToLookFor": [
+                  "Bekreft at ansvaret som forordning (EU) 376/2014 krever, er definert og beskrevet i stillingsbeskrivelsene.",
+                  "Gjennomgå rapporteringssystemet med hensyn til tilgang og brukervennlighet.",
+                  "Sjekk om personellet har tillit til rapporteringssystemet, er kjent med det og vet hva som skal rapporteres."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "2.2",
+          "title": "Vurdering og reduksjon av sikkerhetsrisiko",
+          "items": [
+            {
+              "id": "2.2.1",
+              "text": "Analyse og vurdering av sikkerhetsrisiko",
+              "details": {
+                "Present": "Det finnes en prosess for analyse og vurdering av sikkerhetsrisiko.",
+                "Suitable": "Metodikken for risikovurdering, inkludert brukbare kriterier for «alvorlighetsgrad» og «sannsynlighet», er definert og passer tjenesteyterens faktiske miljø, inkludert hensyn til ekspertvurdering når data ikke er tilgjengelige. Definisjonene som brukes er tilstrekkelig tydelige eller detaljerte. For aksept av risikonivået er riktig myndighetsnivå i organisasjonen (ansvar) i samarbeid med interessentene klart definert.",
+                "Operating": "Risikoanalyser og -vurderinger gjennomføres på en konsistent måte basert på den definerte prosessen. Hensiktsmessige risikokontroller anvendes for å redusere sikkerhetsrisiko til et akseptabelt nivå, inkludert tidsfrister og ansvarsfordeling avtalt med interessentene. Operasjonelle, tekniske, menneskelige og organisatoriske faktorer vurderes som en del av utviklingen av risikokontroller. Toppledelsen er aktivt involvert i middels og høy risiko og tilhørende risikoreduserende tiltak og kontroller. Forståelse av eksterne innspill og resultater fra styring av sikkerhetsrisiko som bør håndteres.",
+                "Effective": "Risikoanalyser og -vurderinger gjennomgås for konsistens og for å identifisere forbedringer i prosessene. Risikovurderinger gjennomgås jevnlig for å sikre at de holdes oppdatert. Kriterier for risikoaksept brukes rutinemessig, anvendes konsistent i ledelsens beslutningsprosesser, og gjennomgås jevnlig.",
+                "whatToLookFor": [
+                  "Gjennomgå ordningen og prosedyrene for risikoklassifisering.",
+                  "Sjekk metodikken som brukes til å vurdere risikoene; hvordan dette dokumenteres, defineres nøyaktig og brukes; sjekk hvordan personellet som bruker metodikken er opplært.",
+                  "Sjekk at prosessen definerer hvem som kan akseptere hvilket risikonivå."
+                ]
+              }
+            },
+            {
+              "id": "2.2.2",
+              "text": "Kontroll av sikkerhetsrisiko",
+              "details": {
+                "Present": "Organisasjonen har en prosess på plass for å beslutte og anvende risikokontroller.",
+                "Suitable": "Ansvar og tidsfrister for å fastsette og akseptere risikokontrollene er definert. Hensiktsmessige strategier og perspektiver for risikoreduksjon vurderes.",
+                "Operating": "Hensiktsmessige risikokontroller anvendes for å redusere risikoen til et akseptabelt nivå, inkludert tidsfrister og ansvarsfordeling. Organisasjonen følger prosessen som er på plass for å ta beslutninger og anvende hensiktsmessige og effektive risikokontroller. Menneskelig ytelse vurderes som en del av utviklingen av risikokontroller.",
+                "Effective": "Risikokontrollene er praktiske og bærekraftige, anvendes i tide og skaper ikke ytterligere risiko. Effektiviteten til risikokontrollene overvåkes gjennom sikkerhetsytelse, ved bruk av kvalitative og/eller kvantitative midler. Risikokontrollene tar hensyn til menneskelig ytelse.",
+                "whatToLookFor": [
+                  "Risikokontroller er tydelig identifisert. Dokumentasjon på at risikokontroller følges opp og iverksettes.",
+                  "Kvantitative og/eller kvalitative midler brukes til å overvåke effektiviteten til risikokontrollene, som SMART SPI-er, SPT-er og varslingsnivåer.",
+                  "Sjekk hvordan policyen tar hensyn til ALARP – bekreft gjennomføringen av det."
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "assurance",
+      "number": "3",
+      "title": "SAFETY ASSURANCE",
+      "subsections": [
+        {
+          "number": "3.1",
+          "title": "Overvåking og måling av sikkerhetsytelse",
+          "items": [
+            {
+              "id": "3.1.1",
+              "text": "Verifisere sikkerhetsytelse og validere risikokontroller",
+              "details": {
+                "Present": "Organisasjonen har et dokumentert internt revisjonsprogram med kobling til en ledelsens gjennomgang. Det finnes en dokumentert prosess for å vurdere om de hensiktsmessige risikokontrollene anvendes og er effektive med hensyn til SMS-ets nøkkelprosesser. En person eller gruppe personer med ansvar for overvåkingsfunksjonen er identifisert, og de har direkte tilgang til Accountable Executive.",
+                "Suitable": "Ansvar, metoder og tidsfrister for å vurdere risikokontroller er hensiktsmessig definert. Måling av sikkerhetsytelse er rettet mot effektiviteten til de risikoreduserende tiltakene som håndterer nøkkelrisikoene, og dermed sikkerhetsmålene. Måling av sikkerhetsytelse fokuserer på det som er viktig, heller enn det som er enkelt å måle. Bidraget fra kontrakterte organisasjoner bør vurderes i prosessen for sikkerhetsytelse, med tanke på den potensielle effekten det kan ha på organisasjonens sikkerhetsytelse.",
+                "Operating": "Informasjon fra rapporteringssystemet(ene), Safety Assurance, samsvarsovervåkingsaktiviteter eller en annen relevant kilde tilbakeføres til prosessen for styring av sikkerhetsrisiko. Hensiktsmessige risikokontroller verifiseres for å vurdere om de anvendes og er effektive. Oppfølging av planen for korrigerende/forebyggende tiltak dokumenteres og gjennomgås av det relevante SMS-styringsorganet (dvs. et tilstrekkelig myndighetsnivå basert på organisasjonens størrelse og kompleksiteten i driften). Grensesnittet mellom samsvarsbaserte revisjoner og prosessene for styring av sikkerhetsrisiko er beskrevet og i drift.",
+                "Effective": "Hensiktsmessige risikokontroller vurderes, og det iverksettes tiltak for å sikre at de er effektive og leverer en sikker tjeneste. Årsakene til at risikokontroller ikke er effektive, undersøkes. Det tas hensyn til menneskelig ytelse. Det er en omfattende integrering av eksterne og interne grensesnitt, der det er hensiktsmessig, i organisasjonens prosesser for styring av sikkerhetsrisiko og Safety Assurance. Resultatet av organisasjonens sikkerhetsytelse vurderes og gir tilbakemelding til SMS-styringsorganet, der det er relevant, for gjennomgang og til slutt til vedkommende myndighet. Effektiviteten til SMS-prosessene gjennomgås jevnlig.",
+                "whatToLookFor": [
+                  "Sjekk om det finnes en mekanisme som sikrer at organisasjonen benytter alle relevante datakilder.",
+                  "Dokumentasjon på ansvar, metoder og tidsfrister for å vurdere om risikokontrollene anvendes og er effektive.",
+                  "Informasjon fra Safety Assurance og samsvarsovervåkingsaktiviteter tilbakeføres til prosessen for styring av sikkerhetsrisiko."
+                ]
+              }
+            },
+            {
+              "id": "3.1.2",
+              "text": "Verifisere ytelse mot indikatorer og mål",
+              "details": {
+                "Present": "Det finnes en dokumentert prosess for å måle organisasjonens sikkerhetsytelse, som dekker alle de hensiktsmessige områdene, inkludert kvalitative og kvantitative midler koblet til organisasjonens sikkerhetsmål og for å måle effektiviteten til risikokontrollene for sikkerhet.",
+                "Suitable": "De kvantitative midlene fokuserer på det som er viktig, heller enn det som er enkelt å måle. Datakildenes pålitelighet vurderes i utformingen av kvalitative og/eller kvantitative midler som SPI-er og SPT-er. De kvalitative og kvantitative midlene er koblet til de identifiserte risikoene, effektiviteten til sikkerhetsbarrierene og sikkerhetsmålene. Frekvensen for og ansvaret for trendovervåking av kvalitative midler er definert. Realistiske mål er satt, der det er hensiktsmessig. Kvalitative og kvantitative midler knyttet til statens sikkerhetsmål fra SSP/SPAS tas i betraktning, der det er aktuelt. De kvalitative og kvantitative midlene tar hensyn til viktige interne og eksterne grensesnitt (eller risiko ved grensesnittene), der det er meningsfullt.",
+                "Operating": "Organisasjonens sikkerhetsytelse måles gjennom kvalitative og kvantitative midler, som overvåkes og analyseres kontinuerlig for trender, der det er hensiktsmessig. Effektiviteten til risikokontrollene for sikkerhet måles og støtter handlingsrettede beslutninger. Frekvensen for og ansvaret for trendovervåking av kvalitative/kvantitative midler er hensiktsmessig og pålitelig.",
+                "Effective": "De kvalitative og kvantitative midlene viser organisasjonens sikkerhetsytelse og effektiviteten til risikokontrollene basert på pålitelige data. De kvalitative og kvantitative midlene gjennomgås; oppdateres jevnlig for å sikre at de forblir relevante, og gjennomgås deretter med det relevante SMS-styringsorganet og muliggjør modningen av organisasjonens SMS. Når de kvalitative og kvantitative midlene indikerer at en risikokontroll ikke er effektiv, iverksettes hensiktsmessige tiltak. Statens sikkerhetsmål i SSP/SPAS vurderes på en hensiktsmessig måte, der det er relevant, og kontinuerlig dialog med staten driver den kontinuerlige forbedringen av prosessen.",
+                "whatToLookFor": [
+                  "Hvordan overvåkes og måles sikkerhetsytelsen? Sjekk at de definerte SPI-ene, SPT-ene, varslingsnivåene og målene er hensiktsmessige.",
+                  "Bekreft at grensesnittene som påvirker SMS-ets ytelse, vurderes på en hensiktsmessig måte.",
+                  "Hvordan muliggjør ordningen for rapportering av tilfeller måling og evaluering av organisasjonens sikkerhetsytelse?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "3.2",
+          "title": "Endringshåndtering",
+          "items": [
+            {
+              "id": "3.2.1",
+              "text": "Endringshåndtering",
+              "details": {
+                "Present": "Organisasjonen har etablert en endringshåndteringsprosess for å identifisere om endringer påvirker sikkerhetsaktiviteter, og for å håndtere betydelige, identifiserte risikoer i samsvar med eksisterende prosesser for styring av sikkerhetsrisiko (se 2.2). Metoder, ansvar og tidsfrister er definert i prosessen.",
+                "Suitable": "Utløsende faktorer for endringshåndteringsprosessen er definert. Prosessen vurderer også forretningsrelaterte endringer og grensesnitt med andre organisasjoner/avdelinger som påvirker sikkerheten.",
+                "Operating": "Organisasjonen bruker en definert endringshåndteringsprosess for å identifisere om vesentlige endringer påvirker sikkerheten. Eventuelle identifiserte risikoer håndteres i samsvar med eksisterende prosesser for styring av sikkerhetsrisiko og overvåkes gjennom Safety Assurance. Interne og eksterne faktorer som tekniske, miljømessige, menneskelige og organisatoriske farer vurderes, der det er hensiktsmessig.",
+                "Effective": "Endringshåndteringsprosessen vurderer akkumuleringen eller virkningen av flere endringer, og endringen og virkningen på sikkerhetsrelaterte funksjoner kommuniseres med andre organisasjoner, inkludert interne og eksterne interessenter. Det finnes et middel for å dele informasjon om virkningen av endringshåndtering med eksterne interessenter (partnere, leverandører, underleverandører osv.). Sikkerhetsrisikoer håndteres i samsvar med omfanget og tidsrammen knyttet til endringen. Risikoreduserende tiltak som følger av endringshåndtering, inngår i overvåkingen av SMS-ytelsen.",
+                "whatToLookFor": [
+                  "Sentrale interessenter er involvert i prosessen.",
+                  "Gjennomgå hva som utløser «endringshåndteringsprosessen».",
+                  "Gjennomgå nylige endringer som har vært gjennom risikovurderingsprosessen."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "3.3",
+          "title": "Kontinuerlig forbedring av SMS-et",
+          "items": [
+            {
+              "id": "3.3.1",
+              "text": "Kontinuerlig forbedring av SMS-et",
+              "details": {
+                "Present": "Det finnes en dokumentert prosess for å overvåke og gjennomgå effektiviteten til SMS-et ved bruk av tilgjengelige data og informasjon.",
+                "Suitable": "Det samlede systemet, inkludert Safety Assurance-aktivitetene, produserer SMS-data/-informasjon som periodisk gjennomgås av sikkerhetsstyringsorganisasjonen for å forbedre gjennomføringen av SMS-et. Ekstern informasjon vurderes i tillegg til intern informasjon. Relevante toppledere er særlig involvert når det berører ulike avdelinger. Beslutningstakingen er datadrevet.",
+                "Operating": "Det finnes dokumentasjon på at SMS-et gjennomgås periodisk for å støtte vurderingen av effektiviteten, og at hensiktsmessige tiltak iverksettes. SMS-et gjennomgås periodisk av toppledergruppen for å støtte vurderingen av effektiviteten, og at hensiktsmessige tiltak iverksettes. Organisasjonen bruker SMS- og sikkerhetsdata til å utvikle og vurdere effektiviteten til SPI-ene for å forbedre sikkerheten og kontinuerlig forbedring av SMS-prosessene.",
+                "Effective": "Vurderingen av SMS-ets effektivitet bruker flere informasjonskilder, inkludert analysen av sikkerhetsdata som støtter beslutninger for kontinuerlige forbedringer. Målingen av organisasjonens sikkerhetsytelse adresserer den kontinuerlige forbedringen av SMS-et på en proaktiv måte, samt sikkerhetsmålene, som oppdateres jevnlig. Bidraget av SMS- og sikkerhetsdata fra viktige eksterne grensesnittorganisasjoner tas i betraktning. Et robust og omfattende sett med SMS- og sikkerhetsdata utvikles [SMS-database med datastyring] som støtter bruk av prediktiv dataanalyse. Organisasjonen deler beste praksis og erfaringer som en global leder innen SMS.",
+                "whatToLookFor": [
+                  "Hvilken type informasjon og kilder støtter den kontinuerlige forbedringen av SMS-et?",
+                  "Gjennomgå informasjonen og sikkerhetsdataene som brukes til ledelsens beslutningstaking for kontinuerlig forbedring.",
+                  "Hvordan henger målingen av tjenesteyterens sikkerhetsytelse sammen med sikkerhetsmålene? Hvordan oppdateres slike prosesser?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "promotion",
+      "number": "4",
+      "title": "SAFETY PROMOTION",
+      "subsections": [
+        {
+          "number": "4.1",
+          "title": "Opplæring og utdanning",
+          "items": [
+            {
+              "id": "4.1.1",
+              "text": "Opplæring og utdanning",
+              "details": {
+                "Present": "Det finnes et opplæringsprogram for SMS som omfatter grunnopplæring og repetisjonsopplæring.",
+                "Suitable": "Opplæringen dekker den enkeltes sikkerhetsoppgaver (inkludert roller, ansvar og ansvarsområder) og hvordan organisasjonens SMS fungerer. Opplæringsmateriell og -metodikk er tilpasset målgruppen og inkluderer menneskelig ytelse der det er relevant. Alt personell som trenger opplæring er identifisert.",
+                "Operating": "SMS-opplæringsprogrammet leverer hensiktsmessig opplæring til de ulike ansatte i organisasjonen og gjennomføres av kompetent personell.",
+                "Effective": "SMS-opplæringen evalueres for alle aspekter (læringsmål, innhold, undervisningsmetoder og -stiler, tester) og er koblet til kompetansevurderingen. Opplæringen gjennomgås rutinemessig for å ta hensyn til tilbakemeldinger fra ulike kilder.",
+                "whatToLookFor": [
+                  "Gjennomgå SMS-opplæringsprogrammet, inkludert kursinnhold og gjennomføringsmetode.",
+                  "Sjekk at opplæringen dekker den enkeltes sikkerhetsoppgaver og hvordan organisasjonens SMS fungerer.",
+                  "Sjekk at opplæringen inkluderer menneskelige og organisatoriske faktorer, Just Culture og ikke-tekniske ferdigheter."
+                ]
+              }
+            },
+            {
+              "id": "4.1.2",
+              "text": "Kompetanse",
+              "details": {
+                "Present": "Et kompetanserammeverk er definert for personellet som påvirker sikkerheten, inkludert instruktører.",
+                "Suitable": "Det finnes en prosess for periodisk å vurdere personellets faktiske sikkerhetskompetanse opp mot rammeverket.",
+                "Operating": "Det finnes dokumentasjon på at prosessen for kompetansevurdering brukes og registreres.",
+                "Effective": "Programmet og prosessen for kompetansevurdering gjennomgås og forbedres rutinemessig. Kompetansevurderingen iverksetter hensiktsmessige korrigerende tiltak ved behov og mater inn i opplæringsprogrammet.",
+                "whatToLookFor": [
+                  "Gjennomgå hvordan kompetansevurdering gjennomføres ved nyrekruttering og jevnlig.",
+                  "Finnes det en prosess som evaluerer den enkeltes kompetanse og iverksetter hensiktsmessige korrigerende tiltak ved behov?",
+                  "Er instruktørenes kompetanse definert og vurdert?"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "4.2",
+          "title": "Sikkerhetskommunikasjon",
+          "items": [
+            {
+              "id": "4.2.1",
+              "text": "Sikkerhetskommunikasjon",
+              "details": {
+                "Present": "Det finnes en prosess for å kommunisere sikkerhetskritisk informasjon.",
+                "Suitable": "Prosessen fastsetter hva, når og hvordan sikkerhetsinformasjon må kommuniseres. Prosessen omfatter kontrakterte organisasjoner og personell, der det er hensiktsmessig. Kommunikasjonsmidlene er tilpasset organisasjonens størrelse og kompleksitet, målgruppen og betydningen av det som kommuniseres.",
+                "Operating": "Sikkerhetskritisk informasjon identifiseres og kommuniseres i hele organisasjonen til alt personell, der det er relevant, inkludert kontrakterte organisasjoner og personell der det er hensiktsmessig.",
+                "Effective": "Organisasjonen analyserer og kommuniserer sikkerhetskritisk informasjon effektivt gjennom en rekke kombinerte metoder, der det er hensiktsmessig, for å maksimere forståelsen. Sikkerhetskommunikasjon vurderes for å fastslå hvordan den brukes og forstås, og for å forbedre den der det er hensiktsmessig. Fremming av sikkerhetspolicyen og dens positive sikkerhetskultur er synlig. Beslutningstaking, tiltak og kommunikasjon gjenspeiler en positiv sikkerhetskultur og sikkerhetslederskap som viser forpliktelse til sikkerhetspolicyen.",
+                "whatToLookFor": [
+                  "Gjennomgå informasjonskildene som brukes til sikkerhetskommunikasjon.",
+                  "Gjennomgå metodene som brukes til å kommunisere sikkerhetsinformasjon.",
+                  "Gjennomgås midlene for sikkerhetskommunikasjon for effektivitet, og brukes materiellet til å oppdatere relevant opplæring?"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "additional",
+      "number": "5",
+      "title": "TILLEGGSPUNKTER SOM SKAL VURDERES",
+      "subsections": [
+        {
+          "number": "5.1",
+          "title": "Håndtering av grensesnitt",
+          "items": [
+            {
+              "id": "5.1.1",
+              "text": "Håndtering av grensesnitt",
+              "details": {
+                "Present": "Organisasjonen har identifisert og dokumentert de relevante interne og eksterne grensesnittene og hvor kritiske disse grensesnittene er.",
+                "Suitable": "Måten grensesnittene håndteres på er tilpasset hvor kritiske de er for sikkerheten. Midlene for å kommunisere sikkerhetsinformasjon er definert. Kontraktene håndterer på en god måte den sikkerhetskritiske karakteren til grensesnittene og behovet for å gi tilstrekkelig input til fareidentifisering og risikovurdering (HIRA), inkludert risikoreduserende tiltak.",
+                "Operating": "Organisasjonen håndterer grensesnittene gjennom fareidentifisering og risikostyring. Det finnes Assurance-aktivitet for å vurdere risikoreduserende tiltak som leveres av eksterne organisasjoner.",
+                "Effective": "Organisasjonen har god forståelse av håndtering av grensesnitt, og det finnes dokumentasjon på at den sikkerhetskritiske karakteren til grensesnittrisikoene identifiseres og følges opp. Organisasjoner i grensesnittet deler sikkerhetsinformasjon og endringshåndtering, og iverksetter tiltak ved behov. Dokumentasjon viser at en positiv sikkerhetskultur fremmes med organisasjoner i grensesnittet.",
+                "whatToLookFor": [
+                  "Gjennomgå hvordan grensesnitt internt og eksternt er identifisert og dokumentert.",
+                  "Dokumentasjon på at: sikkerhetskritiske forhold identifiseres; sikkerhetstilfeller rapporteres og håndteres; risikokontroller anvendes og gjennomgås; grensesnitt gjennomgås periodisk."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "number": "5.2",
+          "title": "Ansvar for samsvar og samsvarsovervåkingsfunksjonen",
+          "items": [
+            {
+              "id": "5.2.1",
+              "text": "Ansvar og ansvarlighet for å sikre samsvar",
+              "details": {
+                "Present": "Gjeldende krav er klart identifisert og riktig overført til organisasjonens håndbøker og prosedyrer. Ansvar og ansvarlighet for samsvar er definert for alt personell som er involvert i sikkerhetsaktiviteter.",
+                "Suitable": "Kontraktene med (eller kravene videreført til) den/de eksterne organisasjonen(e) som har et betydelig bidrag til sikkerheten, håndterer også behovet for å sikre samsvar med sikkerhetskravene; ansvar og ansvarlighet er definert.",
+                "Operating": "Organisasjonens håndbøker og prosedyrer gjennomgås jevnlig i lys av endringer i gjeldende krav. Alt personell er klar over sitt ansvar og sin ansvarlighet for samsvar og for å følge prosesser og prosedyrer.",
+                "Effective": "Forbedringer av prosesser og prosedyrer foreslås fra de ansatte og ledelsen. Enkeltpersoner identifiserer og rapporterer proaktivt potensielle avvik fra samsvar.",
+                "whatToLookFor": [
+                  "Gjennomgå hvordan toppledelsen sikrer at organisasjonen forblir i samsvar.",
+                  "Gjennomgå at stillingsbeskrivelsene tydelig inkluderer ansvar for samsvar.",
+                  "Dokumentasjon på at toppledelsen følger opp resultater fra interne og eksterne revisjoner."
+                ]
+              }
+            },
+            {
+              "id": "5.2.2",
+              "text": "Ansvar og ansvarlighet for samsvarsovervåking",
+              "details": {
+                "Present": "Det er dokumentert at det finnes en person eller gruppe personer med ansvar for samsvarsovervåking, inkludert personen som fungerer som leder for samsvarsovervåking med direkte tilgang til Accountable Manager. Accountable Managers ansvarlighet og ansvar for samsvarsovervåking er dokumentert.",
+                "Suitable": "Uavhengigheten til revisjonsfunksjonen for samsvarsovervåking er oppnådd.",
+                "Operating": "Lederen for samsvarsovervåking har implementert og vedlikeholder et program for samsvarsovervåking. Accountable Manager sikrer at det finnes tilstrekkelige ressurser for samsvarsovervåking, og at revisjonsfunksjonens uavhengighet opprettholdes.",
+                "Effective": "Organisasjonen har etablert en metode for å vurdere effektiviteten til samsvarsovervåkingsaktivitetene, med tilbakemelding til Accountable Manager. Accountable Manager og toppledelsen søker aktivt tilbakemelding om status for samsvarsovervåkingsaktivitetene.",
+                "whatToLookFor": [
+                  "Hvordan samhandler lederen for samsvarsovervåking med toppledelsen, linjeledere, sikkerhetsstyringspersonellet osv.?",
+                  "Dokumentasjon på at toppledelsen følger opp resultater fra samsvarsovervåking.",
+                  "Sjekk for dokumentasjon på direkte rapporteringslinjer til Accountable Manager."
+                ]
+              }
+            },
+            {
+              "id": "5.2.3",
+              "text": "Program for samsvarsovervåking",
+              "details": {
+                "Present": "Organisasjonen har et program for samsvarsovervåking som inkluderer detaljer om tidsplanen for overvåkingsaktiviteter og prosedyrer for revisjoner og inspeksjoner, rapportering, oppfølging og registreringer. Måten uavhengighet i samsvarsovervåkingen oppnås på er dokumentert.",
+                "Suitable": "Revisjonsprogrammet for samsvarsovervåking dekker alle gjeldende forskrifter og inkluderer detaljer om revisjonsplanen. Programmet for samsvarsovervåking dekker på en tilstrekkelig måte de eksterne organisasjonene som støtter leveringen av tjenester, og som har et betydelig bidrag til sikkerheten.",
+                "Operating": "Programmet for samsvarsovervåking følges og gjennomgås jevnlig. Dette inkluderer endring av programmet for å håndtere identifiserte risikoer eller organisatoriske og operasjonelle endringer. Samsvarsovervåking er uavhengig av operasjonelle aktiviteter og inkluderer kontrakterte aktiviteter.",
+                "Effective": "Organisasjonen gjennomgår jevnlig sitt program og sine prosedyrer for samsvarsovervåking for å identifisere behov for endringer og for å sikre at de forblir effektive. Effektiviteten til SMS-prosessene gjennomgås jevnlig.",
+                "whatToLookFor": [
+                  "Vurder innholdet i programmet opp mot eventuelle regulatoriske krav.",
+                  "Gjennomgå hvordan risiko og ytelse brukes til å fastsette dybden og frekvensen av overvåkingsaktivitetene.",
+                  "Gjennomgå hvordan uavhengighet oppnås."
+                ]
+              }
+            },
+            {
+              "id": "5.2.4",
+              "text": "Resultater fra samsvarsovervåking",
+              "details": {
+                "Present": "Organisasjonen har dokumenterte prosedyrer for identifisering og oppfølging av korrigerende og forebyggende tiltak. Det finnes en prosess for hvordan revisjonsresultater kommuniseres til Accountable Manager og toppledelsen. Grensesnittet mellom samsvarsovervåking og prosessene for styring av sikkerhetsrisiko er beskrevet.",
+                "Suitable": "Ansvar og tidsfrister for å fastsette, akseptere og følge opp korrigerende/forebyggende tiltak er definert. Samsvarsovervåking inkluderer kontrakterte aktiviteter. Verktøyene for oppfølging av korrigerende og forebyggende tiltak er tilpasset resultatene fra samsvarsovervåkingen og samhandler på en hensiktsmessig måte med SMS-verktøyene ved behov. Metodene som brukes til årsaksanalyse er tilpasset organisasjonens størrelse og kompleksiteten i dens luftfartsprodukter og -tjenester.",
+                "Operating": "Identifisering og oppfølging av korrigerende og forebyggende tiltak utføres i samsvar med prosedyrene, inkludert årsaksanalyse for å håndtere de bakenforliggende årsakene. Statusen for korrigerende og forebyggende tiltak kommuniseres jevnlig til relevant toppledelse og personell.",
+                "Effective": "Organisasjonen gjennomgår jevnlig statusen for korrigerende og forebyggende tiltak, samt effektiviteten av dem. Organisasjonen undersøker de systemiske årsakene og medvirkende faktorene til funn, som videre kobles til fareidentifisering og risikovurdering (HIRA) samt sikkerhetsmålene. Betydelige funn brukes i interne sikkerhetsopplærings- og sikkerhetsfremmingsøkter. Revisjonsresultatene og de bakenforliggende årsakene, årsaks- og medvirkende faktorer analyseres og tas i betraktning ved gjennomgang av interne policyer og prosedyrer. Det er jevnlig kommunikasjon mellom personell innen samsvarsovervåking og personell involvert i andre SMS-aktiviteter.",
+                "whatToLookFor": [
+                  "Gjennomgå metodene som brukes til årsaksanalyse.",
+                  "Brukes metoden konsistent, og er den tilpasset organisasjonens størrelse og kompleksiteten i aktivitetene?",
+                  "Gjennomgå eventuelle gjentakende funn eller der tiltak ikke er gjennomført eller er forsinket."
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
