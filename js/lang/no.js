@@ -30,6 +30,11 @@ I18n.register("no", {
         dropHint: "Slipp filen for å laste inn",
         dropOnlyData: "Slipp kun .csv-, .dat- eller .txt-filer."
     },
+    view: {
+        label: "Visning:",
+        gauge: "Måler",
+        bars: "Stolper"
+    },
     help: {
         button: "Hjelp",
         title: "Hvordan bruke skjemaet",

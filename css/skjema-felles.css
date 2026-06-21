@@ -1,0 +1,282 @@
+/* =============================================================
+   Felles stilark for kompleksitetsskjemaene (gauge/seksjon).
+   Inneholder reglene som er IDENTISKE pa tvers av alle verktoyene
+   (FixedWing, Rotor, ATO, UAS, ATM). Verktoy-spesifikt (seksjons-/
+   gauge-farger, egne layouter) ligger fortsatt i hvert verktoys stil.css,
+   som lastes ETTER dette arket og dermed kan overstyre.
+   Generert fra de identiske reglene - se ui-layout-conventions.
+   Overpass-fonten lastes via <link> i hver HTML, så den importeres ikke her.
+   ============================================================= */
+
+.section {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-content {
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.header-row {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 0.8fr;
+    background: #34495e;
+    color: white;
+    font-weight: bold;
+}
+
+.header-cell { padding: 8px 12px; text-align: center; min-width: 0; }
+
+.form-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; border-bottom: 1px solid #eee; align-items: center; }
+
+.form-row:last-child { border-bottom: none; }
+
+/* Tomt nedtrekk vises grått til det fylles ut (kun farge – verdi/poeng uendret). */
+.form-cell select:has(option[value=""]:checked) { color: #6c757d; }
+/* Selve valgene i lista skal alltid være mørke/lesbare ... */
+.form-cell select option { color: #212529; }
+/* ... men "Velg…"-plassholderen (value="") forblir grå, også i åpen liste. */
+.form-cell select option[value=""] { color: #6c757d; }
+
+/* Konsistent fokusmarkering for tastaturnavigasjon. */
+.form-cell select:focus-visible,
+.info-field input:focus-visible,
+.comments-section textarea:focus-visible {
+    outline: none;
+    border-color: #4682B4;
+    box-shadow: 0 0 0 3px rgba(70,130,180,0.25);
+}
+
+.total-summary { text-align: center; }
+
+.gauge-block-summary {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+}
+
+#gauge-block-total .gauge-block-title { font-size: 1.6em; margin-bottom: 10px; }
+
+#gauge-block-total .gauge-block-summary { font-size: 1.2em; margin-bottom: 10px; }
+
+#gauge-block-total .gauge { width: 300px; height: 150px; }
+
+#gauge-block-total .gauge-bg { border-radius: 150px 150px 0 0; }
+
+#gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; border-radius: 135px 135px 0 0;}
+
+#gauge-block-total .gauge-needle { height: 125px; }
+
+#gauge-block-total .gauge-cover { background-color: white; }
+
+.comments-section label { font-weight: bold; color: #495057; display: block; margin-bottom: 5px; }
+
+.comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif;}
+
+.action-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+
+.action-buttons button, .action-buttons a[role="button"] {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    font-family: 'Overpass', sans-serif;
+}
+
+.action-buttons button:hover, .action-buttons a[role="button"]:hover { opacity: 0.9; }
+
+#download-csv-button { background-color: #28a745; }
+
+#print-pdf-button { background-color: #6f42c1; }
+
+#clear-form-button { background-color: #dc3545; }
+
+#load-csv-button { background-color: #ffc107; color: #212529; }
+
+.svg-icon { height: 1.2em; width: 1.2em; margin-right: 0.5em; fill: currentColor; }
+
+.footer-links {
+    display: flex;
+    justify-content: flex-end; /* Flytter innholdet til høyre */
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
+
+.footer-links a:hover { text-decoration: underline; }
+
+body {
+    padding-top: 50px; /* Eksempel, juster verdien etter behov */
+    position: relative; /* Nødvendig for absolutt posisjonering av barn */
+}
+
+.header-container, .header {
+    margin-top: 10px; /* Litt ekstra margin for header på noen sider */
+}
+
+/* Stil for valideringsfeil */
+select.invalid, input.invalid {
+    border: 2px solid #dc3545 !important; /* Rød kantlinje */
+    background-color: #f8d7da; /* Svak rød bakgrunn */
+}
+
+/* Versjonsnummer nederst på siden */
+.form-version {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #b0b8c0; /* Svakt grått */
+    margin-top: 50px;
+    padding-bottom: 20px;
+    width: 100%;
+    clear: both;
+    user-select: none; /* Hindrer at man merker det ved uhell */
+}
+
+/* Sørger for at det låses helt til bunnen av arket ved utskrift/PDF */
+@media print {
+    .form-version {
+        position: fixed;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        margin-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+/* =========================================================================
+   Presentasjonsvelger (js/visning.js): bytteknapp + stolpevisning +
+   terskel-skala. Ren presentasjon – styres datadrevet fra gauge-blokkene.
+   ========================================================================= */
+.visning-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0 auto 18px auto;
+}
+.visning-label { font-weight: 700; color: #495057; font-size: 0.9rem; }
+.visning-buttons {
+    display: inline-flex;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+.visning-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: none;
+    border-left: 1px solid #ced4da;
+    background: transparent;
+    color: #495057;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+.visning-btn:first-child { border-left: none; }
+.visning-btn:hover { background: #e9ecef; }
+.visning-btn.active { background: #1A365D; color: #fff; }
+
+/* --- Stolpevisning (diagram med ramme, rutenett og %-akse) --- */
+.visning-bars { display: none; }
+.vb-chart {
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    background: #fff;
+    padding: 16px 18px 10px;
+    max-width: 760px;
+    margin: 0 auto;
+}
+.vb-row {
+    display: grid;
+    grid-template-columns: minmax(84px, 150px) 1fr minmax(58px, 78px);
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.vb-label { text-align: left; font-weight: 600; color: #2c3e50; font-size: 0.88rem; line-height: 1.15; }
+/* Plottflate med loddrette rutenett-linjer (0/25/50/75 %) + y-akse til venstre. */
+.vb-plot {
+    position: relative;
+    height: 22px;
+    border: 1px solid #e3e7ea;
+    border-left: 2px solid #adb5bd;
+    border-radius: 0 3px 3px 0;
+    background-image: linear-gradient(to right, #eef1f3 1px, transparent 1px);
+    background-size: 25% 100%;
+}
+.vb-fill {
+    height: 100%;
+    border-radius: 0 3px 3px 0;
+    transition: width 0.5s ease, background-color 0.5s ease;
+    min-width: 2px;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.08);
+}
+.vb-num { text-align: left; font-weight: 700; font-variant-numeric: tabular-nums; color: #2c3e50; font-size: 0.85rem; }
+/* Uthevet total-rad (verktøy uten tilsynspakke). */
+.vb-total-row { margin-top: 6px; padding-top: 12px; border-top: 2px solid #e9ecef; margin-bottom: 4px; }
+.vb-total-row .vb-label { font-weight: 800; }
+/* x-akse: %-merker justert under rutenett-linjene. */
+.vb-axis-row { margin-bottom: 0; }
+.vb-axis { display: flex; justify-content: space-between; font-size: 0.7rem; color: #8a939b; font-variant-numeric: tabular-nums; }
+.vb-total-sep { margin: 18px 0 14px; }
+
+/* --- Terskel-skala for totalen (tilsynspakke) --- */
+.vb-scale { text-align: left; max-width: 720px; margin: 0 auto; }
+.vb-scale-head { font-size: 0.95rem; color: #2c3e50; margin-bottom: 8px; text-align: center; }
+.vb-scale-head .vs-group { color: #495057; font-weight: 700; }
+.vs-track {
+    position: relative;
+    display: flex;
+    height: 22px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+}
+.vs-seg { height: 100%; opacity: 0.45; transition: opacity 0.3s; }
+.vs-seg.active { opacity: 1; }
+.vs-marker {
+    position: absolute;
+    top: -4px;
+    bottom: -4px;
+    width: 3px;
+    background: #1a202c;
+    transform: translateX(-50%);
+    transition: left 0.5s ease;
+    box-shadow: 0 0 0 1px #fff;
+    z-index: 2;
+}
+.vs-ticks { position: relative; height: 18px; margin-top: 2px; }
+.vs-tick { position: absolute; transform: translateX(-50%); }
+.vs-tick-val { font-size: 0.7rem; color: #6c757d; font-variant-numeric: tabular-nums; }
+
+/* Kategori-ikoner gjenbrukt i stolpe-etikettene (samme som gauge-visningen). */
+.vb-label i, .vb-label .material-icons, .vb-label .material-symbols-outlined {
+    margin-right: 6px;
+    color: #495057;
+}
+
+/* Ved utskrift: vis bare gauges (standardvisningen), skjul velger/alternativer. */
+@media print {
+    .visning-toggle, .visning-bars { display: none !important; }
+    .all-gauges-container { display: grid !important; }
+    .tilsynspakke-badge { display: flex !important; }
+}

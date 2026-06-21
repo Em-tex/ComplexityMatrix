@@ -29,10 +29,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <div class="nav-help" id="nav-help"></div>
 
-        <div class="nav-lang" id="nav-lang" role="group" aria-label="Language">
-            <button type="button" class="lang-btn" data-lang="en" title="English">${flagEN}<span>EN</span></button>
-            <span class="lang-sep">|</span>
-            <button type="button" class="lang-btn" data-lang="no" title="Norsk"><span>NO</span>${flagNO}</button>
+        <div class="nav-lang" id="nav-lang" aria-label="Language">
+            <button type="button" class="lang-toggle" aria-haspopup="true" aria-expanded="false">
+                <span class="lang-current"></span>
+                <svg class="lang-caret" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0 L5 6 L10 0 Z" fill="currentColor"/></svg>
+            </button>
+            <div class="lang-menu" role="menu"></div>
         </div>
     </nav>
     `;
@@ -162,27 +164,73 @@ document.addEventListener("DOMContentLoaded", function() {
 
     buildNavActions();
 
-    // Språkvelger (NO | EN). Krever at i18n.js er lastet før dette skriptet.
+    // Språkvelger som nedtrekksmeny. Knappen viser valgt språk (flagg + bokstaver)
+    // med en liten pil ned; klikk åpner en meny med de(t) andre språket/-ene.
+    // Kompakt på mobil framfor to knapper side ved side. Krever at i18n.js er
+    // lastet før dette skriptet.
     const langGroup = document.getElementById("nav-lang");
     if (langGroup && window.I18n) {
-        const buttons = langGroup.querySelectorAll(".lang-btn");
+        const toggleBtn = langGroup.querySelector(".lang-toggle");
+        const currentEl = langGroup.querySelector(".lang-current");
+        const menu = langGroup.querySelector(".lang-menu");
 
-        const markActive = function () {
+        // Rekkefølge styrer menyen: EN først (= standard), så NO.
+        const langDefs = {
+            en: { label: "EN", flag: flagEN, title: "English" },
+            no: { label: "NO", flag: flagNO, title: "Norsk" }
+        };
+
+        const closeMenu = function () {
+            langGroup.classList.remove("open");
+            toggleBtn.setAttribute("aria-expanded", "false");
+        };
+        const openMenu = function () {
+            langGroup.classList.add("open");
+            toggleBtn.setAttribute("aria-expanded", "true");
+        };
+
+        const render = function () {
             const current = window.I18n.getLang();
-            buttons.forEach(function (btn) {
-                btn.classList.toggle("active", btn.getAttribute("data-lang") === current);
+            const cur = langDefs[current] || langDefs.en;
+            // Valgt språk på knappen: flagg + de to bokstavene.
+            currentEl.innerHTML = cur.flag + "<span>" + cur.label + "</span>";
+            toggleBtn.setAttribute("title", cur.title);
+
+            // Bygg menyen med de øvrige språkene.
+            menu.innerHTML = "";
+            Object.keys(langDefs).forEach(function (code) {
+                if (code === current) return;
+                const d = langDefs[code];
+                const opt = document.createElement("button");
+                opt.type = "button";
+                opt.className = "lang-option";
+                opt.setAttribute("title", d.title);
+                opt.setAttribute("role", "menuitem");
+                opt.innerHTML = d.flag + "<span>" + d.label + "</span>";
+                opt.addEventListener("click", function () {
+                    closeMenu();
+                    window.I18n.setLang(code);
+                });
+                menu.appendChild(opt);
             });
         };
 
-        buttons.forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                window.I18n.setLang(btn.getAttribute("data-lang"));
-            });
+        toggleBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            if (langGroup.classList.contains("open")) closeMenu();
+            else openMenu();
+        });
+        // Klikk utenfor eller Escape lukker menyen.
+        document.addEventListener("click", function (e) {
+            if (!langGroup.contains(e.target)) closeMenu();
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeMenu();
         });
 
-        // Hold knappene synkronisert hvis språket endres et annet sted.
-        window.addEventListener("languageChanged", markActive);
-        markActive();
+        // Hold knappen synkronisert hvis språket endres et annet sted.
+        window.addEventListener("languageChanged", render);
+        render();
     } else if (langGroup) {
         // i18n.js mangler – skjul velgeren framfor å vise en knapp som ikke virker.
         langGroup.style.display = "none";

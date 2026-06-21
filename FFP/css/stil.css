@@ -6,18 +6,6 @@ body {
     margin: 0;
 }
 
-.home-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: #03477F;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 1.2rem;
-    z-index: 1000;
-}
 
 .header {
     background: white;

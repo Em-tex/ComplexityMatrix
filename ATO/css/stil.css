@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap');
-
 body {
     font-family: 'Overpass', sans-serif;
     margin: 0 20px 20px 20px;
@@ -47,20 +45,12 @@ body {
         flex-direction: column;
     }
 }
-
-.section { padding: 0; display: flex; flex-direction: column; }
 .section-header { color: white; padding: 12px 15px; font-weight: bold; display: flex; align-items: center; border-radius: 8px 8px 0 0; }
 #section-resources .section-header { background: #4682B4; }
 #section-fleet .section-header { background: #3CB371; }
 #section-operations .section-header { background: #FF8C00; }
 #section-approvals .section-header { background: #6A5ACD; }
-
-.section-content { border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; flex-grow: 1; }
-.header-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; background: #34495e; color: white; font-weight: bold; }
-.header-cell { padding: 8px 12px; text-align: center; }
-.form-row { display: grid; grid-template-columns: 2fr 1.2fr 0.8fr; border-bottom: 1px solid #eee; align-items: center; }
-.form-row:last-child { border-bottom: none; }
-.form-cell { padding: 8px 12px; position: relative; }
+.form-cell { padding: 8px 12px; position: relative; min-width: 0; }
 .form-cell select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
 .calculated-value { font-weight: bold; text-align: center; padding: 10px 12px; height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: black; } /* Satt tekstfarge til sort */
 
@@ -69,9 +59,6 @@ body {
 .bg-weak-green { background-color: #d4edda !important; color: black !important; }
 .bg-weak-yellow { background-color: #fff3cd !important; color: black !important; }
 .bg-weak-red { background-color: #f8d7da !important; color: black !important; }
-
-/* === GAUGE STYLES === */
-.total-summary { text-align: center; }
 .all-gauges-container { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
 @media (min-width: 992px) { .all-gauges-container { grid-template-columns: 2fr 1fr; } }
 
@@ -82,67 +69,16 @@ body {
 .gauge-block { display: flex; flex-direction: column; align-items: center; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 150px; }
 .gauge-block-title { font-weight: 700; margin-bottom: 5px; font-size: 0.9em; display: flex; align-items: center; }
 .gauge-icon { margin-right: 5px; font-size: 1.1em; }
-.gauge-block-summary { font-size: 0.8em; margin-bottom: 5px; }
 .gauge { position: relative; width: 120px; height: 60px; }
 .gauge-bg { width: 100%; height: 100%; border-radius: 60px 60px 0 0; position: relative; overflow: hidden; background: conic-gradient(from 180deg at 50% 100%, #009122 5%, #fff025 45%, #ff0019e8 80%); }
 .gauge-cover { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 0; background-color: inherit; border-radius: 50px 50px 0 0; }
 .gauge-needle { position: absolute; bottom: 0; left: 50%; width: 2px; height: 50px; background: #333; transform-origin: bottom center; transition: transform 0.5s ease; border-radius: 2px 2px 0 0; z-index: 2; transform: translateX(-50%) rotate(-90deg); }
 
 #gauge-block-total { min-width: 320px; justify-self: center; transform: translateX(-150px); }
-#gauge-block-total .gauge-block-title { font-size: 1.6em; margin-bottom: 10px; }
-#gauge-block-total .gauge-block-summary { font-size: 1.2em; margin-bottom: 10px; }
-#gauge-block-total .gauge { width: 300px; height: 150px; }
-#gauge-block-total .gauge-bg { border-radius: 150px 150px 0 0; }
-#gauge-block-total .gauge-cover { top: 15px; left: 15px; right: 15px; border-radius: 135px 135px 0 0;}
-#gauge-block-total .gauge-needle { height: 125px; }
 
 #gauge-block-resources .gauge-cover { background-color: #E0F2F7; }
 #gauge-block-fleet .gauge-cover { background-color: #E6F7E6; }
 #gauge-block-operations .gauge-cover { background-color: #FFF2E0; }
 #gauge-block-approvals .gauge-cover { background-color: #EAEAF7; }
-#gauge-block-total .gauge-cover { background-color: white; }
-
-.comments-section label { font-weight: bold; color: #495057; display: block; margin-bottom: 5px; }
-.comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif;}
-.action-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-.action-buttons button, .action-buttons a[role="button"] { padding: 10px 20px; font-size: 1em; color: white; border: none; border-radius: 5px; cursor: pointer; transition: opacity 0.2s; display: inline-flex; align-items: center; text-decoration: none; font-family: 'Overpass', sans-serif; }
-.action-buttons button:hover, .action-buttons a[role="button"]:hover { opacity: 0.9; }
-#download-csv-button { background-color: #28a745; }
-#print-pdf-button { background-color: #6f42c1; }
-#clear-form-button { background-color: #dc3545; }
-#load-csv-button { background-color: #ffc107; color: #212529; }
 #sharepoint-upload-button { background-color: #0078D4; }
 #profile-list-button { background-color: #6c757d; }
-.svg-icon { height: 1.2em; width: 1.2em; margin-right: 0.5em; fill: currentColor; }
-.footer-links { display: flex; justify-content: flex-end; padding-top: 10px; border-top: 1px solid #eee; }
-.footer-links a { margin: 0 15px; color: #007bff; text-decoration: none; }
-.footer-links a:hover { text-decoration: underline; }
-
-select.invalid, input.invalid { border: 2px solid #dc3545 !important; background-color: #f8d7da; }
-.home-button { position: absolute; top: 15px; left: 15px; font-size: 1.8em; color: #03477F; text-decoration: none; z-index: 1001; }
-.home-button:hover { color: #023663; }
-body { padding-top: 50px; position: relative; }
-.header-container, .header { margin-top: 10px; }/* Versjonsnummer nederst på siden */
-.form-version {
-    text-align: center;
-    font-size: 0.75rem;
-    color: #b0b8c0; /* Svakt grått */
-    margin-top: 50px;
-    padding-bottom: 20px;
-    width: 100%;
-    clear: both;
-    user-select: none; /* Hindrer at man merker det ved uhell */
-}
-
-/* Sørger for at det låses helt til bunnen av arket ved utskrift/PDF */
-@media print {
-    .form-version {
-        position: fixed;
-        bottom: -10px;
-        left: 0;
-        right: 0;
-        text-align: center;
-        margin-top: 0;
-        padding-bottom: 0;
-    }
-}

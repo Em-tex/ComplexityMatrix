@@ -77,51 +77,99 @@ body {
     font-size: 0.85rem !important;
 }
 
-/* Språkvelger EN | NO (EN er standard) */
+/* Språkvelger som nedtrekksmeny. Knappen viser valgt språk (flagg + bokstaver)
+   med en pil ned; menyen med øvrige språk åpnes under. Kompakt på mobil. */
 .nav-lang {
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
     margin-left: auto !important;
+    position: relative !important;
 }
 
-.lang-btn {
+.lang-toggle {
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
     background: none !important;
     border: none !important;
-    padding: 9px 8px !important;
+    padding: 8px 10px !important;
     border-radius: 4px !important;
     cursor: pointer !important;
     color: #ffffff !important;
     font-family: inherit !important;
     font-size: 0.85rem !important;
     font-weight: bold !important;
-    opacity: 0.55 !important;
-    transition: opacity 0.2s, background-color 0.2s !important;
+    transition: background-color 0.2s !important;
 }
 
-.lang-btn:hover {
-    opacity: 1 !important;
+.lang-toggle:hover {
     background-color: #2B6CB0 !important;
 }
 
-.lang-btn.active {
-    opacity: 1 !important;
+.lang-current {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+/* Liten hvit pil ned; roterer 180° når menyen er åpen. */
+.lang-caret {
+    width: 10px !important;
+    height: 6px !important;
+    fill: #ffffff !important;
+    display: block !important;
+    flex: none !important;
+    transition: transform 0.2s !important;
+}
+.nav-lang.open .lang-caret {
+    transform: rotate(180deg) !important;
+}
+
+.lang-menu {
+    display: none !important;
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    margin-top: 4px !important;
+    min-width: 100% !important;
+    background-color: #1A365D !important;
+    border-radius: 4px !important;
+    padding: 4px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+    z-index: 10000 !important;
+}
+.nav-lang.open .lang-menu {
+    display: block !important;
+}
+
+.lang-option {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    background: none !important;
+    border: none !important;
+    padding: 8px 10px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    color: #ffffff !important;
+    font-family: inherit !important;
+    font-size: 0.85rem !important;
+    font-weight: bold !important;
+    white-space: nowrap !important;
+    transition: background-color 0.2s !important;
+}
+.lang-option:hover {
+    background-color: #2B6CB0 !important;
 }
 
 .lang-flag {
     width: 22px !important;
     height: 16px !important;
     display: block !important;
+    flex: none !important;
     border-radius: 2px !important;
     box-shadow: 0 0 0 1px rgba(255,255,255,0.35) !important;
-}
-
-.lang-sep {
-    color: rgba(255,255,255,0.5) !important;
-    font-weight: bold !important;
 }
 
 /* Handlingsknapper i verktøylinjen – speiler knapperaden nederst i skjemaet.
@@ -153,7 +201,10 @@ body {
     background: transparent !important;
     border: 1px solid rgba(255,255,255,0.4) !important;
     color: #ffffff !important;
-    padding: 6px 10px !important;
+    /* På linje med hjem-ikonet (34px) – litt luft oppe og nede. */
+    height: 40px !important;
+    box-sizing: border-box !important;
+    padding: 0 12px !important;
     border-radius: 4px !important;
     font-family: inherit !important;
     font-size: 0.8rem !important;
@@ -182,7 +233,7 @@ body {
 /* Smal skjerm: vis kun ikonene i linja (full tekst finnes på bunnraden). */
 @media (max-width: 900px) {
     .nav-action-label { display: none !important; }
-    .top-navbar .nav-action-btn { padding: 7px 9px !important; }
+    .top-navbar .nav-action-btn { padding: 0 11px !important; }
 }
 
 /* Hjelp-dialog (enkle instruksjoner for bruk av skjemaet). */

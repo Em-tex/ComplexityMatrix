@@ -29,6 +29,11 @@ I18n.register("en", {
         dropHint: "Drop the file to load it",
         dropOnlyData: "Drop only .csv, .dat or .txt files."
     },
+    view: {
+        label: "View:",
+        gauge: "Gauge",
+        bars: "Bars"
+    },
     help: {
         button: "Help",
         title: "How to use the form",
