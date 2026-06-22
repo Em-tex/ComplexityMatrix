@@ -33,7 +33,7 @@ I18n.register("en", {
 
         thCriteria: "Criteria",
         thSelection: "Selection",
-        thValue: "Value",
+        thValue: "Score",
 
         // Kriterier (også brukt som engelsk fallback til CSV via JS-map)
         cAntallBaser: "Number of bases",

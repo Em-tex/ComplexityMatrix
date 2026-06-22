@@ -196,7 +196,8 @@ select.invalid, input.invalid {
 .visning-btn.active { background: #1A365D; color: #fff; }
 
 /* --- Stolpevisning (diagram med ramme, rutenett og %-akse) --- */
-.visning-bars { display: none; }
+/* margin-bottom gir luft ned til tilsynspakke-knappene som ligger under. */
+.visning-bars { display: none; margin-bottom: 24px; }
 .vb-chart {
     border: 1px solid #ced4da;
     border-radius: 8px;
@@ -275,8 +276,191 @@ select.invalid, input.invalid {
 }
 
 /* Ved utskrift: vis bare gauges (standardvisningen), skjul velger/alternativer. */
+/* =========================================================================
+   UTSKRIFT / PDF: arkiv-vennlig, kompakt og dokument-aktig (byråkratisk skjema).
+   Nedtrekk vises som ren tekst, tette tabeller, dempede grå bånd (sparer blekk),
+   målerne erstattes av kompakte poengceller. Ren presentasjon – poeng uendret.
+   ========================================================================= */
 @media print {
+    /* Skjul presentasjonsvelger og stolpevisning – målerdataene beholdes. */
     .visning-toggle, .visning-bars { display: none !important; }
-    .all-gauges-container { display: grid !important; }
-    .tilsynspakke-badge { display: flex !important; }
+
+    body { font-size: 10px !important; color: #000 !important; }
+    h1 { font-size: 15px !important; margin: 0 0 4px !important; }
+    h2 { font-size: 12px !important; }
+
+    /* Kort/blokker: flate, tynne rammer, lite luft. */
+    .header, .header-container, .operator-info-container,
+    .total-summary, .section, .comments-section {
+        box-shadow: none !important;
+        border: 1px solid #888 !important;
+        border-radius: 0 !important;
+        padding: 6px 9px !important;
+        margin: 0 0 7px 0 !important;
+        background: #fff !important;
+    }
+
+    /* Én kolonne – fullbredde skjematabeller. */
+    .container { display: block !important; }
+    .column-left, .column-right { display: block !important; }
+
+    /* === Dokument-topp: tittel som innfelt grått bånd, info under. ===
+       Headeren har luft (padding) + ramme fra kort-regelen, og båndet er innfelt
+       (ikke fullbredde) – da kan ingenting legge seg utenpå kortets sidekanter,
+       og rammen vises garantert på ALLE fire sider. */
+    .header, .header-container { padding: 8px !important; overflow: visible !important; }
+    .header > h1, .header-container > h1 {
+        background: #ececec !important;
+        border: 1px solid #bfbfbf !important;
+        margin: 0 0 8px 0 !important;
+        padding: 5px 10px !important;
+        font-size: 15px !important;
+        text-align: left !important;
+        color: #000 !important;
+    }
+    .header-info, .meta-info, .info-grid {
+        gap: 6px 20px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    /* Etiketter: små, dempede versaler. Verdier: tydelige på tynn skrivelinje. */
+    .info-field label, .info-item label, .meta-info label {
+        font-size: 8px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.4px !important;
+        color: #555 !important;
+        margin-bottom: 1px !important;
+    }
+    .info-field input, .info-item input, .meta-info input,
+    .info-field select, .info-item select {
+        border: none !important;
+        border-bottom: 1px solid #888 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        padding: 1px 2px !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        color: #000 !important;
+    }
+    /* Datofelt: fjern kalender-ikon og padding rundt segmentene, ellers blir det
+       mellomrom rundt punktumene («16 . 06 . 2026»). */
+    input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
+    input[type="date"]::-webkit-datetime-edit { padding: 0 !important; }
+    input[type="date"]::-webkit-datetime-edit-fields-wrapper { padding: 0 !important; }
+    input[type="date"]::-webkit-datetime-edit-text { padding: 0 !important; margin: 0 !important; }
+    input[type="date"]::-webkit-datetime-edit-day-field,
+    input[type="date"]::-webkit-datetime-edit-month-field,
+    input[type="date"]::-webkit-datetime-edit-year-field { padding: 0 !important; }
+    /* Fjern nedtrekkspilen i header-selects (f.eks. operatør) – vis som ren tekst. */
+    .info-field select, .info-item select {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    /* Operatør-feltet: vis valgt verdi som ren tekst (skjul knapp/flex-oppsett). */
+    .header-info .info-field > div { display: block !important; }
+    /* Skjul navnevalideringen (rød boble + rød ramme) på utskriften. */
+    .name-warning { display: none !important; }
+    .input-error {
+        border: none !important;
+        border-bottom: 1px solid #888 !important;
+        background: none !important;
+    }
+
+    /* Seksjons-overskrift: dempet grått byråkrati-bånd (sparer blekk). */
+    .section-header {
+        background: #ececec !important;
+        color: #000 !important;
+        padding: 3px 8px !important;
+        font-size: 10.5px !important;
+        border: 1px solid #888 !important;
+        border-radius: 0 !important;
+    }
+    /* Behold underdomene-ikonet i seksjons-overskriften, kompakt og svart. */
+    .section-header .gauge-icon,
+    .section-header .material-icons,
+    .section-header .material-symbols-outlined,
+    .section-header i {
+        color: #000 !important;
+        font-size: 13px !important;
+        margin-right: 6px !important;
+    }
+    /* Høyre-ramme fjernet her – verdikolonnens cellestrek dekker høyre kant
+       (ellers blir det dobbel strek). */
+    .section-content { border-color: #888 !important; border-radius: 0 !important; border-right: none !important; }
+
+    /* Komplett rutenett: loddrette kolonneskiller (cellenes høyre-kant) + vannrette
+       radlinjer. Cellene deler kolonnebredder (min-width:0), så strekene møtes. */
+    .header-row {
+        background: #ededed !important;
+        color: #000 !important;
+    }
+    /* align-items: stretch (overstyrer grunnstilens center) så cellene fyller hele
+       radhøyden – ellers blir de loddrette strekene korte og forskjøvet mellom rader. */
+    .header-row, .form-row { align-items: stretch !important; }
+    /* Border på HVER celle (ikke på raden) – ellers skjuler den fargede verdi-cellens
+       bakgrunn rad-streken, så verdikolonnen mangler linjer. Strekene må også være
+       mørke nok til å skrives ut (lyse gråtoner faller ut). */
+    .header-cell, .form-cell {
+        padding: 3px 7px !important;
+        border-right: 1px solid #8a8a8a !important;
+        border-bottom: 1px solid #8a8a8a !important;
+        font-size: 11px !important;
+    }
+    .form-row:last-child .form-cell { border-bottom: none !important; }
+    .form-row { border-bottom: none !important; }
+
+    /* Nedtrekk vises som ren tekst (statisk arkivverdi). */
+    .form-cell select {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        border: none !important;
+        background: none !important;
+        padding: 0 !important;
+        font-weight: 600 !important;
+        color: #000 !important;
+        font-size: inherit !important;
+        white-space: normal !important;
+    }
+    .calculated-value { padding: 3px 7px !important; }
+
+    /* Resultat: skjul de grafiske målerne, vis en kompakt poeng-oppsummering. */
+    .gauge { display: none !important; }
+    .all-gauges-container { display: block !important; }
+    .small-gauges-grid, .small-gauges-wrapper, .four-gauges-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        transform: none !important;
+        margin-bottom: 4px !important;
+    }
+    .gauge-block {
+        border: 1px solid #888 !important;
+        box-shadow: none !important;
+        padding: 5px 12px !important;
+        min-width: 0 !important;
+        flex: 1 1 130px !important;
+        align-items: flex-start !important;
+        transform: none !important;
+        gap: 2px !important;
+    }
+    .gauge-block-title { font-size: 9.5px !important; margin: 0 !important; }
+    /* Sørg for luft mellom ikon og tekst – «Godkjenninger»-ikonet mangler gauge-icon-klassen. */
+    .gauge-block-title .gauge-icon,
+    .gauge-block-title .material-icons,
+    .gauge-block-title .material-symbols-outlined,
+    .gauge-block-title i { margin-right: 6px !important; }
+    .gauge-block-summary { font-size: 12px !important; font-weight: 700 !important; margin: 0 !important; }
+    #gauge-block-total {
+        border: 2px solid #000 !important;
+        min-width: 0 !important;
+        transform: none !important;
+    }
+
+    /* Tilsynspakke kompakt under poengene. */
+    .tilsynspakke-badge { display: flex !important; gap: 6px !important; margin: 6px 0 16px !important; }
+    .tp-chip { padding: 2px 6px !important; }
+
+    /* Hold seksjoner/poengceller samlet over sideskift. */
+    .section, .gauge-block, .form-row { break-inside: avoid; }
 }

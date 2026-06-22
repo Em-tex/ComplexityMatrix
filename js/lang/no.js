@@ -23,7 +23,8 @@ I18n.register("no", {
         warning: "Både for- og etternavn må fylles inn."
     },
     home: {
-        common: "Felles"
+        common: "Felles",
+        luftfartshinder: "Luftfartshinder"
     },
     common: {
         version: "Versjon",

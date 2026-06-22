@@ -313,12 +313,96 @@ body {
 #details-popup .critical-items-list ul { margin: 8px 0 0; padding-left: 22px; }
 #details-popup .critical-items-list li { margin-bottom: 5px; line-height: 1.35; }
 
+/* UTSKRIFT: skjema-felles.css styrer det felles (dokument-topp, kompakte tabeller,
+   nedtrekk-som-tekst, gauges→poengceller, marger, navnevalidering osv. – MSAT bruker
+   de samme klassene). Her kun MSAT-spesifikt: forlengelse-sjekkliste og kommentar-
+   rutenett. Profilen tilpasses automatisk: JS viser/skjuler forlengelse-blokk og
+   riktig kommentarseksjon, så utskriften følger valgt profil. */
 @media print {
-    .action-buttons, .footer-links, .help-icon, .comment-help-icon, #popup-close-button { display: none !important; }
-    body { background-color: white; margin: 0; padding-top: 0; }
-    .container, .header, .total-summary, .section, .multi-comments-section, .comments-section { box-shadow: none; margin-top: 0; width: 100%; max-width: none; }
-    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    .section, .form-row { break-inside: avoid; }
+    .action-buttons, .footer-links, .help-icon, .comment-help-icon,
+    #popup-close-button, #popup-overlay { display: none !important; }
+
+    /* Multi-kommentarer (forlengelse): rent kort, kompakt rutenett. */
+    .multi-comments-section {
+        background: #fff !important;
+        box-shadow: none !important;
+        border: 1px solid #888 !important;
+        border-radius: 0 !important;
+        padding: 8px 10px !important;
+        margin: 0 0 7px !important;
+        break-inside: avoid;
+    }
+    .multi-comments-section h2 { font-size: 12px !important; margin: 0 0 8px !important; }
+    .comments-grid { gap: 8px 12px !important; }
+    .comment-field label { font-size: 9px !important; font-weight: 700 !important; margin-bottom: 2px !important; }
+    .comment-field textarea, .comments-section textarea {
+        font-size: 10px !important;
+        padding: 4px 6px !important;
+        border: 1px solid #aaa !important;
+        border-radius: 0 !important;
+        min-height: 34px !important;
+    }
+
+    /* Forlengelse-sjekkliste: kompakt kort med grått tittelbånd (likt seksjonene). */
+    .extension-block {
+        background: #fff !important;
+        box-shadow: none !important;
+        border: 1px solid #888 !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 8px 0 4px !important;
+        min-width: 0 !important;
+        overflow: hidden;
+        break-inside: avoid;
+    }
+    .extension-block-title {
+        background: #ececec !important;
+        color: #000 !important;
+        font-size: 11px !important;
+        margin: 0 !important;
+        padding: 4px 9px !important;
+        text-align: left !important;
+        border-bottom: 1px solid #888 !important;
+    }
+    #extension-checklist { margin: 0 !important; padding: 6px 9px !important; }
+    #extension-checklist div { padding: 3px 0 !important; font-size: 10px !important; }
+    #extension-checklist .fa-solid { font-size: 1em !important; margin-right: 8px !important; }
+    .extension-block-comment { font-size: 10px !important; margin: 0 9px 8px !important; padding: 5px !important; }
+
+    /* --- Oversikt: de 5 underkriteriene som én jevn rad med kort --- */
+    .all-gauges-container { display: block !important; }
+    /* display:contents løfter de 4 + additional opp i samme flex-rad. */
+    .small-gauges-wrapper {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        transform: none !important;
+        margin: 0 0 8px !important;
+    }
+    .four-gauges-grid, .side-gauge-container { display: contents !important; }
+    .small-gauges-wrapper .gauge-block {
+        flex: 1 1 130px !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* --- Gjennomsnittlig totalscore: bredt, fremhevet felt farget etter kvalitet --- */
+    #gauge-block-total {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 0 8px !important;
+        padding: 8px 12px !important;
+        text-align: center !important;
+        transform: none !important;
+        border: 2px solid #888 !important;
+    }
+    #gauge-block-total .gauge-block-title { font-size: 12px !important; margin: 0 0 2px !important; }
+    #gauge-block-total .gauge-block-summary { font-size: 17px !important; font-weight: 800 !important; margin: 0 !important; }
+    #gauge-block-total.total-score-good { background: #d4edda !important; border-color: #28a745 !important; }
+    #gauge-block-total.total-score-ok   { background: #fff3cd !important; border-color: #e0a800 !important; }
+    #gauge-block-total.total-score-weak { background: #ffe5d0 !important; border-color: #fd7e14 !important; }
+    #gauge-block-total.total-score-poor { background: #f8d7da !important; border-color: #dc3545 !important; }
 }
 /* Highlight-klasser for critical items */
 .highlight-green {

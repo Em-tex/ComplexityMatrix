@@ -29,7 +29,7 @@ I18n.register("en", {
 
         thCriteria: "Criteria",
         thSelection: "Selection",
-        thValue: "Value",
+        thValue: "Score",
         selectPlaceholder: "Select...",
         optNo: "No",
         optYes: "Yes",

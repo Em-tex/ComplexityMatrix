@@ -28,7 +28,7 @@ I18n.register("no", {
 
         thCriteria: "Kriterium",
         thSelection: "Valg",
-        thValue: "Verdi",
+        thValue: "Poeng",
         selectPlaceholder: "Velg...",
         optNo: "Nei",
         optYes: "Ja",

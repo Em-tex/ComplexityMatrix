@@ -32,7 +32,7 @@ I18n.register("no", {
 
         thCriteria: "Kriterier",
         thSelection: "Valg",
-        thValue: "Verdi",
+        thValue: "Poeng",
 
         cAntallBaser: "Antall baser",
         cAntallPiloter: "Antall piloter",

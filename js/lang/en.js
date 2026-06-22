@@ -22,7 +22,8 @@ I18n.register("en", {
         warning: "Both first and last name must be entered."
     },
     home: {
-        common: "Common"
+        common: "Common",
+        luftfartshinder: "Aviation obstacle"
     },
     common: {
         version: "Version",

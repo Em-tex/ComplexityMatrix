@@ -77,16 +77,22 @@
     // Sjekk alle navnefelt. showError=true lyser feltet rødt, viser varsel og
     // setter fokus på det første ugyldige. Tomt felt regnes her som ugyldig
     // (navn KREVES for nedlasting). Returnerer true når alle er fullstendige.
-    function validateAllNameFields(showError) {
+    function validateAllNameFields(showError, doFocus) {
         let firstInvalid = null;
         document.querySelectorAll("#filled-by, #assessed-by").forEach((input) => {
             const value = input.value.trim();
             const valid = value !== "" && isFullName(value);
-            if (!valid) {
+            const warning = document.getElementById(input.id + "-warning");
+            if (valid) {
+                // Rydd alltid bort et eventuelt gjenstående varsel/rød ramme på
+                // gyldige felt – ellers kan et gammelt varsel henge igjen (og bli
+                // med i utskriften) selv om navnet nå er korrekt.
+                input.classList.remove("input-error");
+                if (warning) warning.style.display = "none";
+            } else {
                 if (!firstInvalid) firstInvalid = input;
                 if (showError) {
                     input.classList.add("input-error");
-                    const warning = document.getElementById(input.id + "-warning");
                     if (warning) {
                         warning.textContent = t("warning", FALLBACK.warning);
                         warning.style.display = "block";
@@ -94,20 +100,62 @@
                 }
             }
         });
-        if (firstInvalid && showError) firstInvalid.focus();
+        if (firstInvalid && showError && doFocus !== false) firstInvalid.focus();
         return !firstInvalid;
     }
+
+    // Bulletproof: skjul ALLE navnevarsler + røde rammer rett før utskrift, så
+    // ingenting rødt blir med i PDF-en (uavhengig av CSS/cache). Gjenopprett
+    // skjermtilstanden etter utskrift uten å flytte fokus.
+    window.addEventListener("beforeprint", () => {
+        document.querySelectorAll(".name-warning, [id$='-warning']").forEach((w) => {
+            // Inline !important slår enhver annen regel/innebygd stil.
+            w.style.setProperty("display", "none", "important");
+        });
+        // Fjern alle røde valideringsmarkører (navn + skjema) så verken rød ramme
+        // eller en tom rød boks blir med i PDF-en.
+        document.querySelectorAll(".input-error, .invalid").forEach((el) => {
+            el.classList.remove("input-error", "invalid");
+        });
+        // Datofelt: nettlesernes native datokontroll (særlig Firefox) viser mellomrom
+        // rundt punktumene og kan IKKE styles med CSS. Under utskrift skjuler vi
+        // selve input-feltet og viser i stedet en ren tekst-<span> «dd.mm.yyyy» ved
+        // siden av. Vi rører ALDRI input-ets type/verdi (det nullstilte feltet i
+        // Firefox). Span-en fjernes igjen etter utskrift.
+        document.querySelectorAll('input[type="date"]').forEach((inp) => {
+            const v = inp.value;
+            const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+            const txt = m ? `${m[3]}.${m[2]}.${m[1]}` : (v || "");
+            let span = inp.nextElementSibling;
+            if (!span || !span.classList || !span.classList.contains("print-date-text")) {
+                span = document.createElement("span");
+                span.className = "print-date-text";
+                inp.insertAdjacentElement("afterend", span);
+            }
+            span.textContent = txt;
+            inp.style.setProperty("display", "none", "important");
+        });
+    });
+    window.addEventListener("afterprint", () => {
+        document.querySelectorAll(".print-date-text").forEach((s) => s.remove());
+        document.querySelectorAll('input[type="date"]').forEach((inp) => {
+            inp.style.removeProperty("display");
+        });
+        validateAllNameFields(true, false);
+    });
 
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll("#filled-by, #assessed-by").forEach(setupField);
     });
 
-    // Blokker nedlasting av skjemaet hvis navnefeltet ikke er fullstendig utfylt
-    // (krever for- og etternavn). Fanges i capture-fasen FØR kalkulatorens egen
-    // download-handler, slik at nedlastingen stoppes. Dekker både knappen nederst
-    // og proxy-knappen i verktøylinjen (begge klikker #download-csv-button).
+    // Blokker nedlasting OG «Print til PDF» hvis navnefeltet ikke er fullstendig
+    // utfylt (krever for- og etternavn). Fanges i capture-fasen FØR kalkulatorens
+    // egne handlere, slik at handlingen stoppes. Dekker både knappene nederst og
+    // proxy-knappene i verktøylinjen (som klikker de samme bunnknappene).
     document.addEventListener("click", (e) => {
-        const trigger = e.target.closest ? e.target.closest("#download-csv-button") : null;
+        const trigger = e.target.closest
+            ? e.target.closest("#download-csv-button, #print-pdf-button")
+            : null;
         if (!trigger) return;
         if (!validateAllNameFields(true)) {
             e.stopImmediatePropagation();

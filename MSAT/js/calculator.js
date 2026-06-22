@@ -349,6 +349,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(totalGaugeEl) totalGaugeEl.textContent = grandTotalAvg.toFixed(1);
         updateGauge('total', grandTotalAvg, GAUGE_MAX_VALUE);
 
+        // Fargeklasse på totalscoren etter kvalitet (høy score = bra i MSAT).
+        // Egen klasse (total-score-*) som KUN brukes i utskrift – skjermen er uendret.
+        const totalBlock = document.getElementById('gauge-block-total');
+        if (totalBlock) {
+            totalBlock.classList.remove('total-score-good', 'total-score-ok', 'total-score-weak', 'total-score-poor', 'total-score-none');
+            let band = 'none';
+            if (grandTotalCount > 0) {
+                band = grandTotalAvg >= 5 ? 'good'
+                     : grandTotalAvg >= 3.5 ? 'ok'
+                     : grandTotalAvg >= 2 ? 'weak'
+                     : 'poor';
+            }
+            totalBlock.classList.add('total-score-' + band);
+        }
+
         if (isAirOpsProfile()) {
             const financialSelect = document.getElementById('q-financial-management');
             const level1Select = document.getElementById('q-level1-findings');
