@@ -82,7 +82,7 @@ I18n.register("en", {
             critOf: "of",
             critLink: "critical items",
             critSuffix: "have a score of 7",
-            groupRisk: "Effective identification and management of own risk",
+            groupRisk: "Effective identification and management of risk",
             groupChange: "System for managing change within own organisation",
             groupFindings: "Ability to handle findings within set deadlines",
             financial: "Financial management score is 4 or higher",
