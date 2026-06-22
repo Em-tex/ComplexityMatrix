@@ -286,10 +286,19 @@ body {
 .extension-block-title {
     font-size: 1.6em;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 6px;
     text-align: center;
     color: #212529;
 }
+/* Markerer at forlengelse-blokken gjelder Air Operations (med fly-ikon). */
+.extension-block-subtitle {
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95em;
+    color: #03477F;
+    margin-bottom: 16px;
+}
+.extension-block-subtitle i { margin-right: 6px; }
 #extension-checklist { list-style: none; padding: 0; margin: 0 0 20px 0; }
 #extension-checklist div {
     padding: 8px 0;
@@ -568,6 +577,14 @@ body {
         padding: 4px 9px !important;
         text-align: left !important;
         border-bottom: 1px solid #888 !important;
+    }
+    .extension-block-subtitle {
+        font-size: 9px !important;
+        margin: 0 !important;
+        padding: 2px 9px !important;
+        text-align: left !important;
+        color: #000 !important;
+        border-bottom: 1px solid #ccc !important;
     }
     #extension-checklist { margin: 0 !important; padding: 6px 9px !important; }
     #extension-checklist div { padding: 3px 0 !important; font-size: 10px !important; }
