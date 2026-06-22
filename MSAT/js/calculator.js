@@ -187,10 +187,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
                 toggleBtn.style.backgroundColor = '#6c757d';
             } else {
-                opSelect.style.display = 'none';
-                opInput.style.display = 'block';
-                toggleBtn.innerHTML = '<i class="fa-solid fa-list"></i>';
-                toggleBtn.style.backgroundColor = '#03477F';
+                // Fritekst som ikke finnes i operatorlista (typisk skrevet inn FOER
+                // Air Operations ble valgt) forkastes -> brukeren tvinges til aa
+                // velge organisasjon fra nedtrekksmenyen.
+                opInput.value = '';
+                opSelect.value = '';
+                opSelect.style.display = 'block';
+                opInput.style.display = 'none';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+                toggleBtn.style.backgroundColor = '#6c757d';
             }
         } else if (opSelect && opInput && !opInput.value) {
             opSelect.value = '';
@@ -431,6 +436,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!tabBar || !panels) return;
 
         const selected = getSelectedRights();
+
+        // Stjernene for kritiske punkter vises kun naar Air Operations er valgt.
+        document.body.classList.toggle('airops-active', selected.includes(AIROPS_RIGHT));
 
         // 1) Bygg faneknappene paa nytt (hovedfane + en per rettighet).
         const tabs = [{ key: 'main', label: t('msat.tab.main'), iconHtml: '<i class="fa-solid fa-list"></i>' }];

@@ -172,6 +172,13 @@ body {
     color: #dc3545;
     font-weight: bold;
     margin-left: 4px;
+    /* Kritisk-stjernene er kun relevante for Air Operations sin vurdering av
+       forlengelse. Skjult som standard, vises naar Air Operations er valgt. */
+    display: none;
+}
+
+body.airops-active .critical-marker {
+    display: inline;
 }
 
 .total-summary { text-align: center; }
