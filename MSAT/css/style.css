@@ -486,11 +486,21 @@ body {
 .popup-opener:hover { color: #03477F; text-decoration: underline; }
 .comment-help-icon { color: #6A8E7F; margin-left: 8px; cursor: pointer; font-size: 1.1em; vertical-align: middle; transition: color 0.2s; }
 .comment-help-icon:hover { color: #03477F; }
-#details-popup { display: none; position: absolute; max-width: 800px; min-width: 500px; width: auto; background-color: #f8f9fa; border: 1px solid #adb5bd; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); padding: 20px; z-index: 1000; font-size: 0.9em; line-height: 1.5; color: #212529;}
+#details-popup { display: none; position: absolute; max-width: 800px; min-width: 500px; width: auto; background-color: #f8f9fa; border: 1px solid #adb5bd; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); padding: 20px; z-index: 1000; font-size: 1em; line-height: 1.55; color: #212529;}
 #popup-close-button { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; line-height: 1; color: #6c757d; cursor: pointer; padding: 0; font-weight: bold;}
 #popup-close-button:hover { color: #212529; }
 #details-popup h4 { margin-top: 0; padding-right: 30px; color: #03477F; border-bottom: 2px solid #e9ecef; padding-bottom: 10px;}
-#details-popup .popup-section { margin-bottom: 8px; }
+#details-popup .popup-section { margin-bottom: 14px; }
+
+/* Halvgjennomsiktig bakgrunn som demper resten av vinduet naar en sentrert popup vises. */
+#popup-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 999;
+}
+#popup-backdrop.visible { display: block; }
 
 /* Kommentarvindu sentrert midt paa skjermen (uavhengig av hvor punktet er). */
 #details-popup.popup-centered {
@@ -516,10 +526,10 @@ body {
 .popup-cancel-btn { background: #e9ecef; color: #495057; }
 .popup-cancel-btn:hover { background: #d8dee3; }
 
-/* Kompakt visning av "Critical Items for Extension" med tilhørende tekst */
-#details-popup .critical-items-list { font-size: 0.85em; }
+/* Visning av "Critical Items for Extension" med tilhørende tekst */
+#details-popup .critical-items-list { font-size: 1.15em; }
 #details-popup .critical-items-list ul { margin: 8px 0 0; padding-left: 22px; }
-#details-popup .critical-items-list li { margin-bottom: 5px; line-height: 1.35; }
+#details-popup .critical-items-list li { margin-bottom: 6px; line-height: 1.4; }
 
 /* UTSKRIFT: skjema-felles.css styrer det felles (dokument-topp, kompakte tabeller,
    nedtrekk-som-tekst, gauges→poengceller, marger, navnevalidering osv. – MSAT bruker

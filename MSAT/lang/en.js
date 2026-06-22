@@ -40,7 +40,8 @@ I18n.register("en", {
 
         popup: {
             whatToLookFor: "What to look for:",
-            notSpecified: "Not specified."
+            notSpecified: "Not specified.",
+            ok: "OK"
         },
         itemComment: {
             add: "Add justification",

@@ -40,7 +40,8 @@ I18n.register("no", {
 
         popup: {
             whatToLookFor: "Hva du skal se etter:",
-            notSpecified: "Ikke spesifisert."
+            notSpecified: "Ikke spesifisert.",
+            ok: "OK"
         },
         itemComment: {
             add: "Legg til begrunnelse",

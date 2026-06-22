@@ -679,8 +679,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="popup-section"><strong>Operating:</strong> ${detail('Operating')}</div>
                 <div class="popup-section"><strong>Effective:</strong> ${detail('Effective')}</div>
                 <hr>
-                <div class="popup-section"><strong>${t('msat.popup.whatToLookFor')}</strong><br>${whatToLookForHtml}</div>`;
-            displayPopup(popup, targetElement);
+                <div class="popup-section"><strong>${t('msat.popup.whatToLookFor')}</strong><br>${whatToLookForHtml}</div>
+                <div class="popup-actions">
+                    <button type="button" id="popup-ok-button" class="popup-save-btn">${t('msat.popup.ok')}</button>
+                </div>`;
+            displayPopupCentered(popup);
         }
     }
 
@@ -748,10 +751,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         popup.style.left = `${left}px`;
     }
 
+    // Sentrert visning midt paa skjermen (uavhengig av hvor punktet er i skjemaet).
+    function displayPopupCentered(popup) {
+        popup.classList.add('popup-centered');
+        popup.style.top = '';
+        popup.style.left = '';
+        popup.style.display = 'block';
+        const backdrop = document.getElementById('popup-backdrop');
+        if (backdrop) backdrop.classList.add('visible');
+    }
+
     function hidePopup() {
         const popup = document.getElementById('details-popup');
         popup.style.display = 'none';
         popup.classList.remove('popup-centered');
+        const backdrop = document.getElementById('popup-backdrop');
+        if (backdrop) backdrop.classList.remove('visible');
     }
 
     // ---- Begrunnelse per punkt (kommentar-snakkeboble) ------------------------
@@ -829,10 +844,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>`;
 
         // Vises midt paa skjermen (konsistent uansett hvor i skjemaet punktet er).
-        popup.classList.add('popup-centered');
-        popup.style.top = '';
-        popup.style.left = '';
-        popup.style.display = 'block';
+        displayPopupCentered(popup);
 
         // Teksten skrives ikke til feltet foer brukeren trykker Lagre. Avbryt/lukk lar
         // den forrige verdien staa uendret (ingen commit).
@@ -1114,7 +1126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showPopup(e.target.closest('.popup-opener'));
             } else if (e.target.id === 'extension-help-icon') {
                  showExtensionHelpPopup(e.target);
-            } else if (e.target.id === 'popup-close-button') {
+            } else if (e.target.id === 'popup-close-button' || e.target.id === 'popup-ok-button') {
                 hidePopup();
             } else if (popup.style.display === 'block' && !popup.contains(e.target) && !e.target.closest('.popup-opener, .help-icon, .critical-items-link, .comment-help-icon, .item-comment-btn')) {
                 hidePopup();
