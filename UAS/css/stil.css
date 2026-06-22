@@ -49,11 +49,14 @@ body {
 .meta-info .info-item label {
     margin-bottom: 0;
     white-space: nowrap;
+    font-size: 0.9em;          /* samme stoerrelse som input-feltet ved siden av */
+    line-height: 1.4;
 }
 
 .meta-info .info-item input {
-    padding: 6px;
+    padding: 6px 8px;
     font-size: 0.9em;
+    line-height: 1.4;
     flex-grow: 1;
 }
 
@@ -150,10 +153,10 @@ body {
     border-radius: 8px 8px 0 0;
 }
 
-#section-resources .section-header { background: #17a2b8; }
-#section-fleet .section-header { background: #fd7e14; }
-#section-operations .section-header { background: #20c997; }
-#section-performance .section-header { background: #6f42c1; }
+#section-resources .section-header { background: #3d6a8a; }
+#section-fleet .section-header { background: #4f8a6b; }
+#section-operations .section-header { background: #c07d3a; }
+#section-performance .section-header { background: #5d6b9e; }
 
 .form-cell {
     padding: 8px 12px;
@@ -172,6 +175,10 @@ body {
     font-family: 'Overpass', sans-serif;
     flex-grow: 1;
 }
+
+/* Samme font baade paa lukket select og i den aapne nedtrekkslista (option-ene
+   arver ikke font-family av seg selv i alle nettlesere). */
+select, option { font-family: 'Overpass', sans-serif; }
 
 .calculated-value { 
     font-weight: bold; 

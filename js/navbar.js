@@ -19,14 +19,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <div class="nav-actions" id="nav-actions"></div>
 
-        <div class="nav-options" id="msat-options" style="display: none; margin-left: 14px;">
-            <label for="msat-profile-selector" style="margin-right: 10px;" data-i18n="navbar.msatProfile">MSAT Profile:</label>
-            <select id="msat-profile-selector">
-                <option value="AirOps" data-i18n="navbar.profileExtension">Extension consideration</option>
-                <option value="Standard" data-i18n="navbar.profileStandard">Standard</option>
-            </select>
-        </div>
-
         <div class="nav-help" id="nav-help"></div>
 
         <div class="nav-lang" id="nav-lang" aria-label="Language">
@@ -236,20 +228,4 @@ document.addEventListener("DOMContentLoaded", function() {
         langGroup.style.display = "none";
     }
 
-    const currentPage = window.location.pathname.toLowerCase();
-    if (currentPage.includes("msat.html")) {
-        const optionsDiv = document.getElementById("msat-options");
-        optionsDiv.style.display = "flex";
-        
-        const selector = document.getElementById("msat-profile-selector");
-        
-        // Hent lagret valg, eller default til AirOps
-        const savedProfile = localStorage.getItem("msat_profile") || "AirOps";
-        selector.value = savedProfile;
-        
-        selector.addEventListener("change", (e) => {
-            localStorage.setItem("msat_profile", e.target.value);
-            window.dispatchEvent(new Event('msatProfileChanged'));
-        });
-    }
 });

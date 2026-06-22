@@ -4,6 +4,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     let operationTypes = null;
     const STORAGE_KEY = 'uasComplexityData';
 
+    // Ikon per operasjonstype (vises i den egendefinerte nedtrekksmenyen). Verdier som
+    // peker paa .png/.svg vises som bilde, ellers som Font Awesome-klasse.
+    const operationIcons = {
+        "Agriculture": "fa-solid fa-seedling", "Dangerous goods": "fa-solid fa-triangle-exclamation",
+        "Drone-in-a-box": "fa-solid fa-box-archive", "Inspection": "fa-solid fa-magnifying-glass",
+        "Lightshow": "fa-solid fa-wand-magic-sparkles", "Mapping": "fa-solid fa-map-location-dot",
+        "Offshore": "fa-solid fa-water", "Photo/film": "fa-solid fa-camera-retro",
+        "Pollution control": "fa-solid fa-leaf", "Power generation": "fa-solid fa-bolt",
+        "Powerline inspection": "fa-solid fa-plug-circle-bolt", "Research": "fa-solid fa-flask-vial",
+        "SAR": "fa-solid fa-square-plus", "Sling load": "images/slingload.png",
+        "State operations": "fa-solid fa-building-columns", "Surveillance": "fa-solid fa-video",
+        "Swarm": "fa-solid fa-layer-group", "Tethered": "fa-solid fa-link",
+        "Transport": "fa-solid fa-truck-plane", "UAS development": "fa-solid fa-gears",
+        "Washing": "fa-solid fa-shower", "Weather sensor": "fa-solid fa-cloud-sun-rain",
+        "Default": "fa-solid fa-circle-question"
+    };
+    const dropdownRefreshers = [];   // synk visningen til de egendefinerte nedtrekkene
+
     // Definerer maksverdier
     const MAX_SCORES = {
         resources: 26,
@@ -161,8 +179,81 @@ document.addEventListener('DOMContentLoaded', async () => {
                     option.textContent = type;
                     select.appendChild(option);
                 });
+                createCustomDropdown(select);   // egendefinert nedtrekk med ikoner
             }
         }
+    }
+
+    function refreshCustomDropdowns() {
+        dropdownRefreshers.forEach(fn => fn());
+    }
+
+    function closeAllSelects(except) {
+        document.querySelectorAll('.select-selected.select-arrow-active').forEach(display => {
+            if (display !== except) {
+                display.classList.remove('select-arrow-active');
+                display.nextElementSibling.classList.add('select-hide');
+            }
+        });
+    }
+
+    // Bygger et egendefinert nedtrekk over en skjult <select>, slik at hvert valg kan
+    // ha ikon og bruke samme font (Overpass) baade lukket og aapen.
+    function createCustomDropdown(originalSelect) {
+        const container = document.createElement('div');
+        container.className = 'custom-select-container';
+        originalSelect.parentNode.insertBefore(container, originalSelect);
+
+        const iconHtml = (value) => {
+            const ref = operationIcons[value] || operationIcons.Default;
+            return (ref.includes('.png') || ref.includes('.svg'))
+                ? `<img src="${ref}" class="custom-select-icon">`
+                : `<i class="${ref}"></i>`;
+        };
+
+        const selectedDisplay = document.createElement('div');
+        selectedDisplay.className = 'select-selected';
+        const updateSelectedDisplay = () => {
+            const opt = originalSelect.options[originalSelect.selectedIndex];
+            const text = opt ? opt.textContent : '';
+            if (opt && opt.value) {
+                selectedDisplay.innerHTML = `${iconHtml(opt.value)}<span>${text}</span>`;
+                selectedDisplay.classList.remove('placeholder');
+            } else {
+                selectedDisplay.innerHTML = `<span>${text}</span>`;
+                selectedDisplay.classList.add('placeholder');
+            }
+        };
+        updateSelectedDisplay();
+        dropdownRefreshers.push(updateSelectedDisplay);
+        container.appendChild(selectedDisplay);
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'select-items select-hide';
+        Array.from(originalSelect.options).forEach(option => {
+            const optionDiv = document.createElement('div');
+            optionDiv.innerHTML = option.value
+                ? `${iconHtml(option.value)}<span>${option.textContent}</span>`
+                : `<span>${option.textContent}</span>`;
+            optionDiv.addEventListener('click', () => {
+                originalSelect.value = option.value;
+                originalSelect.dispatchEvent(new Event('change'));
+                updateSelectedDisplay();
+                closeAllSelects(null);
+            });
+            optionsList.appendChild(optionDiv);
+        });
+        container.appendChild(optionsList);
+
+        selectedDisplay.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const willOpen = optionsList.classList.contains('select-hide');
+            closeAllSelects(willOpen ? selectedDisplay : null);
+            optionsList.classList.toggle('select-hide', !willOpen);
+            selectedDisplay.classList.toggle('select-arrow-active', willOpen);
+        });
+
+        originalSelect.style.display = 'none';
     }
 
     function getSelectValue(id) {
@@ -434,6 +525,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setVal('comments', 'General Comments');
 
                 window.syncOperatorUI();
+                refreshCustomDropdowns();
                 toggleApprovalTypes();
                 toggleStateExemptions();
                 toggleAuditFields();
@@ -450,7 +542,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         await initOperatorField();
         await loadConfig();
         loadData();
+        refreshCustomDropdowns();   // synk ikon/tekst i nedtrekkene med innlastede verdier
         window.syncOperatorUI();
+
+        // Lukk aapne egendefinerte nedtrekk ved klikk utenfor.
+        document.addEventListener('click', () => closeAllSelects(null));
 
         document.querySelectorAll('select, input, textarea').forEach(el => {
             el.addEventListener('change', calculateScore);

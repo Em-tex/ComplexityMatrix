@@ -18,7 +18,8 @@
     const GROUP_COLORS = { 1: "#dc3545", 2: "#fd7e14", 3: "#ffc107", 4: "#6CB04A", 5: "#28a745" };
 
     function lerp(a, b, u) { return Math.round(a + (b - a) * u); }
-    // Samme grønn→gul→rød-gradient som gauge-bakgrunnen, som funksjon av andel.
+    // Samme groenn→gul→roed-gradient som totalscore-maaleren (gauge-bakgrunnen),
+    // slik at stolpene gjenbruker de samme fargene.
     function colorFor(f) {
         f = Math.max(0, Math.min(1, f));
         let r, g, b;
@@ -65,10 +66,17 @@
             const cats = []; let total = null;
             blocks.forEach(b => {
                 const titleEl = b.querySelector(".gauge-block-title");
-                const title = titleEl ? titleEl.textContent.trim() : b.id;
                 // Gjenbruk kategoriens ikon (samme som gauge-visningen viser).
                 const iconEl = titleEl ? titleEl.querySelector("i, .material-icons, .material-symbols-outlined") : null;
                 const icon = iconEl ? iconEl.outerHTML : "";
+                // Tittel uten ikon-tekst: for Material Symbols er glyf-navnet (f.eks.
+                // "drone_2") tekstinnhold, og maa fjernes saa stolpen ikke faar det i navnet.
+                let title = b.id;
+                if (titleEl) {
+                    const clone = titleEl.cloneNode(true);
+                    clone.querySelectorAll("i, .material-icons, .material-symbols-outlined").forEach(n => n.remove());
+                    title = clone.textContent.trim() || b.id;
+                }
                 const sumEl = b.querySelector(".gauge-block-summary");
                 let value = 0, max = 0;
                 if (sumEl) {
@@ -119,7 +127,7 @@
             // Tools uten tilsynspakke: ta totalen med som siste (uthevet) rad i diagrammet.
             if (total && !th) rows += barRow(total, "vb-total-row");
             const axis = `<div class="vb-row vb-axis-row"><span class="vb-label"></span>` +
-                `<div class="vb-axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100%</span></div>` +
+                `<div class="vb-axis"><span>0 %</span><span>25 %</span><span>50 %</span><span>75 %</span><span>100 %</span></div>` +
                 `<span class="vb-num"></span></div>`;
             let html = `<div class="vb-chart">${rows}${axis}</div>`;
             // Tools med tilsynspakke: totalen som terskel-skala under diagrammet.

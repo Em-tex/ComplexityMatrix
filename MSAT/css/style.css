@@ -48,6 +48,11 @@ body {
     box-sizing: border-box;
     font-family: 'Overpass', sans-serif;
 }
+/* Felles fontstoerrelse for alle topp-feltene, slik at Godkjenninger-knappen ikke
+   blir stoerre enn tekst-/dato-feltene (input/select arver ikke font-size av seg selv). */
+.info-field input,
+.info-field select,
+.rights-toggle { font-size: 0.9rem; }
 
 .container {
     display: grid;
@@ -127,6 +132,35 @@ body {
 .form-cell { padding: 8px 12px; position: relative; }
 .form-cell select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
 
+/* Nedtrekk + kommentar-knapp (begrunnelse per punkt) */
+.select-with-comment { display: flex; align-items: center; gap: 6px; }
+.select-with-comment select { flex: 1; min-width: 0; }
+.item-comment-btn {
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 8px 10px;         /* stoerre klikkflate rundt ikonet */
+    margin: -4px -2px;         /* uten aa oeke radhoeyden */
+    border-radius: 6px;
+    font-size: 1.15em;
+    line-height: 1;
+    color: #9aa4ae;            /* tom/hvit boble (omriss) som standard */
+    transition: color 0.15s, transform 0.1s, background 0.15s;
+}
+.item-comment-btn:hover { color: #03477F; background: #eef4f9; }
+.item-comment-btn.has-comment { color: #28a745; }     /* begrunnelse lagt inn (groenn) */
+.item-comment-btn.comment-missing { color: #F06C00; } /* poeng valgt, mangler begrunnelse (varsel) */
+.item-comment-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Overpass', sans-serif;
+    resize: vertical;
+}
+
 .calculated-value { font-weight: bold; text-align: center; padding: 10px 12px; height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
 .bg-default-gray { background-color: #e9ecef !important; }
 .bg-weak-green { background-color: #d4edda !important; }
@@ -145,7 +179,7 @@ body {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
-    align-items: flex-start;
+    align-items: center;   /* midtstill maalere/forlengelse-blokk hoydemessig */
 }
 @media (min-width: 768px) {
     .all-gauges-container {
@@ -271,6 +305,7 @@ body {
 
 .critical-items-link { text-decoration: underline; cursor: help; color: inherit; }
 .critical-items-link:hover { color: #03477F; }
+.crit-count { color: #6c757d; font-weight: 700; white-space: nowrap; }
 
 .extension-block-comment {
     font-size: 1.1em;
@@ -296,6 +331,146 @@ body {
 .comments-section label { font-weight: bold; color: #495057; display: block; margin-bottom: 5px;}
 .comments-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; resize: vertical; }
 
+/* --- RETTIGHETER (multi-select nedtrekk) --- */
+.rights-select { position: relative; width: 100%; }
+.rights-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    font-family: 'Overpass', sans-serif;
+    cursor: pointer;
+    box-sizing: border-box;
+    text-align: left;
+}
+.rights-toggle:hover { border-color: #03477F; }
+.rights-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+.rights-label.placeholder { color: #888; }
+.rights-caret { color: #6c757d; flex-shrink: 0; font-size: 0.8em; }
+.rights-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: #fff;
+    border: 1px solid #adb5bd;
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 4px;
+}
+.rights-menu[hidden] { display: none; }
+.rights-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 9px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: normal;
+    color: #212529;
+}
+.rights-option:hover { background: #EEFAFF; }
+.rights-option input { width: auto; margin: 0; cursor: pointer; }
+
+/* --- UNDERFANER --- */
+/* Mappe-faner: fanene stikker opp UTENFOR boksen, rett i overkant. Selve
+   fanelinja er gjennomsiktig; innholdsboksen (.framed) baerer bakgrunn/ramme. */
+.tab-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    max-width: 1400px;
+    margin: 24px auto 0;
+    padding: 0 14px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
+.tab-btn {
+    padding: 9px 18px 11px;
+    border: 1px solid #c4c9cf;
+    border-bottom: none;
+    background: #d6dade;        /* inaktiv: nedtonet/tilbaketrukket */
+    color: #6c757d;
+    font-family: 'Overpass', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 9px 9px 0 0;
+    cursor: pointer;
+    margin-bottom: -1px;        /* legg seg oppaa boksens topp-ramme */
+    transition: background 0.15s, color 0.15s;
+}
+.tab-btn:hover { background: #e6e9ec; color: #495057; }
+.tab-btn.active {
+    background: #f4f5f6;        /* = boksens bakgrunn → glir sammen med den (lysere enn inaktive) */
+    color: #03477F;
+    font-weight: 700;
+    box-shadow: inset 0 3px 0 #03477F;   /* blaa aksentstripe paa toppen av valgt fane */
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Innholdsboksen: baerer bakgrunn/ramme/skygge slik at fanene over ikke "svever".
+   Settes kun naar minst en rettighet er valgt (klassen .framed fra syncTabs). */
+.tab-panels.framed {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #f4f5f6;
+    border: 1px solid #d4d8dd;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+.tab-panels.framed .tab-panel > *:first-child { margin-top: 0; }
+.tab-placeholder {
+    max-width: 900px;
+    margin: 20px auto 0;
+    padding: 40px 20px;
+    background: #fff;
+    border: 1px dashed #adb5bd;
+    border-radius: 8px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+.tab-icon { margin-right: 7px; }
+/* Material Symbols (f.eks. drone_2) skaleres ned til ikon-stoerrelse i faner/liste. */
+.tab-icon .material-symbols-outlined,
+.right-icon .material-symbols-outlined {
+    font-size: 1.2em;
+    line-height: 1;
+    vertical-align: -0.18em;
+}
+
+/* Air Operations-fanen: smalere, sentrert kolonne (ikke full sidebredde). */
+#airops-content {
+    max-width: 900px;
+    margin: 20px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+#airops-content > * { margin: 0; min-width: 0; }
+
+/* Ikoner i rettigheter-nedtrekket */
+.right-icon {
+    width: 1.2em;
+    text-align: center;
+    color: #03477F;
+    flex-shrink: 0;
+}
+
 
 /* --- POPUP STYLES --- */
 .popup-opener { cursor: help; transition: color 0.2s; }
@@ -307,6 +482,30 @@ body {
 #popup-close-button:hover { color: #212529; }
 #details-popup h4 { margin-top: 0; padding-right: 30px; color: #03477F; border-bottom: 2px solid #e9ecef; padding-bottom: 10px;}
 #details-popup .popup-section { margin-bottom: 8px; }
+
+/* Kommentarvindu sentrert midt paa skjermen (uavhengig av hvor punktet er). */
+#details-popup.popup-centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.popup-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
+.popup-save-btn, .popup-cancel-btn {
+    border: none;
+    border-radius: 4px;
+    padding: 8px 20px;
+    font-family: 'Overpass', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.popup-save-btn { background: #03477F; color: #fff; }
+.popup-save-btn:hover { background: #023a68; }
+.popup-cancel-btn { background: #e9ecef; color: #495057; }
+.popup-cancel-btn:hover { background: #d8dee3; }
 
 /* Kompakt visning av "Critical Items for Extension" med tilhørende tekst */
 #details-popup .critical-items-list { font-size: 0.85em; }
@@ -320,7 +519,13 @@ body {
    riktig kommentarseksjon, så utskriften følger valgt profil. */
 @media print {
     .action-buttons, .footer-links, .help-icon, .comment-help-icon,
-    #popup-close-button, #popup-overlay { display: none !important; }
+    .item-comment-btn, #popup-close-button, #popup-overlay { display: none !important; }
+
+    /* Faner: skjul knapperaden, men skriv ut alle paneler (ogsaa inaktive). */
+    .tab-bar { display: none !important; }
+    .tab-panel { display: block !important; }
+    .tab-placeholder { display: none !important; }
+    .tab-panels.framed { background: #fff !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
 
     /* Multi-kommentarer (forlengelse): rent kort, kompakt rutenett. */
     .multi-comments-section {

@@ -11,16 +11,19 @@ I18n.register("en", {
         orgNamePlaceholder: "Enter organisation name",
         orgNameManualPlaceholder: "Enter manually (only if missing)",
         selectOperator: "Select operator...",
-        orgType: "Organisation type:",
-        orgTypePlaceholder: "Select or type",
+        rights: "Approvals:",
+        rightsPlaceholder: "Select approvals...",
         assessedBy: "Assessed by:",
         assessedByPlaceholder: "Enter name",
         assessmentDate: "Date of assessment:",
         empicId: "Empic ID:",
         empicIdPlaceholder: "Enter ID",
 
-        profileLabelAirOps: "Air Operations / Aircrew",
-        profileLabelStandard: "Standard",
+        tab: {
+            main: "Common (1–5)",
+            placeholder: "Only the standard form is used for this approval."
+        },
+
         tooltipEnterManually: "Enter manually",
         tooltipBackToList: "Back to list",
 
@@ -38,6 +41,13 @@ I18n.register("en", {
         popup: {
             whatToLookFor: "What to look for:",
             notSpecified: "Not specified."
+        },
+        itemComment: {
+            add: "Add justification",
+            edit: "Edit justification",
+            placeholder: "Enter a justification for this item...",
+            save: "Save",
+            cancel: "Cancel"
         },
         form: {
             criteria: "Criteria",
@@ -71,6 +81,9 @@ I18n.register("en", {
             critOf: "of",
             critLink: "critical items",
             critSuffix: "have a score of 7",
+            groupRisk: "Effective identification and management of own risk",
+            groupChange: "System for managing change within own organisation",
+            groupFindings: "Ability to handle findings within set deadlines",
             financial: "Financial management score is 4 or higher",
             level1: "No level 1 findings in the last 24 months",
             allOther: "All other items have a minimum score of 4",
@@ -82,7 +95,9 @@ I18n.register("en", {
             csvLoaded: "CSV file loaded successfully!",
             csvFailedPrefix: "Failed to load CSV file. Error: ",
             csvEmpty: "CSV file is empty or invalid.",
-            manualConfirm: "Please check the list carefully first.\n\nAre you sure the operator is not there? Manual entry should ONLY be used if missing."
+            manualConfirm: "Please check the list carefully first.\n\nAre you sure the operator is not there? Manual entry should ONLY be used if missing.",
+            missingCommentsPrefix: "Warning: ",
+            missingCommentsSuffix: " scored item(s) are missing a justification comment.\n\nDownload anyway?"
         }
     }
 });

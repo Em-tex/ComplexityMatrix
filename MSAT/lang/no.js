@@ -11,16 +11,19 @@ I18n.register("no", {
         orgNamePlaceholder: "Skriv inn organisasjonsnavn",
         orgNameManualPlaceholder: "Skriv inn manuelt (kun hvis mangler)",
         selectOperator: "Velg operatør...",
-        orgType: "Organisasjonstype:",
-        orgTypePlaceholder: "Velg eller skriv",
+        rights: "Godkjenninger:",
+        rightsPlaceholder: "Velg godkjenninger...",
         assessedBy: "Vurdert av:",
         assessedByPlaceholder: "Skriv inn navn",
         assessmentDate: "Vurderingsdato:",
         empicId: "Empic-ID:",
         empicIdPlaceholder: "Skriv inn ID",
 
-        profileLabelAirOps: "Air Operations / Aircrew",
-        profileLabelStandard: "Standard",
+        tab: {
+            main: "Felles (1–5)",
+            placeholder: "Kun standard skjema brukes for denne godkjenningen."
+        },
+
         tooltipEnterManually: "Skriv inn manuelt",
         tooltipBackToList: "Tilbake til listen",
 
@@ -38,6 +41,13 @@ I18n.register("no", {
         popup: {
             whatToLookFor: "Hva du skal se etter:",
             notSpecified: "Ikke spesifisert."
+        },
+        itemComment: {
+            add: "Legg til begrunnelse",
+            edit: "Rediger begrunnelse",
+            placeholder: "Skriv en begrunnelse for dette punktet...",
+            save: "Lagre",
+            cancel: "Avbryt"
         },
         form: {
             criteria: "Kriterium",
@@ -71,6 +81,9 @@ I18n.register("no", {
             critOf: "av",
             critLink: "kritiske punkter",
             critSuffix: "har score 7",
+            groupRisk: "Effektiv identifisering og håndtering av egen risiko",
+            groupChange: "System for endringshåndtering i egen organisasjon",
+            groupFindings: "Evne til å håndtere avvik innenfor gitte frister",
             financial: "Økonomistyring har score 4 eller høyere",
             level1: "Ingen nivå 1-funn de siste 24 månedene",
             allOther: "Alle andre punkter har minimum score 4",
@@ -82,7 +95,9 @@ I18n.register("no", {
             csvLoaded: "CSV-filen ble lastet inn!",
             csvFailedPrefix: "Klarte ikke å laste CSV-filen. Feil: ",
             csvEmpty: "CSV-filen er tom eller ugyldig.",
-            manualConfirm: "Sjekk listen nøye først.\n\nEr du sikker på at operatøren ikke finnes der? Manuell innskriving skal KUN brukes hvis den mangler."
+            manualConfirm: "Sjekk listen nøye først.\n\nEr du sikker på at operatøren ikke finnes der? Manuell innskriving skal KUN brukes hvis den mangler.",
+            missingCommentsPrefix: "Varsel: ",
+            missingCommentsSuffix: " punkt(er) med poeng mangler begrunnelse.\n\nVil du laste ned likevel?"
         }
     }
 });

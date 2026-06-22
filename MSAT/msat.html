@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/style.css?v=3">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,300,0,0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
@@ -46,10 +47,16 @@
                 </div>
             </div>
 
-            <div class="info-field">
-                <label for="organisation-type" data-i18n="msat.orgType">Organisation type:</label>
-                <input type="text" id="organisation-type" placeholder="Select or type" data-i18n-placeholder="msat.orgTypePlaceholder" list="org-types-list">
-                <datalist id="org-types-list"></datalist>
+            <div class="info-field" style="min-width: 0;">
+                <label data-i18n="msat.rights">Rights:</label>
+                <div class="rights-select" id="rights-select">
+                    <button type="button" class="rights-toggle" id="rights-toggle" aria-haspopup="true" aria-expanded="false">
+                        <span class="rights-label" id="rights-label" data-i18n="msat.rightsPlaceholder">Select rights...</span>
+                        <i class="fa-solid fa-chevron-down rights-caret"></i>
+                    </button>
+                    <div class="rights-menu" id="rights-menu" role="menu" hidden></div>
+                </div>
+                <input type="hidden" id="organisation-type">
             </div>
             <div class="info-field">
                 <label for="assessed-by" data-i18n="msat.assessedBy">Assessed by:</label>
@@ -81,52 +88,103 @@
             </div>
             
             <div class="gauge-block large-gauge" id="gauge-block-total"><div class="gauge-block-title" data-i18n="msat.gauges.total">Total Average Score</div><div class="gauge-block-summary"><span id="total-gauge-avg-text">0.0</span> / 7.0</div><div class="gauge"><div class="gauge-bg"><div class="gauge-cover"></div></div><div class="gauge-needle" id="total-needle"></div></div></div>
-            
-            <div class="extension-block" id="extension-block-container" style="display: none;">
-                <div class="extension-block-title" data-i18n="msat.gauges.extension">Oversight Cycle Extension</div>
-                <div id="extension-checklist"></div>
-                <div class="extension-block-comment" id="extension-final-comment"></div>
+        </div>
+    </div>
+
+    <div class="tab-bar" id="tab-bar"></div>
+
+    <div class="tab-panels" id="tab-panels">
+        <div class="tab-panel active" id="panel-main">
+            <div class="container" id="main-container"></div>
+
+            <div class="comments-section" id="standard-comments-section">
+                <label for="comments" data-i18n="msat.comments">Comments:</label>
+                <textarea id="comments" placeholder="Add any comments here..." data-i18n-placeholder="msat.commentsPlaceholder" rows="4"></textarea>
             </div>
         </div>
     </div>
 
-    <div class="container" id="main-container"></div>
+    <!-- Skjult lager: innhold som flyttes inn i rettighets-faner ved behov.
+         Elementene beholder sine id-er (lagring/CSV) selv naar fanen ikke er aktiv. -->
+    <div id="tab-content-holder" hidden>
+        <!-- Forlengelse-sjekklista flyttes opp i maaler-oversikten naar Air Operations
+             er valgt (se syncTabs); ellers parkeres den her. -->
+        <div class="extension-block" id="extension-block-container">
+            <div class="extension-block-title" data-i18n="msat.gauges.extension">Oversight Cycle Extension</div>
+            <div id="extension-checklist"></div>
+            <div class="extension-block-comment" id="extension-final-comment"></div>
+        </div>
 
-    <div class="comments-section" id="standard-comments-section">
-        <label for="comments" data-i18n="msat.comments">Comments:</label>
-        <textarea id="comments" placeholder="Add any comments here..." data-i18n-placeholder="msat.commentsPlaceholder" rows="4"></textarea>
-    </div>
+        <div id="airops-content">
+            <div class="section" id="section-extension">
+                <div class="section-header">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>6. <span data-i18n="msat.ext.sectionTitle">ITEMS FOR CONSIDERATION OF EXTENSION</span></span>
+                    <i class="fa-solid fa-circle-question help-icon" id="extension-help-icon"></i>
+                </div>
+                <div class="section-content">
+                    <div class="header-row">
+                        <div class="header-cell" data-i18n="msat.form.criteria">Criteria</div>
+                        <div class="header-cell" data-i18n="msat.form.selection">Selection</div>
+                        <div class="header-cell" data-i18n="msat.form.score">Score</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-cell"><strong>6.1</strong> <span data-i18n="msat.ext.financialLabel">Financial management</span></div>
+                        <div class="form-cell">
+                            <div class="select-with-comment">
+                                <select id="q-financial-management"><option value="">Select...</option><option value="7">Good (7)</option><option value="4">Acceptable (4)</option><option value="1">Poor/Concern (1)</option></select>
+                                <button type="button" class="item-comment-btn" data-target="q-financial-management" aria-label="Comment"><i class="fa-solid fa-comment"></i></button>
+                            </div>
+                            <input type="hidden" id="q-financial-management-comment">
+                        </div>
+                        <div class="form-cell calculated-value" id="q-financial-management-value">0</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-cell"><strong>6.2</strong> <span data-i18n="msat.ext.level1Label">Level 1 findings in the last 24 months</span></div>
+                        <div class="form-cell">
+                            <div class="select-with-comment">
+                                <select id="q-level1-findings"><option value="">Select...</option><option value="7">No (7)</option><option value="1">Yes (1)</option></select>
+                                <button type="button" class="item-comment-btn" data-target="q-level1-findings" aria-label="Comment"><i class="fa-solid fa-comment"></i></button>
+                            </div>
+                            <input type="hidden" id="q-level1-findings-comment">
+                        </div>
+                        <div class="form-cell calculated-value" id="q-level1-findings-value">0</div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="multi-comments-section" id="airops-comments-section" style="display: none;">
-        <h2 data-i18n="msat.commentsHeading">Comments</h2>
-        <div class="comments-grid">
-            <div class="comment-field">
-                <label for="comments-compliance"><span data-i18n="msat.cCompliance">Compliance</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="compliance"></i></label>
-                <textarea id="comments-compliance" rows="4"></textarea>
-            </div>
-            <div class="comment-field">
-                <label for="comments-flightops"><span data-i18n="msat.cFlightOps">Flight Operations</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="flightops"></i></label>
-                <textarea id="comments-flightops" rows="4"></textarea>
-            </div>
-            <div class="comment-field">
-                <label for="comments-safety"><span data-i18n="msat.cSafety">Safety Department</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="safety"></i></label>
-                <textarea id="comments-safety" rows="4"></textarea>
-            </div>
-            <div class="comment-field">
-                <label for="comments-training"><span data-i18n="msat.cTraining">Training</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="training"></i></label>
-                <textarea id="comments-training" rows="4"></textarea>
-            </div>
-            <div class="comment-field">
-                <label for="comments-planning"><span data-i18n="msat.cPlanning">Planning & FTL</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="planning"></i></label>
-                <textarea id="comments-planning" rows="4"></textarea>
-            </div>
-            <div class="comment-field">
-                <label for="comments-reporting"><span data-i18n="msat.cReporting">Reporting</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="reporting"></i></label>
-                <textarea id="comments-reporting" rows="4"></textarea>
-            </div>
-            <div class="comment-field comment-field-full">
-                <label for="comments-other"><span data-i18n="msat.cOther">Other</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="other"></i></label>
-                <textarea id="comments-other" rows="4"></textarea>
+            <div class="multi-comments-section" id="airops-comments-section">
+                <h2 data-i18n="msat.commentsHeading">Comments</h2>
+                <div class="comments-grid">
+                    <div class="comment-field">
+                        <label for="comments-compliance"><span data-i18n="msat.cCompliance">Compliance</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="compliance"></i></label>
+                        <textarea id="comments-compliance" rows="4"></textarea>
+                    </div>
+                    <div class="comment-field">
+                        <label for="comments-flightops"><span data-i18n="msat.cFlightOps">Flight Operations</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="flightops"></i></label>
+                        <textarea id="comments-flightops" rows="4"></textarea>
+                    </div>
+                    <div class="comment-field">
+                        <label for="comments-safety"><span data-i18n="msat.cSafety">Safety Department</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="safety"></i></label>
+                        <textarea id="comments-safety" rows="4"></textarea>
+                    </div>
+                    <div class="comment-field">
+                        <label for="comments-training"><span data-i18n="msat.cTraining">Training</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="training"></i></label>
+                        <textarea id="comments-training" rows="4"></textarea>
+                    </div>
+                    <div class="comment-field">
+                        <label for="comments-planning"><span data-i18n="msat.cPlanning">Planning & FTL</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="planning"></i></label>
+                        <textarea id="comments-planning" rows="4"></textarea>
+                    </div>
+                    <div class="comment-field">
+                        <label for="comments-reporting"><span data-i18n="msat.cReporting">Reporting</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="reporting"></i></label>
+                        <textarea id="comments-reporting" rows="4"></textarea>
+                    </div>
+                    <div class="comment-field comment-field-full">
+                        <label for="comments-other"><span data-i18n="msat.cOther">Other</span> <i class="fa-solid fa-circle-info comment-help-icon" data-field="other"></i></label>
+                        <textarea id="comments-other" rows="4"></textarea>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

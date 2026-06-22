@@ -69,10 +69,10 @@ body {
 .section-header .material-icons {
     margin-right: 10px;
 }
-#section-resources .section-header { background: #4682B4; }
-#section-fleet .section-header { background: #3CB371; }
-#section-operations .section-header { background: #FF8C00; }
-#section-approvals .section-header { background: #6A5ACD; }
+#section-resources .section-header { background: #3d6a8a; }
+#section-fleet .section-header { background: #4f8a6b; }
+#section-operations .section-header { background: #c07d3a; }
+#section-approvals .section-header { background: #5d6b9e; }
 .form-cell { padding: 8px 12px; position: relative; min-width: 0; }
 .form-cell select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: 'Overpass', sans-serif; }
 
